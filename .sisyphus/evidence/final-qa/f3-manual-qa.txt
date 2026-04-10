@@ -1,0 +1,48 @@
+MANUAL QA RESULTS
+=================
+Date: 2026-04-10
+Build: bun run build — SUCCESS (1.73s, 10 pages)
+Warnings: Empty collections (feeds, trending, mustRead) — expected for MVP with sample data only
+
+Pages (12/12):
+✅ 홈: 4830B
+✅ 기사 목록: 11337B
+✅ 기사 상세: 7358B
+✅ 트렌드: 4961B
+✅ Must-read: 4386B
+✅ 플레이리스트 목록: 6165B
+✅ 플레이리스트 상세: 7013B
+✅ 인플루언서: 6704B
+✅ 어드민: 434B
+✅ RSS: 675B
+✅ Sitemap: 191B
+✅ Robots: 116B
+
+Testids (10/10):
+✅ nav-main: found (홈 네비게이션)
+✅ article-list: found (기사 목록)
+✅ tag-filter: found (태그 필터)
+✅ personalization-bar: found (개인화 바)
+✅ article-detail: found (기사 상세)
+✅ trending-list: found (트렌드 목록)
+✅ must-read-list: found (Must-read 목록)
+✅ playlist-list: found (플레이리스트 목록)
+✅ playlist-detail: found (플레이리스트 상세)
+✅ influencer-list: found (인플루언서 목록)
+
+Content Checks:
+✅ RSS valid XML: channel title = "HoneyCombo — 기술 뉴스 큐레이션"
+✅ RSS items: 0 (expected — feeds collection empty in MVP)
+✅ Sitemap generated: https://honeycombo.pages.dev/sitemap-0.xml
+✅ Robots.txt: Disallow /admin/, Sitemap URL present
+✅ Article content: "Astro 5.0" title found
+✅ Giscus script: found in client JS bundle (Comments.astro script, loads dynamically)
+✅ OG meta: og:title found
+
+Notes:
+- Giscus not in static HTML (expected for client-side widget in SSG mode)
+- Giscus confirmed present in dist/_astro/Comments*.js bundle
+- RSS has 0 items because feeds collection is empty — correct behavior
+- Admin page is minimal (434B) — client-side SPA shell as designed
+
+VERDICT: APPROVE
