@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: BaekdongCha/honeycombo
+  repo: orientpine/honeycombo
   branch: main
   auth_endpoint: /api/auth
 

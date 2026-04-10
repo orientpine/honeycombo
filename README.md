@@ -1,6 +1,6 @@
 # HoneyCombo
 
-[![GitHub](https://img.shields.io/github/stars/BaekdongCha/honeycombo?style=social)](https://github.com/BaekdongCha/honeycombo)
+[![GitHub](https://img.shields.io/github/stars/orientpine/honeycombo?style=social)](https://github.com/orientpine/honeycombo)
 
 저비용 기술 뉴스 큐레이션 사이트 — Astro SSG + Cloudflare Pages + GitHub Actions
 
@@ -21,7 +21,7 @@ bun run dev
 
 ## 배포
 
-**GitHub 저장소**: https://github.com/BaekdongCha/honeycombo
+**GitHub 저장소**: https://github.com/orientpine/honeycombo
 
 Cloudflare Pages Git Integration으로 자동 배포됩니다.
 main 브랜치에 push하면 자동으로 빌드/배포됩니다.
