@@ -1,0 +1,82 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import Pagination from '../../components/Pagination.astro';
+import TagFilter from '../../components/TagFilter.astro';
+
+const ITEMS_PER_PAGE = 20;
+
+// Get all approved curated articles
+let curatedEntries = [];
+try {
+  curatedEntries = await getCollection('curated', entry => entry.data.status === 'approved');
+} catch (e) {}
+
+// Get all feed articles
+let feedEntries = [];
+try {
+  feedEntries = await getCollection('feeds');
+} catch (e) {}
+
+// Merge and sort by date (curated first if same date)
+const allArticles = [
+  ...curatedEntries.map(e => ({ ...e.data, _type: 'curated' as const, _id: e.id })),
+  ...feedEntries.map(e => ({ ...e.data, _type: 'feed' as const, _id: e.id })),
+].sort((a, b) => {
+  const dateA = new Date('submitted_at' in a ? a.submitted_at : a.published_at).getTime();
+  const dateB = new Date('submitted_at' in b ? b.submitted_at : b.published_at).getTime();
+  if (a._type === 'curated' && b._type !== 'curated') return -1;
+  if (b._type === 'curated' && a._type !== 'curated') return 1;
+  return dateB - dateA;
+});
+
+const totalPages = Math.max(1, Math.ceil(allArticles.length / ITEMS_PER_PAGE));
+const pageArticles = allArticles.slice(0, ITEMS_PER_PAGE);
+
+// Collect all unique tags
+const allTags = [...new Set(allArticles.flatMap(a => a.tags))].sort();
+---
+
+<BaseLayout title="기사 목록 — HoneyCombo" description="최신 기술 뉴스와 큐레이션 기사">
+  <div class="page-header">
+    <h1>기사</h1>
+    <p class="page-subtitle">최신 기술 뉴스와 에디터 큐레이션</p>
+  </div>
+  
+  {allTags.length > 0 && <TagFilter tags={allTags} />}
+  
+  {allArticles.length === 0 ? (
+    <p class="empty-state" data-testid="article-list-empty">
+      기사를 수집 중입니다. 잠시 후 다시 확인해주세요.
+    </p>
+  ) : (
+    <div class="article-grid grid grid-3" data-testid="article-list">
+      {pageArticles.map(article => (
+        <ArticleCard
+          id={article._id}
+          title={article.title}
+          url={article.url}
+          source={article.source}
+          type={article.type}
+          description={article.description}
+          tags={article.tags}
+          date={'submitted_at' in article ? article.submitted_at : article.published_at}
+          thumbnail_url={article.thumbnail_url}
+          isExternal={article._type === 'feed'}
+          slug={article._type === 'curated' ? article._id : undefined}
+        />
+      ))}
+    </div>
+  )}
+  
+  <Pagination currentPage={1} totalPages={totalPages} baseUrl="/articles" />
+</BaseLayout>
+
+<style>
+.page-header { margin-bottom: var(--space-xl); }
+.page-header h1 { font-size: 2rem; font-weight: 800; }
+.page-subtitle { color: var(--color-text-muted); margin-top: var(--space-xs); }
+.article-grid { margin-top: var(--space-md); }
+.empty-state { text-align: center; padding: var(--space-2xl); color: var(--color-text-muted); }
+</style>

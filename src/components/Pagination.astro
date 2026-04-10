@@ -1,0 +1,35 @@
+---
+interface Props {
+  currentPage: number;
+  totalPages: number;
+  baseUrl: string;  // e.g., '/articles'
+}
+
+const { currentPage, totalPages, baseUrl } = Astro.props;
+
+function pageUrl(page: number): string {
+  if (page === 1) return baseUrl;
+  return `${baseUrl}/page/${page}`;
+}
+---
+
+{totalPages > 1 && (
+  <nav class="pagination" data-testid="pagination" aria-label="페이지 네비게이션">
+    {currentPage > 1 && (
+      <a href={pageUrl(currentPage - 1)} class="pagination-prev" aria-label="이전 페이지">← 이전</a>
+    )}
+    
+    <span class="pagination-info">{currentPage} / {totalPages}</span>
+    
+    {currentPage < totalPages && (
+      <a href={pageUrl(currentPage + 1)} class="pagination-next" aria-label="다음 페이지">다음 →</a>
+    )}
+  </nav>
+)}
+
+<style>
+.pagination { display: flex; gap: var(--space-sm); justify-content: center; align-items: center; padding: var(--space-xl) 0; }
+.pagination a { padding: var(--space-sm) var(--space-md); border: 1px solid var(--color-border); border-radius: var(--radius-sm); font-weight: 500; color: var(--color-text); }
+.pagination a:hover { background: var(--color-primary); color: white; border-color: var(--color-primary); text-decoration: none; }
+.pagination-info { color: var(--color-text-muted); font-size: 0.875rem; }
+</style>

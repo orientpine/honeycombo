@@ -1,0 +1,133 @@
+backend:
+  name: github
+  repo: YOUR_GITHUB_USERNAME/honeycombo
+  branch: main
+  auth_endpoint: /api/auth
+
+# No media uploads — images are external hotlinks only
+media_folder: ""
+public_folder: ""
+
+collections:
+  # Curated articles — individual JSON files in src/content/curated/
+  - name: "curated"
+    label: "큐레이션 기사"
+    label_singular: "기사"
+    folder: "src/content/curated"
+    create: true
+    format: "json"
+    extension: "json"
+    identifier_field: "id"
+    slug: "{{year}}/{{month}}/{{slug}}"
+    fields:
+      - { label: "ID", name: "id", widget: "string", hint: "고유 식별자 (영문, 숫자, 하이픈)" }
+      - { label: "제목", name: "title", widget: "string", pattern: [".{1,200}", "최대 200자"] }
+      - { label: "URL", name: "url", widget: "string", hint: "원문 링크" }
+      - { label: "출처", name: "source", widget: "string" }
+      - label: "유형"
+        name: "type"
+        widget: "select"
+        options:
+          - { label: "기사", value: "article" }
+          - { label: "YouTube", value: "youtube" }
+          - { label: "X 스레드", value: "x_thread" }
+          - { label: "Threads", value: "threads" }
+          - { label: "기타", value: "other" }
+        default: "article"
+      - { label: "썸네일 URL", name: "thumbnail_url", widget: "string", required: false, hint: "외부 이미지 URL" }
+      - { label: "설명", name: "description", widget: "text", required: false, pattern: [".{0,1000}", "최대 1000자"] }
+      - { label: "태그", name: "tags", widget: "list", min: 1, max: 5, hint: "1~5개" }
+      - { label: "제출자", name: "submitted_by", widget: "string", required: false }
+      - { label: "제출일", name: "submitted_at", widget: "datetime" }
+      - label: "상태"
+        name: "status"
+        widget: "select"
+        options:
+          - { label: "대기중", value: "pending" }
+          - { label: "승인됨", value: "approved" }
+          - { label: "거부됨", value: "rejected" }
+        default: "pending"
+
+  # Playlists — individual JSON files in src/data/playlists/
+  - name: "playlists"
+    label: "플레이리스트"
+    label_singular: "플레이리스트"
+    folder: "src/data/playlists"
+    create: true
+    format: "json"
+    extension: "json"
+    identifier_field: "id"
+    fields:
+      - { label: "ID", name: "id", widget: "string" }
+      - { label: "제목", name: "title", widget: "string" }
+      - { label: "설명", name: "description", widget: "text", required: false }
+      - { label: "큐레이터", name: "curator", widget: "string" }
+      - { label: "태그", name: "tags", widget: "list", required: false }
+      - label: "기사 목록"
+        name: "items"
+        widget: "list"
+        fields:
+          - { label: "기사 ID", name: "article_id", widget: "string" }
+          - { label: "추가일", name: "added_at", widget: "datetime" }
+          - { label: "메모", name: "note", widget: "string", required: false }
+      - { label: "생성일", name: "created_at", widget: "datetime" }
+      - { label: "수정일", name: "updated_at", widget: "datetime" }
+
+  # Influencers — individual JSON files in src/data/influencers/
+  - name: "influencers"
+    label: "인플루언서"
+    label_singular: "인플루언서"
+    folder: "src/data/influencers"
+    create: true
+    format: "json"
+    extension: "json"
+    identifier_field: "id"
+    fields:
+      - { label: "ID", name: "id", widget: "string" }
+      - { label: "이름", name: "name", widget: "string" }
+      - label: "플랫폼"
+        name: "platform"
+        widget: "select"
+        options:
+          - { label: "X (Twitter)", value: "x" }
+          - { label: "Threads", value: "threads" }
+          - { label: "블로그", value: "blog" }
+          - { label: "YouTube", value: "youtube" }
+      - { label: "핸들", name: "handle", widget: "string", hint: "@username" }
+      - { label: "소개", name: "bio", widget: "text", required: false }
+      - label: "의견 목록"
+        name: "opinions"
+        widget: "list"
+        fields:
+          - { label: "의견", name: "text", widget: "text" }
+          - { label: "출처 URL", name: "source_url", widget: "string" }
+          - { label: "날짜", name: "date", widget: "datetime" }
+          - { label: "주제", name: "topic", widget: "string" }
+
+  # Must-read — individual JSON files in src/data/must-read/
+  - name: "must-read"
+    label: "Must-read"
+    label_singular: "Must-read"
+    folder: "src/data/must-read"
+    create: true
+    format: "json"
+    extension: "json"
+    identifier_field: "id"
+    fields:
+      - { label: "ID", name: "id", widget: "string" }
+      - { label: "날짜", name: "date", widget: "string", hint: "YYYY-MM-DD" }
+      - { label: "기사 ID 목록", name: "items", widget: "list" }
+      - { label: "핀 설정자", name: "pinned_by", widget: "string", required: false }
+
+  # Ranking overrides — single file
+  - name: "ranking-config"
+    label: "랭킹 설정"
+    files:
+      - label: "랭킹 오버라이드"
+        name: "ranking-overrides"
+        file: "src/config/ranking-overrides.json"
+        fields:
+          - { label: "주차", name: "week", widget: "string", hint: "YYYY-WNN" }
+          - { label: "고정 키워드", name: "pin", widget: "list" }
+          - { label: "제거 키워드", name: "suppress", widget: "list" }
+          - { label: "감사 로그", name: "audit_log", widget: "list", required: false }

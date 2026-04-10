@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Test Tech Feed</title>
+    <link>https://example.com</link>
+    <description>Test RSS feed</description>
+    <item>
+      <title>AI Breakthrough in 2026</title>
+      <link>https://example.com/ai-breakthrough</link>
+      <description>A major AI breakthrough was announced today.</description>
+      <pubDate>Fri, 10 Apr 2026 08:00:00 GMT</pubDate>
+      <category>AI</category>
+    </item>
+    <item>
+      <title>New JavaScript Framework Released</title>
+      <link>https://example.com/new-js-framework</link>
+      <description>Another JavaScript framework has been released.</description>
+      <pubDate>Thu, 09 Apr 2026 10:00:00 GMT</pubDate>
+      <category>JavaScript</category>
+    </item>
+  </channel>
+</rss>

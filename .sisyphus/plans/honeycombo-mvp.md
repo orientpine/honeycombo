@@ -628,7 +628,7 @@ Max Concurrent: 5 (Waves 1, 4)
   **Commit**: YES (Wave 1 그룹)
 
 
-- [ ] 6. RSS 수집 파이프라인 (GitHub Actions cron)
+- [x] 6. RSS 수집 파이프라인 (GitHub Actions cron)
 
   **What to do**:
   - `scripts/rss-collect.ts` 생성:
@@ -710,7 +710,7 @@ Max Concurrent: 5 (Waves 1, 4)
   - Message: `feat: add RSS pipeline and article pages`
   - Pre-commit: `bun run build; bun test`
 
-- [ ] 7. 기사 목록 페이지 + 페이지네이션 + 태그 필터
+- [x] 7. 기사 목록 페이지 + 페이지네이션 + 태그 필터
 
   **What to do**:
   - `src/pages/articles/index.astro` (첫 페이지) + `src/pages/articles/page/[...page].astro` (페이지네이션) 생성:
@@ -786,7 +786,7 @@ Max Concurrent: 5 (Waves 1, 4)
 
   **Commit**: YES (T6과 묶음)
 
-- [ ] 8. 큐레이션 기사 상세 페이지
+- [x] 8. 큐레이션 기사 상세 페이지
 
   **What to do**:
   - `src/pages/articles/[slug].astro` 생성:
@@ -841,7 +841,7 @@ Max Concurrent: 5 (Waves 1, 4)
   **Commit**: YES (T6, T7과 묶음)
 
 
-- [ ] 9. Decap CMS 설정 + 어드민 페이지
+- [x] 9. Decap CMS 설정 + 어드민 페이지
 
   **What to do**:
   - `public/admin/config.yml` 생성:

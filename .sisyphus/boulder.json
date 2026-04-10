@@ -54,6 +54,42 @@
       "agent": "Sisyphus-Junior",
       "category": "quick",
       "updated_at": "2026-04-10T13:07:47.036Z"
+    },
+    "todo:6": {
+      "task_key": "todo:6",
+      "task_label": "6",
+      "task_title": "RSS 수집 파이프라인 (GitHub Actions cron)",
+      "session_id": "ses_2887c03b0ffeWTlOWk70b6qj6V",
+      "agent": "Sisyphus-Junior",
+      "category": "deep",
+      "updated_at": "2026-04-10T13:17:23.814Z"
+    },
+    "todo:7": {
+      "task_key": "todo:7",
+      "task_label": "7",
+      "task_title": "기사 목록 페이지 + 페이지네이션 + 태그 필터",
+      "session_id": "ses_28874376cffedZV9CxK1Qr1omK",
+      "agent": "Sisyphus-Junior",
+      "category": "visual-engineering",
+      "updated_at": "2026-04-10T13:22:35.409Z"
+    },
+    "todo:8": {
+      "task_key": "todo:8",
+      "task_label": "8",
+      "task_title": "큐레이션 기사 상세 페이지",
+      "session_id": "ses_2886fd29dffeQQOFa7kEUFcmrj",
+      "agent": "Sisyphus-Junior",
+      "category": "visual-engineering",
+      "updated_at": "2026-04-10T13:25:22.931Z"
+    },
+    "todo:9": {
+      "task_key": "todo:9",
+      "task_label": "9",
+      "task_title": "Decap CMS 설정 + 어드민 페이지",
+      "session_id": "ses_2886d4be6ffen1ZX3dT2bG87JB",
+      "agent": "Sisyphus-Junior",
+      "category": "unspecified-high",
+      "updated_at": "2026-04-10T13:29:13.056Z"
     }
   }
 }

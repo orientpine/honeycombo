@@ -17,6 +17,7 @@
     "vitest": "^4.1.4"
   },
   "dependencies": {
-    "astro": "^6.1.5"
+    "astro": "^6.1.5",
+    "rss-parser": "^3.13.0"
   }
 }

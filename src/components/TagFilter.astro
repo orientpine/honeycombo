@@ -1,0 +1,54 @@
+---
+interface Props {
+  tags: string[];
+}
+const { tags } = Astro.props;
+---
+
+<div class="tag-filter" data-testid="tag-filter">
+  <span class="tag-filter-label">태그 필터:</span>
+  <button class="tag active" data-tag="all" onclick="filterByTag('all')">전체</button>
+  {tags.map(tag => (
+    <button class="tag" data-tag={tag} onclick={`filterByTag('${tag}')`}>{tag}</button>
+  ))}
+</div>
+
+<script>
+function filterByTag(tag: string) {
+  const cards = document.querySelectorAll('[data-testid="article-card"]');
+  const buttons = document.querySelectorAll('[data-testid="tag-filter"] .tag');
+  
+  // Update active button
+  buttons.forEach(btn => {
+    btn.classList.toggle('active', (btn as HTMLElement).dataset.tag === tag);
+  });
+  
+  // Filter cards
+  cards.forEach(card => {
+    const cardTags = (card as HTMLElement).dataset.tags?.split(',') || [];
+    const show = tag === 'all' || cardTags.includes(tag);
+    (card as HTMLElement).style.display = show ? '' : 'none';
+  });
+  
+  // Update URL without reload
+  const url = new URL(window.location.href);
+  if (tag === 'all') {
+    url.searchParams.delete('tag');
+  } else {
+    url.searchParams.set('tag', tag);
+  }
+  window.history.pushState({}, '', url.toString());
+}
+
+// Apply filter from URL on load
+document.addEventListener('DOMContentLoaded', () => {
+  const tag = new URLSearchParams(window.location.search).get('tag');
+  if (tag) filterByTag(tag);
+});
+</script>
+
+<style>
+.tag-filter { display: flex; flex-wrap: wrap; gap: var(--space-xs); align-items: center; margin-bottom: var(--space-lg); }
+.tag-filter-label { font-size: 0.875rem; color: var(--color-text-muted); margin-right: var(--space-xs); }
+.tag-filter .tag { cursor: pointer; border: none; font-family: inherit; font-size: 0.75rem; }
+</style>
