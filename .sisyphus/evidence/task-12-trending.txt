@@ -1,0 +1,6 @@
+﻿bun test v1.3.9 (cf6cdbbb)
+System.Management.Automation.RemoteException
+ 6 pass
+ 0 fail
+ 19 expect() calls
+Ran 6 tests across 1 file. [102.00ms]

@@ -1,0 +1,7 @@
+{
+  "number": 44,
+  "title": "Submit: https://astro.build/blog/astro-5/",
+  "body": "### URL\n\nhttps://astro.build/blog/astro-5/\n\n### 유형\n\n기사\n\n### 태그 (쉼표 구분, 최대 5개)\n\nastro\n\n### 한줄 소개\n\n이미 등록된 기사입니다.",
+  "labels": [{ "name": "submission" }],
+  "user": { "login": "testuser" }
+}

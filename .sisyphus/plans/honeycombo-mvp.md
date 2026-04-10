@@ -898,7 +898,7 @@ Max Concurrent: 5 (Waves 1, 4)
   **Commit**: YES
   - Message: `feat: add Decap CMS admin interface`
 
-- [ ] 10. 사용자 제출 파이프라인 (GitHub Issues → Actions → JSON)
+- [x] 10. 사용자 제출 파이프라인 (GitHub Issues → Actions → JSON)
 
   **What to do**:
   - `.github/workflows/process-submission.yml` 생성:
@@ -986,7 +986,7 @@ Max Concurrent: 5 (Waves 1, 4)
   **Commit**: YES
   - Message: `feat: add submission pipeline and moderation`
 
-- [ ] 11. 모더레이션 상태 관리 (pending/approved/rejected)
+- [x] 11. 모더레이션 상태 관리 (pending/approved/rejected)
 
   **What to do**:
   - Decap CMS에서 status 필드 통한 모더레이션:
@@ -1035,7 +1035,7 @@ Max Concurrent: 5 (Waves 1, 4)
   **Commit**: YES (T10과 묶음)
 
 
-- [ ] 12. 트렌드 랭킹 계산 워크플로우 (weekly GitHub Actions)
+- [x] 12. 트렌드 랭킹 계산 워크플로우 (weekly GitHub Actions)
 
   **What to do**:
   - `scripts/calc-trending.ts` 생성:
@@ -1097,7 +1097,7 @@ Max Concurrent: 5 (Waves 1, 4)
   **Commit**: YES
   - Message: `feat: add trending ranking and must-read`
 
-- [ ] 13. 트렌드 페이지 + Must-read 페이지
+- [x] 13. 트렌드 페이지 + Must-read 페이지
 
   **What to do**:
   - `src/pages/trending.astro` 생성:

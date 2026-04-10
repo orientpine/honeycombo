@@ -1,0 +1,64 @@
+name: Trending Calculation
+
+on:
+  schedule:
+    - cron: '0 3 * * 1'
+  workflow_dispatch:
+
+concurrency:
+  group: content-update
+  cancel-in-progress: false
+
+jobs:
+  calculate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Calculate trending
+        run: bun run scripts/calc-trending.ts
+
+      - name: Generate must-read
+        run: bun run scripts/calc-must-read.ts
+
+      - name: Configure git
+        run: |
+          git config user.name "honeycombo-bot"
+          git config user.email "bot@honeycombo.pages.dev"
+
+      - name: Commit and push
+        run: |
+          git add src/data/trending/ src/data/must-read/ src/config/ranking-overrides.json
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          git commit -m "chore: update trending rankings [skip ci]"
+
+          MAX_RETRIES=3
+          RETRY=0
+          while [ $RETRY -lt $MAX_RETRIES ]; do
+            git pull --rebase origin main || true
+            if git push origin main; then
+              echo "Push succeeded"
+              exit 0
+            fi
+            RETRY=$((RETRY + 1))
+            sleep 5
+          done
+
+          echo "Push failed after $MAX_RETRIES retries"
+          exit 1

@@ -1,0 +1,8 @@
+﻿T11 Moderation Filter Verification
+Approved article exists: True
+Pending article excluded: True (tested with pending-test.json, not generated in dist)
+All 3 files already had status=approved filter:
+- index.astro line 13
+- page/[...page].astro line 14
+- [...slug].astro line 8
+Build: exit 0, 4 pages built

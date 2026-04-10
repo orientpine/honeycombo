@@ -90,6 +90,42 @@
       "agent": "Sisyphus-Junior",
       "category": "unspecified-high",
       "updated_at": "2026-04-10T13:29:13.056Z"
+    },
+    "todo:10": {
+      "task_key": "todo:10",
+      "task_label": "10",
+      "task_title": "사용자 제출 파이프라인 (GitHub Issues → Actions → JSON)",
+      "session_id": "ses_28868ca28ffe9orHK98o6ZdPE8",
+      "agent": "Sisyphus-Junior",
+      "category": "deep",
+      "updated_at": "2026-04-10T13:37:24.967Z"
+    },
+    "todo:11": {
+      "task_key": "todo:11",
+      "task_label": "11",
+      "task_title": "모더레이션 상태 관리 (pending/approved/rejected)",
+      "session_id": "ses_2886296dbffeIUb1I7lAj5zN0m",
+      "agent": "Sisyphus-Junior",
+      "category": "unspecified-high",
+      "updated_at": "2026-04-10T13:40:05.505Z"
+    },
+    "todo:12": {
+      "task_key": "todo:12",
+      "task_label": "12",
+      "task_title": "트렌드 랭킹 계산 워크플로우 (weekly GitHub Actions)",
+      "session_id": "ses_2885fac50ffeUWybPFdvqISaiS",
+      "agent": "Sisyphus-Junior",
+      "category": "deep",
+      "updated_at": "2026-04-10T13:46:31.634Z"
+    },
+    "todo:13": {
+      "task_key": "todo:13",
+      "task_label": "13",
+      "task_title": "트렌드 페이지 + Must-read 페이지",
+      "session_id": "ses_2885a04abffejzyGVe9Wqom3bx",
+      "agent": "Sisyphus-Junior",
+      "category": "visual-engineering",
+      "updated_at": "2026-04-10T13:49:19.100Z"
     }
   }
 }

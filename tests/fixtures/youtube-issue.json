@@ -1,0 +1,7 @@
+{
+  "number": 43,
+  "title": "Submit: https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+  "body": "### URL\n\nhttps://www.youtube.com/watch?v=dQw4w9WgXcQ\n\n### 유형\n\nYouTube\n\n### 태그 (쉼표 구분, 최대 5개)\n\nvideo, tutorial\n\n### 한줄 소개\n\n좋은 튜토리얼 영상입니다.",
+  "labels": [{ "name": "submission" }],
+  "user": { "login": "testuser" }
+}

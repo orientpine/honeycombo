@@ -1,0 +1,113 @@
+name: Process Submission
+
+on:
+  issues:
+    types: [opened, labeled]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: 'Issue number to process'
+        required: true
+        type: string
+
+concurrency:
+  group: content-update
+  cancel-in-progress: false
+
+jobs:
+  process:
+    runs-on: ubuntu-latest
+    if: contains(github.event.issue.labels.*.name, 'submission') || github.event_name == 'workflow_dispatch'
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Resolve issue payload
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
+          EVENT_NAME: ${{ github.event_name }}
+          ISSUE_NUMBER_INPUT: ${{ github.event.inputs.issue_number }}
+          ISSUE_NUMBER_EVENT: ${{ github.event.issue.number }}
+          ISSUE_TITLE_EVENT: ${{ github.event.issue.title }}
+          ISSUE_BODY_EVENT: ${{ github.event.issue.body }}
+          ISSUE_USER_EVENT: ${{ github.event.issue.user.login }}
+        run: |
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            ISSUE_JSON=$(gh api repos/$REPOSITORY/issues/$ISSUE_NUMBER_INPUT)
+            ISSUE_USER=$(echo "$ISSUE_JSON" | jq -r '.user.login')
+            echo "ISSUE_NUMBER=$ISSUE_NUMBER_INPUT" >> $GITHUB_ENV
+            echo "ISSUE_TITLE<<EOF" >> $GITHUB_ENV
+            echo "$ISSUE_JSON" | jq -r '.title' >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
+            echo "ISSUE_BODY<<EOF" >> $GITHUB_ENV
+            echo "$ISSUE_JSON" | jq -r '.body' >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
+            echo "ISSUE_USER=$ISSUE_USER" >> $GITHUB_ENV
+          else
+            echo "ISSUE_NUMBER=$ISSUE_NUMBER_EVENT" >> $GITHUB_ENV
+            echo "ISSUE_TITLE<<EOF" >> $GITHUB_ENV
+            echo "$ISSUE_TITLE_EVENT" >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
+            echo "ISSUE_BODY<<EOF" >> $GITHUB_ENV
+            echo "$ISSUE_BODY_EVENT" >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
+            echo "ISSUE_USER=$ISSUE_USER_EVENT" >> $GITHUB_ENV
+          fi
+
+      - name: Process submission
+        run: bun run scripts/process-submission.ts
+
+      - name: Validate generated content
+        run: bun run validate
+
+      - name: Configure git
+        run: |
+          git config user.name "honeycombo-bot"
+          git config user.email "bot@honeycombo.pages.dev"
+
+      - name: Create PR with new submission
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ISSUE_NUM="$ISSUE_NUMBER"
+          BRANCH="submission/$ISSUE_NUM"
+
+          git checkout -b "$BRANCH"
+          git add src/content/curated/
+
+          if git diff --cached --quiet; then
+            echo "No new files to commit"
+            exit 0
+          fi
+
+          git commit -m "feat: add submission from issue #$ISSUE_NUM"
+          git push origin "$BRANCH"
+
+          gh pr create \
+            --title "Submission from issue #$ISSUE_NUM" \
+            --body "Auto-generated from GitHub Issue #$ISSUE_NUM. Review and approve to publish." \
+            --base main \
+            --head "$BRANCH" \
+            --label "submission"
+
+      - name: Comment on issue
+        if: success() && github.event_name == 'issues'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue comment $ISSUE_NUMBER \
+            --body "✅ 제출이 접수되었습니다. 검토 후 게시됩니다."
