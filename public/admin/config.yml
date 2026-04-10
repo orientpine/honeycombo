@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: YOUR_GITHUB_USERNAME/honeycombo
+  repo: BaekdongCha/honeycombo
   branch: main
   auth_endpoint: /api/auth
 
