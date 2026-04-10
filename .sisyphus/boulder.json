@@ -189,6 +189,15 @@
       "agent": "Sisyphus-Junior",
       "category": "deep",
       "updated_at": "2026-04-10T14:25:37.220Z"
+    },
+    "todo:21": {
+      "task_key": "todo:21",
+      "task_label": "21",
+      "task_title": "Cloudflare Pages 프로덕션 배포 + 모니터링",
+      "session_id": "ses_2883649c9ffetp05NRSMjXpezm",
+      "agent": "Sisyphus-Junior",
+      "category": "unspecified-high",
+      "updated_at": "2026-04-10T14:30:12.746Z"
     }
   }
 }

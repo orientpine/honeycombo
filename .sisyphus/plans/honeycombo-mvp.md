@@ -1466,7 +1466,7 @@ Max Concurrent: 5 (Waves 1, 4)
 
   **Commit**: YES (T19, T21과 묶음)
 
-- [ ] 21. Cloudflare Pages 프로덕션 배포 + 모니터링
+- [x] 21. Cloudflare Pages 프로덕션 배포 + 모니터링
 
   **What to do**:
   - Cloudflare Pages 프로젝트 생성 (Cloudflare Dashboard)
