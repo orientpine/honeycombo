@@ -1369,7 +1369,7 @@ Max Concurrent: 5 (Waves 1, 4)
 
   **Commit**: YES (Wave 4 그룹)
 
-- [ ] 19. localStorage 개인화 (관심사 태그 필터)
+- [x] 19. localStorage 개인화 (관심사 태그 필터)
 
   **What to do**:
   - `src/components/PersonalizationBar.astro` + 클라이언트 JS:
@@ -1415,7 +1415,7 @@ Max Concurrent: 5 (Waves 1, 4)
   **Commit**: YES
   - Message: `feat: add personalization, oauth, and production deploy`
 
-- [ ] 20. GitHub OAuth (Cloudflare Pages Functions)
+- [x] 20. GitHub OAuth (Cloudflare Pages Functions)
 
   **What to do**:
   - **Pages Functions** 생성 (`functions/api/auth.ts`):

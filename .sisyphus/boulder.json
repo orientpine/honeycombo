@@ -171,6 +171,24 @@
       "agent": "Sisyphus-Junior",
       "category": "quick",
       "updated_at": "2026-04-10T14:18:45.284Z"
+    },
+    "todo:19": {
+      "task_key": "todo:19",
+      "task_label": "19",
+      "task_title": "localStorage 개인화 (관심사 태그 필터)",
+      "session_id": "ses_2883c6b49ffeiO5QjnQqY4DHfS",
+      "agent": "Sisyphus-Junior",
+      "category": "unspecified-high",
+      "updated_at": "2026-04-10T14:21:43.053Z"
+    },
+    "todo:20": {
+      "task_key": "todo:20",
+      "task_label": "20",
+      "task_title": "GitHub OAuth (Cloudflare Pages Functions)",
+      "session_id": "ses_28839db75ffeqyGxfdyV4yrQkA",
+      "agent": "Sisyphus-Junior",
+      "category": "deep",
+      "updated_at": "2026-04-10T14:25:37.220Z"
     }
   }
 }

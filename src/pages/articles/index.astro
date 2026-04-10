@@ -4,6 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
 import Pagination from '../../components/Pagination.astro';
 import TagFilter from '../../components/TagFilter.astro';
+import PersonalizationBar from '../../components/PersonalizationBar.astro';
 
 const ITEMS_PER_PAGE = 20;
 
@@ -44,6 +45,8 @@ const allTags = [...new Set(allArticles.flatMap(a => a.tags))].sort();
     <p class="page-subtitle">최신 기술 뉴스와 에디터 큐레이션</p>
   </div>
   
+  {allTags.length > 0 && <PersonalizationBar availableTags={allTags} />}
+
   {allTags.length > 0 && <TagFilter tags={allTags} />}
   
   {allArticles.length === 0 ? (
