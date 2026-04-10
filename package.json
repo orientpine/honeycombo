@@ -17,6 +17,8 @@
     "vitest": "^4.1.4"
   },
   "dependencies": {
+    "@astrojs/rss": "^4.0.18",
+    "@astrojs/sitemap": "^3.7.2",
     "astro": "^6.1.5",
     "rss-parser": "^3.13.0"
   }

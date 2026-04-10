@@ -1,0 +1,30 @@
+---
+// Giscus comments component
+// Requires GitHub Discussions to be enabled on the repo
+// Configure at: https://giscus.app
+// Replace REPO_ID and CATEGORY_ID with actual values after GitHub repo is created
+---
+
+<section class="comments-section" data-testid="comments">
+  <h2 class="comments-title">댓글</h2>
+  <script src="https://giscus.app/client.js"
+    data-repo="YOUR_GITHUB_USERNAME/honeycombo"
+    data-repo-id="REPO_ID_PLACEHOLDER"
+    data-category="Blog Comments"
+    data-category-id="CATEGORY_ID_PLACEHOLDER"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="preferred_color_scheme"
+    data-lang="ko"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+
+<style>
+.comments-section { margin-top: var(--space-2xl); padding-top: var(--space-xl); border-top: 1px solid var(--color-border); }
+.comments-title { font-size: 1.25rem; font-weight: 700; margin-bottom: var(--space-lg); }
+</style>

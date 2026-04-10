@@ -1,0 +1,85 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+
+export async function getStaticPaths() {
+  const playlists = await getCollection('playlists');
+  return playlists.map(playlist => ({
+    params: { id: playlist.data.id },
+    props: { playlist },
+  }));
+}
+
+const { playlist } = Astro.props;
+const { title, description, curator, tags, items, updated_at } = playlist.data;
+
+// Load article data for each item
+const allCurated = await getCollection('curated', e => e.data.status === 'approved');
+const allFeeds = await getCollection('feeds');
+
+const articleItems = items.map(item => {
+  const curated = allCurated.find(e => e.id === item.article_id);
+  const feed = allFeeds.find(e => e.id === item.article_id);
+  return { item, article: curated || feed };
+}).filter(({ article }) => article !== undefined);
+
+const formattedDate = new Date(updated_at).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<BaseLayout title={`${title} — HoneyCombo`} description={description}>
+  <article class="playlist-detail" data-testid="playlist-detail">
+    <header class="playlist-header">
+      <h1 class="playlist-title">{title}</h1>
+      {description && <p class="playlist-description">{description}</p>}
+      <div class="playlist-meta">
+        <span class="badge">by {curator}</span>
+        <span class="playlist-count">{items.length}개 기사</span>
+        <time>최종 업데이트: {formattedDate}</time>
+      </div>
+      <div class="playlist-tags">
+        {tags.map(tag => <span class="tag">{tag}</span>)}
+      </div>
+    </header>
+
+    {articleItems.length === 0 ? (
+      <p class="empty-state">이 플레이리스트에 기사가 없습니다.</p>
+    ) : (
+      <div class="playlist-articles grid grid-3">
+        {articleItems.map(({ item, article }) => (
+          <div class="playlist-article-wrapper">
+            {item.note && <p class="article-note">💬 {item.note}</p>}
+            <ArticleCard
+              id={article!.id}
+              title={article!.data.title}
+              url={article!.data.url}
+              source={article!.data.source}
+              type={article!.data.type}
+              description={article!.data.description}
+              tags={article!.data.tags}
+              date={'submitted_at' in article!.data ? article!.data.submitted_at : article!.data.published_at}
+              thumbnail_url={article!.data.thumbnail_url}
+              isExternal={'published_at' in article!.data}
+              slug={'submitted_at' in article!.data ? article!.id : undefined}
+            />
+          </div>
+        ))}
+      </div>
+    )}
+  </article>
+</BaseLayout>
+
+<style>
+.playlist-detail { max-width: 1200px; }
+.playlist-header { margin-bottom: var(--space-xl); }
+.playlist-title { font-size: 2rem; font-weight: 800; margin-bottom: var(--space-sm); }
+.playlist-description { color: var(--color-text-muted); font-size: 1.1rem; margin-bottom: var(--space-md); }
+.playlist-meta { display: flex; align-items: center; gap: var(--space-md); flex-wrap: wrap; margin-bottom: var(--space-sm); }
+.playlist-meta time { font-size: 0.875rem; color: var(--color-text-muted); }
+.playlist-count { font-size: 0.875rem; color: var(--color-text-muted); }
+.playlist-tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+.playlist-articles { margin-top: var(--space-lg); }
+.playlist-article-wrapper { display: flex; flex-direction: column; gap: var(--space-xs); }
+.article-note { font-size: 0.875rem; color: var(--color-text-muted); font-style: italic; padding: var(--space-xs) var(--space-sm); background: var(--color-bg-secondary); border-radius: var(--radius-sm); }
+.empty-state { text-align: center; padding: var(--space-2xl); color: var(--color-text-muted); }
+</style>

@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin/
+Disallow: /admin
+
+Sitemap: https://honeycombo.pages.dev/sitemap-index.xml

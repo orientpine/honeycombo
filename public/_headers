@@ -1,0 +1,10 @@
+/*
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+/articles/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://giscus.app https://unpkg.com; style-src 'self' 'unsafe-inline'; frame-src https://giscus.app; connect-src 'self' https://giscus.app; img-src 'self' data: https: http:; font-src 'self'
+
+/admin/*
+  Content-Security-Policy: default-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://api.github.com; img-src 'self' data: https:; connect-src 'self' https://api.github.com https://unpkg.com

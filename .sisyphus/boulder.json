@@ -126,6 +126,51 @@
       "agent": "Sisyphus-Junior",
       "category": "visual-engineering",
       "updated_at": "2026-04-10T13:49:19.100Z"
+    },
+    "todo:14": {
+      "task_key": "todo:14",
+      "task_label": "14",
+      "task_title": "에디터 플레이리스트 (콘텐츠 + 페이지)",
+      "session_id": "ses_28856861dffe5awkLkYkzGN6Be",
+      "agent": "Sisyphus-Junior",
+      "category": "visual-engineering",
+      "updated_at": "2026-04-10T13:53:21.166Z"
+    },
+    "todo:15": {
+      "task_key": "todo:15",
+      "task_label": "15",
+      "task_title": "인플루언서 의견 페이지",
+      "session_id": "ses_28853bf18ffe85Y17n4qUojSqW",
+      "agent": "Sisyphus-Junior",
+      "category": "visual-engineering",
+      "updated_at": "2026-04-10T13:55:57.989Z"
+    },
+    "todo:16": {
+      "task_key": "todo:16",
+      "task_label": "16",
+      "task_title": "YouTube oEmbed 컴포넌트",
+      "session_id": "ses_288518865ffe7zQ7UcpVUs05qN",
+      "agent": "Sisyphus-Junior",
+      "category": "quick",
+      "updated_at": "2026-04-10T14:03:57.010Z"
+    },
+    "todo:17": {
+      "task_key": "todo:17",
+      "task_label": "17",
+      "task_title": "Giscus 댓글 통합",
+      "session_id": "ses_2884a2e41ffeO0xbHce8f9nZHm",
+      "agent": "Sisyphus-Junior",
+      "category": "quick",
+      "updated_at": "2026-04-10T14:14:00.969Z"
+    },
+    "todo:18": {
+      "task_key": "todo:18",
+      "task_label": "18",
+      "task_title": "SEO (sitemap, robots.txt, OG meta, RSS feed)",
+      "session_id": "ses_28840f6c3ffeLxs3fshXwO7num",
+      "agent": "Sisyphus-Junior",
+      "category": "quick",
+      "updated_at": "2026-04-10T14:18:45.284Z"
     }
   }
 }

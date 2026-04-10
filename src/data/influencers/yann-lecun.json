@@ -1,0 +1,15 @@
+{
+  "id": "yann-lecun",
+  "name": "Yann LeCun",
+  "platform": "x",
+  "handle": "@ylecun",
+  "bio": "Meta AI Chief Scientist, Turing Award winner. 딥러닝의 아버지 중 한 명.",
+  "opinions": [
+    {
+      "text": "현재의 LLM 방식으로는 진정한 AGI에 도달할 수 없다. 세계 모델과 추론 능력이 필요하다.",
+      "source_url": "https://x.com/ylecun/status/example",
+      "date": "2026-04-05T00:00:00.000Z",
+      "topic": "AGI"
+    }
+  ]
+}

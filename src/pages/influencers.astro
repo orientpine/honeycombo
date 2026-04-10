@@ -1,0 +1,39 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import InfluencerCard from '../components/InfluencerCard.astro';
+
+const influencers = await getCollection('influencers');
+const sorted = influencers.sort((a, b) => a.data.name.localeCompare(b.data.name));
+---
+
+<BaseLayout title="인플루언서 의견 — HoneyCombo" description="기술 분야 주요 인물들의 최신 의견 모음">
+  <div class="page-header">
+    <h1>💬 인플루언서 의견</h1>
+    <p class="page-subtitle">기술 분야 주요 인물들의 최신 인사이트</p>
+  </div>
+
+  {sorted.length === 0 ? (
+    <p class="empty-state">인플루언서 의견을 수집 중입니다.</p>
+  ) : (
+    <div class="influencer-grid grid grid-2" data-testid="influencer-list">
+      {sorted.map(influencer => (
+        <InfluencerCard
+          id={influencer.data.id}
+          name={influencer.data.name}
+          platform={influencer.data.platform}
+          handle={influencer.data.handle}
+          bio={influencer.data.bio}
+          opinions={influencer.data.opinions}
+        />
+      ))}
+    </div>
+  )}
+</BaseLayout>
+
+<style>
+.page-header { margin-bottom: var(--space-xl); }
+.page-header h1 { font-size: 2rem; font-weight: 800; }
+.page-subtitle { color: var(--color-text-muted); margin-top: var(--space-xs); }
+.empty-state { text-align: center; padding: var(--space-2xl); color: var(--color-text-muted); }
+</style>

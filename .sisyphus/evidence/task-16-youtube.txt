@@ -1,0 +1,46 @@
+﻿bun : $ astro build
+At line:1 char:1
++ bun run build 2>&1 | Out-File -Encoding utf8 ".sisyphus/evidence/task ...
++ ~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ($ astro build:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[2m23:03:23[22m [34m[content][39m Syncing content
+[33m[1m23:03:23[22m [WARN] [glob-loader][39m No files found matching "*.json" in directory "src\data\must-read"
+[33m[1m23:03:23[22m [WARN] [glob-loader][39m No files found matching "*.json" in directory "src\data\trending"
+[33m[1m23:03:23[22m [WARN] [glob-loader][39m No files found matching "**/*.json" in directory "src\data\feeds"
+[2m23:03:23[22m [34m[content][39m Synced content
+[2m23:03:23[22m [34m[types][39m Generated [2m568ms[22m
+[2m23:03:23[22m [34m[build][39m output: [34m"static"[39m
+[2m23:03:23[22m [34m[build][39m mode: [34m"static"[39m
+[2m23:03:23[22m [34m[build][39m directory: [34mC:\Users\BaekdongCha\Documents\honeycombo\dist\[39m
+[2m23:03:23[22m [34m[build][39m Collecting build info...
+[2m23:03:23[22m [34m[build][39m [32m✓ Completed in 583ms.[39m
+[2m23:03:23[22m [34m[build][39m Building static entrypoints...
+[2m23:03:24[22m [34m[vite][39m [32m✓ built in 937ms[39m
+[2m23:03:24[22m [34m[vite][39m [32m✓ built in 13ms[39m
+[2m23:03:24[22m [34m[build][39m Rearranging server assets...
+
+[42m[30m generating static routes [39m[49m
+The collection "feeds" does not exist or is empty. Please check your content config file for errors.
+[2m23:03:24[22m   [34m├─[39m [2m/admin/index.html[22m [2m(+20ms)[22m 
+The collection "feeds" does not exist or is empty. Please check your content config file for errors.
+[2m23:03:24[22m   [34m├─[39m [2m/articles/index.html[22m [2m(+6ms)[22m 
+[2m23:03:24[22m   [34m├─[39m [2m/articles/2026/04/sample-article/index.html[22m [2m(+4ms)[22m 
+[2m23:03:24[22m   [34m├─[39m [2m/influencers/index.html[22m [2m(+6ms)[22m 
+The collection "mustRead" does not exist or is empty. Please check your content config file for errors.
+[2m23:03:24[22m   [34m├─[39m [2m/must-read/index.html[22m [2m(+3ms)[22m 
+The collection "feeds" does not exist or is empty. Please check your content config file for errors.
+[2m23:03:24[22m   [34m├─[39m [2m/playlists/ai-weekly/index.html[22m [2m(+3ms)[22m 
+The collection "feeds" does not exist or is empty. Please check your content config file for errors.
+[2m23:03:24[22m   [34m├─[39m [2m/playlists/startup-picks/index.html[22m [2m(+2ms)[22m 
+[2m23:03:24[22m   [34m├─[39m [2m/playlists/index.html[22m [2m(+4ms)[22m 
+The collection "trending" does not exist or is empty. Please check your content config file for errors.
+[2m23:03:24[22m   [34m├─[39m [2m/trending/index.html[22m [2m(+4ms)[22m 
+[2m23:03:24[22m   [34m├─[39m [2m/index.html[22m [2m(+3ms)[22m 
+[2m23:03:24[22m [32m✓ Completed in 84ms.
+[39m
+[2m23:03:24[22m [34m[build][39m [32m✓ Completed in 1.09s.[39m
+[2m23:03:24[22m [34m[build][39m 10 page(s) built in [1m1.68s[22m
+[2m23:03:24[22m [34m[build][39m [1mComplete![22m
+YouTubeEmbed exists: True

@@ -1147,7 +1147,7 @@ Max Concurrent: 5 (Waves 1, 4)
 
   **Commit**: YES (T12와 묶음)
 
-- [ ] 14. 에디터 플레이리스트 (콘텐츠 + 페이지)
+- [x] 14. 에디터 플레이리스트 (콘텐츠 + 페이지)
 
   **What to do**:
   - 플레이리스트 데이터 모델 (`src/data/playlists/*.json`):
@@ -1199,7 +1199,7 @@ Max Concurrent: 5 (Waves 1, 4)
 
   **Commit**: YES (Wave 4 그룹)
 
-- [ ] 15. 인플루언서 의견 페이지
+- [x] 15. 인플루언서 의견 페이지
 
   **What to do**:
   - 인플루언서 데이터 모델 (`src/data/influencers/*.json`):
@@ -1247,7 +1247,7 @@ Max Concurrent: 5 (Waves 1, 4)
   **Commit**: YES (Wave 4 그룹)
 
 
-- [ ] 16. YouTube oEmbed 컴포넌트
+- [x] 16. YouTube oEmbed 컴포넌트
 
   **What to do**:
   - `src/components/YouTubeEmbed.astro` 생성:
@@ -1289,7 +1289,7 @@ Max Concurrent: 5 (Waves 1, 4)
 
   **Commit**: YES (Wave 4 그룹)
 
-- [ ] 17. Giscus 댓글 통합
+- [x] 17. Giscus 댓글 통합
 
   **What to do**:
   - Giscus GitHub App 설정 가이드 (README에 단계 기록)
@@ -1330,7 +1330,7 @@ Max Concurrent: 5 (Waves 1, 4)
 
   **Commit**: YES (Wave 4 그룹)
 
-- [ ] 18. SEO (sitemap, robots.txt, OG meta, RSS feed)
+- [x] 18. SEO (sitemap, robots.txt, OG meta, RSS feed)
 
   **What to do**:
   - `@astrojs/sitemap` 설치 + 설정

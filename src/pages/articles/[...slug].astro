@@ -1,60 +1,86 @@
 ---
-import { getCollection, getEntry } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
+type CuratedArticle = {
+  id: string;
+  data: {
+    status: string;
+    title: string;
+    url: string;
+    source: string;
+    type: string;
+    description?: string;
+    tags: string[];
+    submitted_at: string;
+    thumbnail_url?: string;
+  };
+};
+
+import { getCollection } from 'astro:content';
+// biome-ignore lint/correctness/noUnusedImports: used in template
 import ArticleMeta from '../../components/ArticleMeta.astro';
+// biome-ignore lint/correctness/noUnusedImports: used in template
+import Comments from '../../components/Comments.astro';
+// biome-ignore lint/correctness/noUnusedImports: used in template
 import RelatedArticles from '../../components/RelatedArticles.astro';
+// biome-ignore lint/correctness/noUnusedImports: used in template
+import BaseLayout from '../../layouts/BaseLayout.astro';
 
 export async function getStaticPaths() {
-  const articles = await getCollection('curated', entry => entry.data.status === 'approved');
-  return articles.map(entry => ({
-    params: { slug: entry.id },
-    props: { entry },
-  }));
+  const articles = (await getCollection('curated', (entry: CuratedArticle) => entry.data.status === 'approved')) as CuratedArticle[];
+  const paths: Array<{ params: { slug: string }; props: { entry: CuratedArticle } }> = [];
+
+  for (const entry of articles) {
+    paths.push({
+      params: { slug: entry.id },
+      props: { entry },
+    });
+  }
+
+  return paths;
 }
 
-const { entry } = Astro.props;
-const { title, url, source, type, description, tags, submitted_at, thumbnail_url } = entry.data;
+const { entry } = Astro.props as { entry: CuratedArticle };
+// biome-ignore lint/correctness/noUnusedVariables: used in template
+const article = entry.data as Required<CuratedArticle['data']>;
 ---
 
 <BaseLayout
-  title={`${title} — HoneyCombo`}
-  description={description || `${title} - ${source}에서 큐레이션된 기사`}
-  ogImage={thumbnail_url}
+  title={`${article.title} — HoneyCombo`}
+  description={article.description || `${article.title} - ${article.source}에서 큐레이션된 기사`}
+  ogImage={article.thumbnail_url}
   ogType="article"
 >
   <article class="article-detail" data-testid="article-detail">
     <header class="article-header">
-      <h1 class="article-detail-title">{title}</h1>
+      <h1 class="article-detail-title">{article.title}</h1>
       <ArticleMeta
-        source={source}
-        date={submitted_at}
-        tags={tags}
-        url={url}
+        source={article.source}
+        date={article.submitted_at}
+        tags={article.tags}
+        url={article.url}
       />
     </header>
 
-    {thumbnail_url && (
+    {article.thumbnail_url && (
       <div class="article-hero-image">
-        <img src={thumbnail_url} alt={title} loading="eager" />
+        <img src={article.thumbnail_url} alt={article.title} loading="eager" />
       </div>
     )}
 
-    {description && (
+    {article.description && (
       <div class="article-summary">
-        <p>{description}</p>
+        <p>{article.description}</p>
       </div>
     )}
 
     <div class="article-cta">
-      <a href={url} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+      <a href={article.url} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
         원문 읽기 →
       </a>
     </div>
 
-    <!-- Giscus comments slot (activated in T17) -->
-    <div id="comments-slot" data-testid="comments-slot"></div>
+    <Comments />
 
-    <RelatedArticles currentId={entry.id} tags={tags} />
+    <RelatedArticles currentId={entry.id} tags={article.tags} />
   </article>
 </BaseLayout>
 

@@ -1,0 +1,16 @@
+{
+  "id": "ai-weekly",
+  "title": "AI 주간 픽",
+  "description": "이번 주 가장 주목할 AI/ML 관련 기사 모음",
+  "curator": "HoneyCombo 에디터",
+  "tags": ["AI", "LLM", "machine-learning"],
+  "items": [
+    {
+      "article_id": "2026/04/sample-article",
+      "added_at": "2026-04-10T00:00:00.000Z",
+      "note": "Astro 5.0의 새로운 컨텐츠 레이어 API 소개"
+    }
+  ],
+  "created_at": "2026-04-10T00:00:00.000Z",
+  "updated_at": "2026-04-10T00:00:00.000Z"
+}

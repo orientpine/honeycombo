@@ -1,0 +1,43 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PlaylistCard from '../../components/PlaylistCard.astro';
+
+const playlists = await getCollection('playlists');
+// Sort by most recently updated
+const sorted = playlists.sort((a, b) =>
+  new Date(b.data.updated_at).getTime() - new Date(a.data.updated_at).getTime()
+);
+---
+
+<BaseLayout title="플레이리스트 — HoneyCombo" description="에디터가 큐레이션한 기사 플레이리스트">
+  <div class="page-header">
+    <h1>🎵 플레이리스트</h1>
+    <p class="page-subtitle">에디터가 엄선한 주제별 기사 모음</p>
+  </div>
+
+  {sorted.length === 0 ? (
+    <p class="empty-state">플레이리스트를 준비 중입니다.</p>
+  ) : (
+    <div class="playlist-grid grid grid-3" data-testid="playlist-list">
+      {sorted.map(playlist => (
+        <PlaylistCard
+          id={playlist.data.id}
+          title={playlist.data.title}
+          description={playlist.data.description}
+          curator={playlist.data.curator}
+          tags={playlist.data.tags}
+          itemCount={playlist.data.items.length}
+          updatedAt={playlist.data.updated_at}
+        />
+      ))}
+    </div>
+  )}
+</BaseLayout>
+
+<style>
+.page-header { margin-bottom: var(--space-xl); }
+.page-header h1 { font-size: 2rem; font-weight: 800; }
+.page-subtitle { color: var(--color-text-muted); margin-top: var(--space-xs); }
+.empty-state { text-align: center; padding: var(--space-2xl); color: var(--color-text-muted); }
+</style>

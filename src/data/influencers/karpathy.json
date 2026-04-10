@@ -1,0 +1,21 @@
+{
+  "id": "karpathy",
+  "name": "Andrej Karpathy",
+  "platform": "x",
+  "handle": "@karpathy",
+  "bio": "AI researcher, former Tesla AI Director, OpenAI co-founder. Deep learning and LLM 전문가.",
+  "opinions": [
+    {
+      "text": "LLM은 단순한 텍스트 예측 모델이 아니라 세계 모델을 학습하고 있다. 이는 AGI로 가는 중요한 단계다.",
+      "source_url": "https://x.com/karpathy/status/example",
+      "date": "2026-04-01T00:00:00.000Z",
+      "topic": "LLM"
+    },
+    {
+      "text": "소프트웨어 2.0 시대에는 코드를 직접 작성하는 것보다 데이터와 학습 과정을 설계하는 것이 더 중요해진다.",
+      "source_url": "https://karpathy.medium.com/software-2-0",
+      "date": "2026-03-15T00:00:00.000Z",
+      "topic": "AI"
+    }
+  ]
+}

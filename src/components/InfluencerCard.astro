@@ -1,0 +1,69 @@
+---
+interface Opinion {
+  text: string;
+  source_url: string;
+  date: Date | string;
+  topic: string;
+}
+
+interface Props {
+  id: string;
+  name: string;
+  platform: string;
+  handle: string;
+  bio?: string;
+  opinions: Opinion[];
+}
+
+const { id, name, platform, handle, bio, opinions } = Astro.props;
+const latestOpinion = opinions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
+
+const platformIcon = (p: string) => {
+  if (p === 'x') return '𝕏';
+  if (p === 'youtube') return '▶';
+  if (p === 'threads') return '@';
+  return '🌐';
+};
+---
+
+<article class="card influencer-card" data-testid="influencer-card">
+  <div class="influencer-header">
+    <div class="influencer-info">
+      <h3 class="influencer-name">{name}</h3>
+      <span class="influencer-handle">{platformIcon(platform)} {handle}</span>
+    </div>
+    <span class="badge">{platform}</span>
+  </div>
+  
+  {bio && <p class="influencer-bio">{bio}</p>}
+  
+  {latestOpinion && (
+    <blockquote class="influencer-opinion">
+      <p>"{latestOpinion.text}"</p>
+      <footer>
+        <span class="tag">{latestOpinion.topic}</span>
+        <a href={latestOpinion.source_url} target="_blank" rel="noopener noreferrer" class="opinion-source">
+          원문 →
+        </a>
+      </footer>
+    </blockquote>
+  )}
+  
+  {opinions.length > 1 && (
+    <p class="more-opinions">+{opinions.length - 1}개 의견 더 보기</p>
+  )}
+</article>
+
+<style>
+.influencer-card { display: flex; flex-direction: column; gap: var(--space-md); }
+.influencer-header { display: flex; justify-content: space-between; align-items: flex-start; }
+.influencer-info { display: flex; flex-direction: column; gap: 2px; }
+.influencer-name { font-size: 1.1rem; font-weight: 700; }
+.influencer-handle { font-size: 0.875rem; color: var(--color-text-muted); }
+.influencer-bio { font-size: 0.875rem; color: var(--color-text-muted); line-height: 1.5; }
+.influencer-opinion { border-left: 3px solid var(--color-primary); padding-left: var(--space-md); margin: 0; }
+.influencer-opinion p { font-size: 0.9rem; line-height: 1.6; font-style: italic; color: var(--color-text); }
+.influencer-opinion footer { display: flex; align-items: center; gap: var(--space-sm); margin-top: var(--space-sm); }
+.opinion-source { font-size: 0.8rem; color: var(--color-primary); }
+.more-opinions { font-size: 0.8rem; color: var(--color-text-muted); text-align: right; }
+</style>

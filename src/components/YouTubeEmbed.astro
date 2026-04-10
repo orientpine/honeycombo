@@ -1,0 +1,92 @@
+---
+interface Props {
+  url: string;
+  title?: string;
+  thumbnail?: string;
+}
+
+const { url, title: propTitle, thumbnail: propThumbnail } = Astro.props;
+
+function extractVideoId(input: string): string | null {
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/,
+  ];
+
+  for (const pattern of patterns) {
+    const match = input.match(pattern);
+    if (match) return match[1];
+  }
+
+  return null;
+}
+
+const videoId = extractVideoId(url);
+let title = propTitle || 'YouTube 동영상';
+let thumbnail = propThumbnail;
+let available = false;
+
+if (videoId) {
+  try {
+    const oembedUrl = `https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
+    const response = await fetch(oembedUrl, { signal: controller.signal });
+    clearTimeout(timeoutId);
+
+    if (response.ok) {
+      const data = await response.json() as { title?: string; thumbnail_url?: string };
+      title = data.title || title;
+      thumbnail = data.thumbnail_url || thumbnail;
+      available = true;
+    }
+  } catch {
+    // Private, deleted, invalid, or unavailable video.
+  }
+}
+
+const hasRenderableVideo = Boolean(videoId && available);
+void hasRenderableVideo;
+
+---
+
+{hasRenderableVideo ? (
+  <div class="youtube-embed" data-testid="youtube-embed">
+    <div class="youtube-thumbnail">
+      <img src={thumbnail} alt={title} loading="lazy" />
+      <a href={url} target="_blank" rel="noopener noreferrer" class="youtube-play-btn" aria-label="YouTube에서 보기">
+        ▶
+      </a>
+    </div>
+    <p class="youtube-title">
+      <a href={url} target="_blank" rel="noopener noreferrer">{title}</a>
+    </p>
+  </div>
+) : (
+  <div class="youtube-placeholder" data-testid="youtube-embed">
+    <p class="placeholder-text">
+      {videoId ? '동영상을 불러올 수 없습니다.' : '유효하지 않은 YouTube URL입니다.'}
+    </p>
+    <a href={url} target="_blank" rel="noopener noreferrer" class="placeholder-link">
+      YouTube에서 보기 →
+    </a>
+  </div>
+)}
+
+<style>
+  .youtube-embed { display: flex; flex-direction: column; gap: var(--space-sm); }
+  .youtube-thumbnail { position: relative; border-radius: var(--radius-md); overflow: hidden; aspect-ratio: 16 / 9; background: #000; }
+  .youtube-thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+  .youtube-play-btn {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: rgba(0, 0, 0, 0.3); color: white; font-size: 3rem; text-decoration: none;
+    transition: background 0.2s;
+  }
+  .youtube-play-btn:hover { background: rgba(255, 0, 0, 0.7); text-decoration: none; }
+  .youtube-title { font-size: 0.9rem; font-weight: 500; }
+  .youtube-title a { color: var(--color-text); }
+  .youtube-title a:hover { color: var(--color-primary); }
+  .youtube-placeholder { padding: var(--space-md); background: var(--color-bg-secondary); border-radius: var(--radius-md); border: 1px dashed var(--color-border); text-align: center; }
+  .placeholder-text { color: var(--color-text-muted); font-size: 0.875rem; margin-bottom: var(--space-sm); }
+  .placeholder-link { font-size: 0.875rem; color: var(--color-primary); }
+</style>
