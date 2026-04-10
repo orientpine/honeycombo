@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "playlist",
+  "type": "object",
+  "required": ["id", "title", "curator", "tags", "items", "created_at", "updated_at"],
+  "properties": {
+    "id": { "type": "string" },
+    "title": { "type": "string", "maxLength": 200 },
+    "description": { "type": "string", "maxLength": 500 },
+    "curator": { "type": "string" },
+    "tags": { "type": "array", "items": { "type": "string" }, "maxItems": 5 },
+    "items": { "type": "array", "items": { "type": "object" } },
+    "created_at": { "type": "string" },
+    "updated_at": { "type": "string" }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "feed-config",
+  "type": "object",
+  "required": ["id", "name", "url", "category", "enabled"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "url": { "type": "string", "format": "uri" },
+    "category": { "type": "string" },
+    "enabled": { "type": "boolean" }
+  },
+  "additionalProperties": false
+}

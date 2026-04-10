@@ -1,15 +1,48 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro';
 ---
-<!DOCTYPE html>
-<html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>HoneyCombo</title>
-  </head>
-  <body>
-    <main>
-      <h1>HoneyCombo</h1>
-    </main>
-  </body>
-</html>
+
+<BaseLayout title="HoneyCombo — 기술 뉴스 큐레이션">
+  <section class="hero">
+    <h1 class="hero-title">🍯 HoneyCombo</h1>
+    <p class="hero-subtitle">개발자를 위한 기술 뉴스 큐레이션</p>
+    <div class="hero-actions">
+      <a href="/articles" class="btn btn-primary">기사 보기</a>
+      <a href="/trending" class="btn btn-secondary">트렌드 랭킹</a>
+    </div>
+  </section>
+  
+  <section class="section">
+    <h2 class="section-title">최근 기사</h2>
+    <p class="empty-state" data-testid="article-list-empty">
+      기사를 수집 중입니다. 잠시 후 다시 확인해주세요.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+.hero {
+  text-align: center;
+  padding: var(--space-2xl) 0;
+}
+.hero-title { font-size: 3rem; font-weight: 800; margin-bottom: var(--space-sm); }
+.hero-subtitle { font-size: 1.25rem; color: var(--color-text-muted); margin-bottom: var(--space-xl); }
+.hero-actions { display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.15s;
+  text-decoration: none;
+}
+.btn-primary { background: var(--color-primary); color: white; }
+.btn-primary:hover { background: var(--color-primary-hover); color: white; text-decoration: none; }
+.btn-secondary { background: var(--color-bg-secondary); color: var(--color-text); border: 1px solid var(--color-border); }
+.btn-secondary:hover { border-color: var(--color-primary); color: var(--color-primary); text-decoration: none; }
+.section { margin-top: var(--space-2xl); }
+.section-title { font-size: 1.5rem; font-weight: 700; margin-bottom: var(--space-lg); }
+.empty-state { color: var(--color-text-muted); text-align: center; padding: var(--space-2xl); }
+</style>

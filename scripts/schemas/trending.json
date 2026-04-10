@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "trending",
+  "type": "object",
+  "required": ["id", "week", "generated_at", "items"],
+  "properties": {
+    "id": { "type": "string" },
+    "week": { "type": "string" },
+    "generated_at": { "type": "string" },
+    "not_enough_data": { "type": "boolean" },
+    "items": { "type": "array", "items": { "type": "object" } }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "feed-article",
+  "type": "object",
+  "required": ["id", "title", "url", "source", "tags", "published_at", "feed_id"],
+  "properties": {
+    "id": { "type": "string" },
+    "title": { "type": "string", "maxLength": 200 },
+    "url": { "type": "string", "format": "uri" },
+    "source": { "type": "string" },
+    "type": { "type": "string", "enum": ["article", "youtube", "x_thread", "threads", "other"] },
+    "thumbnail_url": { "type": "string", "format": "uri" },
+    "description": { "type": "string", "maxLength": 1000 },
+    "tags": { "type": "array", "items": { "type": "string" }, "maxItems": 5 },
+    "published_at": { "type": "string" },
+    "feed_id": { "type": "string" }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,9 @@
+{
+  "id": "invalid-article-001",
+  "title": "Invalid curated article",
+  "url": "not-a-url",
+  "source": "Test",
+  "type": "article",
+  "tags": [],
+  "submitted_at": "not-a-date"
+}

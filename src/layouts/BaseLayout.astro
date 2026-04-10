@@ -1,0 +1,59 @@
+---
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  ogType?: string;
+}
+
+const {
+  title = 'HoneyCombo — 기술 뉴스 큐레이션',
+  description = '개발자를 위한 기술 뉴스 큐레이션 사이트. RSS 자동 수집, 에디터 픽, 주간 트렌드.',
+  ogImage,
+  ogType = 'website',
+} = Astro.props;
+
+const siteUrl = 'https://honeycombo.pages.dev';
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
+---
+
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="canonical" href={canonicalUrl} />
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:type" content={ogType} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="HoneyCombo RSS" href="/rss.xml" />
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <Navigation />
+    <main class="main-content">
+      <div class="container">
+        <slot />
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+.main-content {
+  padding: var(--space-xl) 0;
+  min-height: calc(100vh - var(--nav-height) - 100px);
+}
+</style>

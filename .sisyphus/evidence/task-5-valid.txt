@@ -1,0 +1,8 @@
+﻿bun : $ bun run scripts/validate.ts
+At line:1 char:1
++ bun run validate 2>&1 | Out-File ".sisyphus/evidence/task-5-valid.txt ...
++ ~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ($ bun run scripts/validate.ts:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+✅ All 1 files valid

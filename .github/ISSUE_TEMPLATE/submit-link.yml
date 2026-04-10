@@ -1,0 +1,41 @@
+name: 📎 자료 등록
+description: 뉴스, 아티클, YouTube 링크를 등록합니다
+labels: ["submission"]
+body:
+  - type: input
+    id: url
+    attributes:
+      label: URL
+      description: 등록할 링크를 입력하세요
+      placeholder: "https://example.com/article 또는 https://youtube.com/watch?v=..."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: 유형
+      description: 콘텐츠 유형을 선택하세요
+      options:
+        - 기사
+        - YouTube
+        - X 스레드
+        - Threads
+        - 기타
+    validations:
+      required: true
+
+  - type: input
+    id: tags
+    attributes:
+      label: 태그 (쉼표 구분, 최대 5개)
+      description: 관련 태그를 입력하세요
+      placeholder: "AI, LLM, startup"
+
+  - type: textarea
+    id: note
+    attributes:
+      label: 한줄 소개
+      description: 이 자료를 추천하는 이유를 간단히 설명해주세요
+      placeholder: "이 기사는..."
+      render: text

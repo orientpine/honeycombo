@@ -1,0 +1,10 @@
+{
+  "id": "sample-article-001",
+  "title": "Astro 5.0 출시: 컨텐츠 레이어 API 도입",
+  "url": "https://astro.build/blog/astro-5/",
+  "source": "Astro Blog",
+  "type": "article",
+  "tags": ["astro", "web", "frontend"],
+  "submitted_at": "2026-04-10T00:00:00.000Z",
+  "status": "approved"
+}

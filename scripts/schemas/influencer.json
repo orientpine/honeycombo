@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "influencer",
+  "type": "object",
+  "required": ["id", "name", "platform", "handle", "opinions"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "platform": { "type": "string", "enum": ["x", "threads", "blog", "youtube"] },
+    "handle": { "type": "string" },
+    "bio": { "type": "string", "maxLength": 300 },
+    "opinions": { "type": "array", "items": { "type": "object" } }
+  },
+  "additionalProperties": false
+}

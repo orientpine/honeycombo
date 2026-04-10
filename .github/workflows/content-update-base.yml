@@ -1,0 +1,50 @@
+name: Content Update Base
+
+on:
+  workflow_call:
+    inputs:
+      commit_message:
+        description: 'Commit message for content update'
+        required: false
+        type: string
+        default: 'chore: update content'
+  workflow_dispatch:
+
+concurrency:
+  group: content-update
+  cancel-in-progress: false
+
+jobs:
+  push-content:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git
+        run: |
+          git config user.name "honeycombo-bot"
+          git config user.email "bot@honeycombo.pages.dev"
+
+      - name: Push with retry
+        run: |
+          MAX_RETRIES=3
+          RETRY=0
+          while [ $RETRY -lt $MAX_RETRIES ]; do
+            git pull --rebase origin main || true
+            if git push origin main; then
+              echo "Push succeeded"
+              break
+            fi
+            RETRY=$((RETRY + 1))
+            echo "Push failed, retry $RETRY/$MAX_RETRIES"
+            sleep 5
+          done
+          if [ $RETRY -eq $MAX_RETRIES ]; then
+            echo "Push failed after $MAX_RETRIES retries"
+            exit 1
+          fi

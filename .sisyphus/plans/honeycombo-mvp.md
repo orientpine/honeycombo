@@ -266,7 +266,7 @@ Max Concurrent: 5 (Waves 1, 4)
 
 ## TODOs
 
-- [ ] 1. Astro 프로젝트 스캐폴딩 + 설정
+- [x] 1. Astro 프로젝트 스캐폴딩 + 설정
 
   **What to do**:
   - **루트 디렉토리(C:\Users\BaekdongCha\Documents\honeycombo)에서 직접 스캐폴딩** (하위 폴더 생성 금지):
@@ -360,7 +360,7 @@ Max Concurrent: 5 (Waves 1, 4)
   - Files: 전체 프로젝트 구조
   - Pre-commit: `bun run build`
 
-- [ ] 2. 콘텐츠 스키마 정의 (Zod + JSON Schema)
+- [x] 2. 콘텐츠 스키마 정의 (Zod + JSON Schema)
 
   **What to do**:
   - `src/content.config.ts` 생성 (Astro v5+ loader 기반 컬렉션 — 레거시 `src/content/config.ts` 아님):
@@ -437,7 +437,7 @@ Max Concurrent: 5 (Waves 1, 4)
 
   **Commit**: YES (Wave 1 그룹)
 
-- [ ] 3. 베이스 레이아웃 + 글로벌 스타일 + 네비게이션
+- [x] 3. 베이스 레이아웃 + 글로벌 스타일 + 네비게이션
 
   **What to do**:
   - `src/layouts/BaseLayout.astro` 생성:
@@ -497,7 +497,7 @@ Max Concurrent: 5 (Waves 1, 4)
 
   **Commit**: YES (Wave 1 그룹)
 
-- [ ] 4. GitHub Actions 인프라 (CI/CD + concurrency)
+- [x] 4. GitHub Actions 인프라 (CI/CD + concurrency)
 
   **What to do**:
   - `.github/workflows/ci.yml` 생성:
@@ -557,7 +557,7 @@ Max Concurrent: 5 (Waves 1, 4)
 
   **Commit**: YES (Wave 1 그룹)
 
-- [ ] 5. 콘텐츠 검증 스크립트 (validate.ts)
+- [x] 5. 콘텐츠 검증 스크립트 (validate.ts)
 
   **What to do**:
   - `scripts/validate.ts` 생성:
