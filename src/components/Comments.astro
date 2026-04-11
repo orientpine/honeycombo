@@ -41,6 +41,8 @@ const isConfigured = Boolean(REPO_ID && CATEGORY_ID);
 <style>
 .comments-section { margin-top: var(--space-2xl); padding-top: var(--space-xl); border-top: 1px solid var(--color-border); }
 .comments-title { font-size: 1.25rem; font-weight: 700; margin-bottom: var(--space-lg); }
+.comments-section :global(.giscus) { width: 100%; }
+.comments-section :global(.giscus-frame) { width: 100% !important; min-height: 300px; }
 .comments-setup-note { padding: var(--space-md); background: var(--color-bg-secondary); border-radius: var(--radius-md); border: 1px dashed var(--color-border); text-align: center; }
 .comments-setup-note p { color: var(--color-text-muted); font-size: 0.875rem; margin-bottom: var(--space-sm); }
 .comments-setup-note a { font-size: 0.875rem; color: var(--color-primary); }

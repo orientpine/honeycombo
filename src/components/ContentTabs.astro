@@ -1,0 +1,296 @@
+---
+interface Props {
+  description?: string;
+  url: string;
+}
+const { description, url } = Astro.props;
+---
+
+<div class="content-tabs" data-url={url}>
+  <div class="tab-header" role="tablist">
+    <button
+      class="tab-btn active"
+      role="tab"
+      aria-selected="true"
+      aria-controls="panel-summary"
+      data-tab="summary"
+    >
+      요약
+    </button>
+    <button
+      class="tab-btn"
+      role="tab"
+      aria-selected="false"
+      aria-controls="panel-original"
+      data-tab="original"
+    >
+      원문
+    </button>
+  </div>
+
+  <div class="tab-panels">
+    <div class="tab-panel active" id="panel-summary" role="tabpanel" data-panel="summary">
+      {description ? (
+        <div class="article-summary">
+          <p>{description}</p>
+        </div>
+      ) : (
+        <p class="no-summary">요약이 제공되지 않았습니다.</p>
+      )}
+      <div class="article-cta">
+        <a href={url} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+          원문 읽기 →
+        </a>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-original" role="tabpanel" data-panel="original">
+      <div class="iframe-wrapper">
+        <div class="iframe-loading">
+          <div class="spinner"></div>
+          <span>원문을 불러오는 중...</span>
+        </div>
+        <iframe
+          data-src={url}
+          title="원문 콘텐츠"
+          sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+          loading="lazy"
+        ></iframe>
+      </div>
+      <div class="iframe-footer">
+        <span class="iframe-hint">원문이 표시되지 않나요?</span>
+        <a href={url} target="_blank" rel="noopener noreferrer" class="open-external">
+          새 탭에서 열기 →
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.content-tabs').forEach((tabContainer) => {
+    const buttons = tabContainer.querySelectorAll<HTMLButtonElement>('.tab-btn');
+    const panels = tabContainer.querySelectorAll<HTMLElement>('.tab-panel');
+    const iframe = tabContainer.querySelector<HTMLIFrameElement>('iframe');
+    const loading = tabContainer.querySelector<HTMLElement>('.iframe-loading');
+    let iframeLoaded = false;
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const tabName = btn.dataset.tab;
+        if (!tabName) return;
+
+        // Update active button
+        buttons.forEach((b) => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+
+        // Update active panel
+        panels.forEach((p) => p.classList.remove('active'));
+        const targetPanel = tabContainer.querySelector(`[data-panel="${tabName}"]`);
+        targetPanel?.classList.add('active');
+
+        // Lazy-load iframe on first "원문" tab click
+        if (tabName === 'original' && iframe && !iframeLoaded) {
+          const src = iframe.dataset.src;
+          if (src) {
+            iframeLoaded = true;
+            iframe.src = src;
+
+            iframe.addEventListener('load', () => {
+              if (loading) loading.style.display = 'none';
+              iframe.classList.add('loaded');
+            });
+
+            // Timeout fallback - if iframe doesn't fire load in 10s, hide spinner
+            setTimeout(() => {
+              if (loading) loading.style.display = 'none';
+              iframe.classList.add('loaded');
+            }, 10000);
+          }
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .content-tabs {
+    margin: var(--space-xl) 0;
+  }
+
+  /* Tab Header */
+  .tab-header {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid var(--color-border);
+    margin-bottom: 0;
+  }
+
+  .tab-btn {
+    flex: 1;
+    padding: var(--space-sm) var(--space-md);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+    text-align: center;
+  }
+
+  .tab-btn:hover {
+    color: var(--color-text);
+  }
+
+  .tab-btn.active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+  }
+
+  /* Panels */
+  .tab-panel {
+    display: none;
+    padding-top: var(--space-lg);
+  }
+
+  .tab-panel.active {
+    display: block;
+  }
+
+  /* Summary panel */
+  .article-summary {
+    background: var(--color-bg-secondary);
+    border-left: 4px solid var(--color-primary);
+    padding: var(--space-md) var(--space-lg);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    margin-bottom: var(--space-lg);
+  }
+
+  .article-summary p {
+    color: var(--color-text);
+    line-height: 1.7;
+  }
+
+  .no-summary {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    margin-bottom: var(--space-lg);
+  }
+
+  .article-cta {
+    margin: 0;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-sm) var(--space-lg);
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.15s;
+    text-decoration: none;
+  }
+
+  .btn-primary {
+    background: var(--color-primary);
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: var(--color-primary-hover);
+    color: white;
+    text-decoration: none;
+  }
+
+  /* Original panel - iframe */
+  .iframe-wrapper {
+    position: relative;
+    width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--color-bg);
+  }
+
+  .iframe-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-xl);
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+  }
+
+  .spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--color-border);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  iframe {
+    display: block;
+    width: 100%;
+    height: 70vh;
+    min-height: 400px;
+    border: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  iframe.loaded {
+    opacity: 1;
+  }
+
+  .iframe-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) 0;
+    margin-top: var(--space-sm);
+  }
+
+  .iframe-hint {
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+  }
+
+  .open-external {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-primary);
+  }
+
+  .open-external:hover {
+    text-decoration: underline;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    iframe {
+      height: 60vh;
+      min-height: 300px;
+    }
+
+    .tab-btn {
+      font-size: 0.875rem;
+      padding: var(--space-sm);
+    }
+  }
+</style>
