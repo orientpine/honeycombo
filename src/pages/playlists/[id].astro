@@ -4,25 +4,34 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
 
 export async function getStaticPaths() {
-  const playlists = await getCollection('playlists').catch(() => []);
-  return playlists.map(playlist => ({
+  const playlists = await getCollection('playlists').catch((err: unknown) => {
+    console.error('Failed to load collection:', err);
+    return [];
+  });
+  return playlists.map((playlist: any) => ({
     params: { id: playlist.data.id },
     props: { playlist },
   }));
 }
 
-const { playlist } = Astro.props;
+const { playlist } = Astro.props as { playlist: any };
 const { title, description, curator, tags, items, updated_at } = playlist.data;
 
 // Load article data for each item
-const allCurated = await getCollection('curated', e => e.data.status === 'approved').catch(() => []);
-const allFeeds = await getCollection('feeds').catch(() => []);
+const allCurated = await getCollection('curated', (e: any) => e.data.status === 'approved').catch((err: unknown) => {
+  console.error('Failed to load collection:', err);
+  return [];
+});
+const allFeeds = await getCollection('feeds').catch((err: unknown) => {
+  console.error('Failed to load collection:', err);
+  return [];
+});
 
-const articleItems = items.map(item => {
-  const curated = allCurated.find(e => e.id === item.article_id);
-  const feed = allFeeds.find(e => e.id === item.article_id);
+const articleItems = items.map((item: any) => {
+  const curated = allCurated.find((e: any) => e.id === item.article_id);
+  const feed = allFeeds.find((e: any) => e.id === item.article_id);
   return { item, article: curated || feed };
-}).filter(({ article }) => article !== undefined);
+}).filter(({ article }: { article: any }) => article !== undefined);
 
 const formattedDate = new Date(updated_at).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
@@ -38,7 +47,7 @@ const formattedDate = new Date(updated_at).toLocaleDateString('ko-KR', { year: '
         <time>최종 업데이트: {formattedDate}</time>
       </div>
       <div class="playlist-tags">
-        {tags.map(tag => <span class="tag">{tag}</span>)}
+        {tags.map((tag: any) => <span class="tag">{tag}</span>)}
       </div>
     </header>
 
@@ -46,7 +55,7 @@ const formattedDate = new Date(updated_at).toLocaleDateString('ko-KR', { year: '
       <p class="empty-state">이 플레이리스트에 기사가 없습니다.</p>
     ) : (
       <div class="playlist-articles grid grid-3">
-        {articleItems.map(({ item, article }) => (
+        {articleItems.map(({ item, article }: { item: any; article: any }) => (
           <div class="playlist-article-wrapper">
             {item.note && <p class="article-note">💬 {item.note}</p>}
             <ArticleCard

@@ -4,8 +4,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import MustReadCard from '../components/MustReadCard.astro';
 
 // Get today's or latest must-read
-const allMustRead = await getCollection('mustRead').catch(() => []);
-const latest = allMustRead.sort((a, b) => b.data.date.localeCompare(a.data.date))[0];
+const allMustRead = await getCollection('mustRead').catch((err: unknown) => {
+  console.error('Failed to load collection:', err);
+  return [];
+});
+const latest = allMustRead.sort((a: any, b: any) => b.data.date.localeCompare(a.data.date))[0];
 ---
 
 <BaseLayout title="Must-read — HoneyCombo" description="오늘 꼭 읽어야 할 기술 기사">
@@ -22,7 +25,7 @@ const latest = allMustRead.sort((a, b) => b.data.date.localeCompare(a.data.date)
     </div>
   ) : (
     <div class="must-read-grid" data-testid="must-read-list">
-      {latest.data.items.map((articleId, i) => (
+      {latest.data.items.map((articleId: any, i: number) => (
         <MustReadCard articleId={articleId} rank={i + 1} />
       ))}
     </div>

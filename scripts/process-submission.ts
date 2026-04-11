@@ -1,9 +1,10 @@
 #!/usr/bin/env bun
 
 import { createHash } from 'crypto';
-import { readFile, writeFile, mkdir, readdir } from 'fs/promises';
-import { join, extname } from 'path';
+import { readFile, writeFile, mkdir } from 'fs/promises';
+import { join } from 'path';
 import { curatedArticleSchema } from '../src/schemas/curated-article';
+import { listJsonFiles } from './utils/list-json-files';
 
 const ROOT = process.cwd();
 const CURATED_DIR = join(ROOT, 'src/content/curated');
@@ -41,27 +42,6 @@ function normalizeType(value: string): ParsedSubmission['type'] {
   };
 
   return typeMap[value] ?? 'article';
-}
-
-async function listJsonFiles(dir: string): Promise<string[]> {
-  try {
-    const entries = await readdir(dir, { recursive: true, withFileTypes: true });
-    const files: string[] = [];
-
-    for (const entry of entries) {
-      if (!entry.isFile() || extname(entry.name).toLowerCase() !== '.json') {
-        continue;
-      }
-
-      const parentPath = 'parentPath' in entry ? entry.parentPath : undefined;
-      const basePath = typeof parentPath === 'string' ? parentPath : dir;
-      files.push(join(basePath, entry.name));
-    }
-
-    return files;
-  } catch {
-    return [];
-  }
 }
 
 export function parseIssueBody(body: string): ParsedSubmission | null {
@@ -143,7 +123,8 @@ export function parseIssueBody(body: string): ParsedSubmission | null {
       tags: tags.length > 0 ? tags : ['general'],
       note,
     };
-  } catch {
+  } catch (error) {
+    console.warn('Failed to parse issue body', error);
     return null;
   }
 }
@@ -157,7 +138,8 @@ export async function fetchYouTubeOEmbed(url: string): Promise<OEmbedData | null
     }
 
     return (await response.json()) as OEmbedData;
-  } catch {
+  } catch (error) {
+    console.warn(`Failed to fetch YouTube oEmbed: ${url}`, error);
     return null;
   }
 }
@@ -172,8 +154,8 @@ export async function isDuplicateUrl(url: string): Promise<boolean> {
         if (content.url === url) {
           return true;
         }
-      } catch {
-        // Ignore unreadable JSON files while scanning for duplicates.
+      } catch (error) {
+        console.warn(`Failed to read submission source JSON: ${filePath}`, error);
       }
     }
   }
@@ -189,7 +171,8 @@ export async function isSpam(text: string): Promise<boolean> {
       : [];
     const lowerText = text.toLowerCase();
     return normalizedKeywords.some((keyword) => lowerText.includes(keyword.toLowerCase()));
-  } catch {
+  } catch (error) {
+    console.warn(`Failed to load spam keywords: ${SPAM_KEYWORDS_PATH}`, error);
     return false;
   }
 }
@@ -211,7 +194,8 @@ export async function processSubmission(
 
   try {
     new URL(url);
-  } catch {
+  } catch (error) {
+    console.warn(`Invalid submission URL: ${url}`, error);
     return { success: false, message: `Invalid URL: ${url}` };
   }
 

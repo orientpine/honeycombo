@@ -2,10 +2,10 @@
 
 import Parser from 'rss-parser';
 import { createHash } from 'crypto';
-import { existsSync } from 'fs';
-import { mkdir, readFile, readdir, writeFile } from 'fs/promises';
+import { mkdir, readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
 import { feedArticleSchema, type FeedArticle } from '../src/schemas/feed-article';
+import { listJsonFiles } from './utils/list-json-files';
 
 const ROOT = process.cwd();
 const FEEDS_CONFIG = join(ROOT, 'src/config/feeds.json');
@@ -110,27 +110,6 @@ export function normalizeFeedItem(
   });
 }
 
-async function listJsonFiles(dir: string): Promise<string[]> {
-  if (!existsSync(dir)) {
-    return [];
-  }
-
-  const files: string[] = [];
-  const entries = await readdir(dir, { recursive: true, withFileTypes: true });
-
-  for (const entry of entries) {
-    if (!entry.isFile() || !entry.name.endsWith('.json')) {
-      continue;
-    }
-
-    const parentPath = 'parentPath' in entry ? entry.parentPath : undefined;
-    const basePath = typeof parentPath === 'string' ? parentPath : dir;
-    files.push(join(basePath, entry.name));
-  }
-
-  return files;
-}
-
 export async function loadExistingIds(outputDir = FEEDS_OUTPUT_DIR): Promise<Set<string>> {
   const ids = new Set<string>();
   const files = await listJsonFiles(outputDir);
@@ -141,8 +120,8 @@ export async function loadExistingIds(outputDir = FEEDS_OUTPUT_DIR): Promise<Set
       if (typeof content.id === 'string' && content.id.length > 0) {
         ids.add(content.id);
       }
-    } catch {
-      // Ignore unreadable JSON files and continue collecting known IDs.
+    } catch (error) {
+      console.warn(`Failed to read existing feed JSON: ${filePath}`, error);
     }
   }
 
@@ -154,7 +133,8 @@ export async function loadSpamKeywords(spamKeywordsPath = SPAM_KEYWORDS_PATH): P
     const content = await readFile(spamKeywordsPath, 'utf-8');
     const parsed = JSON.parse(content) as unknown;
     return Array.isArray(parsed) ? parsed.filter((value): value is string => typeof value === 'string') : [];
-  } catch {
+  } catch (error) {
+    console.warn(`Failed to load spam keywords: ${spamKeywordsPath}`, error);
     return [];
   }
 }

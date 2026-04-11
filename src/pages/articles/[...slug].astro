@@ -14,14 +14,17 @@ import YouTubeEmbed from '../../components/YouTubeEmbed.astro';
 import ContentTabs from '../../components/ContentTabs.astro';
 
 export async function getStaticPaths() {
-  const articles = await getCollection('curated', entry => entry.data.status === 'approved').catch(() => []);
-  return articles.map(entry => ({
+  const articles = await getCollection('curated', (entry: any) => entry.data.status === 'approved').catch((err: unknown) => {
+    console.error('Failed to load collection:', err);
+    return [];
+  });
+  return articles.map((entry: any) => ({
     params: { slug: entry.id },
     props: { entry },
   }));
 }
 
-const { entry } = Astro.props;
+const { entry } = Astro.props as { entry: any };
 const article = entry.data;
 ---
 

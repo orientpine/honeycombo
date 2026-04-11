@@ -5,8 +5,8 @@
   { "id": "arstechnica", "name": "Ars Technica", "url": "https://arstechnica.com/feed/", "category": "tech", "enabled": true },
   { "id": "devto", "name": "Dev.to", "url": "https://dev.to/feed", "category": "dev", "enabled": true },
   { "id": "githublog", "name": "GitHub Blog", "url": "https://github.blog/feed/", "category": "dev", "enabled": true },
-  { "id": "producthunt", "name": "Product Hunt", "url": "https://www.producthunt.com/feed.xml", "category": "startup", "enabled": true },
+  { "id": "producthunt", "name": "Product Hunt", "url": "https://www.producthunt.com/feed.xml", "category": "startup", "enabled": false },
   { "id": "mittech", "name": "MIT Technology Review", "url": "https://www.technologyreview.com/feed/", "category": "tech", "enabled": true },
   { "id": "wired", "name": "Wired", "url": "https://www.wired.com/feed/rss", "category": "tech", "enabled": true },
-  { "id": "yozumit", "name": "요즘IT", "url": "https://yozm.wishket.com/magazine/feeds/", "category": "tech-ko", "enabled": true }
+  { "id": "yozumit", "name": "요즘IT", "url": "https://yozm.wishket.com/magazine/feeds/", "category": "tech-ko", "enabled": false }
 ]

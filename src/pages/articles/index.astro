@@ -10,15 +10,21 @@ import { compareArticles } from '../../lib/article-sort';
 const ITEMS_PER_PAGE = 20;
 
 // Get all approved curated articles
-const curatedEntries = await getCollection('curated', entry => entry.data.status === 'approved').catch(() => []);
+const curatedEntries = await getCollection('curated', (entry: any) => entry.data.status === 'approved').catch((err: unknown) => {
+  console.error('Failed to load collection:', err);
+  return [];
+});
 
 // Get all feed articles
-const feedEntries = await getCollection('feeds').catch(() => []);
+const feedEntries = await getCollection('feeds').catch((err: unknown) => {
+  console.error('Failed to load collection:', err);
+  return [];
+});
 
 // Merge and sort (shared comparator)
 const allArticles = [
-  ...curatedEntries.map(e => ({ ...e.data, _type: 'curated' as const, _id: e.id })),
-  ...feedEntries.map(e => ({ ...e.data, _type: 'feed' as const, _id: e.id })),
+  ...curatedEntries.map((e: any) => ({ ...e.data, _type: 'curated' as const, _id: e.id })),
+  ...feedEntries.map((e: any) => ({ ...e.data, _type: 'feed' as const, _id: e.id })),
 ].sort(compareArticles);
 
 const totalPages = Math.max(1, Math.ceil(allArticles.length / ITEMS_PER_PAGE));

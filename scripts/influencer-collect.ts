@@ -230,6 +230,11 @@ export async function collectInfluencers(options: CollectOptions = {}): Promise<
 }
 
 if (import.meta.main) {
+  if (!process.env.EXA_API_KEY) {
+    console.error('Error: EXA_API_KEY environment variable is required');
+    process.exit(1);
+  }
+
   const result = await collectInfluencers();
   console.log(`✅ Influencer collection complete: ${result.updated} updated, ${result.skipped} skipped`);
 

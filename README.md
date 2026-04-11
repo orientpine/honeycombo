@@ -24,7 +24,7 @@ bun run dev
 **GitHub 저장소**: https://github.com/orientpine/honeycombo
 
 Cloudflare Pages Git Integration으로 자동 배포됩니다.
-main 브랜치에 push하면 자동으로 빌드/배포됩니다.
+master 브랜치에 push하면 자동으로 빌드/배포됩니다.
 
 ### Cloudflare Pages 설정
 

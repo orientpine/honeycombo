@@ -16,7 +16,7 @@
 │  src/data/feeds/  src/data/trending/  src/content/   │
 │                   src/data/must-read/  curated/      │
 └────────────────────────┬────────────────────────────┘
-                         │ git push (main)
+                         │ git push (master)
                          ▼
 ┌─────────────────────────────────────────────────────┐
 │  Astro SSG 빌드                                      │

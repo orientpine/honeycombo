@@ -1,7 +1,7 @@
 backend:
   name: github
   repo: orientpine/honeycombo
-  branch: main
+  branch: master
   auth_endpoint: /api/auth
 
 # No media uploads — images are external hotlinks only

@@ -1,9 +1,9 @@
 #!/usr/bin/env bun
 
-import { existsSync } from 'fs';
-import { mkdir, readFile, readdir, writeFile } from 'fs/promises';
-import { extname, join } from 'path';
+import { mkdir, readFile, writeFile } from 'fs/promises';
+import { basename, join } from 'path';
 import { trendingSchema, type Trending } from '../src/schemas/trending';
+import { listJsonFiles } from './utils/list-json-files';
 
 const ROOT = process.cwd();
 const TRENDING_DIR = join(ROOT, 'src/data/trending');
@@ -63,27 +63,6 @@ export function getWeekNumber(date: Date): string {
   return `${d.getUTCFullYear()}-W${String(weekNo).padStart(2, '0')}`;
 }
 
-async function listJsonFiles(dir: string): Promise<string[]> {
-  if (!existsSync(dir)) {
-    return [];
-  }
-
-  const files: string[] = [];
-  const entries = await readdir(dir, { recursive: true, withFileTypes: true });
-
-  for (const entry of entries) {
-    if (!entry.isFile() || extname(entry.name).toLowerCase() !== '.json') {
-      continue;
-    }
-
-    const parentPath = 'parentPath' in entry ? entry.parentPath : undefined;
-    const basePath = typeof parentPath === 'string' ? parentPath : dir;
-    files.push(join(basePath, entry.name));
-  }
-
-  return files;
-}
-
 function isRecentArticle(article: Article, now: Date): boolean {
   const dateStr = article.published_at || article.submitted_at;
   if (!dateStr) {
@@ -112,8 +91,8 @@ export async function loadAllArticles(now = new Date()): Promise<Article[]> {
         if (isRecentArticle(parsed, now)) {
           articles.push(parsed);
         }
-      } catch {
-        // Skip unreadable JSON files while collecting recent articles.
+      } catch (error) {
+        console.warn(`Failed to read article JSON: ${filePath}`, error);
       }
     }
   }
@@ -149,7 +128,8 @@ async function loadOverrides(overridesPath: string): Promise<RankingOverrides> {
           )
         : [],
     };
-  } catch {
+  } catch (error) {
+    console.warn(`Failed to load ranking overrides: ${overridesPath}`, error);
     return { week: '', pin: [], suppress: [], boost: {}, audit_log: [] };
   }
 }
@@ -159,16 +139,54 @@ function shouldApplyOverrides(overrides: RankingOverrides, week: string): boolea
 }
 
 function calculateScore(data: TagAggregate, totalArticles: number, boostMultiplier: number): number {
-  const sourceCount = new Set(data.articles).size;
+  const sampleCount = new Set(data.articles).size;
   const rawScore =
-    (data.count * 0.3 + sourceCount * 0.3 + ((data.count / totalArticles) * 100) * 0.4) * boostMultiplier;
+    (data.count * 0.3 + sampleCount * 0.3 + ((data.count / totalArticles) * 100) * 0.4) * boostMultiplier;
   return Math.round(rawScore * 100) / 100;
+}
+
+function resolveDirection(
+  keyword: string,
+  rank: number,
+  previousRanks: Map<string, number>,
+): TrendingItem['direction'] {
+  const previousRank = previousRanks.get(keyword);
+
+  if (previousRank === undefined || rank < previousRank) {
+    return 'rising';
+  }
+
+  if (rank > previousRank) {
+    return 'falling';
+  }
+
+  return 'stable';
+}
+
+async function loadPreviousTrendingItems(currentWeek: string): Promise<TrendingItem[] | undefined> {
+  const trendingFiles = (await listJsonFiles(TRENDING_DIR))
+    .filter((filePath) => basename(filePath) !== `week-${currentWeek}.json`)
+    .sort((a, b) => b.localeCompare(a));
+
+  for (const filePath of trendingFiles) {
+    try {
+      const parsed = JSON.parse(await readFile(filePath, 'utf-8')) as Partial<Trending>;
+      if (Array.isArray(parsed.items)) {
+        return parsed.items as TrendingItem[];
+      }
+    } catch (error) {
+      console.warn(`Failed to load previous trending file: ${filePath}`, error);
+    }
+  }
+
+  return undefined;
 }
 
 export async function calculateTrending(
   articles?: Article[],
   overridesPath = OVERRIDES_PATH,
   now = new Date(),
+  previousItems?: TrendingItem[],
 ): Promise<TrendingResult> {
   const allArticles = articles ?? (await loadAllArticles(now));
   const week = getWeekNumber(now);
@@ -219,7 +237,17 @@ export async function calculateTrending(
     .map((keyword) => ranked.find((item) => item.keyword === keyword))
     .filter((item): item is TrendingItem => Boolean(item));
   const unpinnedItems = ranked.filter((item) => !pinnedSet.has(item.keyword));
-  const items = [...pinnedItems, ...unpinnedItems].slice(0, 30).map((item, index) => ({ ...item, rank: index + 1 }));
+  const previousRanks = new Map(previousItems?.map((item) => [item.keyword, item.rank]) ?? []);
+  const items = [...pinnedItems, ...unpinnedItems]
+    .slice(0, 30)
+    .map((item, index) => {
+      const rank = index + 1;
+      return {
+        ...item,
+        rank,
+        direction: resolveDirection(item.keyword, rank, previousRanks),
+      };
+    });
 
   if (
     shouldApplyOverrides(overrides, week) &&
@@ -237,8 +265,8 @@ export async function calculateTrending(
 
     try {
       await writeFile(overridesPath, `${JSON.stringify(overrides, null, 2)}\n`, 'utf-8');
-    } catch {
-      // Non-fatal: calculation should still succeed even if audit log persistence fails.
+    } catch (error) {
+      console.warn(`Failed to persist ranking override audit log: ${overridesPath}`, error);
     }
   }
 
@@ -262,7 +290,9 @@ export async function saveTrendingResult(result: TrendingResult): Promise<string
 }
 
 if (import.meta.main) {
-  const result = await calculateTrending();
+  const now = new Date();
+  const previousItems = await loadPreviousTrendingItems(getWeekNumber(now));
+  const result = await calculateTrending(undefined, OVERRIDES_PATH, now, previousItems);
   const filePath = await saveTrendingResult(result);
 
   if (result.not_enough_data) {

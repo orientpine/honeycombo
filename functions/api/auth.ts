@@ -15,6 +15,7 @@
  */
 
 interface Env {
+  ALLOWED_ORIGIN?: string;
   GITHUB_CLIENT_ID: string;
   GITHUB_CLIENT_SECRET: string;
 }
@@ -24,16 +25,17 @@ type PagesFunction<TEnv = Record<string, unknown>> = (context: {
   env: TEnv;
 }) => Response | Promise<Response>;
 
-const allowedOrigin = 'https://honeycombo.orientpine.workers.dev';
-
-const jsonHeaders = {
+function jsonHeaders(allowedOrigin: string) {
+  return {
   'Content-Type': 'application/json',
   'Access-Control-Allow-Origin': allowedOrigin,
-};
+  };
+}
 
 export const onRequest: PagesFunction<Env> = async (context) => {
   const { request, env } = context;
   const url = new URL(request.url);
+  const allowedOrigin = env.ALLOWED_ORIGIN || url.origin;
 
   if (request.method === 'OPTIONS') {
     return new Response(null, {
@@ -50,14 +52,14 @@ export const onRequest: PagesFunction<Env> = async (context) => {
   if (!code) {
     return new Response(JSON.stringify({ error: 'Missing code parameter' }), {
       status: 400,
-      headers: jsonHeaders,
+      headers: jsonHeaders(allowedOrigin),
     });
   }
 
   if (!env.GITHUB_CLIENT_ID || !env.GITHUB_CLIENT_SECRET) {
     return new Response(JSON.stringify({ error: 'OAuth not configured' }), {
       status: 500,
-      headers: jsonHeaders,
+      headers: jsonHeaders(allowedOrigin),
     });
   }
 
@@ -78,7 +80,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     if (!tokenResponse.ok) {
       return new Response(JSON.stringify({ error: 'Token exchange failed' }), {
         status: 502,
-        headers: jsonHeaders,
+        headers: jsonHeaders(allowedOrigin),
       });
     }
 
@@ -92,7 +94,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
         JSON.stringify({ error: tokenData.error || 'No access token' }),
         {
           status: 400,
-          headers: jsonHeaders,
+          headers: jsonHeaders(allowedOrigin),
         },
       );
     }
@@ -116,7 +118,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
   } catch {
     return new Response(JSON.stringify({ error: 'Internal error' }), {
       status: 500,
-      headers: jsonHeaders,
+      headers: jsonHeaders(allowedOrigin),
     });
   }
 };

@@ -4,8 +4,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import TrendingTable from '../components/TrendingTable.astro';
 
 // Get latest trending data
-const allTrending = await getCollection('trending').catch(() => []);
-const latest = allTrending.sort((a, b) => b.data.week.localeCompare(a.data.week))[0];
+const allTrending = await getCollection('trending').catch((err: unknown) => {
+  console.error('Failed to load collection:', err);
+  return [];
+});
+const latest = allTrending.sort((a: any, b: any) => b.data.week.localeCompare(a.data.week))[0];
 ---
 
 <BaseLayout title="트렌드 랭킹 — HoneyCombo" description="이번 주 가장 많이 언급된 기술 주제">

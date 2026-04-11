@@ -51,8 +51,8 @@ jobs:
           MAX_RETRIES=3
           RETRY=0
           while [ $RETRY -lt $MAX_RETRIES ]; do
-            git pull --rebase origin main || true
-            if git push origin main; then
+            git pull --rebase origin master || true
+            if git push origin master; then
               echo "Push succeeded"
               exit 0
             fi

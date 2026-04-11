@@ -100,7 +100,7 @@ jobs:
           gh pr create \
             --title "Submission from issue #$ISSUE_NUM" \
             --body "Auto-generated from GitHub Issue #$ISSUE_NUM. Review and approve to publish." \
-            --base main \
+            --base master \
             --head "$BRANCH" \
             --label "submission"
 

@@ -3,9 +3,12 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PlaylistCard from '../../components/PlaylistCard.astro';
 
-const playlists = await getCollection('playlists').catch(() => []);
+const playlists = await getCollection('playlists').catch((err: unknown) => {
+  console.error('Failed to load collection:', err);
+  return [];
+});
 // Sort by most recently updated
-const sorted = playlists.sort((a, b) =>
+const sorted = playlists.sort((a: any, b: any) =>
   new Date(b.data.updated_at).getTime() - new Date(a.data.updated_at).getTime()
 );
 ---
@@ -20,7 +23,7 @@ const sorted = playlists.sort((a, b) =>
     <p class="empty-state">플레이리스트를 준비 중입니다.</p>
   ) : (
     <div class="playlist-grid grid grid-3" data-testid="playlist-list">
-      {sorted.map(playlist => (
+      {sorted.map((playlist: any) => (
         <PlaylistCard
           id={playlist.data.id}
           title={playlist.data.title}
