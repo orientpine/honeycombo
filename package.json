@@ -5,21 +5,28 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
+    "preview": "bun run build && wrangler dev",
     "check": "astro check",
     "validate": "bun run scripts/validate.ts",
-    "test": "vitest run"
+    "test": "vitest run",
+    "generate-types": "wrangler types",
+    "deploy": "bun run build && wrangler deploy"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.8",
     "@types/bun": "latest",
     "typescript": "^6.0.2",
-    "vitest": "^4.1.4"
+    "vitest": "^4.1.4",
+    "wrangler": "^4.81.1"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^13.1.8",
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.2",
     "astro": "^6.1.5",
     "rss-parser": "^3.13.0"
+  },
+  "overrides": {
+    "vite": "^7"
   }
 }
