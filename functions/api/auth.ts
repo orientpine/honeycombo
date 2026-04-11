@@ -7,8 +7,8 @@
  *
  * Setup:
  * 1. Create a GitHub OAuth App at https://github.com/settings/developers
- *    - Homepage URL: https://honeycombo.pages.dev
- *    - Authorization callback URL: https://honeycombo.pages.dev/api/auth
+ *    - Homepage URL: https://honeycombo.orientpine.workers.dev
+ *    - Authorization callback URL: https://honeycombo.orientpine.workers.dev/api/auth
  * 2. Set environment variables in Cloudflare Pages Dashboard:
  *    - GITHUB_CLIENT_ID: your OAuth app client ID
  *    - GITHUB_CLIENT_SECRET: your OAuth app client secret
@@ -24,7 +24,7 @@ type PagesFunction<TEnv = Record<string, unknown>> = (context: {
   env: TEnv;
 }) => Response | Promise<Response>;
 
-const allowedOrigin = 'https://honeycombo.pages.dev';
+const allowedOrigin = 'https://honeycombo.orientpine.workers.dev';
 
 const jsonHeaders = {
   'Content-Type': 'application/json',

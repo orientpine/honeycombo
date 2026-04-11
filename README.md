@@ -38,8 +38,8 @@ main 브랜치에 push하면 자동으로 빌드/배포됩니다.
 ## GitHub OAuth 설정 (Decap CMS용)
 
 1. GitHub OAuth App 생성: https://github.com/settings/developers
-   - Homepage URL: `https://honeycombo.pages.dev`
-   - Authorization callback URL: `https://honeycombo.pages.dev/api/auth`
+   - Homepage URL: `https://honeycombo.orientpine.workers.dev`
+   - Authorization callback URL: `https://honeycombo.orientpine.workers.dev/api/auth`
 
 2. Cloudflare Pages 환경변수 설정:
    - `GITHUB_CLIENT_ID`: OAuth App Client ID

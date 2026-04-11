@@ -7,7 +7,7 @@
 | GitHub Repo | ✅ https://github.com/orientpine/honeycombo |
 | 코드 Push | ✅ master 브랜치 |
 | 빌드 | ✅ 10 pages, 28/28 테스트 통과 |
-| Cloudflare Pages | ⬜ 설정 필요 |
+| Cloudflare Pages | ✅ `honeycombo.orientpine.workers.dev` |
 | Giscus 댓글 | ⬜ 설정 필요 |
 | GitHub OAuth (CMS) | ⬜ 설정 필요 |
 
@@ -52,7 +52,7 @@
 
 1. **Save and Deploy** 클릭
 2. 빌드 로그에서 `10 page(s) built` 확인
-3. 배포 완료 후 URL 확인: `https://honeycombo.pages.dev`
+3. 배포 완료 후 URL 확인: `https://honeycombo.orientpine.workers.dev`
 4. 사이트 접속 → 홈페이지 렌더링 확인
 
 > **참고**: Cloudflare Pages는 `bun`을 기본 지원합니다.
@@ -132,9 +132,9 @@ Cloudflare Pages가 자동 재배포합니다.
 | 항목 | 값 |
 |------|-----|
 | Application name | `HoneyCombo CMS` |
-| Homepage URL | `https://honeycombo.pages.dev` |
+| Homepage URL | `https://honeycombo.orientpine.workers.dev` |
 | Application description | `HoneyCombo 큐레이션 CMS 인증` |
-| Authorization callback URL | `https://honeycombo.pages.dev/api/auth` |
+| Authorization callback URL | `https://honeycombo.orientpine.workers.dev/api/auth` |
 
 5. **Register application** 클릭
 
@@ -169,7 +169,7 @@ Cloudflare Pages가 자동 재배포합니다.
 
 ### 3-5. CMS 접속 테스트
 
-1. `https://honeycombo.pages.dev/admin` 접속
+1. `https://honeycombo.orientpine.workers.dev/admin` 접속
 2. **Login with GitHub** 클릭
 3. GitHub 인증 팝업 → **Authorize** 승인
 4. Decap CMS 대시보드 로드 확인
@@ -182,7 +182,7 @@ Cloudflare Pages가 자동 재배포합니다.
 | # | 작업 | 확인 |
 |---|------|------|
 | 1 | Cloudflare Pages 프로젝트 생성 | ⬜ |
-| 2 | `honeycombo.pages.dev` 접속 가능 | ⬜ |
+| 2 | `honeycombo.orientpine.workers.dev` 접속 가능 | ⬜ |
 | 3 | 모든 페이지 렌더링 확인 (홈, 기사, 트렌드, 플레이리스트, 인플루언서) | ⬜ |
 | 4 | GitHub Discussions 활성화 | ⬜ |
 | 5 | Giscus 앱 설치 | ⬜ |
@@ -204,7 +204,7 @@ Cloudflare Pages가 자동 재배포합니다.
 
 ### CMS 로그인 실패
 
-- OAuth App의 callback URL이 정확한지 확인: `https://honeycombo.pages.dev/api/auth`
+- OAuth App의 callback URL이 정확한지 확인: `https://honeycombo.orientpine.workers.dev/api/auth`
 - `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` 환경 변수가 Production에 설정되었는지 확인
 - 재배포 후 시도
 
