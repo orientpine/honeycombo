@@ -1,0 +1,20 @@
+[
+  {
+    "id": "karpathy",
+    "name": "Andrej Karpathy",
+    "platform": "x",
+    "handle": "@karpathy",
+    "bio": "AI researcher, former Tesla AI Director, OpenAI co-founder. Deep learning and LLM 전문가.",
+    "search_query": "Andrej Karpathy latest AI opinions insights",
+    "enabled": true
+  },
+  {
+    "id": "yann-lecun",
+    "name": "Yann LeCun",
+    "platform": "x",
+    "handle": "@ylecun",
+    "bio": "Meta AI Chief Scientist, Turing Award winner. 딥러닝의 아버지 중 한 명.",
+    "search_query": "Yann LeCun latest AI opinions insights",
+    "enabled": true
+  }
+]

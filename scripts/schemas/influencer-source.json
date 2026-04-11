@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "influencer-source",
+  "type": "object",
+  "required": ["id", "name", "platform", "handle", "bio", "search_query", "enabled"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "platform": { "type": "string", "enum": ["x", "threads", "blog", "youtube"] },
+    "handle": { "type": "string" },
+    "bio": { "type": "string", "maxLength": 300 },
+    "search_query": { "type": "string" },
+    "enabled": { "type": "boolean" }
+  },
+  "additionalProperties": false
+}

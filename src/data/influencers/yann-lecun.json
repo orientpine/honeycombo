@@ -6,10 +6,64 @@
   "bio": "Meta AI Chief Scientist, Turing Award winner. 딥러닝의 아버지 중 한 명.",
   "opinions": [
     {
-      "text": "현재의 LLM 방식으로는 진정한 AGI에 도달할 수 없다. 세계 모델과 추론 능력이 필요하다.",
-      "source_url": "https://x.com/ylecun/status/example",
-      "date": "2026-04-05T00:00:00.000Z",
-      "topic": "AGI"
+      "text": "The Week AI Split in Two. Yann LeCun stood in front of a packed… | by Atlas Meissner | Atlas Anywhere | Apr, 2026 | ... # The Week AI Split in Two Atlas Meissner 8 min read 13 hours ago -- Listen Share Yann LeCun stood in front of a packed auditorium at Brown University on Tuesday and said two words that shouldn’t surprise anyone anymore, but still landed like a slap: “AI sucks.” He wasn’t being modest. He wasn’t performing contrarianism for clicks. He was making a point that has been buildin...",
+      "source_url": "https://medium.com/atlas-anywhere/the-week-ai-split-in-two-7097cb401c69",
+      "date": "2026-04-04T09:35:06.000Z",
+      "topic": "LLM"
+    },
+    {
+      "text": "Where Yann LeCunn's JEPA comes short # Agerico Montecillo De Villa SubscribeSign in # Where Yann LeCunn's JEPA comes short ### Applying Bridge360 Metatheory Model lens Agerico Montecillo De Villa Apr 03, 2026 Share “… bottom line—that the JEPA program is foundationally truth‑seeking in aspiration and therefore drags in all that baggage—is accurate; its training objective is predictive fitness, but its rhetoric and design goals lean toward robust ... I am the executive doing all the systems th...",
+      "source_url": "https://agericomontecillodevilla.substack.com/p/where-yann-lecunns-jepa-comes-short",
+      "date": "2026-04-03T23:13:39.000Z",
+      "topic": "LLM"
+    },
+    {
+      "text": "Yann LeCun shook the artificial intelligence industry to its core. His ... deal signals a tectonic shift in how the smartest minds in AI are thinking about the future of machine intelligence, and it raises a provocative question: Are large language models a technological dead end? LeCun, who spent over a decade leading Meta’s Fundamental AI Research (FAIR) lab, has bet his reputation and billions of dollars in investor capital on an alternative vision — one built around “world models” that le...",
+      "source_url": "https://tech-insider.org/yann-lecun-ami-labs-1-billion-world-models-2026/",
+      "date": "2026-04-03T20:10:04.000Z",
+      "topic": "LLM"
+    },
+    {
+      "text": "LeCun Raises $1.03B for AMI Labs: World Models, JEPA, and What Comes After Transformers | ToolHalla Yann LeCun has been saying for years that large language models are not the path to artificial general intelligence. Now he's betting $1.03 billion on a different path — his own. ... This is worth understanding not because AMI Labs is a product you can use today, but because LeCun's bet, and who's funding it, says something important about where the AI field's most serious money and minds think...",
+      "source_url": "https://toolhalla.ai/blog/yann-lecun-ami-labs-billion-dollar-world-models-2026",
+      "date": "2026-04-03T09:00:00.000Z",
+      "topic": "LLM"
+    },
+    {
+      "text": "LeWorldModel: How Yann LeCun Solved the Hardest Problem in World Models — on a Single GPU ... The AI godfather just dropped a paper that makes physics-aware planning practical. ### The Problem with LLMs Nobody Wants to Admit Large Language Models are impressive. They can write code, summarize research, and pass the bar exam. But ask one a ... confidence.That’s because LLMs predict the next token. They don’t simulate the world. They have no internal model of physics, causality, or space. They...",
+      "source_url": "https://medium.com/@bathri06vishal/leworldmodel-how-yann-lecun-solved-the-hardest-problem-in-world-models-on-a-single-gpu-555829cf9ab1",
+      "date": "2026-04-02T10:00:10.000Z",
+      "topic": "LLM"
+    },
+    {
+      "text": "lecture at Brown, Yann LeCun discusses a new approach to AI No stranger to controversy, AI pioneer Yann LeCun told a capacity crowd that large language models are not the future of AI and that a new approach is needed if machines are to achieve human-like intelligence. PROVIDENCE, R.I. [Brown University] — Yann LeCun is known as one of the world’s preeminent artificial intelligence researchers and pioneers. He’s also known for being blunt and not shying away from controversy. During a talk at...",
+      "source_url": "https://brown.edu/news/2026-04-01/yann-lecun-artificial-intelligence-pioneer",
+      "date": "2026-04-01T02:44:00.000Z",
+      "topic": "LLM"
+    },
+    {
+      "text": "Pourquoi Yann LeCun mise-t-il sur les “world models” plutôt que sur les LLM ? - Choses à Savoir SCIENCES | Acast ... ## Pourquoi Yann LeCun mise-t-il sur les “world models” plutôt que sur les LLM ? • mardi 24 mars 2026 Depuis quelques années, l’intelligence artificielle est dominée par les LLM, les “Large Language Models”, comme ChatGPT ou Gemini. Ces modèles sont entraînés sur des quantités gigantesques de textes afin d’apprendre à prédire le mot suivant dans une phrase. Autrement dit, ils s...",
+      "source_url": "https://shows.acast.com/choses-a-savoir-sciences/episodes/pourquoi-yann-lecun-mise-t-il-sur-les-world-models-plutot-qu",
+      "date": "2026-03-31T10:00:39.000Z",
+      "topic": "LLM"
+    },
+    {
+      "text": "A team led by Yann LeCun has released a paper showing that Joint Embedding Predictive Architectures can finally train without the pile of engineering hacks that have kept them unstable for years. The LeWorldModel paper, authored by Lucas Maes, Quentin Le Lidec, Damien Scieur, LeCun, and Randall Balestriero from Mila, NYU, Samsung SAIL, and Brown University, describes a system that learns a world model directly from raw pixels using only two loss terms. Fifteen million parameters. One GPU. A f...",
+      "source_url": "https://aihola.com/article/leworldmodel-jepa-single-gpu",
+      "date": "2026-03-30T16:01:41.000Z",
+      "topic": "Robotics"
+    },
+    {
+      "text": "AMI Labs : pourquoi Yann LeCun pense que ChatGPT est une impasse et parie 1 milliard sur autre chose Le 10 mars 2026, une startup française a fait trembler le monde de l’intelligence artificielle. AMI Labs a annoncé une ... le monde connaît dans le secteur. Yann LeCun, co-lauréat du prix Turing en 2018 et ancien directeur scientifique de Meta AI pendant douze ans. Son message est limpide. Les chatbots comme ChatGPT représentent selon lui une voie sans issue. Il veut construire une IA capable...",
+      "source_url": "https://digitechnologie.com/ami-labs-yann-lecun-chatgpt-impasse/",
+      "date": "2026-03-30T06:44:11.000Z",
+      "topic": "LLM"
+    },
+    {
+      "text": "LeWorldModel: LeCun's AI Learns Real-World Physics — On a Single GPU Search Yann LeCun, together with researchers from Mila, NYU and Samsung SAIL, has published LeWorldModel (LeWM) — a compact 15-million-parameter JEPA architecture that understands physical reality and plans up to 48 times faster than foundation-model-based world models. The notorious collapse problem is finally solved. Image by Gemini for abit.ee LeCun has been saying for years that large language models are a dead end. They...",
+      "source_url": "https://abit.ee/en/artificial-intelligence/leworldmodel-lewm-yann-lecun-jepa-world-model-physical-ai-ami-labs-sigreg-robotics-artificial-intell-en",
+      "date": "2026-03-28T19:07:33.000Z",
+      "topic": "LLM"
     }
   ]
 }
