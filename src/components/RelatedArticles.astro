@@ -8,7 +8,7 @@ interface Props {
 }
 const { currentId, tags, maxItems = 3 } = Astro.props;
 
-const allCurated = await getCollection('curated', e => e.data.status === 'approved' && e.id !== currentId);
+const allCurated = await getCollection('curated', e => e.data.status === 'approved' && e.id !== currentId).catch(() => []);
 const related = allCurated
   .filter(e => e.data.tags.some(t => tags.includes(t)))
   .slice(0, maxItems);

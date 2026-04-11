@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="자료등록 — HoneyCombo" description="기술 기사나 YouTube 영상을 제출하세요">
+  <div class="page-header">
+    <h1>📝 자료등록</h1>
+    <p class="page-subtitle">좋은 기술 콘텐츠를 공유해주세요</p>
+  </div>
+
+  <div class="submit-content">
+    <section class="submit-section">
+      <h2>제출 방법</h2>
+      <p>GitHub Issues를 통해 기사나 영상을 제출할 수 있습니다.</p>
+      <a
+        href="https://github.com/orientpine/honeycombo/issues/new?template=submit-link.yml&labels=submission"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn btn-primary"
+      >
+        GitHub에서 제출하기 →
+      </a>
+    </section>
+
+    <section class="submit-section">
+      <h2>제출 가이드</h2>
+      <div class="guide-grid">
+        <div class="card guide-card">
+          <h3>✅ 제출 가능</h3>
+          <ul>
+            <li>기술 블로그 포스트</li>
+            <li>YouTube 기술 영상</li>
+            <li>오픈소스 프로젝트 소개</li>
+            <li>컨퍼런스 발표 자료</li>
+            <li>기술 튜토리얼</li>
+          </ul>
+        </div>
+        <div class="card guide-card">
+          <h3>❌ 제출 불가</h3>
+          <ul>
+            <li>광고성 콘텐츠</li>
+            <li>중복 URL</li>
+            <li>기술과 무관한 콘텐츠</li>
+            <li>유료 구독 전용 콘텐츠</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="submit-section">
+      <h2>처리 과정</h2>
+      <ol class="process-list">
+        <li><strong>제출</strong> — GitHub Issue로 URL과 태그를 입력합니다.</li>
+        <li><strong>자동 검증</strong> — URL 유효성, 중복, 스팸 키워드를 자동 검사합니다.</li>
+        <li><strong>에디터 검토</strong> — 에디터가 콘텐츠를 확인하고 승인합니다.</li>
+        <li><strong>게시</strong> — 승인된 콘텐츠가 사이트에 표시됩니다.</li>
+      </ol>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+.page-header { margin-bottom: var(--space-xl); }
+.page-header h1 { font-size: 2rem; font-weight: 800; }
+.page-subtitle { color: var(--color-text-muted); margin-top: var(--space-xs); }
+.submit-content { max-width: 800px; }
+.submit-section { margin-bottom: var(--space-2xl); }
+.submit-section h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: var(--space-md); }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.15s;
+  text-decoration: none;
+}
+.btn-primary { background: var(--color-primary); color: white; }
+.btn-primary:hover { background: var(--color-primary-hover); color: white; text-decoration: none; }
+.guide-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-md); }
+.guide-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: var(--space-sm); }
+.guide-card ul { list-style: none; display: flex; flex-direction: column; gap: var(--space-xs); }
+.guide-card ul li { font-size: 0.9rem; color: var(--color-text-muted); }
+.process-list { display: flex; flex-direction: column; gap: var(--space-md); padding-left: var(--space-lg); }
+.process-list li { font-size: 0.95rem; line-height: 1.6; }
+</style>

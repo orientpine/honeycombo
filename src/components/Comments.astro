@@ -2,29 +2,46 @@
 // Giscus comments component
 // Requires GitHub Discussions to be enabled on the repo
 // Configure at: https://giscus.app
-// Replace REPO_ID and CATEGORY_ID with actual values after GitHub repo is created
+// Set REPO_ID and CATEGORY_ID below after running giscus.app setup
+const REPO_ID = 'R_kgDOR_fpgQ';
+const CATEGORY_ID = 'DIC_kwDOR_fpgc4C6lgR';
+const isConfigured = Boolean(REPO_ID && CATEGORY_ID);
 ---
 
-<section class="comments-section" data-testid="comments">
-  <h2 class="comments-title">댓글</h2>
+{isConfigured ? (
+  <section class="comments-section" data-testid="comments">
+    <h2 class="comments-title">댓글</h2>
   <script src="https://giscus.app/client.js"
-    data-repo="orientpine/honeycombo"
-    data-repo-id=""
-    data-category="Blog Comments"
-    data-category-id=""
-    data-mapping="pathname"
-    data-strict="0"
-    data-reactions-enabled="1"
-    data-emit-metadata="0"
-    data-input-position="bottom"
-    data-theme="preferred_color_scheme"
-    data-lang="ko"
-    crossorigin="anonymous"
-    async>
-  </script>
-</section>
+      data-repo="orientpine/honeycombo"
+      data-repo-id={REPO_ID}
+      data-category="General"
+      data-category-id={CATEGORY_ID}
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="preferred_color_scheme"
+      data-lang="ko"
+      crossorigin="anonymous"
+      async
+      is:inline
+    ></script>
+  </section>
+) : (
+  <section class="comments-section" data-testid="comments">
+    <h2 class="comments-title">댓글</h2>
+    <div class="comments-setup-note">
+      <p>GitHub Discussions 설정 후 댓글 기능이 활성화됩니다.</p>
+      <a href="https://giscus.app" target="_blank" rel="noopener noreferrer">Giscus 설정 →</a>
+    </div>
+  </section>
+)}
 
 <style>
 .comments-section { margin-top: var(--space-2xl); padding-top: var(--space-xl); border-top: 1px solid var(--color-border); }
 .comments-title { font-size: 1.25rem; font-weight: 700; margin-bottom: var(--space-lg); }
+.comments-setup-note { padding: var(--space-md); background: var(--color-bg-secondary); border-radius: var(--radius-md); border: 1px dashed var(--color-border); text-align: center; }
+.comments-setup-note p { color: var(--color-text-muted); font-size: 0.875rem; margin-bottom: var(--space-sm); }
+.comments-setup-note a { font-size: 0.875rem; color: var(--color-primary); }
 </style>

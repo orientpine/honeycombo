@@ -17,12 +17,12 @@ const { availableTags } = Astro.props;
     <p class="personalization-hint">관심 있는 태그를 선택하면 해당 기사가 상단에 표시됩니다.</p>
     <div class="personalization-tags" id="personalization-tags">
       {availableTags.map(tag => (
-        <button class="tag personalization-tag" data-tag={tag} onclick={`toggleInterest('${tag}')`}>
+        <button class="tag personalization-tag" data-tag={tag}>
           {tag}
         </button>
       ))}
     </div>
-    <button class="personalization-clear" onclick="clearInterests()">초기화</button>
+    <button class="personalization-clear" id="personalization-clear">초기화</button>
   </div>
 </div>
 
@@ -67,24 +67,37 @@ function updateUI(): void {
     const tag = btn.dataset.tag || '';
     btn.classList.toggle('active', interests.includes(tag));
   });
-  
+
   const label = document.querySelector('.personalization-label');
   if (label) {
     label.textContent = interests.length > 0
-      ? `⭐ 관심사 (${interests.length}개 선택됨)`
-      : '⭐ 관심사 설정';
+      ? `\u2B50 \uAD00\uC2EC\uC0AC (${interests.length}\uAC1C \uC120\uD0DD\uB428)`
+      : '\u2B50 \uAD00\uC2EC\uC0AC \uC124\uC815';
   }
 }
 
 function prioritizeArticles(): void {
   const interests = getInterests();
   const list = document.querySelector('[data-testid="article-list"]');
-  if (!list || interests.length === 0) return;
-  
+  if (!list) return;
+
   const cards = Array.from(list.querySelectorAll<HTMLElement>('[data-testid="article-card"]'));
+
+  if (interests.length === 0) {
+    // Clear styling and restore original DOM order
+    cards.forEach(card => card.classList.remove('interest-match'));
+    const sorted = [...cards].sort((a, b) => {
+      const idxA = Number(a.dataset.originalIndex ?? 0);
+      const idxB = Number(b.dataset.originalIndex ?? 0);
+      return idxA - idxB;
+    });
+    sorted.forEach(card => list.appendChild(card));
+    return;
+  }
+
   const matched: HTMLElement[] = [];
   const unmatched: HTMLElement[] = [];
-  
+
   cards.forEach(card => {
     const tags = (card.dataset.tags || '').split(',');
     const isMatch = interests.some(i => tags.includes(i));
@@ -96,28 +109,51 @@ function prioritizeArticles(): void {
       card.classList.remove('interest-match');
     }
   });
-  
-  // Re-order: matched first
+
   [...matched, ...unmatched].forEach(card => list.appendChild(card));
 }
 
-// Toggle panel
-document.getElementById('personalization-toggle')?.addEventListener('click', () => {
-  const panel = document.getElementById('personalization-panel');
-  const toggle = document.getElementById('personalization-toggle');
-  if (panel && toggle) {
-    const isHidden = panel.hidden;
-    panel.hidden = !isHidden;
-    toggle.setAttribute('aria-expanded', String(isHidden));
-    toggle.textContent = isHidden ? '설정 닫기 ▲' : '설정 열기 ▼';
+function initPersonalization() {
+  // Store original card order for reset
+  const list = document.querySelector('[data-testid="article-list"]');
+  if (list) {
+    list.querySelectorAll<HTMLElement>('[data-testid="article-card"]').forEach((card, i) => {
+      card.dataset.originalIndex = String(i);
+    });
   }
-});
 
-// Initialize on load
-document.addEventListener('DOMContentLoaded', () => {
+  // Tag toggle buttons
+  document.querySelectorAll<HTMLElement>('.personalization-tag').forEach(btn => {
+    btn.addEventListener('click', () => {
+      toggleInterest(btn.dataset.tag || '');
+    });
+  });
+
+  // Clear button
+  document.getElementById('personalization-clear')?.addEventListener('click', clearInterests);
+
+  // Toggle panel
+  document.getElementById('personalization-toggle')?.addEventListener('click', () => {
+    const panel = document.getElementById('personalization-panel');
+    const toggle = document.getElementById('personalization-toggle');
+    if (panel && toggle) {
+      const isHidden = panel.hidden;
+      panel.hidden = !isHidden;
+      toggle.setAttribute('aria-expanded', String(isHidden));
+      toggle.textContent = isHidden ? '\uC124\uC815 \uB2EB\uAE30 \u25B2' : '\uC124\uC815 \uC5F4\uAE30 \u25BC';
+    }
+  });
+
+  // Initialize state
   updateUI();
   prioritizeArticles();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initPersonalization);
+} else {
+  initPersonalization();
+}
 </script>
 
 <style>

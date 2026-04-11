@@ -4,7 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
 
 export async function getStaticPaths() {
-  const playlists = await getCollection('playlists');
+  const playlists = await getCollection('playlists').catch(() => []);
   return playlists.map(playlist => ({
     params: { id: playlist.data.id },
     props: { playlist },
@@ -15,8 +15,8 @@ const { playlist } = Astro.props;
 const { title, description, curator, tags, items, updated_at } = playlist.data;
 
 // Load article data for each item
-const allCurated = await getCollection('curated', e => e.data.status === 'approved');
-const allFeeds = await getCollection('feeds');
+const allCurated = await getCollection('curated', e => e.data.status === 'approved').catch(() => []);
+const allFeeds = await getCollection('feeds').catch(() => []);
 
 const articleItems = items.map(item => {
   const curated = allCurated.find(e => e.id === item.article_id);

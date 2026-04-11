@@ -3,9 +3,8 @@ import { getCollection } from 'astro:content';
 import type { APIContext } from 'astro';
 
 export async function GET(context: APIContext) {
-  const curatedArticles = await getCollection('curated', (entry) => entry.data.status === 'approved');
-  const feedArticles = await getCollection('feeds');
-
+  const curatedArticles = await getCollection('curated', (entry) => entry.data.status === 'approved').catch(() => []);
+  const feedArticles = await getCollection('feeds').catch(() => []);
   const allArticles = [
     ...curatedArticles.map((entry) => ({
       title: entry.data.title,

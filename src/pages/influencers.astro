@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import InfluencerCard from '../components/InfluencerCard.astro';
 
-const influencers = await getCollection('influencers');
+const influencers = await getCollection('influencers').catch(() => []);
 const sorted = influencers.sort((a, b) => a.data.name.localeCompare(b.data.name));
 ---
 

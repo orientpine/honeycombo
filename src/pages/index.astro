@@ -1,5 +1,22 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import { compareArticles } from '../lib/article-sort';
+import PersonalizationBar from '../components/PersonalizationBar.astro';
+
+const MAX_RECENT = 6;
+
+const curatedEntries = await getCollection('curated', entry => entry.data.status === 'approved').catch(() => []);
+const feedEntries = await getCollection('feeds').catch(() => []);
+
+const allArticles = [
+  ...curatedEntries.map(e => ({ ...e.data, _type: 'curated' as const, _id: e.id })),
+  ...feedEntries.map(e => ({ ...e.data, _type: 'feed' as const, _id: e.id })),
+].sort(compareArticles);
+
+const allTags = [...new Set(allArticles.flatMap(a => a.tags))].sort();
+const recentArticles = allArticles.slice(0, MAX_RECENT);
 ---
 
 <BaseLayout title="HoneyCombo — 기술 뉴스 큐레이션">
@@ -11,12 +28,33 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <a href="/trending" class="btn btn-secondary">트렌드 랭킹</a>
     </div>
   </section>
-  
+
   <section class="section">
     <h2 class="section-title">최근 기사</h2>
-    <p class="empty-state" data-testid="article-list-empty">
-      기사를 수집 중입니다. 잠시 후 다시 확인해주세요.
-    </p>
+    {allTags.length > 0 && <PersonalizationBar availableTags={allTags} />}
+    {recentArticles.length === 0 ? (
+      <p class="empty-state" data-testid="article-list-empty">
+        기사를 수집 중입니다. 잠시 후 다시 확인해주세요.
+      </p>
+    ) : (
+      <div class="article-grid grid grid-3" data-testid="article-list">
+        {recentArticles.map(article => (
+          <ArticleCard
+            id={article._id}
+            title={article.title}
+            url={article.url}
+            source={article.source}
+            type={article.type}
+            description={article.description}
+            tags={article.tags}
+            date={'submitted_at' in article ? article.submitted_at : article.published_at}
+            thumbnail_url={article.thumbnail_url}
+            isExternal={article._type === 'feed'}
+            slug={article._type === 'curated' ? article._id : undefined}
+          />
+        ))}
+      </div>
+    )}
   </section>
 </BaseLayout>
 

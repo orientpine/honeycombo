@@ -4,7 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import TrendingTable from '../components/TrendingTable.astro';
 
 // Get latest trending data
-const allTrending = await getCollection('trending');
+const allTrending = await getCollection('trending').catch(() => []);
 const latest = allTrending.sort((a, b) => b.data.week.localeCompare(a.data.week))[0];
 ---
 

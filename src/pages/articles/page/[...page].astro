@@ -4,29 +4,19 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import ArticleCard from '../../../components/ArticleCard.astro';
 import Pagination from '../../../components/Pagination.astro';
 import TagFilter from '../../../components/TagFilter.astro';
+import { compareArticles } from '../../../lib/article-sort';
+import PersonalizationBar from '../../../components/PersonalizationBar.astro';
 
-const ITEMS_PER_PAGE = 20;
 
 export async function getStaticPaths() {
   const ITEMS_PER_PAGE = 20;
-  let curatedEntries = [];
-  try {
-    curatedEntries = await getCollection('curated', entry => entry.data.status === 'approved');
-  } catch (e) {}
-  
-  let feedEntries = [];
-  try {
-    feedEntries = await getCollection('feeds');
-  } catch (e) {}
+  const curatedEntries = await getCollection('curated', entry => entry.data.status === 'approved').catch(() => []);
+  const feedEntries = await getCollection('feeds').catch(() => []);
   
   const allArticles = [
     ...curatedEntries.map(e => ({ ...e.data, _type: 'curated' as const, _id: e.id })),
     ...feedEntries.map(e => ({ ...e.data, _type: 'feed' as const, _id: e.id })),
-  ].sort((a, b) => {
-    const dateA = new Date('submitted_at' in a ? a.submitted_at : a.published_at).getTime();
-    const dateB = new Date('submitted_at' in b ? b.submitted_at : b.published_at).getTime();
-    return dateB - dateA;
-  });
+  ].sort(compareArticles);
   
   const totalPages = Math.max(1, Math.ceil(allArticles.length / ITEMS_PER_PAGE));
   
@@ -51,6 +41,7 @@ const { articles, currentPage, totalPages, allTags } = Astro.props;
     <p class="page-subtitle">최신 기술 뉴스와 에디터 큐레이션</p>
   </div>
   
+  {allTags.length > 0 && <PersonalizationBar availableTags={allTags} />}
   {allTags.length > 0 && <TagFilter tags={allTags} />}
   
   <div class="article-grid grid grid-3" data-testid="article-list">

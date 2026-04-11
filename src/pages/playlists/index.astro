@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PlaylistCard from '../../components/PlaylistCard.astro';
 
-const playlists = await getCollection('playlists');
+const playlists = await getCollection('playlists').catch(() => []);
 // Sort by most recently updated
 const sorted = playlists.sort((a, b) =>
   new Date(b.data.updated_at).getTime() - new Date(a.data.updated_at).getTime()

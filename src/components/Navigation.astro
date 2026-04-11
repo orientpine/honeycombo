@@ -15,11 +15,16 @@ const currentPath = Astro.url.pathname;
 <nav data-testid="nav-main" class="nav">
   <div class="container nav-inner">
     <a href="/" class="nav-logo">🍯 HoneyCombo</a>
-    <ul class="nav-links">
+    <button class="nav-toggle" id="nav-toggle" aria-label="메뉴 열기" aria-expanded="false">
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
       {navItems.map(item => (
         <li>
-          <a 
-            href={item.href} 
+          <a
+            href={item.href}
             class:list={['nav-link', { active: currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href)) }]}
           >
             {item.label}
@@ -29,6 +34,18 @@ const currentPath = Astro.url.pathname;
     </ul>
   </div>
 </nav>
+
+<script>
+document.getElementById('nav-toggle')?.addEventListener('click', () => {
+  const links = document.getElementById('nav-links');
+  const toggle = document.getElementById('nav-toggle');
+  if (links && toggle) {
+    const isOpen = links.classList.toggle('open');
+    toggle.classList.toggle('open', isOpen);
+    toggle.setAttribute('aria-expanded', String(isOpen));
+  }
+});
+</script>
 
 <style>
 .nav {
@@ -52,6 +69,26 @@ const currentPath = Astro.url.pathname;
   text-decoration: none;
 }
 .nav-logo:hover { color: var(--color-primary); }
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-xs);
+}
+.nav-toggle-bar {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--color-text);
+  border-radius: 1px;
+  transition: transform 0.2s, opacity 0.2s;
+}
+.nav-toggle.open .nav-toggle-bar:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.nav-toggle.open .nav-toggle-bar:nth-child(2) { opacity: 0; }
+.nav-toggle.open .nav-toggle-bar:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 .nav-links {
   display: flex;
   list-style: none;
@@ -70,6 +107,17 @@ const currentPath = Astro.url.pathname;
 .nav-link.active { background: var(--color-primary); color: white; }
 
 @media (max-width: 768px) {
-  .nav-links { display: none; }
+  .nav { height: auto; min-height: var(--nav-height); }
+  .nav-inner { flex-wrap: wrap; padding-top: var(--space-sm); padding-bottom: var(--space-sm); }
+  .nav-toggle { display: flex; }
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    padding-top: var(--space-sm);
+    gap: 2px;
+  }
+  .nav-links.open { display: flex; }
+  .nav-link { padding: var(--space-sm); }
 }
 </style>

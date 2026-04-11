@@ -8,8 +8,8 @@ const { articleId, rank } = Astro.props;
 
 // Try to load article data
 import { getCollection } from 'astro:content';
-const allCurated = await getCollection('curated', e => e.data.status === 'approved');
-const allFeeds = await getCollection('feeds');
+const allCurated = await getCollection('curated', e => e.data.status === 'approved').catch(() => []);
+const allFeeds = await getCollection('feeds').catch(() => []);
 
 const article = allCurated.find(e => e.id === articleId) || allFeeds.find(e => e.id === articleId);
 const data = article?.data;

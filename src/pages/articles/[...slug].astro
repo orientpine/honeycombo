@@ -1,19 +1,4 @@
 ---
-type CuratedArticle = {
-  id: string;
-  data: {
-    status: string;
-    title: string;
-    url: string;
-    source: string;
-    type: string;
-    description?: string;
-    tags: string[];
-    submitted_at: string;
-    thumbnail_url?: string;
-  };
-};
-
 import { getCollection } from 'astro:content';
 // biome-ignore lint/correctness/noUnusedImports: used in template
 import ArticleMeta from '../../components/ArticleMeta.astro';
@@ -23,24 +8,19 @@ import Comments from '../../components/Comments.astro';
 import RelatedArticles from '../../components/RelatedArticles.astro';
 // biome-ignore lint/correctness/noUnusedImports: used in template
 import BaseLayout from '../../layouts/BaseLayout.astro';
+// biome-ignore lint/correctness/noUnusedImports: used in template
+import YouTubeEmbed from '../../components/YouTubeEmbed.astro';
 
 export async function getStaticPaths() {
-  const articles = (await getCollection('curated', (entry: CuratedArticle) => entry.data.status === 'approved')) as CuratedArticle[];
-  const paths: Array<{ params: { slug: string }; props: { entry: CuratedArticle } }> = [];
-
-  for (const entry of articles) {
-    paths.push({
-      params: { slug: entry.id },
-      props: { entry },
-    });
-  }
-
-  return paths;
+  const articles = await getCollection('curated', entry => entry.data.status === 'approved').catch(() => []);
+  return articles.map(entry => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
 }
 
-const { entry } = Astro.props as { entry: CuratedArticle };
-// biome-ignore lint/correctness/noUnusedVariables: used in template
-const article = entry.data as Required<CuratedArticle['data']>;
+const { entry } = Astro.props;
+const article = entry.data;
 ---
 
 <BaseLayout
@@ -60,7 +40,9 @@ const article = entry.data as Required<CuratedArticle['data']>;
       />
     </header>
 
-    {article.thumbnail_url && (
+    {article.type === 'youtube' ? (
+      <YouTubeEmbed url={article.url} title={article.title} thumbnail={article.thumbnail_url} />
+    ) : article.thumbnail_url && (
       <div class="article-hero-image">
         <img src={article.thumbnail_url} alt={article.title} loading="eager" />
       </div>
