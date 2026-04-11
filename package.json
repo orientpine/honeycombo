@@ -10,7 +10,8 @@
     "validate": "bun run scripts/validate.ts",
     "test": "vitest run",
     "generate-types": "wrangler types",
-    "deploy": "bun run build && wrangler deploy"
+    "deploy": "bun run build && wrangler deploy",
+    "summarize": "bun run scripts/summarize-articles.ts"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.8",
@@ -23,7 +24,10 @@
     "@astrojs/cloudflare": "^13.1.8",
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.2",
+    "@google/generative-ai": "^0.24.1",
+    "@mozilla/readability": "^0.6.0",
     "astro": "^6.1.5",
+    "linkedom": "^0.18.12",
     "rss-parser": "^3.13.0"
   },
   "overrides": {
