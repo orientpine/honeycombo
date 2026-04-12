@@ -513,6 +513,12 @@ function renderStatusPage(status: number, title: string, message: string, canoni
 
 export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
   const playlistId = params.id;
+
+  // /p/new is a static Astro page — delegate to static asset serving
+  if (playlistId === 'new') {
+    return env.ASSETS.fetch(request);
+  }
+
   const canonicalUrl = getCanonicalUrl(request.url, playlistId);
   const playlist = await getPlaylist(env.DB, playlistId);
 
