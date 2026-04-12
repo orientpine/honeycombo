@@ -45,9 +45,41 @@
 
 ```
 기사 페이지 → AddToPlaylist 드롭다운
-           → GET /api/playlists?mine=true (내 목록 조회)
+           → GET /api/playlists?mine=true&source_id=...&item_type=... (내 목록 + 포함 여부 조회)
            → POST /api/playlists/{id}/items (기사 추가)
 ```
+
+- 로그인 전에는 현재 페이지 경로를 `return_to`로 포함한 OAuth 로그인 링크를 노출한다.
+- 이미 같은 기사가 들어있는 플레이리스트는 드롭다운에서 `✓ 추가됨` 상태로 비활성화한다.
+- 중복 추가 시 API의 `409` 응답을 받아 `이미 추가된 기사입니다.` 토스트를 표시한다.
+
+### 상세 페이지 내 기사 검색/외부 URL 추가 (플레이리스트 소유자)
+
+```
+소유자 → /p/{id} (SSR)
+      → functions/p/[id].ts 에서 검색 UI + 외부 URL 폼 렌더링
+      → GET /search-index.json (Astro build-time 생성 정적 인덱스)
+      → POST /api/playlists/{id}/items (검색 결과 기사/외부 URL 추가)
+```
+
+- 검색 인덱스는 `src/pages/search-index.json.ts`가 빌드 시 생성하며, 승인된 curated 기사와 feed 기사를 합쳐 제공한다.
+- 소유자는 상세 페이지 안에서 제목/출처 기준으로 HoneyCombo 기사 검색 후 즉시 플레이리스트에 추가할 수 있다.
+- 외부 URL은 접이식 폼으로 추가하며, `external` 타입 스냅샷으로 저장한다.
+- 검색/외부 URL 모두 중복 추가 시 API의 `409` 응답을 받아 `이미 추가됨` 또는 안내 alert로 처리한다.
+
+### 아이템 관리 (플레이리스트 소유자)
+
+```
+소유자 → /p/{id} (SSR)
+       → functions/p/[id].ts 에서 소유자 전용 컨트롤 렌더링
+       → DELETE /api/playlists/{id}/items/{itemId} (삭제)
+       → PUT /api/playlists/{id}/items/{itemId} (메모 수정, position 변경)
+```
+
+- 소유자에게만 상세 페이지 카드별 관리 버튼(`삭제`, `↑`, `↓`, `💬 메모 수정/추가`)을 노출한다.
+- 삭제 성공 시 카드가 페이드아웃 후 DOM에서 제거된다.
+- 순서 이동은 인접 두 아이템의 `position`을 서로 바꾸는 방식으로 처리한다.
+- 메모 수정은 카드 내부 인라인 에디터에서 수행하며, 저장 성공 시 화면 표시를 즉시 갱신한다.
 
 ### 공개 플레이리스트 승인
 
@@ -66,6 +98,7 @@
 |------|------|
 | `src/pages/p/new.astro` | 플레이리스트 생성 폼 (인증 필요) |
 | `src/pages/my/playlists.astro` | 내 플레이리스트 관리 페이지 |
+| `src/pages/search-index.json.ts` | 빌드 시 기사 검색용 정적 JSON 인덱스 생성 |
 | `src/pages/playlists/index.astro` | 에디터+커뮤니티 플레이리스트 목록 |
 | `src/pages/playlists/[id].astro` | 에디터 플레이리스트 상세 (정적) |
 | `src/components/PlaylistCard.astro` | 플레이리스트 카드 컴포넌트 |
@@ -116,6 +149,7 @@
       "visibility": "unlisted|public",
       "status": "draft|pending|approved|rejected",
       "item_count": 5,
+      "contains_item": true,
       "created_at": "...",
       "updated_at": "..."
     }
@@ -166,3 +200,6 @@
 | 날짜 | 변경 내용 |
 |------|----------|
 | 2026-04-12 | 최초 작성 — 플레이리스트 기능 전체 문서화 |
+| 2026-04-12 | AddToPlaylist 로그인 return URL, 중복 추가 409 처리, contains_item 기반 비활성화 표시 반영 |
+| 2026-04-12 | 유저 플레이리스트 상세(`/p/{id}`)에 소유자 전용 아이템 삭제/재정렬/메모 수정 UI 반영 |
+| 2026-04-12 | 유저 플레이리스트 상세(`/p/{id}`)에 기사 검색 추가와 외부 URL 추가 폼, `/search-index.json` 정적 인덱스 반영 |

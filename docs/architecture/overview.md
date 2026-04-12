@@ -85,6 +85,7 @@
 | `/must-read` | `must-read.astro` | 필독 기사 |
 | `/influencers` | `influencers.astro` | 인플루언서 |
 | `/playlists/[slug]` | `playlists/` | 플레이리스트 |
+| `/search-index.json` | `search-index.json.ts` | 플레이리스트 상세 기사 검색용 정적 JSON 인덱스 |
 | `/submit` | `submit.astro` | 기사 제출 |
 | `/admin` | `admin.astro` | Decap CMS 관리자 |
 | `/rss.xml` | `rss.xml.ts` | RSS 피드 |
@@ -155,3 +156,4 @@ src/ (pages + components + data + content) → astro build → dist/
 | 2026-04-12 | validate-docs 스크립트 추가, CI 파이프라인 반영 |
 | 2026-04-12 | 단건 제출 워크플로우에 bulk submission 처리 추가 |
 | 2026-04-12 | SourceFilter 4탭 구조, Decap CMS auth 수정 반영 |
+| 2026-04-12 | `/search-index.json` 정적 검색 인덱스 엔드포인트 추가 |
