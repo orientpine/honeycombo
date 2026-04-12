@@ -15,11 +15,9 @@ export const onRequest: AppPagesFunction = async ({ data, request }) => {
   }
 
   return Response.json({
-    user: {
-      id: data.user.id,
-      username: data.user.username,
-      display_name: data.user.display_name,
-      avatar_url: data.user.avatar_url,
-    },
+    id: data.user.id,
+    username: data.user.username,
+    display_name: data.user.display_name,
+    avatar_url: data.user.avatar_url,
   });
 };

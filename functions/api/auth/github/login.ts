@@ -11,11 +11,24 @@ export const onRequest: AppPagesFunction = async ({ env, request }) => {
     });
   }
 
+  const clientId = env.USER_GITHUB_CLIENT_ID || env.GITHUB_CLIENT_ID;
+
+  if (!clientId) {
+    return Response.json(
+      { error: 'OAuth not configured: missing GITHUB_CLIENT_ID' },
+      { status: 500 },
+    );
+  }
+
+  const redirectUri =
+    env.USER_GITHUB_REDIRECT_URI ||
+    new URL('/api/auth/github/callback', request.url).toString();
+
   const state = crypto.randomUUID();
   const authorizeUrl = new URL('https://github.com/login/oauth/authorize');
 
-  authorizeUrl.searchParams.set('client_id', env.USER_GITHUB_CLIENT_ID);
-  authorizeUrl.searchParams.set('redirect_uri', env.USER_GITHUB_REDIRECT_URI);
+  authorizeUrl.searchParams.set('client_id', clientId);
+  authorizeUrl.searchParams.set('redirect_uri', redirectUri);
   authorizeUrl.searchParams.set('state', state);
   authorizeUrl.searchParams.set('scope', 'read:user');
 

@@ -40,6 +40,13 @@ export const onRequest: AppPagesFunction = async ({ env, request }) => {
     return Response.json({ error: 'Invalid OAuth state' }, { status: 403 });
   }
 
+  const clientId = env.USER_GITHUB_CLIENT_ID || env.GITHUB_CLIENT_ID;
+  const clientSecret = env.USER_GITHUB_CLIENT_SECRET || env.GITHUB_CLIENT_SECRET;
+
+  if (!clientId || !clientSecret) {
+    return Response.json({ error: 'OAuth not configured' }, { status: 500 });
+  }
+
   const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
     method: 'POST',
     headers: {
@@ -47,8 +54,8 @@ export const onRequest: AppPagesFunction = async ({ env, request }) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      client_id: env.USER_GITHUB_CLIENT_ID,
-      client_secret: env.USER_GITHUB_CLIENT_SECRET,
+      client_id: clientId,
+      client_secret: clientSecret,
       code,
     }),
   });

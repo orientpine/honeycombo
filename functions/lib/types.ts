@@ -12,10 +12,10 @@ export interface Env {
   // Existing Decap CMS OAuth (unchanged)
   GITHUB_CLIENT_ID: string;
   GITHUB_CLIENT_SECRET: string;
-  // New user-auth OAuth
-  USER_GITHUB_CLIENT_ID: string;
-  USER_GITHUB_CLIENT_SECRET: string;
-  USER_GITHUB_REDIRECT_URI: string;
+  // User-auth OAuth (optional — falls back to Decap CMS credentials above)
+  USER_GITHUB_CLIENT_ID?: string;
+  USER_GITHUB_CLIENT_SECRET?: string;
+  USER_GITHUB_REDIRECT_URI?: string;
   // Admin
   ADMIN_GITHUB_IDS: string; // comma-separated GitHub user IDs
   ALLOWED_ORIGIN?: string;
