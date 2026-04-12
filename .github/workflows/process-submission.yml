@@ -126,3 +126,11 @@ jobs:
         run: |
           gh issue comment $ISSUE_NUMBER \
             --body "✅ 제출이 접수되었습니다. 검토 후 게시됩니다."
+
+      - name: Comment on failure
+        if: failure() && github.event_name == 'issues'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue comment $ISSUE_NUMBER \
+            --body "❌ 제출 처리 중 오류가 발생했습니다. 입력 내용을 확인해주세요."

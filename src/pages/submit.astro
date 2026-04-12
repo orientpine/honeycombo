@@ -12,14 +12,35 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <section class="submit-section">
       <h2>제출 방법</h2>
       <p>GitHub Issues를 통해 기사나 영상을 제출할 수 있습니다.</p>
-      <a
-        href="https://github.com/orientpine/honeycombo/issues/new?template=submit-link.yml&labels=submission"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="btn btn-primary"
-      >
-        GitHub에서 제출하기 →
-      </a>
+      <div class="submit-methods">
+        <a
+          href="https://github.com/orientpine/honeycombo/issues/new?template=submit-link.yml&labels=submission"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-primary"
+        >
+          단건 제출 →
+        </a>
+        <a
+          href="https://github.com/orientpine/honeycombo/issues/new?template=submit-bulk.yml&labels=submission,bulk"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-secondary"
+        >
+          대량 제출 →
+        </a>
+      </div>
+    </section>
+
+    <section class="submit-section">
+      <h2>터미널 / AI 에이전트로 제출</h2>
+      <p><code>gh</code> CLI로도 제출할 수 있습니다. AI 에이전트 자동화에 적합합니다.</p>
+      <div class="code-block">
+        <code>gh issue create --repo orientpine/honeycombo \<br/>
+          &nbsp;&nbsp;--title "📎 자료 등록" \<br/>
+          &nbsp;&nbsp;--body "### URL&#10;&#10;https://...&#10;&#10;### 유형&#10;&#10;기사&#10;&#10;### 태그 (쉼표 구분, 최대 5개)&#10;&#10;AI, LLM&#10;&#10;### 한줄 소개&#10;&#10;설명"</code>
+      </div>
+      <p class="text-muted">자세한 가이드: <a href="https://github.com/orientpine/honeycombo/blob/master/docs/guides/agent-submission.md" target="_blank" rel="noopener noreferrer">AI 에이전트 제출 가이드</a></p>
     </section>
 
     <section class="submit-section">
@@ -78,6 +99,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 }
 .btn-primary { background: var(--color-primary); color: white; }
 .btn-primary:hover { background: var(--color-primary-hover); color: white; text-decoration: none; }
+.btn-secondary { background: var(--color-bg-alt, #f0f0f0); color: var(--color-text); border: 1px solid var(--color-border, #ddd); }
+.btn-secondary:hover { background: var(--color-bg-alt-hover, #e0e0e0); text-decoration: none; }
+.submit-methods { display: flex; gap: var(--space-sm); flex-wrap: wrap; }
+.code-block { background: var(--color-bg-alt, #f5f5f5); padding: var(--space-md); border-radius: var(--radius-md); overflow-x: auto; margin: var(--space-sm) 0; }
+.code-block code { font-size: 0.85rem; line-height: 1.6; white-space: pre-wrap; word-break: break-all; }
+.text-muted { color: var(--color-text-muted); font-size: 0.9rem; margin-top: var(--space-sm); }
 .guide-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-md); }
 .guide-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: var(--space-sm); }
 .guide-card ul { list-style: none; display: flex; flex-direction: column; gap: var(--space-xs); }

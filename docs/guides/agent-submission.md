@@ -19,10 +19,27 @@ sudo apt install gh   # 또는 https://cli.github.com/ 참조
 
 ### 2. GitHub 인증
 
+**대화형 로그인** (사람이 직접 사용 시):
+
 ```bash
 gh auth login
 # → GitHub.com 선택 → HTTPS → 브라우저 인증
 ```
+
+**비대화형 로그인** (AI 에이전트 / CI 환경):
+
+```bash
+# 방법 1: 환경변수로 토큰 전달
+export GH_TOKEN="ghp_xxxxxxxxxxxx"
+
+# 방법 2: 토큰 파이프
+echo "ghp_xxxxxxxxxxxx" | gh auth login --with-token
+
+# 방법 3: GitHub Actions 환경
+# GH_TOKEN은 자동으로 제공됨
+```
+
+Personal Access Token(PAT) 생성: [GitHub Settings → Tokens](https://github.com/settings/tokens). `repo` 또는 `public_repo` 스코프 필요.
 
 인증 확인:
 
@@ -30,6 +47,12 @@ gh auth login
 gh auth status
 # ✓ Logged in to github.com account YOUR_USERNAME
 ```
+
+## 라벨에 대한 중요 참고
+
+> **외부 사용자 참고**: GitHub API는 push 권한이 없는 사용자의 `--label` 옵션을 무시합니다.
+> 그러나 HoneyCombo는 **자동 라벨링 워크플로우**를 통해 Issue 본문의 `### URL` 또는 `### 링크 목록` 패턴을 감지하여 자동으로 라벨을 붙입니다.
+> **따라서 `--label` 옵션을 넣어도 되고, 안 넣어도 됩니다.** 본문 형식만 맞으면 제출이 처리됩니다.
 
 ## 단건 제출
 

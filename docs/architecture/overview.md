@@ -73,6 +73,7 @@
 | `rss-collect.yml` | RSS 수집 스케줄 |
 | `trending-calc.yml` | 트렌딩 계산 스케줄 |
 | `process-submission.yml` | 기사 제출 처리 |
+| `auto-label-submission.yml` | 외부 사용자 제출 자동 라벨링 |
 
 ## 페이지 구조
 
