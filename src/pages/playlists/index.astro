@@ -125,8 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
       listContainer.insertAdjacentHTML('beforeend', renderCard(p));
     });
 
-    // Assuming API returns total or hasMore, or we just check if we got less than limit
-    const hasMore = playlists.length === limit;
+    const hasMore = data.totalPages ? currentPage < data.totalPages : playlists.length === limit;
     if (hasMore) {
       loadMoreBtn.style.display = 'inline-block';
       loadMoreBtn.textContent = '더 보기';
