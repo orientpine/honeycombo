@@ -14,7 +14,7 @@ const currentPath = Astro.url.pathname;
 
 <nav data-testid="nav-main" class="nav">
   <div class="container nav-inner">
-    <a href="/" class="nav-logo">🍯 HoneyCombo</a>
+    <a href="/" class="nav-logo">HONEYCOMBO</a>
     <button class="nav-toggle" id="nav-toggle" aria-label="메뉴 열기" aria-expanded="false">
       <span class="nav-toggle-bar"></span>
       <span class="nav-toggle-bar"></span>
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           <span class="auth-username">` + user.username + `</span>
           <div class="auth-dropdown">
             <a href="/my/playlists" class="auth-dropdown-item">내 플레이리스트</a>
-            ` + (user.is_admin ? `<a href="/admin/playlists" class="auth-dropdown-item auth-dropdown-admin">🛡️ 플레이리스트 관리</a>` : '') + `
+            ` + (user.is_admin ? `<a href="/admin/playlists" class="auth-dropdown-item auth-dropdown-admin">🛡️ 플레이리스트 관리</a><a href="/admin" class="auth-dropdown-item auth-dropdown-admin">🛡️ 기사 검토 (CMS)</a>` : '') + `
             <button id="logout-btn" class="auth-dropdown-item text-danger">로그아웃</button>
           </div>
         </div>
@@ -106,11 +106,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 }
 .nav-logo {
   font-size: 1.2rem;
-  font-weight: 700;
-  color: var(--color-text);
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   text-decoration: none;
 }
-.nav-logo:hover { color: var(--color-primary); }
+.nav-logo:hover { filter: brightness(1.1); }
 .nav-toggle {
   display: none;
   flex-direction: column;
