@@ -1,0 +1,17 @@
+{
+  "id": "f323c58102296a94",
+  "title": "A Deep Dive into SQL Basics",
+  "url": "https://dev.to/derickmenje/mastering-the-fundamentals-a-deep-dive-into-sql-basics-3onn",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "This week, I transitioned from simply viewing data to actively managing it. Using a practical assignment focused on a hypothetical \"Nairobi Academy,\" I explored how SQL serves as the backbone for creating, modifying, and querying relational databases. Here is a breakdown of the core concepts and how they were applied. DDL (Data Definition Language): This is used to define the structure of the database. It includes commands like CREATE (to build tables or schemas), ALTER (to change the structure), and DROP (to delete the structure). DML (Data Manipulation Language): This is used to manage the data within the structures that have been defined by the DDL. It includes commands like INSERT (adding records), UPDATE (modifying existing records), and DELETE (removing records). Step By Step example in a hypothetical project. Project Goal: Building a school management system from scratch (nairobi_academy project) CREATE: I first established a schema named nairobi_academy and then defined thre...",
+  "tags": [
+    "dev",
+    "beginners",
+    "database",
+    "sql",
+    "tutorial"
+  ],
+  "published_at": "2026-04-12T14:37:18.000Z",
+  "feed_id": "devto"
+}

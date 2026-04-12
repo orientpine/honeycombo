@@ -1,0 +1,17 @@
+{
+  "id": "735abd790169dca8",
+  "title": "I spent 10 years building a lightweight PHP framework for WEB application development",
+  "url": "https://dev.to/o-planet/i-spent-10-years-building-a-lightweight-php-framework-for-web-application-development-42op",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "What do you think about ditching tags entirely and building web projects purely with classes? And having client-side and server-side code live together, like in a desktop app. And working with the same variables in both PHP and JavaScript. \"Why?\" someone might ask. Here's why: so we can build domain objects for business processes instead of DOM elements. And stop wasting time on async, promises, ajax, etc. — let the framework handle that! I'm talking about something like this: incoming = new Document(base->incoming); incoming->head(['date', 'buyer', 'comment']); goodsincoming = incoming->subtable(base->goodsincoming); goodsincoming->columns(['art', 'goods', 'quantity', 'price', 'total']); button = new Button('Incoming Invoice'); button->click(incoming->open()); content = new Grid(); content->add(button); content->build(); After one IT conference, I got seriously fired up about the idea of creating such a tool. About six months later, I had my first version—pretty rough around the ed...",
+  "tags": [
+    "dev",
+    "architecture",
+    "php",
+    "showdev",
+    "webdev"
+  ],
+  "published_at": "2026-04-12T14:30:40.000Z",
+  "feed_id": "devto"
+}

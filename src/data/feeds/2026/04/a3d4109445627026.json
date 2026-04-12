@@ -1,0 +1,17 @@
+{
+  "id": "a3d4109445627026",
+  "title": "I Made the Agent's Memory Visible and It Changed How Everyone Understood the Product",
+  "url": "https://dev.to/roopa_ravi_77/i-made-the-agents-memory-visible-and-it-changed-how-everyone-understood-the-product-5eec",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "Nobody believed the memory was working. We had Hindsight integrated, decisions were being retained, recalls were firing — but when you looked at the app, it just looked like a chatbot. You'd ask a question, get an answer, have no idea whether the agent had actually pulled from your history or was just making something up. The memory was invisible. And an invisible memory layer is indistinguishable from no memory layer at all. Retrospect is a personal decision memory agent. You log decisions and their outcomes. The agent retains every one using Hindsight agent memory and recalls the most relevant ones when you ask for advice. Gemini 2.5 Flash reasons over the recalled memories to give you personalised, pattern-based guidance. My job was the frontend. Dashboard, log form, chat interface, insights page. The part everyone sees. And the most important UI decision I made was one I almost didn't make at all. The Ask Agent page has two columns. Left: the chat interface. Right: the Hindsight...",
+  "tags": [
+    "dev",
+    "webdev",
+    "programming",
+    "agents",
+    "hindsight"
+  ],
+  "published_at": "2026-04-12T14:24:12.000Z",
+  "feed_id": "devto"
+}

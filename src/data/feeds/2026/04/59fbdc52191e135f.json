@@ -1,0 +1,16 @@
+{
+  "id": "59fbdc52191e135f",
+  "title": "How did I pass the AWS Certified Solutions Architect – Professional 2026 exam?",
+  "url": "https://dev.to/kevinl/how-did-i-pass-the-aws-certified-solutions-architect-professional-2026-exam-75n",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "Passing the AWS Solutions Architect - Professional exam isn't just about knowing which services to use, but about understanding how to interconnect them under pressure and with cost, security, and scalability constraints. After weeks of intense preparation, I want to share the path that allowed me to obtain the certification. I prepared for three intense weeks, and I want to share exactly how I approached it—what worked, what didn't, and how I leveraged AI to make the process much faster and more effective. Here are several key points that helped me achieve this: The first thing I did was familiarize myself with the official AWS documentation, because I knew this exam wasn't just about memorization. It's about understanding the trade-offs, architectures, and design decisions at a deep level. So I focused on reviewing the service documentation for topics I wasn't entirely confident in, such as migration strategies, hybrid architectures, cost optimization, and security patterns. I stu...",
+  "tags": [
+    "dev",
+    "aws",
+    "certification",
+    "architecture"
+  ],
+  "published_at": "2026-04-12T14:28:27.000Z",
+  "feed_id": "devto"
+}

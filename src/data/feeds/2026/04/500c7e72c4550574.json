@@ -1,0 +1,17 @@
+{
+  "id": "500c7e72c4550574",
+  "title": "Ingeniería Detrás de un Descargador de Bilibili: Desafíos con DASH, M4S y Procesamiento de Media en Python",
+  "url": "https://dev.to/yqqwe/ingenieria-detras-de-un-descargador-de-bilibili-desafios-con-dash-m4s-y-procesamiento-de-media-en-3j46",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "Introducción En el ecosistema actual de las redes sociales, Bilibili se ha consolidado como el gigante del contenido ACG (Anime, Cómics y Juegos) y video profesional en China. Sin embargo, para los desarrolladores, Bilibili representa un desafío técnico mucho mayor que plataformas como YouTube o Twitter. A diferencia de los sitios que sirven archivos estáticos, Bilibili utiliza una arquitectura de streaming adaptativo dinámico extremadamente compleja. Cualquier ingeniero que intente interactuar con la API de Bilibili debe primero enfrentarse a su sistema de identificación. Bilibili utiliza dos sistemas de IDs distintos que todo descargador robusto debe reconciliar. El mayor obstáculo para descargar videos de calidad original en Bilibili es su implementación de DASH (Dynamic Adaptive Streaming over HTTP). La CDN de Bilibili es altamente agresiva. Si intentas descargar un flujo utilizando una solicitud estándar de curl o fetch, recibirás un error 403 Forbidden. Validación de Referer:...",
+  "tags": [
+    "dev",
+    "backend",
+    "python",
+    "showdev",
+    "softwareengineering"
+  ],
+  "published_at": "2026-04-12T14:23:31.000Z",
+  "feed_id": "devto"
+}
