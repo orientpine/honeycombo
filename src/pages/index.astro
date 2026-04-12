@@ -105,8 +105,8 @@ const recentArticles = allArticles.slice(0, MAX_RECENT);
   background-position: center;
   z-index: -1;
   pointer-events: none;
-  mask-image: radial-gradient(ellipse at center, black 20%, transparent 70%);
-  -webkit-mask-image: radial-gradient(ellipse at center, black 20%, transparent 70%);
+  mask-image: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.4) 50%, black 70%, transparent 90%);
+  -webkit-mask-image: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.4) 50%, black 70%, transparent 90%);
 }
 .hero-image-wrapper {
   position: relative;
@@ -137,6 +137,9 @@ const recentArticles = allArticles.slice(0, MAX_RECENT);
   gap: 0.25rem;
   margin-bottom: var(--space-xl);
   margin-top: 0.5rem;
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-lg);
+  background: radial-gradient(ellipse at center, rgba(247, 246, 243, 0.85) 0%, rgba(247, 246, 243, 0.4) 60%, transparent 100%);
 }
 .hero-brand {
   font-size: clamp(2rem, 6vw, 3.5rem);
