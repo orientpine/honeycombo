@@ -49,12 +49,25 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 
   const code = url.searchParams.get('code');
 
+  // Step 1: No code → redirect to GitHub OAuth (Decap CMS opens this in a popup)
   if (!code) {
-    return new Response(JSON.stringify({ error: 'Missing code parameter' }), {
-      status: 400,
-      headers: jsonHeaders(allowedOrigin),
-    });
+    if (!env.GITHUB_CLIENT_ID) {
+      return new Response(JSON.stringify({ error: 'OAuth not configured: missing GITHUB_CLIENT_ID' }), {
+        status: 500,
+        headers: jsonHeaders(allowedOrigin),
+      });
+    }
+
+    const redirectUri = new URL('/api/auth', request.url).toString();
+    const authorizeUrl = new URL('https://github.com/login/oauth/authorize');
+    authorizeUrl.searchParams.set('client_id', env.GITHUB_CLIENT_ID);
+    authorizeUrl.searchParams.set('redirect_uri', redirectUri);
+    authorizeUrl.searchParams.set('scope', 'repo,user');
+
+    return Response.redirect(authorizeUrl.toString(), 302);
   }
+
+  // Step 2: Has code → exchange for token and postMessage back to CMS
 
   if (!env.GITHUB_CLIENT_ID || !env.GITHUB_CLIENT_SECRET) {
     return new Response(JSON.stringify({ error: 'OAuth not configured' }), {
