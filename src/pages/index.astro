@@ -30,7 +30,10 @@ const recentArticles = allArticles.slice(0, MAX_RECENT);
     <div class="hero-image-wrapper">
       <img src="/main_image.jpg" alt="HoneyCombo - 기술 뉴스 큐레이션" class="hero-logo" loading="eager" />
     </div>
-    <p class="hero-subtitle">개발자를 위한 기술 뉴스 큐레이션</p>
+    <div class="hero-subtitle">
+      <span class="hero-brand">HONEYCOMBO</span>
+      <span class="hero-desc">연구자를 위한 AI 기술 커뮤니티</span>
+    </div>
     <div class="hero-actions">
       <a href="/articles" class="btn btn-primary">기사 보기</a>
       <a href="/trending" class="btn btn-secondary">트렌드 랭킹</a>
@@ -127,7 +130,53 @@ const recentArticles = allArticles.slice(0, MAX_RECENT);
   position: relative;
   z-index: 2;
 }
-.hero-subtitle { font-size: 1.25rem; color: var(--color-text-muted); margin-bottom: var(--space-xl); }
+.hero-subtitle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: var(--space-xl);
+  margin-top: 0.5rem;
+}
+.hero-brand {
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 4px 12px rgba(245, 124, 34, 0.3));
+  line-height: 1.1;
+}
+.hero-desc {
+  font-size: clamp(1.1rem, 3vw, 1.4rem);
+  font-weight: 600;
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.hero-desc::before,
+.hero-desc::after {
+  content: '';
+  display: block;
+  width: 2.5rem;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-primary));
+  opacity: 0.6;
+}
+.hero-desc::after {
+  background: linear-gradient(270deg, transparent, var(--color-primary));
+}
+@media (max-width: 600px) {
+  .hero-desc::before,
+  .hero-desc::after {
+    width: 1.5rem;
+  }
+}
 .hero-actions { display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap; }
 .btn {
   display: inline-flex;
