@@ -17,7 +17,11 @@ const platformIcon = (p: string) => {
 };
 
 const handleClean = handle.replace(/^@/, '');
-const profileUrl = platform === 'x' ? `https://x.com/${handleClean}` : '#';
+const profileUrl = platform === 'x'
+  ? `https://x.com/${handleClean}`
+  : platform === 'threads'
+    ? `https://www.threads.net/@${handleClean}`
+    : '#';
 ---
 
 <article class="card influencer-card" data-testid="influencer-card">

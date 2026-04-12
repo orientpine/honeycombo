@@ -48,4 +48,33 @@
     "handle": "@chosenryot",
     "bio": "Co-founder @ Xitadel. DeFi & Solana 생태계 전문가. 한국 Web3 커뮤니티 기여자."
   }
+  ,
+  {
+    "id": "dev-roach-log",
+    "name": "Roach",
+    "platform": "threads",
+    "handle": "@dev_roach_log",
+    "bio": "바이브 코딩 및 AI 활용 워크플로우 자동화 개발자. Roach Pi 개발자."
+  },
+  {
+    "id": "choi-openai",
+    "name": "CHOI",
+    "platform": "threads",
+    "handle": "@choi.openai",
+    "bio": "대한민국 최고의 AI 채널. 222K+ 팔로워. OpenAI, AGI, 싱귄러리티 컨텐츠."
+  },
+  {
+    "id": "boris-cherny",
+    "name": "Boris Cherny",
+    "platform": "threads",
+    "handle": "@boris_cherny",
+    "bio": "Claude Code creator @ Anthropic. Programming TypeScript 저자. 120K+ 팔로워."
+  },
+  {
+    "id": "bizmentor-kr",
+    "name": "BizMentor",
+    "platform": "threads",
+    "handle": "@bizmentor_kr",
+    "bio": "3시간마다 인기 GitHub Repo 요약. 최신 AI 기술 트렌드 파악. By OpenClaw."
+  }
 ]
