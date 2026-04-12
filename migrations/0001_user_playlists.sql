@@ -47,10 +47,10 @@ CREATE TABLE IF NOT EXISTS playlist_items (
   note                  TEXT,
   position              INTEGER NOT NULL,
   added_at              DATETIME DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT uq_playlist_item UNIQUE(playlist_id, item_type, COALESCE(source_id, external_url)),
   CONSTRAINT chk_source CHECK(
     (item_type IN ('curated', 'feed') AND source_id IS NOT NULL) OR
     (item_type = 'external' AND external_url IS NOT NULL)
   )
 );
 CREATE INDEX IF NOT EXISTS idx_playlist_items_playlist_id ON playlist_items(playlist_id);
+CREATE UNIQUE INDEX IF NOT EXISTS uq_playlist_item ON playlist_items(playlist_id, item_type, COALESCE(source_id, external_url));

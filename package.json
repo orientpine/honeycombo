@@ -5,12 +5,12 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "bun run build && wrangler dev",
+    "preview": "bun run build && wrangler pages dev dist",
     "check": "astro check",
     "validate": "bun run scripts/validate.ts",
     "test": "vitest run",
     "generate-types": "wrangler types",
-    "deploy": "bun run build && wrangler deploy",
+    "deploy": "bun run build && wrangler pages deploy dist",
     "summarize": "bun run scripts/summarize-articles.ts"
   },
   "devDependencies": {
@@ -21,7 +21,6 @@
     "wrangler": "^4.81.1"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^13.1.8",
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.2",
     "@google/generative-ai": "^0.24.1",

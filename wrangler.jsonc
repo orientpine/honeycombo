@@ -2,11 +2,7 @@
 	"compatibility_date": "2026-04-11",
 	"compatibility_flags": ["global_fetch_strictly_public"],
 	"name": "honeycombo",
-	"main": "@astrojs/cloudflare/entrypoints/server",
-	"assets": {
-		"directory": "./dist",
-		"binding": "ASSETS"
-	},
+	"pages_build_output_dir": "./dist",
 	"observability": {
 		"enabled": true
 	},
@@ -14,7 +10,7 @@
 		{
 			"binding": "DB",
 			"database_name": "honeycombo-db",
-			"database_id": "<placeholder>",
+			"database_id": "12807f17-fac5-461e-8c4c-eb12bd4b3655",
 			"migrations_dir": "migrations"
 		}
 	]

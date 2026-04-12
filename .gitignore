@@ -10,3 +10,4 @@ node_modules/
 !.env.example
 .playwright-mcp/
 .sisyphus/evidence/
+wrangler-dev.log

@@ -1,6 +1,5 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
-import cloudflare from '@astrojs/cloudflare';
 
 export default defineConfig({
   output: 'static',
@@ -11,5 +10,4 @@ export default defineConfig({
       return path !== '/admin' && path !== '/admin/';
     },
   })],
-  adapter: cloudflare(),
 });
