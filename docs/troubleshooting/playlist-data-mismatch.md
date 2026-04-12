@@ -102,6 +102,10 @@ API `GET /api/playlists?mine=true`가 `{ playlists: [...] }` 형태로 응답하
 
 ---
 
+## 관련 문서
+
+- [플레이리스트 기능](../features/playlists.md)
+
 ## 변경 이력
 
 | 날짜 | 변경 내용 |

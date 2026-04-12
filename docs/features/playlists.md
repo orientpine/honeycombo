@@ -139,6 +139,14 @@
 2. GitHub → `GET /api/auth/github/callback` → 세션 생성 → `Set-Cookie: session={id}`
 3. 이후 API 호출 시 쿠키 기반 인증 (`functions/api/_middleware.ts`에서 자동 처리)
 
+## 설정값
+
+| 이름 | 위치 | 기본값 | 설명 |
+|------|------|--------|------|
+| `D1_DATABASE` | `wrangler.jsonc` | — | Cloudflare D1 데이터베이스 바인딩 |
+| `GITHUB_CLIENT_ID` | Cloudflare 환경변수 | — | GitHub OAuth App Client ID |
+| `GITHUB_CLIENT_SECRET` | Cloudflare 환경변수 | — | GitHub OAuth App Client Secret |
+
 ## 제약 사항
 
 - 유저 플레이리스트는 D1 데이터베이스 의존 → 마이그레이션 필수

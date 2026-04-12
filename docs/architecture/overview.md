@@ -55,6 +55,7 @@
 | `calc-must-read.ts` | 필독 기사 선정 → `src/data/must-read/` | GitHub Actions (scheduled) |
 | `process-submission.ts` | 기사 제출 Issue → PR 변환 | GitHub Actions (on issue) |
 | `validate.ts` | 콘텐츠 유효성 검사 | CI, 로컬 |
+| `validate-docs.ts` | 문서 형식·커버리지 검증 | CI, 로컬 |
 
 ### `functions/` — Cloudflare Functions
 
@@ -66,7 +67,7 @@
 
 | 워크플로우 | 역할 |
 |-----------|------|
-| `ci.yml` | CI (validate, build, test) |
+| `ci.yml` | CI (validate, validate:docs, build, test) |
 | `content-update-base.yml` | 콘텐츠 업데이트 공통 베이스 |
 | `rss-collect.yml` | RSS 수집 스케줄 |
 | `trending-calc.yml` | 트렌딩 계산 스케줄 |
@@ -137,9 +138,11 @@ src/ (pages + components + data + content) → astro build → dist/
 ## 관련 문서
 
 - [초기 기술 스택 결정](../decisions/0001-initial-tech-stack.md)
+- [문서 유효성 검증](../features/doc-validation.md)
 
 ## 변경 이력
 
 | 날짜 | 변경 내용 |
 |------|----------|
 | 2026-04-11 | 최초 작성 — 현재 프로젝트 구조 기반 |
+| 2026-04-12 | validate-docs 스크립트 추가, CI 파이프라인 반영 |
