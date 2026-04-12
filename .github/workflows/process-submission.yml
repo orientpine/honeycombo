@@ -17,17 +17,37 @@ concurrency:
 jobs:
   process:
     runs-on: ubuntu-latest
-    if: contains(github.event.issue.labels.*.name, 'submission') || github.event_name == 'workflow_dispatch'
+    if: >-
+      contains(github.event.issue.labels.*.name, 'submission')
+      || (github.event.action == 'opened'
+          && (contains(github.event.issue.body, '### URL')
+              || contains(github.event.issue.body, '### 링크 목록')))
+      || github.event_name == 'workflow_dispatch'
     permissions:
       contents: write
       issues: write
       pull-requests: write
     steps:
+      - name: Auto-label if needed
+        if: github.event_name == 'issues' && !contains(github.event.issue.labels.*.name, 'submission')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          ISSUE_NUM: ${{ github.event.issue.number }}
+          IS_BULK: ${{ contains(github.event.issue.body, '### 링크 목록') }}
+        run: |
+          if [ "$IS_BULK" = "true" ]; then
+            gh issue edit "$ISSUE_NUM" --add-label "submission,bulk" --repo "$REPO"
+            echo "AUTO_LABELS=submission,bulk" >> $GITHUB_ENV
+          else
+            gh issue edit "$ISSUE_NUM" --add-label "submission" --repo "$REPO"
+            echo "AUTO_LABELS=submission" >> $GITHUB_ENV
+          fi
+
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-
       - uses: actions/setup-node@v6
         with:
           node-version: '22'
@@ -73,7 +93,11 @@ jobs:
             echo "$ISSUE_BODY_EVENT" >> $GITHUB_ENV
             echo "EOF" >> $GITHUB_ENV
             echo "ISSUE_USER=$ISSUE_USER_EVENT" >> $GITHUB_ENV
-            echo "ISSUE_LABELS=$ISSUE_LABELS_EVENT" >> $GITHUB_ENV
+            if [ -n "$AUTO_LABELS" ]; then
+              echo "ISSUE_LABELS=$AUTO_LABELS" >> $GITHUB_ENV
+            else
+              echo "ISSUE_LABELS=$ISSUE_LABELS_EVENT" >> $GITHUB_ENV
+            fi
           fi
 
       - name: Process submission
