@@ -48,7 +48,7 @@ export interface CollectOptions {
   outputDir?: string;
   apiKey?: string;
   now?: Date;
-  searchFn?: (query: string, apiKey: string, startDate: string) => Promise<ExaResult[]>;
+  searchFn?: (query: string, apiKey: string, startDate: string, domains?: string[]) => Promise<ExaResult[]>;
 }
 
 const TOPIC_KEYWORDS: [string, string[]][] = [
@@ -91,25 +91,32 @@ export async function searchExa(
   query: string,
   apiKey: string,
   startDate: string,
+  domains?: string[],
 ): Promise<ExaResult[]> {
+  const body: Record<string, unknown> = {
+    query,
+    type: 'auto',
+    numResults: 10,
+    startPublishedDate: startDate,
+    contents: { highlights: { numSentences: 3 }, text: { maxCharacters: 500 } },
+  };
+
+  if (domains && domains.length > 0) {
+    body.includeDomains = domains;
+  }
+
   const response = await fetch(EXA_API_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'x-api-key': apiKey,
     },
-    body: JSON.stringify({
-      query,
-      type: 'auto',
-      numResults: 10,
-      startPublishedDate: startDate,
-      contents: { highlights: { numSentences: 3 } },
-    }),
+    body: JSON.stringify(body),
   });
 
   if (!response.ok) {
-    const body = await response.text().catch(() => '');
-    throw new Error(`Exa API ${response.status}: ${body.slice(0, 200)}`);
+    const text = await response.text().catch(() => '');
+    throw new Error(`Exa API ${response.status}: ${text.slice(0, 200)}`);
   }
 
   const data = (await response.json()) as ExaResponse;

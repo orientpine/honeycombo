@@ -6,21 +6,63 @@
   "bio": "AI 에이전트 및 개발 도구 인사이트 공유. 한국 AI 테크 커뮤니티 활동가.",
   "opinions": [
     {
-      "text": "Claude Agent SDK 딥다이브 — Claude Code를 라이브러리로 쓴다는 건 이런 뜻이다. 에이전트 프레임워크가 6개 넘게 경쟁하는 2026년, Anthropic은 기존 프레임워크와 완전히 다른 접근을 택했다. LangGraph처럼 그래프를 설계하거나, CrewAI처럼 역할을 분배하는 게 아니다.",
-      "source_url": "https://jidonglab.com/blog/claude-agent-sdk-deep-dive-ko/",
-      "date": "2026-03-30T23:00:00.000Z",
+      "text": "Ralphify Changelog - Ralphify Skip to content # Changelog¶ All notable changes to ralphify are documented here. ## Unreleased¶ ### Added¶ - Live agent output streaming (on by default,`p` toggles) — when you run`ralph run` in an interactive terminal, the agent's stdout and stderr now stream live to the console as the agent produces them. Press`p` to silence the stream and`p` again to resume. The blocking agent path was refactored to line-stream both pipes through background reader threads",
+      "source_url": "https://ralphify.co/docs/changelog/",
+      "date": "2026-04-05T23:55:36.000Z",
       "topic": "AI Agent"
     },
     {
-      "text": "韓 AI 해커톤 '랄프톤', 미국 진출…네이버·카카오 후원 확대. 국내 최대 규모의 인공지능(AI) 해커톤 '랄프톤(RALPH-THON)'이 미국 시장에 진출하며, 네이버와 카카오가 후원을 확대한다.",
-      "source_url": "https://en.sedaily.com/technology/2026/03/24/korean-ai-agent-hackathon-ralphthon-expands-to-us-with",
-      "date": "2026-03-24T20:30:05.000Z",
+      "text": "Blog - Ralphify Skip to content ## RALPH.md – a markdown format for autonomous agent loops I keep setting up the same thing: an agent in a while loop, a few shell commands that run between iterations to check what changed, their output piped back into the prompt. Every time I set one up I rewrite the same scaffolding. So I made a format for it — a skill-like format with a single markdown file that defines what happens in the outer loop — run commands, assemble",
+      "source_url": "https://ralphify.co/docs/blog/",
+      "date": "2026-04-05T23:46:25.000Z",
       "topic": "AI Agent"
     },
     {
-      "text": "Beyond Ralph Loop — Self-Evolving Agents and the Shifting Role of AI Developers. Ralph Loop solved context rot but remains prompt-bound. AI 개발자의 역할이 코드 작성자에서 에이전트 오케스트레이터로 전환되고 있다.",
-      "source_url": "https://minbook.dev/en/blog/ralph-loop-beyond-self-evolving",
-      "date": "2026-03-31T00:00:00.000Z",
+      "text": "How to Set Up an Autonomous AI Coding Agent Loop — Ralphify Tutorial - Ralphify Skip to content # Getting Started¶ TL;DR `uv tool install ralphify`→`ralph scaffold my-ralph`→ edit the RALPH.md →`ralph run my-ralph -n 1 --log-dir ralph_logs` to test → add a`commands` entry for your test suite →`ralph run my-ralph` to loop. The agent sees fresh test output each iteration and fixes what it breaks. This tutorial walks through setting up ralphify, creating a ralph with commands, and running a pr",
+      "source_url": "https://ralphify.co/docs/getting-started/",
+      "date": "2026-04-05T19:40:29.000Z",
+      "topic": "AI Agent"
+    },
+    {
+      "text": "How to Run Claude Code, Aider, or Codex in an Autonomous Loop - Ralphify Skip to content # Using with Different Agents¶ TL;DR Set the`agent` field in your RALPH.md to any CLI that reads a prompt from stdin and exits when done. Claude Code (`claude -p --dangerously-skip-permissions`) is the default with the deepest integration. Aider needs a`bash -c` wrapper to pass stdin as`--message`. Codex CLI works natively with`codex exec`. For anything else, write a short wrapper script. Ralphify works",
+      "source_url": "https://ralphify.co/docs/agents/",
+      "date": "2026-04-05T16:24:55.000Z",
+      "topic": "LLM"
+    },
+    {
+      "text": "How Autonomous AI Coding Loops Work — The Ralph Loop Lifecycle - Ralphify Skip to content # How the ralph loop works¶ TL;DR Each iteration: re-read`RALPH.md` from disk → run commands → replace`{{ placeholders }}` with output → pipe the assembled prompt to the agent → agent works and exits → repeat. The prompt body is re-read every iteration (so you can edit it live), but frontmatter is parsed once at startup. Failed commands still capture output — that's what makes the loop self-healing. Wh",
+      "source_url": "https://ralphify.co/docs/how-it-works/",
+      "date": "2026-04-05T16:20:47.000Z",
+      "topic": "AI Agent"
+    },
+    {
+      "text": "What Tasks Can You Automate with an AI Coding Agent Loop? - Ralphify Skip to content # When to use ralph loops¶ TL;DR Use a ralph loop when the task breaks into small, independent steps with automated validation (tests, linters, builds). Use a single conversation for quick tasks, interactive work, or anything requiring subjective judgment. The key ingredient is a command that can tell the agent \"you broke something\" — that's what makes the loop self-healing. A ralph loop is an autonomous co",
+      "source_url": "https://ralphify.co/docs/when-to-use/",
+      "date": "2026-04-05T11:05:48.000Z",
+      "topic": "AI Agent"
+    },
+    {
+      "text": "Run AI Agent Loops from Python — Ralphify API - Ralphify Skip to content # Python API¶ TL;DR `run_loop(config, state)` runs the same loop as`ralph run` but from Python. Build a`RunConfig` with your agent, commands, and options. Pass a`RunState` to inspect progress and control the loop (pause, resume, stop). Add an`EventEmitter` to react to events. Use`RunManager` for concurrent runs. All public API is available from the top-level`ralphify` package. The API runs the same [core loop](https://",
+      "source_url": "https://ralphify.co/docs/api/",
+      "date": "2026-04-05T07:06:23.000Z",
+      "topic": "AI Agent"
+    },
+    {
+      "text": "Ralphify Codebase Map - Ralphify Skip to content # Codebase Map¶ Quick orientation guide for anyone working on this codebase — human contributors and AI coding agents alike. ## What this project is¶ Ralphify is a CLI tool (`ralph`) that runs AI coding agents in autonomous loops. It reads a RALPH.md file from a ralph directory, runs commands, assembles a prompt with the output, pipes it to an agent command via stdin, waits for it to finish, then repeats. Each iteration gets a fresh context w",
+      "source_url": "https://ralphify.co/docs/contributing/codebase-map/",
+      "date": "2026-04-05T07:06:22.000Z",
+      "topic": "AI Agent"
+    },
+    {
+      "text": "How to Write Prompts for Autonomous AI Coding Agents - Ralphify Skip to content # Writing Prompts¶ TL;DR Every good RALPH.md has three parts: orientation (tell the agent it's in a loop with no memory), task source (point at something concrete like TODO.md), and rules (constraints matter more than instructions). Add commands for self-healing feedback. Edit the prompt while the loop runs to steer the agent. Your`RALPH.md` is the single most important file in a ralph loop. A good prompt turns",
+      "source_url": "https://ralphify.co/docs/writing-prompts/",
+      "date": "2026-04-05T06:19:32.000Z",
+      "topic": "AI Agent"
+    },
+    {
+      "text": "CLI Reference: Run AI Coding Agents in Autonomous Loops - Ralphify Skip to content # CLI Reference¶ TL;DR `ralph run -n 5` runs the loop.`ralph scaffold ` creates a ralph from a template. Pass user args as`--name value` flags. Everything is configured in a single`RALPH.md` file with YAML frontmatter. ## ralph¶ With no subcommand, prints the banner and help text. ``` ralph # Show banner and help ralph --version # Show version ralph --help # Show help ``` | Option | Short",
+      "source_url": "https://ralphify.co/docs/cli/",
+      "date": "2026-04-05T02:40:21.000Z",
       "topic": "AI Agent"
     }
   ]

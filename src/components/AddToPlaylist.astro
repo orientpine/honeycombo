@@ -152,6 +152,14 @@ document.addEventListener('DOMContentLoaded', () => {
   position: relative;
   display: inline-block;
 }
+.add-to-playlist-container::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: var(--space-xs);
+}
 
 .add-to-playlist-btn {
   font-family: inherit;

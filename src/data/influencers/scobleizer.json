@@ -6,27 +6,63 @@
   "bio": "Tech evangelist, author. Founder of Unaligned. Ex-Microsoft. Silicon Valley AI & spatial computing 전문가.",
   "opinions": [
     {
-      "text": "The New AI Infrastructure Economy — AI infrastructure is shifting to chips, cloud and data centers. The investment landscape for AI is evolving rapidly as companies race to build the computational backbone needed for next-generation AI systems.",
-      "source_url": "https://www.unaligned.io/p/the-new-ai-infrastructure-economy",
-      "date": "2026-03-17T14:30:00.000Z",
-      "topic": "AI"
+      "text": "Wherobots is Bringing Spatial Context to AI - SD Times Published: April 8th, 2026 - Wherobots is launching a set of features designed to make its powerful geospatial processing capabilities accessible to modern AI systems. Building on its core compute engine — the Wherobots DB, which processes two-dimensional data like map and trip information; and its raster flow tool, which handles aerial imagery data from satellites and drones — Wherobots is making these capabilities accessible to AI. Wh",
+      "source_url": "https://sdtimes.com/ai/wherobots-is-bringing-spatial-context-to-ai/",
+      "date": "2026-04-08T16:00:03.000Z",
+      "topic": "Robotics"
     },
     {
-      "text": "NVIDIA Investor Report Analysis — Robert Scoble shares insights from meetings with NVIDIA, analyzing the company's position in the AI infrastructure market and the implications for investors in the rapidly evolving AI chip landscape.",
-      "source_url": "https://www.linkedin.com/posts/scobleizer_the-investor-report-for-nvidia-im-meeting-activity-7440407895730536448-A41-",
-      "date": "2026-03-19T00:00:00.000Z",
-      "topic": "AI"
+      "text": "Thanks Walt What \"Spatial Computing\" Needs is a tiny LiDAR unit with 17+ Million PPS resolution. We have that. LinkedIn Article There is a new paradigm coming. It will arrive in full force by 2025. It is Spatial Computing. Computing that you, a robot, or a virtual being, can move through. Some think it's ambient computing. Tha",
+      "source_url": "https://petersmvis.blogspot.com/2019/09/",
+      "date": "2026-04-07T06:58:00.000Z",
+      "topic": "Robotics"
     },
     {
-      "text": "THE ULTIMATE CLAWDBOT REPORT — Every single important post on X about ClawdBot. ClawdBot is taking the world by storm. Report and analysis covering the very hot trend of AI agents that can autonomously interact and create.",
-      "source_url": "https://www.linkedin.com/posts/scobleizer_the-ultimate-clawdbot-report-every-single-activity-7421115480318455808-LVT9",
-      "date": "2026-03-10T00:00:00.000Z",
+      "text": "Antigravity AI Agents × Apple Vision Pro: A Complete Guide to the New Development Paradigm for Spatial Computing | Antigravity Lab Articles/Agents & Manager ◈ Agents & Manager/2026-04-03Advanced # Antigravity AI Agents × Apple Vision Pro: A Complete Guide to the New Development Paradigm for Spatial Computing A comprehensive practical guide to using Antigravity AI agents for Apple Vision Pro app development. Learn how to automate visionOS builds with",
+      "source_url": "https://antigravitylab.net/en/articles/agents/antigravity-agent-vision-pro-spatial-computing-guide",
+      "date": "2026-04-03T10:00:00.000Z",
       "topic": "AI Agent"
     },
     {
-      "text": "GTC 2026 Highlights — Robert Scoble discusses the latest developments in AI, robotics, and spatial computing at NVIDIA's GPU Technology Conference, covering breakthrough announcements in physical AI and autonomous systems.",
-      "source_url": "https://www.tiktok.com/@techinnovationdeeptalk/video/7625339896193912078",
-      "date": "2026-04-05T11:06:26.000Z",
+      "text": "— Paramendra Kumar Bhagat (@paramendra) April 3, 2026 My number is public: +1-425-205-1921Now that I've gotten far enough along to build this: https://t.co/kiuZ7QXLzb I see the problem.1. Tokens cost money. Site costs about $200 a day to run on tokens.2. API calls cost money. Site costs about $300 a day to run on API calls.… > — Robert Scoble (@Scobleizer) [April 3, 2026](https://twitter",
+      "source_url": "https://technbiz.blogspot.com/2026/04/scobleizer-newstech.html",
+      "date": "2026-04-03T00:29:00.000Z",
+      "topic": "LLM"
+    },
+    {
+      "text": "# Stream High-Fidelity Spatial Computing Content to Any Device with NVIDIA CloudXR 6.0 Published: 2026-03-31 Author: Max Bickley Spatial computing is moving from visualization to active collaboration, adding increasingly more GPU demands on XR hardware to render photorealistic, physics-accurate, high-fidelity spatial content in real time. Meanwhile, developers have had to maintain separate codebases for every platform, each with different toolchains, SDKs, and streaming protocols. At NVIDIA G",
+      "source_url": "https://developer.nvidia.com/blog/stream-high-fidelity-spatial-computing-content-to-any-device-with-nvidia-cloudxr-6-0/",
+      "date": "2026-03-31T18:14:50.000Z",
+      "topic": "Coding"
+    },
+    {
+      "text": "The Future Of Spatial Computing. When the digital world stops living on… | by Top Boss | Bossier Tech | Mar, 2026 | Medium Sitemap Open in app Sign up [Sign in](https://medium.com/m/signin?operation=login&redirect=https%3A%2F%2Fmedium.com%2Fbossier-tech%2Fthe-future-of-spa",
+      "source_url": "https://medium.com/bossier-tech/the-future-of-spatial-computing-3e2e44b6d278",
+      "date": "2026-03-31T13:01:04.000Z",
+      "topic": "Tech"
+    },
+    {
+      "text": "Spatial Computing in 2026: How the Spatial Web Is Quietly Reshaping Everything - DEV Community # Spatial Computing in 2026: How the Spatial Web Is Quietly Reshaping Everything While the tech world obsesses over AI agents and large language models, a quieter revolution is unfolding on a different front. Spatial computing — the blending of digital information with physical space — is moving from novelty to infrastructure. And it's happening faster than most developers realize. ## Beyond \"VR Hea",
+      "source_url": "https://dev.to/walid_azrour_0813f6b60398/spatial-computing-in-2026-how-the-spatial-web-is-quietly-reshaping-everything-3587",
+      "date": "2026-03-30T21:05:20.000Z",
+      "topic": "LLM"
+    },
+    {
+      "text": "AR Integration & Spatial Computing: 5 Ways to Scale in 2026 Headlines ## Next-Generation Electronics: The Future of Tech in 2026 ## Innovative Display Solutions for Contemporary Interiors ## AR Integration & Spatial Computing: 5 Ways to Scale in 2026 ## Why Do I Pee When I Sneeze? Causes & How to Stop Leaks ## What Is GLP-1 Medication? 2026 Guide to Benefits & Uses ## Hans Corporation’s Journey to Sustainable Agriculture and Fertilizers Most people still picture AR as those quirky",
+      "source_url": "https://fobie.org/spatial-computing-ar-integration/",
+      "date": "2026-03-30T10:38:27.000Z",
+      "topic": "AI"
+    },
+    {
+      "text": "Spatial Computing Explained: Use Cases Beyond Gaming – startupgeek.org For decades, our interaction with the digital world has been confined to two dimensions. We stared at glowing rectangles—laptops, smartphones, and monitors—translating our 3D intentions into 2D clicks and swipes. However, we are currently witnessing a paradigm shift. Spatial Computing Explained: Use Cases Beyond Gaming represents the next great frontier in technology, where the digital and physical worlds merge into a single",
+      "source_url": "https://startupgeek.org/spatial-computing-explained-use-cases-beyond-gaming-3/",
+      "date": "2026-03-29T00:38:33.000Z",
+      "topic": "AI"
+    },
+    {
+      "text": "Spatial Computing Explained: Use Cases Beyond Gaming – startupgeek.org For years, the conversation around immersive technology was dominated by the world of entertainment. However, we are currently witnessing a seismic shift as Spatial Computing Explained: Use Cases Beyond Gaming becomes a central theme for the next generation of enterprise and industrial productivity. Unlike traditional computing, which confines our digital lives to flat screens, spatial computing blends the digital and physic",
+      "source_url": "https://startupgeek.org/spatial-computing-explained-use-cases-beyond-gaming-2/",
+      "date": "2026-03-29T00:31:53.000Z",
       "topic": "AI"
     }
   ]

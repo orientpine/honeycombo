@@ -27,11 +27,12 @@ const sorted = influencers.sort((a: any, b: any) => a.data.name.localeCompare(b.
           platform={influencer.data.platform}
           handle={influencer.data.handle}
           bio={influencer.data.bio}
-          opinions={influencer.data.opinions}
         />
       ))}
     </div>
   )}
+
+  <script is:inline src="https://platform.twitter.com/widgets.js" async></script>
 </BaseLayout>
 
 <style>

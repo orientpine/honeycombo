@@ -168,6 +168,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 .auth-area :global(.auth-user:hover) {
   background: var(--color-bg-secondary);
 }
+.auth-area :global(.auth-user::after) {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: var(--space-xs);
+}
 .auth-area :global(.auth-avatar) {
   width: 28px;
   height: 28px;

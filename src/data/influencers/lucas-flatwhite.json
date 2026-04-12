@@ -6,34 +6,64 @@
   "bio": "AI x Software Engineer. Twitter 𝕏 'Software Engineering' 커뮤니티 Admin. Claude Code 및 AI 도구 전문가.",
   "opinions": [
     {
-      "text": "Comprehensive analysis and documentation of Claude Code's internal prompt architecture and multi-agent reasoning system. Claude Code의 내부 프롬프트 아키텍처와 멀티 에이전트 추론 시스템을 분석하고 문서화한 프로젝트.",
+      "text": "Claude Code for Large Codebases: Refactoring, Debugging, and Project-Wide Edits in Real Engineering Workflows top of page Search Claude Code has emerged as one of the clearest examples of an AI coding system designed for repository-scale work rather than for isolated prompt-response programming tasks. Its practical significance lies in how it handles the demanding middle layer of software engineering, where developers are not merely writing new code, but understanding unfamiliar systems, tra",
+      "source_url": "https://www.datastudios.org/post/claude-code-for-large-codebases-refactoring-debugging-and-project-wide-edits-in-real-engineering",
+      "date": "2026-04-06T16:00:21.000Z",
+      "topic": "LLM"
+    },
+    {
+      "text": "Claude Code Guide: CLI, Desktop, Web, and Real-World Fit Remote OpenClaw Blog # Claude Code Guide [2026]: CLI, Desktop, Web, and Real-World Fit 5 min read · 3 April 2026 If you want the plain answer first, Claude Code is now better understood as a coding system with multiple surfaces, not as a single terminal tool. Anthropic's docs currently describe an agentic coding tool available in the terminal, IDE, desktop app, and browser, with support for MCP, memory, scheduled tasks, remote control,",
+      "source_url": "https://remoteopenclaw.com/blog/claude-code-guide",
+      "date": "2026-04-03T00:00:00.000Z",
+      "topic": "LLM"
+    },
+    {
+      "text": "Claude Code Deep Dive Part 2: The 1,421-Line While Loop That Runs Everything | HarrisonSec # Claude Code Deep Dive Part 2: The 1,421-Line While Loop That Runs Everything ## Inside query.ts — the 1,729-line async generator that is Claude Code's beating heart. 10 steps per iteration, 9 continue points, 4-stage compression, and streaming tool execution. With line numbers. April 3, 2026 Harrison Guo 9 min read ### Table of Contents This is Part 2 of our Claude Code Architecture Deep Dive seri",
+      "source_url": "https://harrisonsec.com/blog/claude-code-deep-dive-query-loop/",
+      "date": "2026-04-03T00:00:00.000Z",
+      "topic": "LLM"
+    },
+    {
+      "text": "Inside Claude Code: What the Source Really Tells Us About Building Production AI Agents | by Morty | Apr, 2026 | Medium Sign up Get app Sign up # Inside Claude Code: What the Source Really Tells Us About Building Production AI Agents ## Everyone was busy chasing the drama. I was busy reading the code, and I opened the Box. 10 min read Apr 2, 2026 -- Share Press enter or click to view image in full size I spent time going through the source and documenting what’s really inside Claude C",
+      "source_url": "https://medium.com/@mortitech/inside-claude-code-what-the-source-really-tells-us-about-building-production-ai-agents-cd9c3eb7c91b",
+      "date": "2026-04-02T02:58:47.000Z",
+      "topic": "LLM"
+    },
+    {
+      "text": "Claude Code Source Code Leaked: What 512K Lines Reveal About the Best AI Coding Harness | Superframeworks | Superframeworks ## Key Takeaways - A 59.8 MB source map file was accidentally included in Claude Code v2.1.88 on npm, exposing 512,000 lines of TypeScript — the entire codebase - The leak reveals 10 architectural secrets: parallelism, permissions, memory compaction, a 4-type persistent memory system, 5-layer config hierarchy, 7-stage bootstrap pipeline, and more - Claude.md is loaded int",
+      "source_url": "https://superframeworks.com/articles/claude-code-source-code-leak",
+      "date": "2026-04-01T04:08:29.000Z",
+      "topic": "LLM"
+    },
+    {
+      "text": "# Repository: lucas-flatwhite/claude-code-system-prompts Comprehensive analysis and documentation of Claude Code’s internal prompt architecture and multi-agent reasoning system. - Stars: 146 - Forks: 135 - Watchers: 146 - Open issues: 0 - License: MIT License (MIT) - Default branch: main - Created: 2026-03-31T15:50:35Z - Last push: 2026-03-31T16:46:11Z - Contributors: 1 (top: lucas-flatwhite) --- # Claude Code 시스템 프롬프트 **Claude Code**의 내부 프롬프트 아키텍처와 에이전트 동작 방식을 문서화한 독립 연구 프로젝트입니다. Claude Co",
       "source_url": "https://github.com/lucas-flatwhite/claude-code-system-prompts",
       "date": "2026-03-31T15:50:35.000Z",
-      "topic": "AI Agent"
+      "topic": "LLM"
     },
     {
-      "text": "How Claude Code Actually Works: Reverse-Engineering 512K Lines of Production AI Agent. On March 31, 2026, Anthropic shipped an npm package with a .map file that referenced their full TypeScript source. Claude Code의 내부 구조가 밝혀지면서 AI 에이전트 아키텍처에 대한 깊은 이해가 가능해졌다.",
-      "source_url": "https://www.karanprasad.com/blog/how-claude-code-actually-works-reverse-engineering-512k-lines",
-      "date": "2026-04-02T00:00:00.000Z",
-      "topic": "AI Agent"
+      "text": "THE HARNESS THAT MAKES THE MODEL USEFUL: A SOURCE-LEVEL STUDY OF CLAUDE CODE | DuoCode Technology Blog # THE HARNESS THAT MAKES THE MODEL USEFUL: A SOURCE-LEVEL STUDY OF CLAUDE CODE A 513,237-line TypeScript codebase. 1,902 source files. 40 tools, 101 commands, 20 service modules, 8 task execution types. We performed a complete source-level analysis of Claude Code to answer one question: what does it actually take to turn a language model into a reliable coding agent? This is not a product rev",
+      "source_url": "https://duocodetech.com/blog/claude-code-harness-engineering",
+      "date": "2026-03-31T03:56:38.000Z",
+      "topic": "LLM"
     },
     {
-      "text": "INSIDE CLAUDE CODE: HOW A 513K-LINE CODEBASE TURNS AN LLM INTO A CODING AGENT. We analyzed Claude Code's 1,900+ file codebase — 512K lines, 90% written by Claude itself, 85K+ GitHub stars. What we found is not just an AI wrapper — it's a terminal-native IDE with its own rendering engine, multi-agent system.",
+      "text": "# INSIDE CLAUDE CODE: HOW A 513K-LINE CODEBASE TURNS AN LLM INTO A CODING AGENT We analyzed Claude Code's 1,900+ file codebase — 512K lines, 90% written by Claude itself, 85K+ GitHub stars. What we found is not just an AI wrapper — it's a terminal-native IDE with its own rendering engine, multi-agent orchestration, and a multi-layered permission system. March 31, 2026·Liu Wei We analyzed Claude Code's 1,900+ file codebase — 512K lines, 90% written by Claude itself, 85K+ GitHub stars. What we",
       "source_url": "https://duocodetech.com/blog/claude-code-anatomy",
       "date": "2026-03-31T02:14:21.000Z",
-      "topic": "Coding"
+      "topic": "LLM"
     },
     {
-      "text": "Claude Code 내부 아키텍처 분석 — npm Source Map 유출로 본 에이전틱 AI의 해부학. Anthropic이 '오픈소스'라고 부르는 것과 실제로 오픈된 것 사이에는 4,600개 파일만큼의 간극이 있었습니다. 내부에는 8겹 보안 레이어가 존재.",
-      "source_url": "https://bits-bytes-nn.github.io/insights/agentic-ai/2026/03/31/claude-code-source-map-leak-analysis.html",
+      "text": "Inside Claude Code's Architecture: The Agentic Loop That Codes For You ## How Anthropic built a terminal AI that reads, writes, executes, asks permission, and loops until the job is done --- I’ve been living inside Claude Code for months. It writes my code, runs my tests, commits my changes, reviews my PRs. At some point I stopped thinking of it as a tool and started thinking of it as a collaborator with terminal access. So I read the architecture doc. Not the marketing page, not the changel",
+      "source_url": "https://oldeucryptoboi.com/blog/claude-code-architecture/",
       "date": "2026-03-31T00:00:00.000Z",
-      "topic": "AI Agent"
+      "topic": "LLM"
     },
     {
-      "text": "Y Combinator CEO Garry Tan이 만든 gstack의 한국어 버전 gstack-ko를 구성. Claude Code가 '하나의 모드'에 갇혀 있다는 느낌을 받아본 적 있나요? gstack은 Claude Code에게 '전문가 모드'를 부여하는 슬래시 커맨드 모음.",
-      "source_url": "https://github.com/lucas-flatwhite/gstack-ko",
-      "date": "2026-03-29T00:00:00.000Z",
-      "topic": "Coding"
+      "text": "Claude Code Leak: A Deep Dive into Anthropic's AI Coding Agent Architecture # Claude Code Leak: A Deep Dive into Anthropic’s AI Coding Agent Architecture Claude Code’s source code was briefly exposed to the public. We read all 1,884 TypeScript files across 150+ directories. What we found is not just a chatbot with tool access. It is a full operating system for AI-assisted software development — with a multi-agent runtime, a plugin marketplace, a cross-session memory system, and a security mode",
+      "source_url": "https://redreamality.com/blog/claude-code-source-leak-architecture-analysis/",
+      "date": "2026-03-31T00:00:00.000Z",
+      "topic": "LLM"
     }
   ]
 }
