@@ -1,12 +1,12 @@
 ---
 const navItems = [
-  { href: '/', label: '홈' },
-  { href: '/articles', label: '기사' },
-  { href: '/trending', label: '트렌드' },
+  { href: '/', label: 'Home' },
+  { href: '/articles', label: 'Articles' },
+  { href: '/trending', label: 'Trending' },
   { href: '/must-read', label: 'Must-read' },
-  { href: '/playlists', label: '플레이리스트' },
-  { href: '/influencers', label: '추천 인플루언서' },
-  { href: '/submit', label: '자료등록' },
+  { href: '/playlists', label: 'Playlists' },
+  { href: '/influencers', label: 'Influencers' },
+  { href: '/submit', label: 'Submit' },
 ];
 
 const currentPath = Astro.url.pathname;
@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           <span class="auth-username">` + user.username + `</span>
           <div class="auth-dropdown">
             <a href="/my/playlists" class="auth-dropdown-item">내 플레이리스트</a>
+            ` + (user.is_admin ? `<a href="/admin/playlists" class="auth-dropdown-item auth-dropdown-admin">🛡️ 플레이리스트 관리</a>` : '') + `
             <button id="logout-btn" class="auth-dropdown-item text-danger">로그아웃</button>
           </div>
         </div>
@@ -222,6 +223,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 }
 .auth-area :global(.auth-dropdown-item.text-danger) {
   color: var(--color-danger);
+}
+.auth-area :global(.auth-dropdown-admin) {
+  border-top: 1px solid var(--color-border);
+  margin-top: var(--space-xs);
+  padding-top: var(--space-sm);
+  color: var(--color-primary);
+  font-weight: 600;
 }
 .auth-area :global(.auth-login-btn) {
   padding: var(--space-xs) var(--space-md);

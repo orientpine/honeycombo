@@ -5,6 +5,7 @@ import ArticleCard from '../../components/ArticleCard.astro';
 import Pagination from '../../components/Pagination.astro';
 import TagFilter from '../../components/TagFilter.astro';
 import PersonalizationBar from '../../components/PersonalizationBar.astro';
+import SourceFilter from '../../components/SourceFilter.astro';
 import { compareArticles } from '../../lib/article-sort';
 
 const ITEMS_PER_PAGE = 20;
@@ -32,6 +33,8 @@ const pageArticles = allArticles.slice(0, ITEMS_PER_PAGE);
 
 // Collect all unique tags
 const allTags = [...new Set(allArticles.flatMap(a => a.tags))].sort();
+const curatedCount = allArticles.filter(a => a._type === 'curated').length;
+const feedCount = allArticles.filter(a => a._type === 'feed').length;
 ---
 
 <BaseLayout title="기사 목록 — HoneyCombo" description="최신 기술 뉴스와 큐레이션 기사">
@@ -40,6 +43,8 @@ const allTags = [...new Set(allArticles.flatMap(a => a.tags))].sort();
     <p class="page-subtitle">최신 기술 뉴스와 에디터 큐레이션</p>
   </div>
   
+  <SourceFilter curatedCount={curatedCount} feedCount={feedCount} />
+
   {allTags.length > 0 && <PersonalizationBar availableTags={allTags} />}
 
   {allTags.length > 0 && <TagFilter tags={allTags} />}
@@ -63,6 +68,7 @@ const allTags = [...new Set(allArticles.flatMap(a => a.tags))].sort();
           thumbnail_url={article.thumbnail_url}
           isExternal={article._type === 'feed'}
           slug={article._type === 'curated' ? article._id : undefined}
+          articleOrigin={article._type}
         />
       ))}
     </div>

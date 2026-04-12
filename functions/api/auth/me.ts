@@ -1,6 +1,7 @@
+import { isAdmin } from '../../lib/admin';
 import type { AppPagesFunction } from '../../lib/types';
 
-export const onRequest: AppPagesFunction = async ({ data, request }) => {
+export const onRequest: AppPagesFunction = async ({ data, env, request }) => {
   if (request.method !== 'GET') {
     return new Response('Method Not Allowed', {
       status: 405,
@@ -19,5 +20,6 @@ export const onRequest: AppPagesFunction = async ({ data, request }) => {
     username: data.user.username,
     display_name: data.user.display_name,
     avatar_url: data.user.avatar_url,
+    is_admin: isAdmin(env, data.user.id),
   });
 };

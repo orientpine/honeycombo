@@ -1,0 +1,104 @@
+---
+interface Props {
+  curatedCount: number;
+  feedCount: number;
+}
+const { curatedCount, feedCount } = Astro.props;
+---
+
+<div class="source-filter" data-testid="source-filter">
+  <button class="source-filter-btn active" data-origin="all">
+    전체 <span class="source-count">{curatedCount + feedCount}</span>
+  </button>
+  <button class="source-filter-btn" data-origin="curated">
+    에디터 추천 <span class="source-count">{curatedCount}</span>
+  </button>
+  <button class="source-filter-btn" data-origin="feed">
+    RSS 피드 <span class="source-count">{feedCount}</span>
+  </button>
+</div>
+
+<script>
+function filterByOrigin(origin: string) {
+  const cards = document.querySelectorAll<HTMLElement>('[data-testid="article-card"]');
+  const buttons = document.querySelectorAll<HTMLElement>('[data-testid="source-filter"] .source-filter-btn');
+
+  buttons.forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.origin === origin);
+  });
+
+  cards.forEach(card => {
+    const show = origin === 'all' || card.dataset.origin === origin;
+    card.style.display = show ? '' : 'none';
+  });
+
+  const url = new URL(window.location.href);
+  if (origin === 'all') {
+    url.searchParams.delete('origin');
+  } else {
+    url.searchParams.set('origin', origin);
+  }
+  window.history.pushState({}, '', url.toString());
+}
+
+function initSourceFilter() {
+  const buttons = document.querySelectorAll<HTMLElement>('[data-testid="source-filter"] .source-filter-btn');
+  const validOrigins = new Set(Array.from(buttons).map(b => b.dataset.origin));
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterByOrigin(btn.dataset.origin || 'all');
+    });
+  });
+
+  const originParam = new URLSearchParams(window.location.search).get('origin');
+  if (originParam && validOrigins.has(originParam)) {
+    filterByOrigin(originParam);
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initSourceFilter);
+} else {
+  initSourceFilter();
+}
+</script>
+
+<style>
+.source-filter {
+  display: flex;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-lg);
+}
+.source-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  color: var(--color-text-muted);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.source-filter-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-text);
+}
+.source-filter-btn.active {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+.source-count {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+.source-filter-btn.active .source-count {
+  opacity: 1;
+}
+</style>

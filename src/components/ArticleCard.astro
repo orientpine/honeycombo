@@ -11,14 +11,15 @@ interface Props {
   thumbnail_url?: string;
   isExternal?: boolean;  // RSS articles link externally; curated articles link to /articles/[slug]
   slug?: string;
+  articleOrigin?: 'curated' | 'feed';  // Distinguishes user-submitted vs RSS-collected articles
 }
 
-const { id, title, url, source, type, description, tags, date, thumbnail_url, isExternal = true, slug } = Astro.props;
+const { id, title, url, source, type, description, tags, date, thumbnail_url, isExternal = true, slug, articleOrigin = 'feed' } = Astro.props;
 const articleUrl = isExternal ? url : `/articles/${slug || id}`;
 const formattedDate = new Date(date).toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' });
 ---
 
-<article class="card article-card" data-testid="article-card" data-tags={tags.join(',')}>
+<article class="card article-card" data-testid="article-card" data-tags={tags.join(',')} data-origin={articleOrigin}>
   {thumbnail_url && (
     <div class="article-thumbnail">
       <img src={thumbnail_url} alt={title} loading="lazy" width="300" height="160" />
@@ -26,6 +27,7 @@ const formattedDate = new Date(date).toLocaleDateString('ko-KR', { year: 'numeri
   )}
   <div class="article-body">
     <div class="article-meta">
+      {articleOrigin === 'curated' && <span class="badge badge-curated">에디터 추천</span>}
       <span class="badge">{source}</span>
       {type === 'youtube' && <span class="badge badge-primary">YouTube</span>}
       <time class="article-date" datetime={new Date(date).toISOString()}>{formattedDate}</time>
