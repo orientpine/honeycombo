@@ -10,8 +10,14 @@ import { compareArticles } from '../../lib/article-sort';
 
 const ITEMS_PER_PAGE = 20;
 
-// Get all approved curated articles
-const curatedEntries = await getCollection('curated', (entry: any) => entry.data.status === 'approved').catch((err: unknown) => {
+// Get approved curated articles (에디터 추천)
+const approvedEntries = await getCollection('curated', (entry: any) => entry.data.status === 'approved').catch((err: unknown) => {
+  console.error('Failed to load collection:', err);
+  return [];
+});
+
+// Get pending curated articles (제출 기사 - 검토 대기)
+const pendingEntries = await getCollection('curated', (entry: any) => entry.data.status === 'pending').catch((err: unknown) => {
   console.error('Failed to load collection:', err);
   return [];
 });
@@ -24,7 +30,8 @@ const feedEntries = await getCollection('feeds').catch((err: unknown) => {
 
 // Merge and sort (shared comparator)
 const allArticles = [
-  ...curatedEntries.map((e: any) => ({ ...e.data, _type: 'curated' as const, _id: e.id })),
+  ...approvedEntries.map((e: any) => ({ ...e.data, _type: 'curated' as const, _id: e.id })),
+  ...pendingEntries.map((e: any) => ({ ...e.data, _type: 'submitted' as const, _id: e.id })),
   ...feedEntries.map((e: any) => ({ ...e.data, _type: 'feed' as const, _id: e.id })),
 ].sort(compareArticles);
 
@@ -34,6 +41,7 @@ const pageArticles = allArticles.slice(0, ITEMS_PER_PAGE);
 // Collect all unique tags
 const allTags = [...new Set(allArticles.flatMap(a => a.tags))].sort();
 const curatedCount = allArticles.filter(a => a._type === 'curated').length;
+const submittedCount = allArticles.filter(a => a._type === 'submitted').length;
 const feedCount = allArticles.filter(a => a._type === 'feed').length;
 ---
 
@@ -43,7 +51,7 @@ const feedCount = allArticles.filter(a => a._type === 'feed').length;
     <p class="page-subtitle">최신 기술 뉴스와 에디터 큐레이션</p>
   </div>
   
-  <SourceFilter curatedCount={curatedCount} feedCount={feedCount} />
+  <SourceFilter curatedCount={curatedCount} submittedCount={submittedCount} feedCount={feedCount} />
 
   {allTags.length > 0 && <PersonalizationBar availableTags={allTags} />}
 

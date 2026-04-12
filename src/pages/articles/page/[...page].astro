@@ -11,7 +11,11 @@ import SourceFilter from '../../../components/SourceFilter.astro';
 
 export async function getStaticPaths() {
   const ITEMS_PER_PAGE = 20;
-  const curatedEntries = await getCollection('curated', (entry: any) => entry.data.status === 'approved').catch((err: unknown) => {
+  const approvedEntries = await getCollection('curated', (entry: any) => entry.data.status === 'approved').catch((err: unknown) => {
+    console.error('Failed to load collection:', err);
+    return [];
+  });
+  const pendingEntries = await getCollection('curated', (entry: any) => entry.data.status === 'pending').catch((err: unknown) => {
     console.error('Failed to load collection:', err);
     return [];
   });
@@ -21,7 +25,8 @@ export async function getStaticPaths() {
   });
   
   const allArticles = [
-    ...curatedEntries.map((e: any) => ({ ...e.data, _type: 'curated' as const, _id: e.id })),
+    ...approvedEntries.map((e: any) => ({ ...e.data, _type: 'curated' as const, _id: e.id })),
+    ...pendingEntries.map((e: any) => ({ ...e.data, _type: 'submitted' as const, _id: e.id })),
     ...feedEntries.map((e: any) => ({ ...e.data, _type: 'feed' as const, _id: e.id })),
   ].sort(compareArticles);
   
@@ -36,12 +41,13 @@ export async function getStaticPaths() {
       totalPages,
       allTags: [...new Set(allArticles.flatMap(a => a.tags))].sort(),
       curatedCount: allArticles.filter(a => a._type === 'curated').length,
+      submittedCount: allArticles.filter(a => a._type === 'submitted').length,
       feedCount: allArticles.filter(a => a._type === 'feed').length,
     },
   }));
 }
 
-const { articles, currentPage, totalPages, allTags, curatedCount, feedCount } = Astro.props;
+const { articles, currentPage, totalPages, allTags, curatedCount, submittedCount, feedCount } = Astro.props;
 ---
 
 <BaseLayout title={`기사 ${currentPage}페이지 — HoneyCombo`}>
@@ -50,7 +56,7 @@ const { articles, currentPage, totalPages, allTags, curatedCount, feedCount } = 
     <p class="page-subtitle">최신 기술 뉴스와 에디터 큐레이션</p>
   </div>
   
-  <SourceFilter curatedCount={curatedCount} feedCount={feedCount} />
+  <SourceFilter curatedCount={curatedCount} submittedCount={submittedCount} feedCount={feedCount} />
 
   {allTags.length > 0 && <PersonalizationBar availableTags={allTags} />}
   {allTags.length > 0 && <TagFilter tags={allTags} />}

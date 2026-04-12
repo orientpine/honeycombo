@@ -91,6 +91,7 @@ img { max-width: 100%; height: auto; }
 }
 .badge-primary { background: var(--color-primary); color: white; border-color: var(--color-primary); }
 .badge-curated { background: var(--color-accent); color: var(--color-text); border-color: var(--color-accent); font-weight: 700; }
+.badge-submitted { background: var(--color-success); color: white; border-color: var(--color-success); }
 
 /* Tag */
 .tag {
