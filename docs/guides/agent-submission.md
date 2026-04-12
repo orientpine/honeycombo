@@ -62,7 +62,6 @@ gh auth status
 gh issue create \
   --repo orientpine/honeycombo \
   --title "📎 자료 등록" \
-  --title "📎 자료 등록" \
   --body "### URL
 
 https://example.com/great-article
