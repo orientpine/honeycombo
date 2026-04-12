@@ -60,6 +60,7 @@ const recentArticles = allArticles.slice(0, MAX_RECENT);
             tags={article.tags}
             date={'submitted_at' in article ? article.submitted_at : article.published_at}
             thumbnail_url={article.thumbnail_url}
+            articleOrigin={article._type}
             isExternal={article._type === 'feed'}
             slug={article._type === 'curated' ? article._id : undefined}
           />

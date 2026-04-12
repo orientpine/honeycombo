@@ -1,4 +1,6 @@
 ---
+import AddToPlaylist from './AddToPlaylist.astro';
+
 interface Props {
   id: string;
   title: string;
@@ -15,6 +17,7 @@ interface Props {
 }
 
 const { id, title, url, source, type, description, tags, date, thumbnail_url, isExternal = true, slug, articleOrigin = 'feed' } = Astro.props;
+const sourceType = articleOrigin === 'feed' ? 'feed' : 'curated';
 const articleUrl = isExternal ? url : `/articles/${slug || id}`;
 const formattedDate = new Date(date).toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' });
 ---
@@ -42,11 +45,18 @@ const formattedDate = new Date(date).toLocaleDateString('ko-KR', { year: 'numeri
     <div class="article-tags">
       {tags.map(tag => <span class="tag">{tag}</span>)}
     </div>
+    <AddToPlaylist
+      articleId={id}
+      title={title}
+      url={url}
+      description={description}
+      sourceType={sourceType}
+    />
   </div>
 </article>
 
 <style>
-.article-card { display: flex; flex-direction: column; gap: var(--space-sm); }
+.article-card { display: flex; flex-direction: column; gap: var(--space-sm); position: relative; }
 .article-thumbnail img { width: 100%; height: 160px; object-fit: cover; border-radius: var(--radius-sm); }
 .article-body { display: flex; flex-direction: column; gap: var(--space-sm); flex: 1; }
 .article-meta { display: flex; align-items: center; gap: var(--space-sm); flex-wrap: wrap; }
