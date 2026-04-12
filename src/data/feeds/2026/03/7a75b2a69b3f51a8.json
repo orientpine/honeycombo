@@ -1,0 +1,17 @@
+{
+  "id": "7a75b2a69b3f51a8",
+  "title": "What’s coming to our GitHub Actions 2026 security roadmap",
+  "url": "https://github.blog/news-insights/product-news/whats-coming-to-our-github-actions-2026-security-roadmap/",
+  "source": "GitHub Blog",
+  "type": "article",
+  "description": "A look at GitHub Actions’ 2026 roadmap, outlining how secure defaults, policy controls, and CI/CD observability harden the software supply chain end to end. The post What’s coming to our GitHub Actions 2026 security roadmap appeared first on The GitHub Blog.",
+  "tags": [
+    "dev",
+    "news & insights",
+    "product",
+    "ci/cd",
+    "github actions"
+  ],
+  "published_at": "2026-03-26T16:49:14.000Z",
+  "feed_id": "githublog"
+}

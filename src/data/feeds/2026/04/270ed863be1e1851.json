@@ -1,0 +1,16 @@
+{
+  "id": "270ed863be1e1851",
+  "title": "sudo - Power Tool, Not a Magic Fix",
+  "url": "https://dev.to/axo4321/sudo-power-tool-not-a-magic-fix-1lgo",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "If you've spent any time in a Linux terminal, you've typed sudo in front of a command. Maybe it was because something was blocked, maybe someone told you to, or maybe you just picked up the habit. Either way, most beginners use it constantly without really thinking about what it's doing. So let's talk about it. What sudo actually is, when you should reach for it, and where it can genuinely get you into trouble. sudo sudo stands for \"superuser do.\" When you put it in front of a command, you're telling Linux to run that command as the root user, the most powerful account on the Root can read, modify, or delete anything. No file is off limits, no permission can stop it, and nothing it does is automatically undoable. That's a lot of power to invoke casually. sudo Makes Sense There are plenty of situations where sudo is exactly the right tool. Installing software, editing system configuration files, managing users, restarting services. These all genuinely require elevated privileges and...",
+  "tags": [
+    "dev",
+    "linux",
+    "beginners",
+    "tutorial"
+  ],
+  "published_at": "2026-04-12T04:45:10.000Z",
+  "feed_id": "devto"
+}

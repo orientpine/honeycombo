@@ -1,0 +1,17 @@
+{
+  "id": "e42e2494aee4dcc9",
+  "title": "Building an Explainable AI Toolkit for Laravel (Not Just Another ChatGPT Wrapper)",
+  "url": "https://dev.to/mukundhan_mohan_403443a12/building-an-explainable-ai-toolkit-for-laravel-not-just-another-chatgpt-wrapper-49c",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "AI is everywhere right now - but most integrations have one big problem: They give answers, but not explanations. If you’re building real applications (customer support tools, decision systems, analytics dashboards), that’s a serious limitation. So I built something to fix that. Most AI integrations in web apps look like this: $response = AI::ask(\"Summarize this feedback\"); And you get: “The customer is unhappy and requests a refund.” But: Why did the system decide that? What signals influenced the output? How confident is it? Can we audit or trace this decision later? This becomes a huge issue in real-world systems: customer support automation decision workflows enterprise dashboards compliance-sensitive environments The Idea: Explainable AI for Applications Instead of just generating responses, what if AI systems could return: structured outputs reasoning / explanation confidence scores decision traces That’s where explainable AI (XAI) meets backend engineering. What I Built I cre...",
+  "tags": [
+    "dev",
+    "ai",
+    "laravel",
+    "php",
+    "showdev"
+  ],
+  "published_at": "2026-04-12T04:40:45.000Z",
+  "feed_id": "devto"
+}

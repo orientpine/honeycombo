@@ -1,0 +1,16 @@
+{
+  "id": "3482602ca0bd5698",
+  "title": "Vane (Perplexica 2.0) Quickstart With Ollama and llama.cpp",
+  "url": "https://dev.to/rosgluk/vane-perplexica-20-quickstart-with-ollama-and-llamacpp-132o",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "Vane is one of the more pragmatic entries in the \"AI search with citations\" space: a self-hosted answering engine that mixes live web retrieval with local or cloud LLMs, while keeping the whole stack under your control. The project was originally known as Perplexica, Because the useful part of the stack is not only the UI but also where inference and data live, this comparison of LLM hosting in 2026 pulls local, self-hosted, and cloud setups together so you can place Vane next to other runtimes and deployment choices. This post focuses on the parts technical readers actually care about: how the system works, a minimal Docker quickstart, and how to run it with local inference via Ollama and llama.cpp (directly or through LM Studio). Along the way, each FAQ topic is answered in-context, not parked at the bottom. At a high level, Vane is a Next.js application that combines a chat UI with search and citations. The core architectural pieces are also exactly what you would expect from a m...",
+  "tags": [
+    "dev",
+    "selfhosting",
+    "llm",
+    "ai"
+  ],
+  "published_at": "2026-04-12T04:56:41.000Z",
+  "feed_id": "devto"
+}

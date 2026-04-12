@@ -1,0 +1,17 @@
+{
+  "id": "04ccaf1a2a148898",
+  "title": "Open-source AI Built Qwen’s Reach. Alibaba Wants Cloud Cash",
+  "url": "https://dev.to/simon_paxton/open-source-ai-built-qwens-reach-alibaba-wants-cloud-cash-223g",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "Three hundred million downloads and more than 100,000 derivative models is what success looks like in open-source AI—at least until someone in finance asks where the money is. Alibaba’s own filings say Qwen reached that scale, while AP and Bloomberg report the company is now chasing much harder numbers: cloud revenue up 34% on AI demand, and a target of $100 billion a year in AI and cloud revenue within five years. The easy reading is betrayal. Alibaba used openness to make Qwen famous, and now wants to funnel everyone back into paid services. The better reading is more important: open models were never the business. They were the distribution layer. That distinction matters because it is about to repeat across the industry. Developers still talk about model releases as if the prize is winning Hugging Face. Large vendors increasingly treat that as top-of-funnel marketing for cloud, enterprise integration, and model-as-a-service. Popularity is cheap. Monetization is hard. The Financi...",
+  "tags": [
+    "dev",
+    "alibaba",
+    "opensourceai",
+    "cloudcomputing",
+    "generativeai"
+  ],
+  "published_at": "2026-04-12T04:22:15.000Z",
+  "feed_id": "devto"
+}

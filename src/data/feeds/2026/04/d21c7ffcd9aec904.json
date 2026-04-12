@@ -1,0 +1,17 @@
+{
+  "id": "d21c7ffcd9aec904",
+  "title": "Robot Training Data Is Turning Labor Into Infrastructure",
+  "url": "https://dev.to/simon_paxton/robot-training-data-is-turning-labor-into-infrastructure-2ebd",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "A man in southern India folds hand towels while wearing a GoPro on his forehead. The point is not surveillance for its own sake; according to Los Angeles Times reporting, the footage becomes robot training data for a U.S. client trying to teach machines to perform real-world tasks. If that sounds like a story about robots replacing workers, it is. But that is not the most important part. The more important frame is this: labor is being reclassified as AI infrastructure. Workers are no longer only producing towels, seams, or warehouse throughput. They are producing the motion traces, retries, corrections, and first-person context that make their own jobs legible to machines. That shift changes the economics. Once labor becomes data generation, the value no longer sits mainly in the finished good. It moves upstream to whoever owns the dataset, the model, the customer relationship, and eventually the robotic system that can replay the work without paying the worker again. The news itse...",
+  "tags": [
+    "dev",
+    "ai",
+    "automation",
+    "robotics",
+    "datalabeling"
+  ],
+  "published_at": "2026-04-12T04:25:06.000Z",
+  "feed_id": "devto"
+}

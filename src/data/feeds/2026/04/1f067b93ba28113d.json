@@ -1,0 +1,16 @@
+{
+  "id": "1f067b93ba28113d",
+  "title": "I Built a Security Tool That Does Absolutely Nothing (And It's Terrifyingly Realistic)",
+  "url": "https://dev.to/shadowstrike/i-built-a-security-tool-that-does-absolutely-nothing-and-its-terrifyingly-realistic-ihk",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "This is a submission for the DEV April Fools Challenge What I Built: Demo: Code: / security-theatre-simulator IT Security Theatre Simulator 🎭 A devastating satire of enterprise security tools that generate impressive reports with zero actual value. Built for the DEV Community April Fools Challenge 2026 by ShadowStrike (Strategos). What This Does This tool perfectly simulates enterprise security software by: Taking way too long to do absolutely nothing Displaying impressive progress bars that measure fictional work Generating CRITICAL findings about non-existent threats Providing completely useless recommendations Creating reports with suspiciously precise but meaningless statistics Looking professional enough that executives might actually buy it Installation Option 1: With pretty colours (recommended) pip install colorama python security_theatre.py Option 2: Without colours (it still works, just less theatrical) python security_theatre.py Usage python security_theatre.py Then sit...",
+  "tags": [
+    "dev",
+    "devchallenge",
+    "418challenge",
+    "showdev"
+  ],
+  "published_at": "2026-04-12T04:07:28.000Z",
+  "feed_id": "devto"
+}

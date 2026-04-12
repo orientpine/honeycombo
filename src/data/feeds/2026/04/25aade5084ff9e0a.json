@@ -1,0 +1,15 @@
+{
+  "id": "25aade5084ff9e0a",
+  "title": "How to Connect Mila to Claude Desktop via MCP in 30 Seconds",
+  "url": "https://dev.to/noleetcode/how-to-connect-mila-to-claude-desktop-via-mcp-in-30-seconds-22jo",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "If you've been using Claude Desktop and wished it could create documents, spreadsheets, and presentations for you — now it can. Mila is an AI-native office suite with a built-in MCP server, so you can connect it to Claude (or Cursor, VS Code, or any MCP client) in seconds. Mila is a collaborative platform for documents, spreadsheets, and slide presentations — think Google Docs meets AI. With 74,000+ users across 50+ countries, it's built from the ground up for AI workflows. The Mila MCP server gives your AI assistant 23 tools to: Create rich documents with headings, tables, and formatting Build spreadsheets with formulas and cell formatting (A1 notation) Design slide presentations on a 960×540 canvas Organize content into servers (workspaces) Full CRUD operations on all document types Sign up at mila.gg and grab an API key from mila.gg/api-keys. Open your claude_desktop_config.json and add: { \"mcpServers\": { \"mila\": { \"url\": \"https://mcp.mila.gg\", \"headers\": { \"Authorization\": \"Bear...",
+  "tags": [
+    "dev",
+    "tutorial",
+    "productivity"
+  ],
+  "published_at": "2026-04-12T04:23:45.000Z",
+  "feed_id": "devto"
+}

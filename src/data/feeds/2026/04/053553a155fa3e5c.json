@@ -1,0 +1,16 @@
+{
+  "id": "053553a155fa3e5c",
+  "title": "Run multiple agents at once with /fleet in Copilot CLI",
+  "url": "https://github.blog/ai-and-ml/github-copilot/run-multiple-agents-at-once-with-fleet-in-copilot-cli/",
+  "source": "GitHub Blog",
+  "type": "article",
+  "description": "/fleet lets Copilot CLI dispatch multiple agents in parallel. Learn how to write prompts that split work across files, declare dependencies, and avoid common pitfalls. The post Run multiple agents at once with /fleet in Copilot CLI appeared first on The GitHub Blog.",
+  "tags": [
+    "dev",
+    "ai & ml",
+    "github copilot",
+    "github copilot cli"
+  ],
+  "published_at": "2026-04-01T15:00:00.000Z",
+  "feed_id": "githublog"
+}
