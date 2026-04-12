@@ -10,10 +10,10 @@ const influencers = await getCollection('influencers').catch((err: unknown) => {
 const sorted = influencers.sort((a: any, b: any) => a.data.name.localeCompare(b.data.name));
 ---
 
-<BaseLayout title="인플루언서 의견 — HoneyCombo" description="기술 분야 주요 인물들의 최신 의견 모음">
+<BaseLayout title="추천 인플루언서 — HoneyCombo" description="기술 분야 주요 인플루언서 모음">
   <div class="page-header">
-    <h1>💬 인플루언서 의견</h1>
-    <p class="page-subtitle">기술 분야 주요 인물들의 최신 인사이트</p>
+    <h1>⭐ 추천 인플루언서</h1>
+    <p class="page-subtitle">기술 분야 주요 인물들을 팔로우해 보세요</p>
   </div>
 
   {sorted.length === 0 ? (
