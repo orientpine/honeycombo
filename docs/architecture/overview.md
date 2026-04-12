@@ -79,7 +79,8 @@
 | URL | 페이지 | 설명 |
 |-----|--------|------|
 | `/` | `index.astro` | 메인 (최신 기사) |
-| `/articles/[slug]` | `articles/` | 개별 기사 |
+| `/articles` | `articles/index.astro` | 기사 목록 (SourceFilter: 전체/에디터추천/제출기사/RSS) |
+| `/articles/[slug]` | `articles/[...slug].astro` | 개별 기사 (curated만) |
 | `/trending` | `trending.astro` | 트렌딩 기사 |
 | `/must-read` | `must-read.astro` | 필독 기사 |
 | `/influencers` | `influencers.astro` | 인플루언서 |
@@ -142,6 +143,8 @@ src/ (pages + components + data + content) → astro build → dist/
 - [문서 유효성 검증](../features/doc-validation.md)
 - [대량 제출 (bulk submission)](../features/bulk-submission.md)
 - [제출 CLI 래퍼](../features/submit-cli.md)
+- [기사 소스 필터](../features/source-filter.md)
+- [Decap CMS 로그인 Not Found](../troubleshooting/decap-cms-login-not-found.md)
 - [AI 에이전트 제출 가이드](../guides/agent-submission.md)
 
 ## 변경 이력
@@ -151,3 +154,4 @@ src/ (pages + components + data + content) → astro build → dist/
 | 2026-04-11 | 최초 작성 — 현재 프로젝트 구조 기반 |
 | 2026-04-12 | validate-docs 스크립트 추가, CI 파이프라인 반영 |
 | 2026-04-12 | 단건 제출 워크플로우에 bulk submission 처리 추가 |
+| 2026-04-12 | SourceFilter 4탭 구조, Decap CMS auth 수정 반영 |
