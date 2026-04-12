@@ -85,13 +85,16 @@ export const onRequest: AppPagesFunction[] = [
     if (method === 'GET') {
       const url = new URL(request.url);
       const mine = url.searchParams.get('mine') === 'true';
+      const sourceId = url.searchParams.get('source_id');
+      const itemType = url.searchParams.get('item_type');
 
       if (mine) {
         if (!data.user) {
           return json({ error: 'Unauthorized' }, 401);
         }
 
-        const playlists = await listUserPlaylists(env.DB, data.user.id);
+        const containment = sourceId && itemType ? { source_id: sourceId, item_type: itemType } : undefined;
+        const playlists = await listUserPlaylists(env.DB, data.user.id, containment);
         return json({ playlists });
       }
 

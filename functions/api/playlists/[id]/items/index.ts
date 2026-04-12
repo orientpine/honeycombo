@@ -1,4 +1,4 @@
-import { addItem } from '../../../../lib/playlist-items';
+import { addItem, DuplicateItemError } from '../../../../lib/playlist-items';
 import { isBlockedDomain, isValidUrl } from '../../../../lib/validate';
 import type { AddItemInput, AppPagesFunction } from '../../../../lib/types';
 
@@ -108,13 +108,18 @@ export const onRequest: AppPagesFunction[] = [
         return withRateLimitHeaders(parsed);
       }
 
-      const item = await addItem(env.DB, params.id, data.user.id, parsed);
-
-      if (!item) {
-        return withRateLimitHeaders(json({ error: 'Forbidden' }, 403));
+      try {
+        const item = await addItem(env.DB, params.id, data.user.id, parsed);
+        if (!item) {
+          return withRateLimitHeaders(json({ error: 'Forbidden' }, 403));
+        }
+        return withRateLimitHeaders(json(item, 201));
+      } catch (err) {
+        if (err instanceof DuplicateItemError) {
+          return withRateLimitHeaders(json({ error: '이미 추가된 기사입니다' }, 409));
+        }
+        throw err;
       }
-
-      return withRateLimitHeaders(json(item, 201));
     }
 
     return json({ error: 'Method not allowed' }, 405);

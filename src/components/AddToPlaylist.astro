@@ -6,11 +6,9 @@ interface Props {
   description?: string;
   sourceType: 'curated' | 'feed';
 }
-
-const { articleId, title, url, description, sourceType } = Astro.props;
 ---
 
-<div class="add-to-playlist-container" data-article-id={articleId} data-title={title} data-url={url} data-description={description || ''} data-source-type={sourceType}>
+<div class="add-to-playlist-container" data-article-id={Astro.props.articleId} data-title={Astro.props.title} data-url={Astro.props.url} data-description={Astro.props.description || ''} data-source-type={Astro.props.sourceType}>
   <button class="add-to-playlist-btn tag">
     ➕ 플레이리스트에 추가
   </button>
@@ -77,17 +75,19 @@ document.addEventListener('DOMContentLoaded', () => {
           list.innerHTML = `
             <li class="playlist-auth-required">
               로그인이 필요합니다.<br/>
-              <a href="/api/auth/github/login" class="login-link">로그인하기</a>
+              <a href="#" class="login-link" onclick="window.location.href='/api/auth/github/login?return_to='+encodeURIComponent(window.location.pathname);return false;">로그인하기</a>
             </li>
           `;
           return;
         }
 
-        const playlistsRes = await fetch('/api/playlists?mine=true');
+        const playlistsRes = await fetch(
+          `/api/playlists?mine=true&source_id=${encodeURIComponent(articleId!)}&item_type=${encodeURIComponent(sourceType!)}`
+        );
         if (!playlistsRes.ok) throw new Error('Failed to fetch playlists');
         
         const playlistData = await playlistsRes.json();
-        const playlists: Array<{ id: string; title: string }> = playlistData.playlists || [];
+        const playlists: Array<{ id: string; title: string; contains_item?: boolean }> = playlistData.playlists || [];
         
         if (playlists.length === 0) {
           list.innerHTML = '<li class="playlist-empty">플레이리스트가 없습니다.</li>';
@@ -96,8 +96,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         list.innerHTML = playlists.map((p: any) => `
           <li>
-            <button class="playlist-item-btn" data-id="${p.id}">
-              ${p.title}
+            <button class="playlist-item-btn${p.contains_item ? ' already-added' : ''}"
+                    data-id="${p.id}" ${p.contains_item ? 'disabled' : ''}>
+              ${p.contains_item ? '✓ ' : ''}${p.title}
+              ${p.contains_item ? '<span class="badge-added">추가됨</span>' : ''}
             </button>
           </li>
         `).join('');
@@ -121,7 +123,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
               });
 
-              if (!addRes.ok) throw new Error('Failed to add');
+              if (!addRes.ok) {
+                if (addRes.status === 409) {
+                  showToast('이미 추가된 기사입니다.', true);
+                } else {
+                  showToast('추가에 실패했습니다.', true);
+                }
+                dropdown.style.display = 'none';
+                isDropdownOpen = false;
+                return;
+              }
               
               showToast('플레이리스트에 추가되었습니다.');
               dropdown.style.display = 'none';
@@ -233,6 +244,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
 .playlist-item-btn:hover {
   background: var(--color-bg-secondary);
+}
+
+.playlist-item-btn.already-added {
+  color: var(--color-text-muted);
+  cursor: default;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.playlist-item-btn.already-added:hover {
+  background: none;
+}
+
+.badge-added {
+  font-size: 0.75rem;
+  color: var(--color-success, #22c55e);
+  font-weight: 600;
 }
 
 .playlist-dropdown-footer {

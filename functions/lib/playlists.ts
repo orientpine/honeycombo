@@ -199,7 +199,21 @@ export async function listPublicPlaylists(
   };
 }
 
-export async function listUserPlaylists(db: D1Database, userId: string): Promise<UserPlaylistWithCount[]> {
+export async function listUserPlaylists(
+  db: D1Database,
+  userId: string,
+  containment?: { source_id: string; item_type: string },
+): Promise<UserPlaylistWithCount[]> {
+  const containsItemSelect = containment
+    ? `,
+              EXISTS(
+                SELECT 1 FROM playlist_items pi2
+                WHERE pi2.playlist_id = p.id
+                  AND pi2.item_type = ?
+                  AND pi2.source_id = ?
+              ) AS contains_item`
+    : '';
+
   const result = await db
     .prepare(
       `SELECT p.id, p.user_id, p.title, p.description, p.visibility, p.status, p.created_at, p.updated_at,
@@ -207,17 +221,18 @@ export async function listUserPlaylists(db: D1Database, userId: string): Promise
                 SELECT COUNT(*)
                 FROM playlist_items pi
                 WHERE pi.playlist_id = p.id
-              ) AS item_count
+              ) AS item_count${containsItemSelect}
        FROM user_playlists p
        WHERE p.user_id = ?
        ORDER BY p.updated_at DESC`,
     )
-    .bind(userId)
-    .all<PlaylistRow & { item_count: number | string }>();
+    .bind(...(containment ? [containment.item_type, containment.source_id, userId] : [userId]))
+    .all<PlaylistRow & { item_count: number | string; contains_item?: number | boolean }>();
 
   return result.results.map((row) => ({
     ...row,
     item_count: Number(row.item_count),
+    ...(row.contains_item !== undefined ? { contains_item: Boolean(row.contains_item) } : {}),
   }));
 }
 
