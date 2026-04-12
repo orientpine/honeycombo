@@ -1,0 +1,326 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="새 플레이리스트 만들기 — HoneyCombo" description="새로운 플레이리스트를 만들어보세요">
+  <div class="page-header">
+    <h1>📝 새 플레이리스트 만들기</h1>
+    <p class="page-subtitle">나만의 기술 콘텐츠 모음을 만들어보세요</p>
+  </div>
+
+  <div class="submit-content">
+    <div id="auth-check-loading" class="auth-message">
+      <p>로그인 상태를 확인 중입니다...</p>
+    </div>
+
+    <div id="auth-required" class="auth-message" style="display: none;">
+      <p>플레이리스트를 만들려면 로그인이 필요합니다.</p>
+      <a href="/api/auth/github/login" class="btn btn-primary">GitHub로 로그인</a>
+    </div>
+
+    <form id="playlist-form" class="playlist-form" style="display: none;">
+      <div class="form-group">
+        <label for="title">제목 <span class="required">*</span></label>
+        <input 
+          type="text" 
+          id="title" 
+          name="title" 
+          required 
+          maxlength="200" 
+          placeholder="예: 2024년 프론트엔드 트렌드 모음"
+          class="form-control"
+        />
+        <div class="form-hint">최대 200자</div>
+      </div>
+
+      <div class="form-group">
+        <label for="description">설명</label>
+        <textarea 
+          id="description" 
+          name="description" 
+          maxlength="500" 
+          rows="4"
+          placeholder="이 플레이리스트에 대한 설명을 적어주세요 (선택사항)"
+          class="form-control"
+        ></textarea>
+        <div class="form-hint">최대 500자</div>
+      </div>
+
+      <div class="form-group">
+        <label>공개 범위</label>
+        <div class="radio-group">
+          <label class="radio-label">
+            <input type="radio" name="visibility" value="unlisted" checked />
+            <div class="radio-content">
+              <span class="radio-title">비공개 링크</span>
+              <span class="radio-desc">링크를 아는 사람만 볼 수 있습니다.</span>
+            </div>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="visibility" value="public" />
+            <div class="radio-content">
+              <span class="radio-title">공개 목록</span>
+              <span class="radio-desc">사이트의 플레이리스트 목록에 노출됩니다. (에디터 승인 후 공개)</span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div id="form-error" class="form-error" style="display: none;"></div>
+
+      <div class="form-actions">
+        <button type="submit" id="submit-btn" class="btn btn-primary btn-lg">
+          <span class="btn-text">만들기</span>
+          <span class="btn-spinner" style="display: none;">⏳</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</BaseLayout>
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  const loadingEl = document.getElementById('auth-check-loading');
+  const authRequiredEl = document.getElementById('auth-required');
+  const formEl = document.getElementById('playlist-form') as HTMLFormElement;
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+  const btnText = submitBtn?.querySelector('.btn-text') as HTMLElement;
+  const btnSpinner = submitBtn?.querySelector('.btn-spinner') as HTMLElement;
+  const errorEl = document.getElementById('form-error');
+
+  // Check auth
+  try {
+    const res = await fetch('/api/auth/me');
+    if (res.ok) {
+      // Authed
+      if (loadingEl) loadingEl.style.display = 'none';
+      if (formEl) formEl.style.display = 'block';
+    } else {
+      // Not authed
+      if (loadingEl) loadingEl.style.display = 'none';
+      if (authRequiredEl) authRequiredEl.style.display = 'block';
+    }
+  } catch (err) {
+    if (loadingEl) loadingEl.style.display = 'none';
+    if (authRequiredEl) authRequiredEl.style.display = 'block';
+  }
+
+  // Handle form submit
+  if (formEl) {
+    formEl.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      if (errorEl) errorEl.style.display = 'none';
+      
+      const formData = new FormData(formEl);
+      const title = formData.get('title')?.toString().trim();
+      const description = formData.get('description')?.toString().trim();
+      const visibility = formData.get('visibility')?.toString();
+
+      if (!title) {
+        showError('제목을 입력해주세요.');
+        return;
+      }
+
+      if (title.length > 200) {
+        showError('제목은 200자를 초과할 수 없습니다.');
+        return;
+      }
+
+      if (description && description.length > 500) {
+        showError('설명은 500자를 초과할 수 없습니다.');
+        return;
+      }
+
+      // Set loading state
+      submitBtn.disabled = true;
+      if (btnText) btnText.style.display = 'none';
+      if (btnSpinner) btnSpinner.style.display = 'inline-block';
+
+      try {
+        const res = await fetch('/api/playlists', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            title,
+            description,
+            visibility
+          }),
+        });
+
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.error || '플레이리스트 생성에 실패했습니다.');
+        }
+
+        const data = await res.json();
+        // Redirect to the new playlist page
+        window.location.href = `/p/${data.id}`;
+      } catch (err: unknown) {
+        const errorMessage = err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.';
+        showError(errorMessage);
+        
+        // Reset loading state
+        submitBtn.disabled = false;
+        if (btnText) btnText.style.display = 'inline-block';
+        if (btnSpinner) btnSpinner.style.display = 'none';
+      }
+    });
+  }
+
+  function showError(msg: string) {
+    if (errorEl) {
+      errorEl.textContent = msg;
+      errorEl.style.display = 'block';
+    }
+  }
+});
+</script>
+
+<style>
+.page-header { margin-bottom: var(--space-xl); }
+.page-header h1 { font-size: 2rem; font-weight: 800; }
+.page-subtitle { color: var(--color-text-muted); margin-top: var(--space-xs); }
+.submit-content { max-width: 600px; }
+
+.auth-message {
+  padding: var(--space-xl);
+  text-align: center;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+.auth-message p {
+  margin-bottom: var(--space-md);
+  color: var(--color-text-muted);
+}
+
+.playlist-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.form-group label {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.required {
+  color: var(--color-danger);
+}
+
+.form-control {
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 1rem;
+  background: var(--color-bg);
+  color: var(--color-text);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.form-hint {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  text-align: right;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.radio-label {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.radio-label:hover {
+  background: var(--color-bg-secondary);
+}
+
+.radio-label:has(input:checked) {
+  border-color: var(--color-primary);
+  background: rgba(37, 99, 235, 0.05);
+}
+
+.radio-label input[type="radio"] {
+  margin-top: 4px;
+  accent-color: var(--color-primary);
+}
+
+.radio-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.radio-title {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.radio-desc {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.form-error {
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--color-danger);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+}
+
+.form-actions {
+  margin-top: var(--space-md);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.15s;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-lg {
+  width: 100%;
+  padding: var(--space-md);
+  font-size: 1.05rem;
+}
+
+.btn-primary { background: var(--color-primary); color: white; }
+.btn-primary:hover { background: var(--color-primary-hover); color: white; text-decoration: none; }
+.btn-primary:disabled { opacity: 0.7; cursor: not-allowed; }
+</style>

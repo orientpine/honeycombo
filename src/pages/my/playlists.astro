@@ -1,0 +1,445 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="내 플레이리스트 — HoneyCombo" description="내가 만든 플레이리스트를 관리하세요">
+  <div class="page-header flex-between">
+    <div>
+      <h1>📋 내 플레이리스트</h1>
+      <p class="page-subtitle">내가 만든 플레이리스트를 관리하세요</p>
+    </div>
+    <a href="/p/new" class="btn btn-primary">새 플레이리스트 만들기</a>
+  </div>
+
+  <div class="my-playlists-content">
+    <div id="auth-check-loading" class="state-message">
+      <p>목록을 불러오는 중입니다...</p>
+    </div>
+
+    <div id="auth-required" class="state-message" style="display: none;">
+      <p>플레이리스트를 관리하려면 로그인이 필요합니다.</p>
+      <a href="/api/auth/github/login" class="btn btn-primary">GitHub로 로그인</a>
+    </div>
+
+    <div id="empty-state" class="state-message" style="display: none;">
+      <p>아직 플레이리스트가 없습니다. 첫 플레이리스트를 만들어보세요!</p>
+      <a href="/p/new" class="btn btn-primary">새 플레이리스트 만들기</a>
+    </div>
+
+    <div id="error-state" class="state-message error-message" style="display: none;">
+      <p id="error-text">목록을 불러오는데 실패했습니다.</p>
+      <button id="retry-btn" class="btn">다시 시도</button>
+    </div>
+
+    <div id="playlists-grid" class="grid grid-2" style="display: none;">
+      <!-- Playlists will be rendered here -->
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const loadingEl = document.getElementById('auth-check-loading');
+  const authRequiredEl = document.getElementById('auth-required');
+  const emptyStateEl = document.getElementById('empty-state');
+  const errorStateEl = document.getElementById('error-state');
+  const errorTextEl = document.getElementById('error-text');
+  const gridEl = document.getElementById('playlists-grid');
+  const retryBtn = document.getElementById('retry-btn');
+
+  let isAuthed = false;
+
+  async function checkAuthAndLoad() {
+    hideAllStates();
+    if (loadingEl) loadingEl.style.display = 'block';
+
+    try {
+      const res = await fetch('/api/auth/me');
+      if (res.ok) {
+        isAuthed = true;
+        await loadPlaylists();
+      } else {
+        isAuthed = false;
+        hideAllStates();
+        if (authRequiredEl) authRequiredEl.style.display = 'block';
+      }
+    } catch (err) {
+      isAuthed = false;
+      hideAllStates();
+      if (authRequiredEl) authRequiredEl.style.display = 'block';
+    }
+  }
+
+  async function loadPlaylists() {
+    try {
+      const res = await fetch('/api/playlists?mine=true');
+      if (!res.ok) {
+        throw new Error('플레이리스트를 불러오는데 실패했습니다.');
+      }
+
+      const data = await res.json();
+      const playlists = data.items || [];
+
+      hideAllStates();
+
+      if (playlists.length === 0) {
+        if (emptyStateEl) emptyStateEl.style.display = 'block';
+      } else {
+        renderPlaylists(playlists);
+        if (gridEl) gridEl.style.display = 'grid';
+      }
+    } catch (err: unknown) {
+      hideAllStates();
+      if (errorStateEl) errorStateEl.style.display = 'block';
+      if (errorTextEl) {
+        errorTextEl.textContent = err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.';
+      }
+    }
+  }
+
+  function renderPlaylists(playlists: any[]) {
+    if (!gridEl) return;
+    
+    gridEl.innerHTML = '';
+    
+    playlists.forEach(playlist => {
+      const card = document.createElement('div');
+      card.className = 'card playlist-card';
+      
+      const formattedDate = new Date(playlist.updated_at || playlist.created_at).toLocaleDateString('ko-KR', { 
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric' 
+      });
+
+      // Visibility badge
+      const isPublic = playlist.visibility === 'public';
+      const visibilityIcon = isPublic ? '🌐' : '🔒';
+      const visibilityText = isPublic ? '공개' : '비공개';
+      const visibilityClass = isPublic ? 'badge-public' : 'badge-unlisted';
+
+      // Status badge (only relevant for public)
+      let statusBadgeHtml = '';
+      if (isPublic) {
+        const status = playlist.status || 'draft';
+        let statusText = '';
+        let statusClass = '';
+        
+        if (status === 'draft') {
+          statusText = '작성 중';
+          statusClass = 'badge-draft';
+        } else if (status === 'pending') {
+          statusText = '승인 대기';
+          statusClass = 'badge-pending';
+        } else if (status === 'approved') {
+          statusText = '승인됨';
+          statusClass = 'badge-approved';
+        } else if (status === 'rejected') {
+          statusText = '반려';
+          statusClass = 'badge-rejected';
+        }
+        
+        statusBadgeHtml = `<span class="badge ${statusClass}">${statusText}</span>`;
+      }
+
+      card.innerHTML = `
+        <div class="playlist-header">
+          <h3 class="playlist-title">
+            <a href="/p/${playlist.id}">${escapeHtml(playlist.title)}</a>
+          </h3>
+          <div class="playlist-actions">
+            <button class="btn-icon delete-btn" data-id="${playlist.id}" aria-label="삭제" title="삭제">🗑️</button>
+          </div>
+        </div>
+        
+        ${playlist.description ? `<p class="playlist-description">${escapeHtml(playlist.description)}</p>` : ''}
+        
+        <div class="playlist-meta">
+          <div class="badges">
+            <span class="badge ${visibilityClass}">${visibilityIcon} ${visibilityText}</span>
+            ${statusBadgeHtml}
+          </div>
+          <span class="playlist-count">${playlist.item_count || 0}개 항목</span>
+        </div>
+        
+        <div class="playlist-footer">
+          <time class="playlist-date">업데이트: ${formattedDate}</time>
+        </div>
+      `;
+      
+      gridEl.appendChild(card);
+    });
+
+    // Add delete event listeners
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const target = e.currentTarget as HTMLButtonElement;
+        const id = target.getAttribute('data-id');
+        if (!id) return;
+        
+        if (confirm('정말로 이 플레이리스트를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
+          target.disabled = true;
+          target.style.opacity = '0.5';
+          
+          try {
+            const res = await fetch(`/api/playlists/${id}`, {
+              method: 'DELETE'
+            });
+            
+            if (res.ok) {
+              await loadPlaylists();
+            } else {
+              const data = await res.json().catch(() => ({}));
+              alert(data.error || '삭제에 실패했습니다.');
+              target.disabled = false;
+              target.style.opacity = '1';
+            }
+          } catch (err) {
+            alert('삭제 중 오류가 발생했습니다.');
+            target.disabled = false;
+            target.style.opacity = '1';
+          }
+        }
+      });
+    });
+  }
+
+  function hideAllStates() {
+    if (loadingEl) loadingEl.style.display = 'none';
+    if (authRequiredEl) authRequiredEl.style.display = 'none';
+    if (emptyStateEl) emptyStateEl.style.display = 'none';
+    if (errorStateEl) errorStateEl.style.display = 'none';
+    if (gridEl) gridEl.style.display = 'none';
+  }
+
+  function escapeHtml(unsafe: string) {
+    return unsafe
+         .replace(/&/g, "&amp;")
+         .replace(/</g, "&lt;")
+         .replace(/>/g, "&gt;")
+         .replace(/"/g, "&quot;")
+         .replace(/'/g, "&#039;");
+  }
+
+  if (retryBtn) {
+    retryBtn.addEventListener('click', loadPlaylists);
+  }
+
+  // Initial load
+  checkAuthAndLoad();
+});
+</script>
+
+<style>
+.page-header { margin-bottom: var(--space-xl); }
+.page-header h1 { font-size: 2rem; font-weight: 800; }
+.page-subtitle { color: var(--color-text-muted); margin-top: var(--space-xs); }
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+.state-message {
+  padding: var(--space-2xl) var(--space-xl);
+  text-align: center;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.state-message p {
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+}
+
+.error-message {
+  background: rgba(239, 68, 68, 0.05);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.error-message p {
+  color: var(--color-danger);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.15s;
+  text-decoration: none;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: var(--color-bg-secondary);
+}
+
+.btn-primary { 
+  background: var(--color-primary); 
+  color: white; 
+  border-color: var(--color-primary);
+}
+
+.btn-primary:hover { 
+  background: var(--color-primary-hover); 
+  color: white; 
+  text-decoration: none; 
+}
+
+/* Playlist Card Styles */
+.playlist-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.playlist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-sm);
+}
+
+.playlist-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.playlist-title a {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.playlist-title a:hover {
+  color: var(--color-primary);
+}
+
+.playlist-description {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0;
+}
+
+.playlist-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.badges {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.badge-unlisted {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-muted);
+  border-color: var(--color-border);
+}
+
+.badge-public {
+  background: rgba(37, 99, 235, 0.1);
+  color: var(--color-primary);
+  border-color: rgba(37, 99, 235, 0.2);
+}
+
+.badge-draft {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-muted);
+}
+
+.badge-pending {
+  background: rgba(245, 158, 11, 0.1);
+  color: #d97706;
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.badge-approved {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--color-success);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.badge-rejected {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--color-danger);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.playlist-count {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-text);
+  background: var(--color-bg-secondary);
+  padding: 2px var(--space-sm);
+  border-radius: var(--radius-sm);
+}
+
+.playlist-footer {
+  margin-top: auto;
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--color-border);
+}
+
+.playlist-date {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: var(--space-xs);
+  border-radius: var(--radius-sm);
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.6;
+}
+
+.btn-icon:hover {
+  background: var(--color-bg-secondary);
+  opacity: 1;
+}
+
+.delete-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+@media (max-width: 640px) {
+  .flex-between {
+    flex-direction: column;
+  }
+  .flex-between .btn {
+    width: 100%;
+  }
+}
+</style>
