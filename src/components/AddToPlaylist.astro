@@ -1,0 +1,271 @@
+---
+interface Props {
+  articleId: string;
+  title: string;
+  url: string;
+  description?: string;
+  sourceType: 'curated' | 'feed';
+}
+
+const { articleId, title, url, description, sourceType } = Astro.props;
+---
+
+<div class="add-to-playlist-container" data-article-id={articleId} data-title={title} data-url={url} data-description={description || ''} data-source-type={sourceType}>
+  <button class="add-to-playlist-btn tag">
+    ➕ 플레이리스트에 추가
+  </button>
+  <div class="playlist-dropdown" style="display: none;">
+    <div class="playlist-dropdown-header">플레이리스트 선택</div>
+    <ul class="playlist-list">
+      <li class="playlist-loading">불러오는 중...</li>
+    </ul>
+    <div class="playlist-dropdown-footer">
+      <a href="/p/new" class="new-playlist-link">➕ 새 플레이리스트 만들기</a>
+    </div>
+  </div>
+  <div class="playlist-toast" style="display: none;"></div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const containers = document.querySelectorAll('.add-to-playlist-container');
+  
+  containers.forEach(container => {
+    const btn = container.querySelector('.add-to-playlist-btn') as HTMLButtonElement;
+    const dropdown = container.querySelector('.playlist-dropdown') as HTMLDivElement;
+    const list = container.querySelector('.playlist-list') as HTMLUListElement;
+    const toast = container.querySelector('.playlist-toast') as HTMLDivElement;
+    
+    const articleId = container.getAttribute('data-article-id');
+    const title = container.getAttribute('data-title');
+    const url = container.getAttribute('data-url');
+    const description = container.getAttribute('data-description');
+    const sourceType = container.getAttribute('data-source-type');
+
+    let isDropdownOpen = false;
+
+    const showToast = (message: string, isError = false) => {
+      toast.textContent = message;
+      toast.className = `playlist-toast ${isError ? 'error' : 'success'}`;
+      toast.style.display = 'block';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3000);
+    };
+
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      
+      if (isDropdownOpen) {
+        dropdown.style.display = 'none';
+        isDropdownOpen = false;
+        return;
+      }
+
+      // Close other dropdowns
+      document.querySelectorAll('.playlist-dropdown').forEach(d => {
+        (d as HTMLDivElement).style.display = 'none';
+      });
+
+      dropdown.style.display = 'block';
+      isDropdownOpen = true;
+      list.innerHTML = '<li class="playlist-loading">불러오는 중...</li>';
+
+      try {
+        const authRes = await fetch('/api/auth/me');
+        if (!authRes.ok) {
+          list.innerHTML = `
+            <li class="playlist-auth-required">
+              로그인이 필요합니다.<br/>
+              <a href="/api/auth/github/login" class="login-link">로그인하기</a>
+            </li>
+          `;
+          return;
+        }
+
+        const playlistsRes = await fetch('/api/playlists?mine=true');
+        if (!playlistsRes.ok) throw new Error('Failed to fetch playlists');
+        
+        const playlists = await playlistsRes.json();
+        
+        if (playlists.length === 0) {
+          list.innerHTML = '<li class="playlist-empty">플레이리스트가 없습니다.</li>';
+          return;
+        }
+
+        list.innerHTML = playlists.map((p: any) => `
+          <li>
+            <button class="playlist-item-btn" data-id="${p.id}">
+              ${p.title}
+            </button>
+          </li>
+        `).join('');
+
+        // Add click handlers to items
+        list.querySelectorAll('.playlist-item-btn').forEach(itemBtn => {
+          itemBtn.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            const playlistId = itemBtn.getAttribute('data-id');
+            
+            try {
+              const addRes = await fetch(`/api/playlists/${playlistId}/items`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  item_type: sourceType,
+                  source_id: articleId,
+                  title_snapshot: title,
+                  url_snapshot: url,
+                  description_snapshot: description
+                })
+              });
+
+              if (!addRes.ok) throw new Error('Failed to add');
+              
+              showToast('플레이리스트에 추가되었습니다.');
+              dropdown.style.display = 'none';
+              isDropdownOpen = false;
+            } catch (err) {
+              showToast('추가에 실패했습니다.', true);
+            }
+          });
+        });
+
+      } catch (err) {
+        list.innerHTML = '<li class="playlist-error">오류가 발생했습니다.</li>';
+      }
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!container.contains(e.target as Node)) {
+        dropdown.style.display = 'none';
+        isDropdownOpen = false;
+      }
+    });
+  });
+});
+</script>
+
+<style>
+.add-to-playlist-container {
+  position: relative;
+  display: inline-block;
+}
+
+.add-to-playlist-btn {
+  font-family: inherit;
+}
+
+.playlist-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: var(--space-xs);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  min-width: 220px;
+  z-index: 50;
+  overflow: hidden;
+}
+
+.playlist-dropdown-header {
+  padding: var(--space-sm) var(--space-md);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  background: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.playlist-list {
+  list-style: none;
+  max-height: 200px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+}
+
+.playlist-loading,
+.playlist-empty,
+.playlist-error,
+.playlist-auth-required {
+  padding: var(--space-md);
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.playlist-auth-required .login-link {
+  display: inline-block;
+  margin-top: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--color-primary);
+  color: white;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.playlist-item-btn {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  text-align: left;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.9rem;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.playlist-item-btn:hover {
+  background: var(--color-bg-secondary);
+}
+
+.playlist-dropdown-footer {
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-bg-secondary);
+  border-top: 1px solid var(--color-border);
+}
+
+.new-playlist-link {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.new-playlist-link:hover {
+  text-decoration: underline;
+}
+
+.playlist-toast {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 500;
+  white-space: nowrap;
+  z-index: 60;
+  box-shadow: var(--shadow-sm);
+}
+
+.playlist-toast.success {
+  background: var(--color-success);
+  color: white;
+}
+
+.playlist-toast.error {
+  background: var(--color-danger);
+  color: white;
+}
+</style>

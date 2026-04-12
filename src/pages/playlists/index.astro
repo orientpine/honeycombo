@@ -16,7 +16,7 @@ const sorted = playlists.sort((a: any, b: any) =>
 <BaseLayout title="플레이리스트 — HoneyCombo" description="에디터가 큐레이션한 기사 플레이리스트">
   <div class="page-header">
     <h1>🎵 플레이리스트</h1>
-    <p class="page-subtitle">에디터가 엄선한 주제별 기사 모음</p>
+    <p class="page-subtitle">에디터 큐레이션 & 커뮤니티 플레이리스트</p>
   </div>
 
   {sorted.length === 0 ? (
@@ -36,11 +36,172 @@ const sorted = playlists.sort((a: any, b: any) =>
       ))}
     </div>
   )}
+
+  <section id="community-playlists" class="community-section">
+    <h2>🎯 커뮤니티 플레이리스트</h2>
+    <p class="section-subtitle">유저들이 만든 기사 모음</p>
+    <div id="community-list" class="playlist-grid grid grid-3">
+      <p class="loading-state">불러오는 중...</p>
+    </div>
+    <div class="load-more-container">
+      <button id="load-more" class="load-more-btn" style="display:none">더 보기</button>
+    </div>
+  </section>
 </BaseLayout>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const listContainer = document.getElementById('community-list');
+  const loadMoreBtn = document.getElementById('load-more');
+  if (!listContainer || !loadMoreBtn) return;
+
+  let currentPage = 1;
+  const limit = 12;
+
+  const fetchPlaylists = async (page: number) => {
+    try {
+      const res = await fetch(`/api/playlists?page=${page}&limit=${limit}`);
+      if (!res.ok) throw new Error('Failed to fetch');
+      const data = await res.json();
+      return data;
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
+  };
+
+  const renderCard = (playlist: any) => {
+    const date = new Date(playlist.updated_at || playlist.created_at).toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' });
+    const itemCount = playlist.items ? playlist.items.length : 0;
+    
+    return `
+      <a href="/p/${playlist.id}" class="card playlist-card">
+        <div class="playlist-header">
+          <h3 class="playlist-title">${playlist.title}</h3>
+          <span class="playlist-count">${itemCount}개</span>
+        </div>
+        ${playlist.description ? `<p class="playlist-description">${playlist.description}</p>` : ''}
+        <div class="playlist-footer">
+          <span class="playlist-curator">
+            ${playlist.user?.avatar_url ? `<img src="${playlist.user.avatar_url}" alt="" class="curator-avatar" />` : ''}
+            by @${playlist.user?.username || 'unknown'}
+          </span>
+          <time class="playlist-date">${date}</time>
+        </div>
+      </a>
+    `;
+  };
+
+  const loadPlaylists = async (isFirstLoad = false) => {
+    if (isFirstLoad) {
+      listContainer.innerHTML = '<p class="loading-state">불러오는 중...</p>';
+    } else {
+      loadMoreBtn.textContent = '불러오는 중...';
+      loadMoreBtn.disabled = true;
+    }
+
+    const data = await fetchPlaylists(currentPage);
+    
+    if (!data) {
+      if (isFirstLoad) listContainer.innerHTML = '<p class="error-state">데이터를 불러오는데 실패했습니다.</p>';
+      loadMoreBtn.textContent = '더 보기';
+      loadMoreBtn.disabled = false;
+      return;
+    }
+
+    const playlists = Array.isArray(data) ? data : (data.items || []);
+    
+    if (isFirstLoad && playlists.length === 0) {
+      listContainer.innerHTML = '<p class="empty-state">아직 커뮤니티 플레이리스트가 없습니다.</p>';
+      loadMoreBtn.style.display = 'none';
+      return;
+    }
+
+    if (isFirstLoad) {
+      listContainer.innerHTML = '';
+    }
+
+    playlists.forEach((p: any) => {
+      listContainer.insertAdjacentHTML('beforeend', renderCard(p));
+    });
+
+    // Assuming API returns total or hasMore, or we just check if we got less than limit
+    const hasMore = playlists.length === limit;
+    if (hasMore) {
+      loadMoreBtn.style.display = 'inline-block';
+      loadMoreBtn.textContent = '더 보기';
+      loadMoreBtn.disabled = false;
+    } else {
+      loadMoreBtn.style.display = 'none';
+    }
+  };
+
+  loadMoreBtn.addEventListener('click', () => {
+    currentPage++;
+    loadPlaylists();
+  });
+
+  loadPlaylists(true);
+});
+</script>
 
 <style>
 .page-header { margin-bottom: var(--space-xl); }
 .page-header h1 { font-size: 2rem; font-weight: 800; }
 .page-subtitle { color: var(--color-text-muted); margin-top: var(--space-xs); }
 .empty-state { text-align: center; padding: var(--space-2xl); color: var(--color-text-muted); }
+
+.community-section {
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-xl);
+  border-top: 1px solid var(--color-border);
+}
+.community-section h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: var(--space-xs);
+}
+.section-subtitle {
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-lg);
+}
+.loading-state, .error-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: var(--space-xl);
+  color: var(--color-text-muted);
+}
+.load-more-container {
+  text-align: center;
+  margin-top: var(--space-xl);
+}
+.load-more-btn {
+  padding: var(--space-sm) var(--space-xl);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.load-more-btn:hover:not(:disabled) {
+  background: var(--color-border);
+}
+.load-more-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Re-use PlaylistCard styles for dynamic cards */
+.playlist-card { display: flex; flex-direction: column; gap: var(--space-sm); text-decoration: none; color: var(--color-text); }
+.playlist-card:hover { text-decoration: none; }
+.playlist-header { display: flex; justify-content: space-between; align-items: flex-start; }
+.playlist-title { font-size: 1.1rem; font-weight: 700; }
+.playlist-count { font-size: 0.8rem; color: var(--color-text-muted); background: var(--color-bg-secondary); padding: 2px var(--space-sm); border-radius: var(--radius-sm); }
+.playlist-description { font-size: 0.875rem; color: var(--color-text-muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.playlist-footer { display: flex; justify-content: space-between; align-items: center; }
+.playlist-curator { font-size: 0.8rem; color: var(--color-text-muted); display: flex; align-items: center; gap: 4px; }
+.curator-avatar { width: 16px; height: 16px; border-radius: 50%; object-fit: cover; }
+.playlist-date { font-size: 0.8rem; color: var(--color-text-muted); }
 </style>

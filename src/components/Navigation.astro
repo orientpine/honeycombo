@@ -32,17 +32,57 @@ const currentPath = Astro.url.pathname;
         </li>
       ))}
     </ul>
+    <div id="auth-area" class="auth-area"></div>
   </div>
 </nav>
 
 <script>
-document.getElementById('nav-toggle')?.addEventListener('click', () => {
-  const links = document.getElementById('nav-links');
-  const toggle = document.getElementById('nav-toggle');
-  if (links && toggle) {
-    const isOpen = links.classList.toggle('open');
-    toggle.classList.toggle('open', isOpen);
-    toggle.setAttribute('aria-expanded', String(isOpen));
+const navToggle = document.getElementById('nav-toggle');
+if (navToggle) {
+  navToggle.addEventListener('click', () => {
+    const links = document.getElementById('nav-links');
+    if (links) {
+      const isOpen = links.classList.toggle('open');
+      navToggle.classList.toggle('open', isOpen);
+      navToggle.setAttribute('aria-expanded', String(isOpen));
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const authArea = document.getElementById('auth-area');
+  if (!authArea) return;
+
+  try {
+    const res = await fetch('/api/auth/me');
+    if (res.ok) {
+      const user = await res.json();
+      const avatarUrl = user.avatar_url ? user.avatar_url : '/default-avatar.png';
+      authArea.innerHTML = `
+        <div class="auth-user">
+          <img src="` + avatarUrl + `" alt="` + user.username + `" class="auth-avatar" />
+          <span class="auth-username">` + user.username + `</span>
+          <div class="auth-dropdown">
+            <a href="/my/playlists" class="auth-dropdown-item">내 플레이리스트</a>
+            <button id="logout-btn" class="auth-dropdown-item text-danger">로그아웃</button>
+          </div>
+        </div>
+      `;
+      
+      const logoutBtn = document.getElementById('logout-btn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+          await fetch('/api/auth/logout', { method: 'POST' });
+          window.location.reload();
+        });
+      }
+    } else {
+      authArea.innerHTML = `<a href="/api/auth/github/login" class="auth-login-btn">로그인</a>`;
+    }
+  } catch (err) {
+    authArea.innerHTML = `<a href="/api/auth/github/login" class="auth-login-btn">로그인</a>`;
+  } finally {
+    authArea.classList.add('loaded');
   }
 });
 </script>
@@ -105,6 +145,90 @@ document.getElementById('nav-toggle')?.addEventListener('click', () => {
 }
 .nav-link:hover { background: var(--color-bg-secondary); color: var(--color-text); text-decoration: none; }
 .nav-link.active { background: var(--color-primary); color: white; }
+.auth-area {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+.auth-area.loaded {
+  opacity: 1;
+}
+.auth-user {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  cursor: pointer;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  transition: background 0.15s;
+}
+.auth-user:hover {
+  background: var(--color-bg-secondary);
+}
+.auth-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.auth-username {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text);
+}
+.auth-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: var(--space-xs);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  min-width: 150px;
+  display: none;
+  flex-direction: column;
+  padding: var(--space-xs) 0;
+  z-index: 10;
+}
+.auth-user:hover .auth-dropdown {
+  display: flex;
+}
+.auth-dropdown-item {
+  padding: var(--space-sm) var(--space-md);
+  font-size: 0.9rem;
+  color: var(--color-text);
+  text-decoration: none;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+}
+.auth-dropdown-item:hover {
+  background: var(--color-bg-secondary);
+  text-decoration: none;
+}
+.auth-dropdown-item.text-danger {
+  color: var(--color-danger);
+}
+.auth-login-btn {
+  padding: var(--space-xs) var(--space-md);
+  background: var(--color-primary);
+  color: white;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.auth-login-btn:hover {
+  background: var(--color-primary-hover);
+  color: white;
+  text-decoration: none;
+}
 
 @media (max-width: 768px) {
   .nav { height: auto; min-height: var(--nav-height); }
@@ -119,5 +243,9 @@ document.getElementById('nav-toggle')?.addEventListener('click', () => {
   }
   .nav-links.open { display: flex; }
   .nav-link { padding: var(--space-sm); }
+  .auth-area {
+    margin-left: auto;
+    margin-right: var(--space-md);
+  }
 }
 </style>
