@@ -25,6 +25,8 @@ export const onRequest: AppPagesFunction = async ({ env, request }) => {
     new URL('/api/auth/github/callback', request.url).toString();
 
   const state = crypto.randomUUID();
+  const reqUrl = new URL(request.url);
+  const returnTo = reqUrl.searchParams.get('return_to') || '';
   const authorizeUrl = new URL('https://github.com/login/oauth/authorize');
 
   authorizeUrl.searchParams.set('client_id', clientId);
@@ -45,6 +47,18 @@ export const onRequest: AppPagesFunction = async ({ env, request }) => {
       maxAge: 600,
     }),
   );
+
+  if (returnTo && returnTo.startsWith('/') && !returnTo.startsWith('//')) {
+    headers.append(
+      'Set-Cookie',
+      serializeCookie('oauth_return', returnTo, {
+        httpOnly: true,
+        sameSite: 'Lax',
+        path: '/',
+        maxAge: 600,
+      }),
+    );
+  }
 
   return new Response(null, {
     status: 302,

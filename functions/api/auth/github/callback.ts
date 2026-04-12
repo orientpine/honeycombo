@@ -31,6 +31,7 @@ export const onRequest: AppPagesFunction = async ({ env, request }) => {
   const state = url.searchParams.get('state');
   const cookies = parseCookies(request.headers.get('cookie') ?? '');
   const cookieState = cookies.oauth_state;
+  const returnTo = cookies.oauth_return;
 
   if (!code || !state) {
     return Response.json({ error: 'Missing code or state' }, { status: 400 });
@@ -92,7 +93,7 @@ export const onRequest: AppPagesFunction = async ({ env, request }) => {
   const { sessionId } = await createSession(env.DB, user.id);
 
   const headers = new Headers({
-    Location: '/my/playlists',
+    Location: (returnTo && returnTo.startsWith('/') && !returnTo.startsWith('//')) ? returnTo : '/my/playlists',
   });
 
   headers.append(
@@ -106,6 +107,7 @@ export const onRequest: AppPagesFunction = async ({ env, request }) => {
     }),
   );
   headers.append('Set-Cookie', clearCookie('oauth_state'));
+  headers.append('Set-Cookie', clearCookie('oauth_return'));
 
   return new Response(null, {
     status: 302,
