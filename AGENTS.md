@@ -6,6 +6,18 @@
 - 커밋 메시지는 conventional commits 형식을 따른다 (`feat:`, `fix:`, `chore:`, `docs:` 등).
 - 관련 없는 변경 사항은 별도 커밋으로 분리한다.
 
+## 배포 (Cloudflare Pages)
+
+- **즉시 배포 요청 시**: Cloudflare Pages GitHub App 연동은 짧은 시간 내 다수 push 시 이벤트를 놓치는 경우가 있다. 사용자가 "즉시 배포", "지금 반영" 등을 요청하면 wrangler CLI로 직접 배포한다.
+
+```bash
+bun run build
+npx wrangler pages deploy dist --project-name=honeycombo --branch=master
+```
+
+- `--branch=master` 옵션이 있어야 Production 배포로 인식된다.
+- 상세 트러블슈팅: `docs/troubleshooting/cloudflare-pages-auto-deploy-failure.md` 참조.
+
 ## 문서화 (docs/) — 개발 메모리
 
 > **목적**: 버그·기능 작업의 중복 방지. 과거 맥락을 빠르게 파악하여 같은 실수를 반복하지 않는다.

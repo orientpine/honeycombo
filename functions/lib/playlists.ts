@@ -1,5 +1,5 @@
 import { generateId } from './id';
-import type { PlaylistDetail, PlaylistItemRow, PlaylistListResponse, PlaylistRow, UserRow } from './types';
+import type { PlaylistDetail, PlaylistItemRow, PlaylistListResponse, PlaylistRow, UserPlaylistWithCount, UserRow } from './types';
 
 type PlaylistWithUserRow = PlaylistRow & Pick<UserRow, 'username' | 'display_name' | 'avatar_url'>;
 
@@ -199,18 +199,26 @@ export async function listPublicPlaylists(
   };
 }
 
-export async function listUserPlaylists(db: D1Database, userId: string): Promise<PlaylistRow[]> {
+export async function listUserPlaylists(db: D1Database, userId: string): Promise<UserPlaylistWithCount[]> {
   const result = await db
     .prepare(
-      `SELECT id, user_id, title, description, visibility, status, created_at, updated_at
-       FROM user_playlists
-       WHERE user_id = ?
-       ORDER BY updated_at DESC`,
+      `SELECT p.id, p.user_id, p.title, p.description, p.visibility, p.status, p.created_at, p.updated_at,
+              (
+                SELECT COUNT(*)
+                FROM playlist_items pi
+                WHERE pi.playlist_id = p.id
+              ) AS item_count
+       FROM user_playlists p
+       WHERE p.user_id = ?
+       ORDER BY p.updated_at DESC`,
     )
     .bind(userId)
-    .all<PlaylistRow>();
+    .all<PlaylistRow & { item_count: number | string }>();
 
-  return result.results;
+  return result.results.map((row) => ({
+    ...row,
+    item_count: Number(row.item_count),
+  }));
 }
 
 export async function updatePlaylist(

@@ -198,17 +198,25 @@ describe('playlists repository', () => {
     expect(queries[1]?.params).toEqual([5, 10]);
   });
 
-  it('listUserPlaylists returns all playlists for given user', async () => {
-    controller.setResults([[basePlaylist, { ...basePlaylist, id: 'pl_2', title: 'Second' }]]);
+  it('listUserPlaylists returns all playlists for given user with item_count', async () => {
+    controller.setResults([
+      [
+        { ...basePlaylist, item_count: 3 },
+        { ...basePlaylist, id: 'pl_2', title: 'Second', item_count: '0' },
+      ],
+    ]);
 
     const playlists = await listUserPlaylists(controller.db, 'user_1');
 
     expect(playlists).toHaveLength(2);
     expect(playlists.map((playlist) => playlist.id)).toEqual(['pl_1', 'pl_2']);
+    expect(playlists[0]?.item_count).toBe(3);
+    expect(playlists[1]?.item_count).toBe(0);
 
     const queries = controller.getQueries();
     expect(queries[0]?.params).toEqual(['user_1']);
-    expect(queries[0]?.sql).toContain('ORDER BY updated_at DESC');
+    expect(queries[0]?.sql).toContain('ORDER BY p.updated_at DESC');
+    expect(queries[0]?.sql).toContain('SELECT COUNT(*)');
   });
 
   it('updatePlaylist returns updated row for owner', async () => {

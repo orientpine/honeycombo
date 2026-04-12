@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const data = await res.json();
-      const playlists = data.items || [];
+      const playlists = data.playlists || [];
 
       hideAllStates();
 

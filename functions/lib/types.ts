@@ -50,6 +50,8 @@ export interface PlaylistRow {
   updated_at: string;
 }
 
+export type UserPlaylistWithCount = PlaylistRow & { item_count: number };
+
 export interface PlaylistItemRow {
   id: string;
   playlist_id: string;

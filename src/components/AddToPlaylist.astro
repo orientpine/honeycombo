@@ -86,7 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const playlistsRes = await fetch('/api/playlists?mine=true');
         if (!playlistsRes.ok) throw new Error('Failed to fetch playlists');
         
-        const playlists = await playlistsRes.json();
+        const playlistData = await playlistsRes.json();
+        const playlists: Array<{ id: string; title: string }> = playlistData.playlists || [];
         
         if (playlists.length === 0) {
           list.innerHTML = '<li class="playlist-empty">플레이리스트가 없습니다.</li>';

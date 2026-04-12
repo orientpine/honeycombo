@@ -4,10 +4,9 @@ import { escapeAttr, escapeHtml } from '../lib/escape';
 import { getPlaylist } from '../lib/playlists';
 import type { AppPagesFunction, PlaylistDetail, PlaylistItemRow } from '../lib/types';
 
-const SITE_URL = 'https://honeycombo.orientpine.workers.dev';
-
-function getCanonicalUrl(playlistId: string): string {
-  return `${SITE_URL}/p/${encodeURIComponent(playlistId)}`;
+function getCanonicalUrl(requestUrl: string, playlistId: string): string {
+  const origin = new URL(requestUrl).origin;
+  return `${origin}/p/${encodeURIComponent(playlistId)}`;
 }
 
 function canViewPlaylist(playlist: PlaylistDetail, userId?: string): boolean {
@@ -514,7 +513,7 @@ function renderStatusPage(status: number, title: string, message: string, canoni
 
 export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
   const playlistId = params.id;
-  const canonicalUrl = getCanonicalUrl(playlistId);
+  const canonicalUrl = getCanonicalUrl(request.url, playlistId);
   const playlist = await getPlaylist(env.DB, playlistId);
 
   if (!playlist) {

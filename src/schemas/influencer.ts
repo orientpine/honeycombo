@@ -13,7 +13,7 @@ export const influencerSchema = z.object({
       date: z.coerce.date(),
       topic: z.string(),
     }),
-  ),
+  ).optional().default([]),
 });
 
 export type Influencer = z.infer<typeof influencerSchema>;
