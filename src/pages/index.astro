@@ -27,7 +27,7 @@ const recentArticles = allArticles.slice(0, MAX_RECENT);
 
 <BaseLayout title="HoneyCombo — 기술 뉴스 큐레이션">
   <section class="hero">
-    <h1 class="hero-title">🍯 HoneyCombo</h1>
+    <img src="/main_image.jpg" alt="HoneyCombo - 기술 뉴스 큐레이션" class="hero-logo" loading="eager" />
     <p class="hero-subtitle">개발자를 위한 기술 뉴스 큐레이션</p>
     <div class="hero-actions">
       <a href="/articles" class="btn btn-primary">기사 보기</a>
@@ -68,8 +68,17 @@ const recentArticles = allArticles.slice(0, MAX_RECENT);
 .hero {
   text-align: center;
   padding: var(--space-2xl) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.hero-title { font-size: 3rem; font-weight: 800; margin-bottom: var(--space-sm); }
+.hero-logo {
+  width: 100%;
+  max-width: 600px;
+  max-height: 280px;
+  object-fit: contain;
+  margin-bottom: var(--space-md);
+}
 .hero-subtitle { font-size: 1.25rem; color: var(--color-text-muted); margin-bottom: var(--space-xl); }
 .hero-actions { display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap; }
 .btn {

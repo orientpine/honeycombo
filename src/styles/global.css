@@ -1,13 +1,13 @@
 /* Design Tokens */
 :root {
-  --color-bg: #ffffff;
-  --color-bg-secondary: #f8f9fa;
-  --color-text: #1a1a2e;
-  --color-text-muted: #6c757d;
-  --color-primary: #2563eb;
-  --color-primary-hover: #1d4ed8;
-  --color-border: #e2e8f0;
-  --color-accent: #f59e0b;
+  --color-bg: #F7F6F3;
+  --color-bg-secondary: #FFF8F0;
+  --color-text: #2F2B31;
+  --color-text-muted: #6B6168;
+  --color-primary: #F57C22;
+  --color-primary-hover: #EE7320;
+  --color-border: #E8DDD4;
+  --color-accent: #FCB924;
   --color-success: #10b981;
   --color-danger: #ef4444;
   
@@ -34,13 +34,13 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg: #0f172a;
-    --color-bg-secondary: #1e293b;
-    --color-text: #f1f5f9;
-    --color-text-muted: #94a3b8;
-    --color-primary: #3b82f6;
-    --color-primary-hover: #60a5fa;
-    --color-border: #334155;
+    --color-bg: #1A1517;
+    --color-bg-secondary: #2A2226;
+    --color-text: #F7F6F3;
+    --color-text-muted: #A89B96;
+    --color-primary: #F58B3F;
+    --color-primary-hover: #FCB924;
+    --color-border: #3D3235;
   }
 }
 

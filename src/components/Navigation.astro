@@ -93,7 +93,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   top: 0;
   z-index: 100;
   background: var(--color-bg);
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(to right, var(--color-primary), var(--color-accent)) 1;
   height: var(--nav-height);
 }
 .nav-inner {
