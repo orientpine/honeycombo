@@ -1,0 +1,17 @@
+name: 📦 대량 자료 등록
+description: 여러 링크를 한꺼번에 등록합니다
+labels: ["submission", "bulk"]
+body:
+  - type: textarea
+    id: items
+    attributes:
+      label: 링크 목록
+      description: |
+        한 줄에 하나씩 입력하세요.
+        형식: URL | 유형 | 태그(쉼표구분) | 한줄소개
+        유형: 기사, YouTube, X 스레드, Threads, 기타
+      placeholder: |
+        https://example.com/article | 기사 | AI, LLM | 좋은 분석 기사
+        https://youtube.com/watch?v=abc | YouTube | tutorial | 유용한 튜토리얼
+    validations:
+      required: true

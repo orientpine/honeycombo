@@ -46,6 +46,7 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           ISSUE_NUMBER_INPUT: ${{ github.event.inputs.issue_number }}
           ISSUE_NUMBER_EVENT: ${{ github.event.issue.number }}
+          ISSUE_LABELS_EVENT: ${{ join(github.event.issue.labels.*.name, ',') }}
           ISSUE_TITLE_EVENT: ${{ github.event.issue.title }}
           ISSUE_BODY_EVENT: ${{ github.event.issue.body }}
           ISSUE_USER_EVENT: ${{ github.event.issue.user.login }}
@@ -53,6 +54,7 @@ jobs:
           if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
             ISSUE_JSON=$(gh api repos/$REPOSITORY/issues/$ISSUE_NUMBER_INPUT)
             ISSUE_USER=$(echo "$ISSUE_JSON" | jq -r '.user.login')
+            LABELS=$(echo "$ISSUE_JSON" | jq -r '[.labels[].name] | join(",")')
             echo "ISSUE_NUMBER=$ISSUE_NUMBER_INPUT" >> $GITHUB_ENV
             echo "ISSUE_TITLE<<EOF" >> $GITHUB_ENV
             echo "$ISSUE_JSON" | jq -r '.title' >> $GITHUB_ENV
@@ -61,6 +63,7 @@ jobs:
             echo "$ISSUE_JSON" | jq -r '.body' >> $GITHUB_ENV
             echo "EOF" >> $GITHUB_ENV
             echo "ISSUE_USER=$ISSUE_USER" >> $GITHUB_ENV
+            echo "ISSUE_LABELS=$LABELS" >> $GITHUB_ENV
           else
             echo "ISSUE_NUMBER=$ISSUE_NUMBER_EVENT" >> $GITHUB_ENV
             echo "ISSUE_TITLE<<EOF" >> $GITHUB_ENV
@@ -70,9 +73,12 @@ jobs:
             echo "$ISSUE_BODY_EVENT" >> $GITHUB_ENV
             echo "EOF" >> $GITHUB_ENV
             echo "ISSUE_USER=$ISSUE_USER_EVENT" >> $GITHUB_ENV
+            echo "ISSUE_LABELS=$ISSUE_LABELS_EVENT" >> $GITHUB_ENV
           fi
 
       - name: Process submission
+        env:
+          ISSUE_LABELS: ${{ env.ISSUE_LABELS }}
         run: bun run scripts/process-submission.ts
 
       - name: Validate generated content
@@ -89,6 +95,11 @@ jobs:
         run: |
           ISSUE_NUM="$ISSUE_NUMBER"
           BRANCH="submission/$ISSUE_NUM"
+          PR_TITLE="Submission from issue #$ISSUE_NUM"
+
+          if echo ",$ISSUE_LABELS," | grep -q ',bulk,'; then
+            PR_TITLE="Bulk submission from issue #$ISSUE_NUM"
+          fi
 
           git checkout -b "$BRANCH"
           git add src/content/curated/
@@ -102,7 +113,7 @@ jobs:
           git push origin "$BRANCH"
 
           gh pr create \
-            --title "Submission from issue #$ISSUE_NUM" \
+            --title "$PR_TITLE" \
             --body "Auto-generated from GitHub Issue #$ISSUE_NUM. Review and approve to publish." \
             --base master \
             --head "$BRANCH" \

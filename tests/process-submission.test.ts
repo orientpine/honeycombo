@@ -6,8 +6,11 @@ import {
   generateId,
   isDuplicateUrl,
   isSpam,
+  parseBulkIssueBody,
   parseIssueBody,
+  processBulkSubmission,
   processSubmission,
+  type BulkResult,
   type IssueData,
 } from '../scripts/process-submission';
 
@@ -61,6 +64,57 @@ describe('parseIssueBody', () => {
     const result = parseIssueBody(body);
 
     expect(result?.tags).toEqual(['a', 'b', 'c', 'd', 'e']);
+  });
+});
+
+describe('parseBulkIssueBody', () => {
+  it('parses valid bulk issue body fixture', async () => {
+    const issue = await readFixture('bulk-issue.json');
+    const result = parseBulkIssueBody(issue.body);
+
+    expect(result).toHaveLength(3);
+    expect(result[0]).toEqual({
+      url: 'https://example.com/bulk-article-1',
+      type: 'article',
+      tags: ['ai', 'llm'],
+      note: '첫 번째 기사',
+    });
+    expect(result[1].type).toBe('youtube');
+    expect(result[2].type).toBe('other');
+  });
+
+  it('skips invalid lines in partial fixture', async () => {
+    const issue = await readFixture('bulk-issue-partial.json');
+    const result = parseBulkIssueBody(issue.body);
+
+    expect(result.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it('returns empty array for empty body', () => {
+    expect(parseBulkIssueBody('')).toEqual([]);
+  });
+
+  it('returns empty array when section not found', () => {
+    expect(parseBulkIssueBody('### 다른 섹션\n\nsome text')).toEqual([]);
+  });
+
+  it('limits items to 20', () => {
+    const lines = Array.from({ length: 25 }, (_, i) =>
+      `https://example.com/item-${i} | 기사 | tag${i} | note ${i}`,
+    ).join('\n');
+    const body = `### 링크 목록\n\n${lines}`;
+    const result = parseBulkIssueBody(body);
+
+    expect(result).toHaveLength(20);
+  });
+
+  it('handles lines with missing optional fields', () => {
+    const body = '### 링크 목록\n\nhttps://example.com/minimal | 기사 | |';
+    const result = parseBulkIssueBody(body);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].tags).toEqual(['general']);
+    expect(result[0].note).toBe('');
   });
 });
 
@@ -204,5 +258,48 @@ describe('processSubmission', () => {
     const result = await processSubmission(issue);
 
     expect(result).toEqual({ success: false, message: 'Could not parse issue body' });
+  });
+});
+
+describe('processBulkSubmission', () => {
+  it('processes valid bulk submission in dry run', async () => {
+    const issue = await readFixture('bulk-issue.json');
+    globalThis.fetch = vi.fn(async () =>
+      new Response(JSON.stringify({ title: 'Test Video' }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      }),
+    ) as typeof fetch;
+
+    const result: BulkResult = await processBulkSubmission(issue, { dryRun: true });
+    expect(result.total).toBe(3);
+    expect(result.succeeded).toHaveLength(3);
+    expect(result.failed).toHaveLength(0);
+  });
+
+  it('handles partial failures gracefully', async () => {
+    const issue = await readFixture('bulk-issue-partial.json');
+    globalThis.fetch = vi.fn(async () =>
+      new Response('{}', { status: 200, headers: { 'content-type': 'application/json' } }),
+    ) as typeof fetch;
+
+    const result = await processBulkSubmission(issue, { dryRun: true });
+    expect(result.succeeded.length).toBeGreaterThanOrEqual(1);
+    expect(result.failed.length).toBeGreaterThanOrEqual(1);
+    expect(result.total).toBe(result.succeeded.length + result.failed.length);
+  });
+
+  it('returns empty result for unparseable body', async () => {
+    const issue: IssueData = {
+      number: 200,
+      title: 'Bulk',
+      body: 'no valid content',
+      labels: [{ name: 'submission' }, { name: 'bulk' }],
+      user: { login: 'testuser' },
+    };
+    const result = await processBulkSubmission(issue, { dryRun: true });
+    expect(result.total).toBe(0);
+    expect(result.succeeded).toHaveLength(0);
+    expect(result.failed).toHaveLength(0);
   });
 });

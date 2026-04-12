@@ -1,0 +1,7 @@
+{
+  "number": 100,
+  "title": "📦 대량 자료 등록",
+  "body": "### 링크 목록\n\nhttps://example.com/bulk-article-1 | 기사 | AI, LLM | 첫 번째 기사\nhttps://www.youtube.com/watch?v=test123 | YouTube | video, tutorial | 좋은 튜토리얼\nhttps://example.com/bulk-article-2 | 기타 | startup | 스타트업 관련",
+  "labels": [{ "name": "submission" }, { "name": "bulk" }],
+  "user": { "login": "bulkuser" }
+}

@@ -53,9 +53,10 @@
 | `rss-collect.ts` | RSS 피드 수집 → `src/data/feeds/` | GitHub Actions (scheduled) |
 | `calc-trending.ts` | 트렌딩 점수 계산 → `src/data/trending/` | GitHub Actions (scheduled) |
 | `calc-must-read.ts` | 필독 기사 선정 → `src/data/must-read/` | GitHub Actions (scheduled) |
-| `process-submission.ts` | 기사 제출 Issue → PR 변환 | GitHub Actions (on issue) |
+| `process-submission.ts` | 단건/대량 기사 제출 Issue → PR 변환 | GitHub Actions (on issue) |
 | `validate.ts` | 콘텐츠 유효성 검사 | CI, 로컬 |
 | `validate-docs.ts` | 문서 형식·커버리지 검증 | CI, 로컬 |
+| `submit-cli.ts` | `gh` CLI 래퍼 (단건/대량 제출) | 사용자/AI 에이전트 (로컬) |
 
 ### `functions/` — Cloudflare Functions
 
@@ -110,7 +111,7 @@ src/data/feeds/ → scripts/calc-trending.ts → src/data/trending/
 ### 3. 기사 제출
 
 ```
-GitHub Issue → scripts/process-submission.ts → PR (src/content/curated/)
+GitHub Issue (single/bulk) → scripts/process-submission.ts → PR (src/content/curated/)
 ```
 
 ### 4. 빌드
@@ -139,6 +140,9 @@ src/ (pages + components + data + content) → astro build → dist/
 
 - [초기 기술 스택 결정](../decisions/0001-initial-tech-stack.md)
 - [문서 유효성 검증](../features/doc-validation.md)
+- [대량 제출 (bulk submission)](../features/bulk-submission.md)
+- [제출 CLI 래퍼](../features/submit-cli.md)
+- [AI 에이전트 제출 가이드](../guides/agent-submission.md)
 
 ## 변경 이력
 
@@ -146,3 +150,4 @@ src/ (pages + components + data + content) → astro build → dist/
 |------|----------|
 | 2026-04-11 | 최초 작성 — 현재 프로젝트 구조 기반 |
 | 2026-04-12 | validate-docs 스크립트 추가, CI 파이프라인 반영 |
+| 2026-04-12 | 단건 제출 워크플로우에 bulk submission 처리 추가 |
