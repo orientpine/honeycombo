@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 .auth-area.loaded {
   opacity: 1;
 }
-.auth-user {
+.auth-area :global(.auth-user) {
   position: relative;
   display: flex;
   align-items: center;
@@ -165,21 +165,21 @@ document.addEventListener('DOMContentLoaded', async () => {
   border-radius: var(--radius-sm);
   transition: background 0.15s;
 }
-.auth-user:hover {
+.auth-area :global(.auth-user:hover) {
   background: var(--color-bg-secondary);
 }
-.auth-avatar {
+.auth-area :global(.auth-avatar) {
   width: 28px;
   height: 28px;
   border-radius: 50%;
   object-fit: cover;
 }
-.auth-username {
+.auth-area :global(.auth-username) {
   font-size: 0.9rem;
   font-weight: 500;
   color: var(--color-text);
 }
-.auth-dropdown {
+.auth-area :global(.auth-dropdown) {
   position: absolute;
   top: 100%;
   right: 0;
@@ -194,10 +194,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   padding: var(--space-xs) 0;
   z-index: 10;
 }
-.auth-user:hover .auth-dropdown {
+.auth-area :global(.auth-user:hover .auth-dropdown) {
   display: flex;
 }
-.auth-dropdown-item {
+.auth-area :global(.auth-dropdown-item) {
   padding: var(--space-sm) var(--space-md);
   font-size: 0.9rem;
   color: var(--color-text);
@@ -208,14 +208,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   cursor: pointer;
   width: 100%;
 }
-.auth-dropdown-item:hover {
+.auth-area :global(.auth-dropdown-item:hover) {
   background: var(--color-bg-secondary);
   text-decoration: none;
 }
-.auth-dropdown-item.text-danger {
+.auth-area :global(.auth-dropdown-item.text-danger) {
   color: var(--color-danger);
 }
-.auth-login-btn {
+.auth-area :global(.auth-login-btn) {
   padding: var(--space-xs) var(--space-md);
   background: var(--color-primary);
   color: white;
@@ -225,7 +225,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   text-decoration: none;
   transition: background 0.15s;
 }
-.auth-login-btn:hover {
+.auth-area :global(.auth-login-btn:hover) {
   background: var(--color-primary-hover);
   color: white;
   text-decoration: none;
