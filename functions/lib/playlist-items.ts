@@ -1,6 +1,13 @@
 import { generateId } from './id';
-import { isValidUrl, isBlockedDomain } from './validate';
+import { isValidUrl, isBlockedDomain, isValidSourceId } from './validate';
 import type { PlaylistItemRow, AddItemInput, UpdateItemInput } from './types';
+
+export class DuplicateItemError extends Error {
+  constructor() {
+    super('Duplicate item');
+    this.name = 'DuplicateItemError';
+  }
+}
 
 async function isPlaylistOwner(db: D1Database, playlistId: string, userId: string): Promise<boolean> {
   const row = await db
@@ -37,7 +44,7 @@ export async function addItem(
     if (!input.external_url || !isValidUrl(input.external_url) || isBlockedDomain(input.external_url)) {
       return null;
     }
-  } else if (!input.source_id) {
+  } else if (!input.source_id || !isValidSourceId(input.source_id)) {
     return null;
   }
 
@@ -51,9 +58,10 @@ export async function addItem(
     : positionRow.max_position + 1;
   const id = generateId();
 
-  await db
-    .prepare(
-      `INSERT INTO playlist_items (
+  try {
+    await db
+      .prepare(
+        `INSERT INTO playlist_items (
         id,
         playlist_id,
         item_type,
@@ -65,20 +73,26 @@ export async function addItem(
         note,
         position
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-    )
-    .bind(
-      id,
-      playlistId,
-      input.item_type,
-      input.item_type === 'external' ? null : input.source_id ?? null,
-      input.item_type === 'external' ? input.external_url : null,
-      input.title_snapshot,
-      input.url_snapshot,
-      input.description_snapshot ?? null,
-      input.note ?? null,
-      position
-    )
-    .run();
+      )
+      .bind(
+        id,
+        playlistId,
+        input.item_type,
+        input.item_type === 'external' ? null : input.source_id ?? null,
+        input.item_type === 'external' ? input.external_url : null,
+        input.title_snapshot,
+        input.url_snapshot,
+        input.description_snapshot ?? null,
+        input.note ?? null,
+        position
+      )
+      .run();
+  } catch (err: unknown) {
+    if (err instanceof Error && /UNIQUE constraint/i.test(err.message)) {
+      throw new DuplicateItemError();
+    }
+    throw err;
+  }
 
   await db.prepare('UPDATE user_playlists SET updated_at = CURRENT_TIMESTAMP WHERE id = ?').bind(playlistId).run();
 

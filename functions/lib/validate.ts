@@ -19,6 +19,17 @@ export function isBlockedDomain(url: string): boolean {
   return BLOCKED_DOMAINS.some((domain) => hostname === domain || hostname.endsWith(`.${domain}`));
 }
 
+export function isValidSourceId(sourceId: string): boolean {
+  return (
+    sourceId.length > 0 &&
+    sourceId.length <= 500 &&
+    !Array.from(sourceId).some((char) => {
+      const code = char.charCodeAt(0);
+      return code >= 0 && code <= 31;
+    })
+  );
+}
+
 export function sanitizeText(str: string, maxLen: number): string {
   return str.trim().replace(/\s+/g, ' ').slice(0, maxLen);
 }

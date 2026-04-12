@@ -50,11 +50,9 @@ function getVisibilityLabel(playlist: PlaylistDetail): string {
 }
 
 function getItemHref(item: PlaylistItemRow): string {
-  if (item.item_type === 'external') {
-    return item.url_snapshot;
-  }
-
-  return `/articles/${encodeURIComponent(item.source_id ?? '')}`;
+  if (item.item_type === 'external') return item.url_snapshot;
+  if (item.item_type === 'feed') return item.url_snapshot;
+  return `/articles/${item.source_id ?? ''}`;
 }
 
 function getItemDomain(url: string): string {
@@ -100,22 +98,37 @@ function renderAvatar(playlist: PlaylistDetail): string {
   return `<span class="avatar avatar-fallback" aria-hidden="true">${escapeHtml(fallback)}</span>`;
 }
 
-function renderItems(items: PlaylistItemRow[]): string {
+function renderItems(items: PlaylistItemRow[], isOwner: boolean, playlistId: string): string {
   if (items.length === 0) {
     return '<p class="empty-state">이 플레이리스트에 아직 기사가 없습니다.</p>';
   }
 
   return items
-    .map((item) => {
+    .map((item, index) => {
       const href = getItemHref(item);
       const title = item.title_snapshot.trim() || '제목 없음';
       const note = item.note?.trim();
       const sourceLabel = getItemMetaLabel(item);
       const domain = getItemDomain(item.url_snapshot);
-      const isExternal = item.item_type === 'external';
+      const isExternal = item.item_type === 'external' || item.item_type === 'feed';
+      const ownerControls = isOwner
+        ? `
+          <div class="item-controls">
+            <div class="item-control-row">
+              <button class="btn btn-sm item-move-up" data-item-id="${escapeAttr(item.id)}" data-position="${item.position}" title="위로" ${index === 0 ? 'hidden' : ''}>↑</button>
+              <button class="btn btn-sm item-move-down" data-item-id="${escapeAttr(item.id)}" data-position="${item.position}" title="아래로" ${index === items.length - 1 ? 'hidden' : ''}>↓</button>
+              <button class="btn btn-sm btn-danger item-delete" data-item-id="${escapeAttr(item.id)}" title="삭제">삭제</button>
+            </div>
+            <div class="item-note-edit">
+              <button class="btn btn-sm item-edit-note" data-item-id="${escapeAttr(item.id)}" data-note="${escapeAttr(item.note || '')}" data-playlist-id="${escapeAttr(playlistId)}">
+                ${item.note ? '💬 메모 수정' : '💬 메모 추가'}
+              </button>
+            </div>
+          </div>`
+        : '';
 
       return `
-        <article class="item-card card">
+        <article class="item-card card" data-item-id="${escapeAttr(item.id)}" data-position="${item.position}">
           <div class="item-card-header">
             <span class="badge">${escapeHtml(sourceLabel)}</span>
             ${isExternal ? `<span class="item-domain">${escapeHtml(domain)}</span>` : '<span class="item-domain">HoneyCombo 기사</span>'}
@@ -125,6 +138,7 @@ function renderItems(items: PlaylistItemRow[]): string {
           </h2>
           <p class="item-url">${escapeHtml(item.url_snapshot)}</p>
           ${note ? `<p class="item-note">💬 ${escapeHtml(note)}</p>` : ''}
+          ${ownerControls}
         </article>`;
     })
     .join('');
@@ -142,6 +156,25 @@ function renderOwnerControls(playlist: PlaylistDetail): string {
         <a href="/p/new" class="btn">새 플레이리스트</a>
         <button type="button" class="btn btn-danger" onclick="deletePlaylist()">삭제</button>
       </div>
+    </section>
+    <section class="article-search-section">
+      <h2>기사 추가</h2>
+      <div class="search-box">
+        <input type="text" class="search-input" placeholder="기사 제목으로 검색..." />
+      </div>
+      <div class="search-results" style="display:none;"></div>
+    </section>
+    <section class="external-url-section">
+      <button class="btn toggle-external-form">➕ 외부 URL 추가</button>
+      <form class="external-url-form" style="display:none;">
+        <input type="url" name="url" placeholder="https://example.com/article" required class="search-input" />
+        <input type="text" name="title" placeholder="제목" required class="search-input" />
+        <textarea name="description" placeholder="설명 (선택)" class="search-input" style="min-height:60px;resize:vertical;"></textarea>
+        <div style="display:flex;gap:var(--space-xs);">
+          <button type="submit" class="btn btn-sm" style="background:var(--color-primary);color:white;">추가</button>
+          <button type="button" class="btn btn-sm external-cancel">취소</button>
+        </div>
+      </form>
     </section>`;
 }
 
@@ -372,6 +405,60 @@ function renderDocument(options: {
         color: var(--color-text-muted);
       }
 
+      .item-controls {
+        margin-top: var(--space-sm);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--space-sm);
+      }
+
+      .item-control-row {
+        display: flex;
+        gap: var(--space-xs);
+      }
+
+      .btn-sm {
+        padding: var(--space-xs) var(--space-sm);
+        font-size: 0.8rem;
+      }
+
+      .item-note-edit {
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .note-editor {
+        margin-top: var(--space-sm);
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xs);
+      }
+
+      .note-editor textarea {
+        width: 100%;
+        min-height: 60px;
+        padding: var(--space-sm);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        font: inherit;
+        font-size: 0.9rem;
+        resize: vertical;
+        background: var(--color-bg);
+        color: var(--color-text);
+      }
+
+      .note-editor-actions {
+        display: flex;
+        gap: var(--space-xs);
+        justify-content: flex-end;
+      }
+
+      .item-card.removing {
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
       .owner-controls {
         margin-top: var(--space-xl);
         display: flex;
@@ -393,6 +480,97 @@ function renderDocument(options: {
         display: flex;
         gap: var(--space-sm);
         flex-wrap: wrap;
+      }
+
+      .article-search-section {
+        margin-top: var(--space-xl);
+        padding-top: var(--space-xl);
+        border-top: 1px solid var(--color-border);
+      }
+
+      .article-search-section h2 {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: var(--space-md);
+      }
+
+      .search-input {
+        width: 100%;
+        padding: var(--space-sm) var(--space-md);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        font: inherit;
+        font-size: 0.95rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+      }
+
+      .search-input:focus {
+        outline: none;
+        border-color: var(--color-primary);
+      }
+
+      .search-results {
+        margin-top: var(--space-md);
+        display: grid;
+        gap: var(--space-sm);
+      }
+
+      .search-result-card {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xs);
+      }
+
+      .search-result-meta {
+        display: flex;
+        gap: var(--space-xs);
+      }
+
+      .search-result-title {
+        font-size: 0.95rem;
+        font-weight: 600;
+      }
+
+      .search-result-desc {
+        font-size: 0.85rem;
+        color: var(--color-text-muted);
+      }
+
+      .search-add-btn {
+        align-self: flex-start;
+        background: var(--color-primary);
+        color: white;
+        border: none;
+      }
+
+      .search-add-btn:disabled {
+        background: var(--color-bg-secondary);
+        color: var(--color-text-muted);
+      }
+
+      .search-empty {
+        color: var(--color-text-muted);
+        text-align: center;
+        padding: var(--space-md);
+      }
+
+      .external-url-section {
+        margin-top: var(--space-lg);
+      }
+
+      .toggle-external-form {
+        background: none;
+        color: var(--color-primary);
+        border: 1px dashed var(--color-border);
+        width: 100%;
+        padding: var(--space-sm);
+        cursor: pointer;
+        font-size: 0.9rem;
+      }
+
+      .toggle-external-form:hover {
+        border-color: var(--color-primary);
       }
 
       .btn {
@@ -559,11 +737,13 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
           </div>
           <p class="meta-text">${escapeHtml(ownerName)}가 모은 기술 콘텐츠를 한 번에 확인해보세요.</p>
         </header>
-        <section class="items">${renderItems(playlist.items)}</section>
+        <section class="items">${renderItems(playlist.items, isOwner, playlist.id)}</section>
         ${isOwner ? renderOwnerControls(playlist) : ''}
       </article>`,
     script: isOwner
       ? `<script>
+          const playlistId = '${encodeURIComponent(playlist.id)}';
+
           async function deletePlaylist() {
             if (!window.confirm('이 플레이리스트를 삭제할까요?')) {
               return;
@@ -584,6 +764,416 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
               window.alert(error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다.');
             }
           }
+
+          function escapeHtml(value) {
+            return String(value)
+              .replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+              .replace(/"/g, '&quot;')
+              .replace(/'/g, '&#39;');
+          }
+
+          function escapeAttr(value) {
+            return escapeHtml(value);
+          }
+
+          let searchIndex = null;
+
+          const searchInput = document.querySelector('.search-input');
+          const searchResults = document.querySelector('.search-results');
+          const toggleBtn = document.querySelector('.toggle-external-form');
+          const extForm = document.querySelector('.external-url-form');
+          const cancelBtn = document.querySelector('.external-cancel');
+
+          if (searchInput) {
+            let debounceTimer;
+            searchInput.addEventListener('input', (e) => {
+              clearTimeout(debounceTimer);
+              debounceTimer = window.setTimeout(() => handleSearch(e.target.value), 300);
+            });
+          }
+
+          async function addPlaylistItem(payload) {
+            const res = await fetch('/api/playlists/' + playlistId + '/items', {
+              method: 'POST',
+              credentials: 'same-origin',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+
+            return res;
+          }
+
+          async function handleSearch(query) {
+            if (!searchResults) {
+              return;
+            }
+
+            if (!query || query.length < 2) {
+              searchResults.style.display = 'none';
+              return;
+            }
+
+            if (!searchIndex) {
+              try {
+                const res = await fetch('/search-index.json');
+                searchIndex = await res.json();
+              } catch {
+                return;
+              }
+            }
+
+            const q = query.toLowerCase();
+            const results = searchIndex.filter((article) =>
+              article.title.toLowerCase().includes(q) ||
+              article.source.toLowerCase().includes(q)
+            ).slice(0, 10);
+
+            if (results.length === 0) {
+              searchResults.innerHTML = '<p class="search-empty">검색 결과가 없습니다.</p>';
+            } else {
+              searchResults.innerHTML = results.map((article) => {
+                const safeSource = escapeHtml(article.source);
+                const safeType = article.type === 'curated' ? '큐레이션' : '피드';
+                const safeTitle = escapeHtml(article.title);
+                const safeId = escapeAttr(article.id);
+                const safeItemType = escapeAttr(article.type);
+                const safeUrl = escapeAttr(article.url);
+                const safeDescAttr = escapeAttr((article.description || '').slice(0, 200));
+                const safeDescHtml = article.description
+                  ? '<p class="search-result-desc">' + escapeHtml(article.description.slice(0, 100)) + '</p>'
+                  : '';
+
+                return '\n                  <div class="search-result-card card">\n                    <div class="search-result-meta">\n                      <span class="badge">' + safeSource + '</span>\n                      <span class="badge">' + safeType + '</span>\n                    </div>\n                    <h3 class="search-result-title">' + safeTitle + '</h3>\n                    ' + safeDescHtml + '\n                    <button class="btn btn-sm search-add-btn"\n                            data-id="' + safeId + '" data-type="' + safeItemType + '"\n                            data-title="' + escapeAttr(article.title) + '" data-url="' + safeUrl + '"\n                            data-desc="' + safeDescAttr + '">\n                      추가\n                    </button>\n                  </div>\n                ';
+              }).join('');
+
+              searchResults.querySelectorAll('.search-add-btn').forEach((btn) => {
+                btn.addEventListener('click', async () => {
+                  try {
+                    const res = await addPlaylistItem({
+                      item_type: btn.dataset.type,
+                      source_id: btn.dataset.id,
+                      title_snapshot: btn.dataset.title,
+                      url_snapshot: btn.dataset.url,
+                      description_snapshot: btn.dataset.desc,
+                    });
+
+                    if (res.status === 409) {
+                      btn.textContent = '이미 추가됨';
+                      btn.disabled = true;
+                      return;
+                    }
+
+                    if (!res.ok) {
+                      throw new Error();
+                    }
+
+                    btn.textContent = '✓ 추가됨';
+                    btn.disabled = true;
+                  } catch {
+                    window.alert('추가에 실패했습니다.');
+                  }
+                });
+              });
+            }
+
+            searchResults.style.display = 'block';
+          }
+
+          if (toggleBtn && extForm) {
+            toggleBtn.addEventListener('click', () => {
+              extForm.style.display = extForm.style.display === 'none' ? 'flex' : 'none';
+            });
+          }
+
+          if (cancelBtn && extForm) {
+            cancelBtn.addEventListener('click', () => {
+              extForm.style.display = 'none';
+            });
+          }
+
+          if (extForm) {
+            extForm.style.flexDirection = 'column';
+            extForm.style.gap = 'var(--space-sm)';
+            extForm.style.marginTop = 'var(--space-md)';
+
+            extForm.addEventListener('submit', async (e) => {
+              e.preventDefault();
+
+              const urlInput = extForm.elements.namedItem('url');
+              const titleInput = extForm.elements.namedItem('title');
+              const descriptionInput = extForm.elements.namedItem('description');
+              const url = urlInput && 'value' in urlInput ? urlInput.value.trim() : '';
+              const title = titleInput && 'value' in titleInput ? titleInput.value.trim() : '';
+              const desc = descriptionInput && 'value' in descriptionInput ? descriptionInput.value.trim() : '';
+
+              if (!url || !title) {
+                return;
+              }
+
+              try {
+                const res = await addPlaylistItem({
+                  item_type: 'external',
+                  external_url: url,
+                  title_snapshot: title,
+                  url_snapshot: url,
+                  description_snapshot: desc || undefined,
+                });
+
+                if (res.status === 409) {
+                  window.alert('이미 추가된 URL입니다.');
+                  return;
+                }
+
+                if (!res.ok) {
+                  throw new Error();
+                }
+
+                extForm.reset();
+                extForm.style.display = 'none';
+                window.alert('추가되었습니다. 새로고침하면 목록에 반영됩니다.');
+              } catch {
+                window.alert('추가에 실패했습니다.');
+              }
+            });
+          }
+
+          function getItemCards() {
+            return Array.from(document.querySelectorAll('.item-card'));
+          }
+
+          function syncItemControls() {
+            const cards = getItemCards();
+
+            cards.forEach((card, index) => {
+              const position = index + 1;
+              card.dataset.position = String(position);
+
+              const upButton = card.querySelector('.item-move-up');
+              const downButton = card.querySelector('.item-move-down');
+
+              if (upButton) {
+                upButton.dataset.position = String(position);
+                upButton.hidden = index === 0;
+              }
+
+              if (downButton) {
+                downButton.dataset.position = String(position);
+                downButton.hidden = index === cards.length - 1;
+              }
+            });
+          }
+
+          document.querySelectorAll('.item-delete').forEach((btn) => {
+            btn.addEventListener('click', async () => {
+              const itemId = btn.dataset.itemId;
+
+              if (!itemId || !window.confirm('이 기사를 플레이리스트에서 삭제할까요?')) {
+                return;
+              }
+
+              try {
+                const res = await fetch('/api/playlists/' + playlistId + '/items/' + encodeURIComponent(itemId), {
+                  method: 'DELETE',
+                  credentials: 'same-origin'
+                });
+
+                if (!res.ok) {
+                  throw new Error();
+                }
+
+                const card = btn.closest('.item-card');
+                if (!card) {
+                  return;
+                }
+
+                card.classList.add('removing');
+                window.setTimeout(() => {
+                  card.remove();
+                  syncItemControls();
+                }, 300);
+              } catch {
+                window.alert('삭제에 실패했습니다.');
+              }
+            });
+          });
+
+          async function moveItem(itemId, direction) {
+            const cards = getItemCards();
+            const currentCard = cards.find((card) => card.dataset.itemId === itemId);
+
+            if (!currentCard) {
+              return;
+            }
+
+            const currentIndex = cards.indexOf(currentCard);
+            const targetIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
+
+            if (targetIndex < 0 || targetIndex >= cards.length) {
+              return;
+            }
+
+            const targetCard = cards[targetIndex];
+            const targetItemId = targetCard.dataset.itemId;
+            const currentPos = Number(currentCard.dataset.position);
+            const targetPos = Number(targetCard.dataset.position);
+
+            if (!targetItemId || !Number.isFinite(currentPos) || !Number.isFinite(targetPos)) {
+              return;
+            }
+
+            try {
+              const responses = await Promise.all([
+                fetch('/api/playlists/' + playlistId + '/items/' + encodeURIComponent(itemId), {
+                  method: 'PUT',
+                  credentials: 'same-origin',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ position: targetPos })
+                }),
+                fetch('/api/playlists/' + playlistId + '/items/' + encodeURIComponent(targetItemId), {
+                  method: 'PUT',
+                  credentials: 'same-origin',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ position: currentPos })
+                })
+              ]);
+
+              if (!responses.every((res) => res.ok)) {
+                throw new Error();
+              }
+
+              const parent = currentCard.parentNode;
+              if (!parent) {
+                return;
+              }
+
+              if (direction === 'up') {
+                parent.insertBefore(currentCard, targetCard);
+              } else {
+                parent.insertBefore(targetCard, currentCard);
+              }
+
+              currentCard.dataset.position = String(targetPos);
+              targetCard.dataset.position = String(currentPos);
+              syncItemControls();
+            } catch {
+              window.alert('순서 변경에 실패했습니다.');
+            }
+          }
+
+          document.querySelectorAll('.item-move-up').forEach((btn) => {
+            btn.addEventListener('click', () => {
+              const itemId = btn.dataset.itemId;
+              if (itemId) {
+                void moveItem(itemId, 'up');
+              }
+            });
+          });
+
+          document.querySelectorAll('.item-move-down').forEach((btn) => {
+            btn.addEventListener('click', () => {
+              const itemId = btn.dataset.itemId;
+              if (itemId) {
+                void moveItem(itemId, 'down');
+              }
+            });
+          });
+
+          document.querySelectorAll('.item-edit-note').forEach((btn) => {
+            btn.addEventListener('click', () => {
+              const itemId = btn.dataset.itemId;
+              const currentNote = btn.dataset.note || '';
+              const card = btn.closest('.item-card');
+
+              if (!itemId || !card) {
+                return;
+              }
+
+              const existing = card.querySelector('.note-editor');
+              if (existing) {
+                existing.remove();
+                return;
+              }
+
+              const editor = document.createElement('div');
+              editor.className = 'note-editor';
+
+              const textarea = document.createElement('textarea');
+              textarea.placeholder = '메모를 입력하세요...';
+              textarea.value = currentNote;
+
+              const actions = document.createElement('div');
+              actions.className = 'note-editor-actions';
+
+              const cancelButton = document.createElement('button');
+              cancelButton.type = 'button';
+              cancelButton.className = 'btn btn-sm note-cancel';
+              cancelButton.textContent = '취소';
+
+              const saveButton = document.createElement('button');
+              saveButton.type = 'button';
+              saveButton.className = 'btn btn-sm note-save';
+              saveButton.style.background = 'var(--color-primary)';
+              saveButton.style.color = 'white';
+              saveButton.textContent = '저장';
+
+              actions.append(cancelButton, saveButton);
+              editor.append(textarea, actions);
+
+              const controls = card.querySelector('.item-controls');
+              if (controls) {
+                card.insertBefore(editor, controls);
+              } else {
+                card.appendChild(editor);
+              }
+
+              cancelButton.addEventListener('click', () => editor.remove());
+              saveButton.addEventListener('click', async () => {
+                const note = textarea.value;
+
+                try {
+                  const res = await fetch('/api/playlists/' + playlistId + '/items/' + encodeURIComponent(itemId), {
+                    method: 'PUT',
+                    credentials: 'same-origin',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ note })
+                  });
+
+                  if (!res.ok) {
+                    throw new Error();
+                  }
+
+                  let noteEl = card.querySelector('.item-note');
+                  const trimmedNote = note.trim();
+
+                  if (trimmedNote) {
+                    if (!noteEl) {
+                      noteEl = document.createElement('p');
+                      noteEl.className = 'item-note';
+                      const controlsEl = card.querySelector('.item-controls');
+                      if (controlsEl) {
+                        card.insertBefore(noteEl, controlsEl);
+                      } else {
+                        card.appendChild(noteEl);
+                      }
+                    }
+                    noteEl.textContent = '💬 ' + note;
+                  } else if (noteEl) {
+                    noteEl.remove();
+                  }
+
+                  btn.dataset.note = note;
+                  btn.textContent = trimmedNote ? '💬 메모 수정' : '💬 메모 추가';
+                  editor.remove();
+                } catch {
+                  window.alert('메모 저장에 실패했습니다.');
+                }
+              });
+            });
+          });
+
+          syncItemControls();
         </script>`
       : undefined,
   });
