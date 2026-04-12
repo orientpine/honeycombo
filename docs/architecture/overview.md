@@ -63,6 +63,24 @@
 | 파일 | 역할 |
 |------|------|
 | `api/auth.ts` | GitHub OAuth (Decap CMS 인증) |
+| `api/auth/github/login.ts` | 사용자 GitHub OAuth 로그인 (return_to 쿠키 지원) |
+| `api/auth/github/callback.ts` | OAuth 콜백, 세션 생성, 원래 페이지로 리디렉션 |
+| `api/auth/me.ts` | 현재 로그인 사용자 정보 |
+| `api/auth/logout.ts` | 로그아웃 |
+| `api/playlists/index.ts` | GET(목록)/POST(생성), contains_item 포함 여부 지원 |
+| `api/playlists/[id]/index.ts` | GET/PUT/DELETE (개별 플레이리스트 CRUD) |
+| `api/playlists/[id]/items/index.ts` | POST (기사 추가, 중복 시 409) |
+| `api/playlists/[id]/items/[itemId].ts` | PUT/DELETE (기사 수정/삭제) |
+| `api/playlists/[id]/visibility.ts` | PUT (공개 범위 변경) |
+| `api/admin/playlists/pending.ts` | GET (관리자: 승인 대기 목록) |
+| `api/admin/playlists/[id]/approve.ts` | POST (관리자: 승인) |
+| `api/admin/playlists/[id]/reject.ts` | POST (관리자: 반려) |
+| `p/[id].ts` | 유저 플레이리스트 SSR (아이템 관리, 기사 검색, 외부 URL 추가) |
+| `lib/auth.ts` | 세션 관리 (upsertUser, createSession, getSession) |
+| `lib/playlists.ts` | 플레이리스트 CRUD, 목록 조회, 포함 여부 확인 |
+| `lib/playlist-items.ts` | 아이템 추가/수정/삭제, 중복 방지 (DuplicateItemError) |
+| `lib/types.ts` | TypeScript 타입 정의 |
+| `lib/validate.ts` | URL/제목/source_id 검증 |
 
 ### `.github/workflows/` — CI/CD
 
@@ -129,7 +147,8 @@ src/ (pages + components + data + content) → astro build → dist/
 | 프레임워크 | Astro 6 (SSG) | `output: 'static'` |
 | 런타임 | Bun | 패키지 매니저 + 스크립트 실행 |
 | 호스팅 | Cloudflare Pages | 무료, 무제한 bandwidth |
-| 서버리스 | Cloudflare Functions | OAuth용 |
+| 서버리스 | Cloudflare Functions | OAuth, 플레이리스트 API, SSR |
+| 데이터베이스 | Cloudflare D1 (SQLite) | 사용자, 세션, 플레이리스트, 아이템 |
 | CMS | Decap CMS | git-native |
 | 댓글 | Giscus | GitHub Discussions 기반 |
 | CI/CD | GitHub Actions | 수집, 계산, 배포 자동화 |
@@ -157,3 +176,4 @@ src/ (pages + components + data + content) → astro build → dist/
 | 2026-04-12 | 단건 제출 워크플로우에 bulk submission 처리 추가 |
 | 2026-04-12 | SourceFilter 4탭 구조, Decap CMS auth 수정 반영 |
 | 2026-04-12 | `/search-index.json` 정적 검색 인덱스 엔드포인트 추가 |
+| 2026-04-13 | Cloudflare Functions 전체 목록 반영, D1 데이터베이스 추가, 플레이리스트 기능 아키텍처 문서화 |
