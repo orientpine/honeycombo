@@ -15,8 +15,6 @@ const DEFAULT_REPO = 'orientpine/honeycombo';
 const DEFAULT_TYPE = '기사';
 const SINGLE_TITLE = '📎 자료 등록';
 const BULK_TITLE = '📦 대량 자료 등록';
-const SINGLE_LABELS = ['submission'];
-const BULK_LABELS = ['submission', 'bulk'];
 const VALID_TYPES = new Set(['기사', 'YouTube', 'X 스레드', 'Threads', '기타']);
 const MAX_BULK_ITEMS = 20;
 const MAX_TAGS = 5;
@@ -130,16 +128,11 @@ function formatCommandForDisplay(cmd: string[]): string {
 
 async function createIssue(args: {
   repo: string;
-  labels: string[];
   title: string;
   body: string;
   dryRun?: boolean;
 }): Promise<string | null> {
   const cmd = ['gh', 'issue', 'create', '--repo', args.repo];
-
-  for (const label of args.labels) {
-    cmd.push('--label', label);
-  }
 
   cmd.push('--title', args.title, '--body', args.body);
 
@@ -191,7 +184,6 @@ async function submitSingle(args: CliArgs): Promise<void> {
 
   const issueUrl = await createIssue({
     repo: args.repo,
-    labels: SINGLE_LABELS,
     title: SINGLE_TITLE,
     body,
     dryRun: args.dryRun,
@@ -245,7 +237,6 @@ async function submitBulk(args: CliArgs): Promise<void> {
 
   const issueUrl = await createIssue({
     repo: args.repo,
-    labels: BULK_LABELS,
     title: BULK_TITLE,
     body,
     dryRun: args.dryRun,

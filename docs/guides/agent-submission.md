@@ -51,8 +51,8 @@ gh auth status
 ## 라벨에 대한 중요 참고
 
 > **외부 사용자 참고**: GitHub API는 push 권한이 없는 사용자의 `--label` 옵션을 무시합니다.
-> 그러나 HoneyCombo는 **자동 라벨링 워크플로우**를 통해 Issue 본문의 `### URL` 또는 `### 링크 목록` 패턴을 감지하여 자동으로 라벨을 붙입니다.
-> **따라서 `--label` 옵션을 넣어도 되고, 안 넣어도 됩니다.** 본문 형식만 맞으면 제출이 처리됩니다.
+> HoneyCombo는 Issue **본문의 `### URL` 또는 `### 링크 목록` 패턴을 감지**하여 자동으로 라벨을 붙이고 제출을 처리합니다.
+> **`--label` 옵션은 필요 없습니다.** 본문 형식만 맞으면 됩니다.
 
 ## 단건 제출
 
@@ -61,7 +61,7 @@ gh auth status
 ```bash
 gh issue create \
   --repo orientpine/honeycombo \
-  --label "submission" \
+  --title "📎 자료 등록" \
   --title "📎 자료 등록" \
   --body "### URL
 
@@ -126,8 +126,6 @@ bun run scripts/submit-cli.ts --bulk items.txt
 ```bash
 gh issue create \
   --repo orientpine/honeycombo \
-  --label "submission" \
-  --label "bulk" \
   --title "📦 대량 자료 등록" \
   --body "### 링크 목록
 
@@ -148,7 +146,6 @@ urls=(
 for url in "${urls[@]}"; do
   gh issue create \
     --repo orientpine/honeycombo \
-    --label "submission" \
     --title "📎 자료 등록" \
     --body "### URL
 
@@ -217,7 +214,6 @@ gh CLI가 인증된 상태에서 아래 명령을 실행해:
 
 gh issue create \
   --repo orientpine/honeycombo \
-  --label "submission" \
   --title "📎 자료 등록" \
   --body "### URL
 
@@ -244,8 +240,6 @@ gh CLI가 인증된 상태에서 아래 명령을 실행해:
 
 gh issue create \
   --repo orientpine/honeycombo \
-  --label "submission" \
-  --label "bulk" \
   --title "📦 대량 자료 등록" \
   --body "### 링크 목록
 
@@ -261,7 +255,7 @@ gh issue create \
 ```bash
 # 이것만으로 충분합니다
 gh auth login
-gh issue create --repo orientpine/honeycombo --label "submission" --title "📎 자료 등록" --body "..."
+gh issue create --repo orientpine/honeycombo --title "📎 자료 등록" --body "### URL\n\nhttps://...\n\n### 유형\n\n기사\n\n### 태그 (쉼표 구분, 최대 5개)\n\nAI\n\n### 한줄 소개\n\n설명"
 ```
 
 CLI 래퍼(`scripts/submit-cli.ts`)를 사용하려면 프로젝트 클론이 필요합니다:
