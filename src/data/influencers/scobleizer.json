@@ -1,0 +1,33 @@
+{
+  "id": "scobleizer",
+  "name": "Robert Scoble",
+  "platform": "x",
+  "handle": "@Scobleizer",
+  "bio": "Tech evangelist, author. Founder of Unaligned. Ex-Microsoft. Silicon Valley AI & spatial computing 전문가.",
+  "opinions": [
+    {
+      "text": "The New AI Infrastructure Economy — AI infrastructure is shifting to chips, cloud and data centers. The investment landscape for AI is evolving rapidly as companies race to build the computational backbone needed for next-generation AI systems.",
+      "source_url": "https://www.unaligned.io/p/the-new-ai-infrastructure-economy",
+      "date": "2026-03-17T14:30:00.000Z",
+      "topic": "AI"
+    },
+    {
+      "text": "NVIDIA Investor Report Analysis — Robert Scoble shares insights from meetings with NVIDIA, analyzing the company's position in the AI infrastructure market and the implications for investors in the rapidly evolving AI chip landscape.",
+      "source_url": "https://www.linkedin.com/posts/scobleizer_the-investor-report-for-nvidia-im-meeting-activity-7440407895730536448-A41-",
+      "date": "2026-03-19T00:00:00.000Z",
+      "topic": "AI"
+    },
+    {
+      "text": "THE ULTIMATE CLAWDBOT REPORT — Every single important post on X about ClawdBot. ClawdBot is taking the world by storm. Report and analysis covering the very hot trend of AI agents that can autonomously interact and create.",
+      "source_url": "https://www.linkedin.com/posts/scobleizer_the-ultimate-clawdbot-report-every-single-activity-7421115480318455808-LVT9",
+      "date": "2026-03-10T00:00:00.000Z",
+      "topic": "AI Agent"
+    },
+    {
+      "text": "GTC 2026 Highlights — Robert Scoble discusses the latest developments in AI, robotics, and spatial computing at NVIDIA's GPU Technology Conference, covering breakthrough announcements in physical AI and autonomous systems.",
+      "source_url": "https://www.tiktok.com/@techinnovationdeeptalk/video/7625339896193912078",
+      "date": "2026-04-05T11:06:26.000Z",
+      "topic": "AI"
+    }
+  ]
+}

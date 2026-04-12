@@ -1,0 +1,33 @@
+{
+  "id": "justsisyphus",
+  "name": "Sisyphus",
+  "platform": "x",
+  "handle": "@justsisyphus",
+  "bio": "Oh My OpenCode 공식 X 계정. AI 에이전트 개발 및 오픈소스 프로젝트 업데이트.",
+  "opinions": [
+    {
+      "text": "Oh My OpenCode v3.14.0 released — Major update featuring category-based agent delegation, model-optimized task routing, and enhanced orchestration capabilities. Sisyphus agent now delegates tasks to specialized subagents based on domain categories.",
+      "source_url": "https://github.com/code-yeongyu/oh-my-openagent/releases/tag/v3.14.0",
+      "date": "2026-03-26T16:04:14.000Z",
+      "topic": "AI Agent"
+    },
+    {
+      "text": "Ralph Loop, OpenClaw — 새로운건 없었다. 에이전트 루프에 새로운 Computer Science가 없다. while문, 상태 머신, 재시도 패턴 — 전부 예전부터 있던 것들. 차이는 반복문 안에서 LLM이 '다음에 뭘 할지'를 결정한다는 것.",
+      "source_url": "https://channel.io/ko/team/blog/articles/tech-ralph-loop-openclaw-9a2e654c",
+      "date": "2026-02-11T00:00:00.000Z",
+      "topic": "AI Agent"
+    },
+    {
+      "text": "Beyond Ralph Loop — Self-Evolving Agents and the Shifting Role of AI Developers. Ralph Loop solved context rot but remains prompt-bound. This post maps the trajectory from ALAS autonomous parameter updates to Self-Evolving Agent loops.",
+      "source_url": "https://minbook.dev/en/blog/ralph-loop-beyond-self-evolving",
+      "date": "2026-03-31T00:00:00.000Z",
+      "topic": "AI Agent"
+    },
+    {
+      "text": "Oh My OpenCode v3.0.0-beta.10 — Features include /ulw-loop command for intensive coding sessions, Skill MCP auto-reconnect, orchestrator parallel delegation enabled by default for better performance, and LSP diagnostics improvements.",
+      "source_url": "https://github.com/code-yeongyu/oh-my-openagent/releases/tag/v3.0.0-beta.10",
+      "date": "2026-01-18T04:11:32.000Z",
+      "topic": "Coding"
+    }
+  ]
+}

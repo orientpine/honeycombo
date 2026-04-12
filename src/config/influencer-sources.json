@@ -16,5 +16,50 @@
     "bio": "Meta AI Chief Scientist, Turing Award winner. 딥러닝의 아버지 중 한 명.",
     "search_query": "Yann LeCun latest AI opinions insights",
     "enabled": true
+  },
+  {
+    "id": "lucas-flatwhite",
+    "name": "Lucas",
+    "platform": "x",
+    "handle": "@lucas_flatwhite",
+    "bio": "AI x Software Engineer. Twitter 𝕏 'Software Engineering' 커뮤니티 Admin. Claude Code 및 AI 도구 전문가.",
+    "search_query": "lucas_flatwhite AI software engineering Claude Code opinions",
+    "enabled": true
+  },
+  {
+    "id": "ralralbral",
+    "name": "잔다르크",
+    "platform": "x",
+    "handle": "@ralralbral",
+    "bio": "AI 에이전트 및 개발 도구 인사이트 공유. 한국 AI 테크 커뮤니티 활동가.",
+    "search_query": "ralralbral AI agent development insights opinions",
+    "enabled": true
+  },
+  {
+    "id": "scobleizer",
+    "name": "Robert Scoble",
+    "platform": "x",
+    "handle": "@Scobleizer",
+    "bio": "Tech evangelist, author. Founder of Unaligned. Ex-Microsoft. Silicon Valley AI & spatial computing 전문가.",
+    "search_query": "Robert Scoble Scobleizer latest AI tech opinions insights",
+    "enabled": true
+  },
+  {
+    "id": "justsisyphus",
+    "name": "Sisyphus",
+    "platform": "x",
+    "handle": "@justsisyphus",
+    "bio": "Oh My OpenCode 공식 X 계정. AI 에이전트 개발 및 오픈소스 프로젝트 업데이트.",
+    "search_query": "justsisyphus oh-my-opencode AI agent development updates",
+    "enabled": true
+  },
+  {
+    "id": "chosenryot",
+    "name": "Ryot",
+    "platform": "x",
+    "handle": "@chosenryot",
+    "bio": "Co-founder @ Xitadel. DeFi & Solana 생태계 전문가. 한국 Web3 커뮤니티 기여자.",
+    "search_query": "chosenryot Ryot DeFi Solana Web3 crypto opinions insights",
+    "enabled": true
   }
 ]

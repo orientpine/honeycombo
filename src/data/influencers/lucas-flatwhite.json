@@ -1,0 +1,39 @@
+{
+  "id": "lucas-flatwhite",
+  "name": "Lucas",
+  "platform": "x",
+  "handle": "@lucas_flatwhite",
+  "bio": "AI x Software Engineer. Twitter 𝕏 'Software Engineering' 커뮤니티 Admin. Claude Code 및 AI 도구 전문가.",
+  "opinions": [
+    {
+      "text": "Comprehensive analysis and documentation of Claude Code's internal prompt architecture and multi-agent reasoning system. Claude Code의 내부 프롬프트 아키텍처와 멀티 에이전트 추론 시스템을 분석하고 문서화한 프로젝트.",
+      "source_url": "https://github.com/lucas-flatwhite/claude-code-system-prompts",
+      "date": "2026-03-31T15:50:35.000Z",
+      "topic": "AI Agent"
+    },
+    {
+      "text": "How Claude Code Actually Works: Reverse-Engineering 512K Lines of Production AI Agent. On March 31, 2026, Anthropic shipped an npm package with a .map file that referenced their full TypeScript source. Claude Code의 내부 구조가 밝혀지면서 AI 에이전트 아키텍처에 대한 깊은 이해가 가능해졌다.",
+      "source_url": "https://www.karanprasad.com/blog/how-claude-code-actually-works-reverse-engineering-512k-lines",
+      "date": "2026-04-02T00:00:00.000Z",
+      "topic": "AI Agent"
+    },
+    {
+      "text": "INSIDE CLAUDE CODE: HOW A 513K-LINE CODEBASE TURNS AN LLM INTO A CODING AGENT. We analyzed Claude Code's 1,900+ file codebase — 512K lines, 90% written by Claude itself, 85K+ GitHub stars. What we found is not just an AI wrapper — it's a terminal-native IDE with its own rendering engine, multi-agent system.",
+      "source_url": "https://duocodetech.com/blog/claude-code-anatomy",
+      "date": "2026-03-31T02:14:21.000Z",
+      "topic": "Coding"
+    },
+    {
+      "text": "Claude Code 내부 아키텍처 분석 — npm Source Map 유출로 본 에이전틱 AI의 해부학. Anthropic이 '오픈소스'라고 부르는 것과 실제로 오픈된 것 사이에는 4,600개 파일만큼의 간극이 있었습니다. 내부에는 8겹 보안 레이어가 존재.",
+      "source_url": "https://bits-bytes-nn.github.io/insights/agentic-ai/2026/03/31/claude-code-source-map-leak-analysis.html",
+      "date": "2026-03-31T00:00:00.000Z",
+      "topic": "AI Agent"
+    },
+    {
+      "text": "Y Combinator CEO Garry Tan이 만든 gstack의 한국어 버전 gstack-ko를 구성. Claude Code가 '하나의 모드'에 갇혀 있다는 느낌을 받아본 적 있나요? gstack은 Claude Code에게 '전문가 모드'를 부여하는 슬래시 커맨드 모음.",
+      "source_url": "https://github.com/lucas-flatwhite/gstack-ko",
+      "date": "2026-03-29T00:00:00.000Z",
+      "topic": "Coding"
+    }
+  ]
+}

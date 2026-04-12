@@ -1,0 +1,27 @@
+{
+  "id": "chosenryot",
+  "name": "Ryot",
+  "platform": "x",
+  "handle": "@chosenryot",
+  "bio": "Co-founder @ Xitadel. DeFi & Solana 생태계 전문가. 한국 Web3 커뮤니티 기여자.",
+  "opinions": [
+    {
+      "text": "2026 Korea Crypto Market Guide — 한국 암호화폐 시장의 현재와 미래를 분석. 한국은 글로벌 크립토 시장에서 독특한 위치를 차지하며, 제도권 진입과 DeFi 생태계 확장이 동시에 진행되고 있다.",
+      "source_url": "https://reports.tiger-research.com/p/2026-korea-crypto-industry-guide-eng",
+      "date": "2026-04-09T16:00:09.000Z",
+      "topic": "Tech"
+    },
+    {
+      "text": "Solana 101: A 2026 Guide to SOL and Its Ecosystem. The complete Solana guide for 2026 covering how SOL works, Firedancer, DeFi, staking yields, DePIN, institutional adoption, and how to keep your Solana assets safe.",
+      "source_url": "https://www.kerberus.com/learn/solana-101-guide-ecosystem-security-narratives-trends/",
+      "date": "2026-03-13T00:00:00.000Z",
+      "topic": "Tech"
+    },
+    {
+      "text": "Institutional Adoption of Solana in South Korea — Hanwha Asset Management and Solana Foundation collaborate on ETPs, custody standards, and education to bridge traditional finance and blockchain infrastructure.",
+      "source_url": "https://www.ainvest.com/news/institutional-adoption-solana-south-korea-strategic-partnerships-catalysts-digital-asset-growth-2601/",
+      "date": "2026-01-23T18:31:06.000Z",
+      "topic": "Tech"
+    }
+  ]
+}

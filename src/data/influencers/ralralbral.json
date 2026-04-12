@@ -1,0 +1,27 @@
+{
+  "id": "ralralbral",
+  "name": "잔다르크",
+  "platform": "x",
+  "handle": "@ralralbral",
+  "bio": "AI 에이전트 및 개발 도구 인사이트 공유. 한국 AI 테크 커뮤니티 활동가.",
+  "opinions": [
+    {
+      "text": "Claude Agent SDK 딥다이브 — Claude Code를 라이브러리로 쓴다는 건 이런 뜻이다. 에이전트 프레임워크가 6개 넘게 경쟁하는 2026년, Anthropic은 기존 프레임워크와 완전히 다른 접근을 택했다. LangGraph처럼 그래프를 설계하거나, CrewAI처럼 역할을 분배하는 게 아니다.",
+      "source_url": "https://jidonglab.com/blog/claude-agent-sdk-deep-dive-ko/",
+      "date": "2026-03-30T23:00:00.000Z",
+      "topic": "AI Agent"
+    },
+    {
+      "text": "韓 AI 해커톤 '랄프톤', 미국 진출…네이버·카카오 후원 확대. 국내 최대 규모의 인공지능(AI) 해커톤 '랄프톤(RALPH-THON)'이 미국 시장에 진출하며, 네이버와 카카오가 후원을 확대한다.",
+      "source_url": "https://en.sedaily.com/technology/2026/03/24/korean-ai-agent-hackathon-ralphthon-expands-to-us-with",
+      "date": "2026-03-24T20:30:05.000Z",
+      "topic": "AI Agent"
+    },
+    {
+      "text": "Beyond Ralph Loop — Self-Evolving Agents and the Shifting Role of AI Developers. Ralph Loop solved context rot but remains prompt-bound. AI 개발자의 역할이 코드 작성자에서 에이전트 오케스트레이터로 전환되고 있다.",
+      "source_url": "https://minbook.dev/en/blog/ralph-loop-beyond-self-evolving",
+      "date": "2026-03-31T00:00:00.000Z",
+      "topic": "AI Agent"
+    }
+  ]
+}
