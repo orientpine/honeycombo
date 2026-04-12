@@ -134,6 +134,10 @@ src/ (pages + components + data + content) → astro build → dist/
 
 ---
 
+## 관련 문서
+
+- [초기 기술 스택 결정](../decisions/0001-initial-tech-stack.md)
+
 ## 변경 이력
 
 | 날짜 | 변경 내용 |

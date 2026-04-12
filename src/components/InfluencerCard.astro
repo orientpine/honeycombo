@@ -35,16 +35,25 @@ const syndicationUrl = `https://syndication.twitter.com/srv/timeline-profile/scr
   {bio && <p class="influencer-bio">{bio}</p>}
 
   {platform === 'x' && (
-    <div class="timeline-embed">
-      <iframe
-        src={syndicationUrl}
-        title={`${handle} 타임라인`}
-        loading="lazy"
-        sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"
-      ></iframe>
+    <div class="timeline-embed" data-src={syndicationUrl}>
+      <button class="timeline-load-btn" type="button">
+        𝕏 타임라인 보기
+      </button>
     </div>
   )}
 </article>
+
+<script>
+  document.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest('.timeline-load-btn');
+    if (!btn) return;
+    const container = btn.closest('.timeline-embed') as HTMLElement;
+    if (!container) return;
+    const src = container.dataset.src;
+    if (!src) return;
+    container.innerHTML = `<iframe src="${src}" title="타임라인" loading="lazy" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>`;
+  });
+</script>
 
 <style>
 .influencer-card { display: flex; flex-direction: column; gap: var(--space-md); }
@@ -57,4 +66,21 @@ const syndicationUrl = `https://syndication.twitter.com/srv/timeline-profile/scr
 .influencer-bio { font-size: 0.875rem; color: var(--color-text-muted); line-height: 1.5; }
 .timeline-embed { border-radius: 8px; overflow: hidden; }
 .timeline-embed iframe { width: 100%; height: 500px; border: none; }
+.timeline-load-btn {
+  width: 100%;
+  padding: var(--space-md);
+  border: 1px dashed var(--color-text-muted);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-primary);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.timeline-load-btn:hover {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
 </style>

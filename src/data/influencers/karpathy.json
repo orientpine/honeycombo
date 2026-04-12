@@ -1,69 +1,7 @@
 {
-  "id": "karpathy",
-  "name": "Andrej Karpathy",
-  "platform": "x",
-  "handle": "@karpathy",
-  "bio": "AI researcher, former Tesla AI Director, OpenAI co-founder. Deep learning and LLM 전문가.",
-  "opinions": [
-    {
-      "text": "Karpathy's LLM Knowledge Base: How He Uses AI to Build and Manage His Second Brain # Codersera Apply as a Freelancer Hire Developers + 4 More 8 min to read # Karpathy's LLM Knowledge Base: How He Uses AI to Build and Manage His Second Brain ## Andrej Karpathy revealed a shift from using LLMs for code generation to building a self-maintaining personal knowledge base. Here's the full architecture and how to build your own. Share On April 3, 2026, Andrej Karpathy posted something on X that",
-      "source_url": "https://codersera.com/blog/karpathy-llm-knowledge-base-second-brain/",
-      "date": "2026-04-06T11:48:14.000Z",
-      "topic": "LLM"
-    },
-    {
-      "text": "Karpathy Stopped Using RAG. He Makes LLMs Build Entire Wikis Instead. | Aiia ← Back to blog # Karpathy Stopped Using RAG. He Makes LLMs Build Entire Wikis Instead. April 5, 2026post Andrej Karpathy dropped a tweet that hit 40K likes in two days. The idea: stop treating LLMs as search engines that retrieve and forget. Instead, have them build and maintain a persistent, structured knowledge base that compounds over time. He calls it an LLM Wiki. Two days later, he fo",
-      "source_url": "https://aiia.ro/blog/karpathy-llm-wiki-knowledge-base",
-      "date": "2026-04-05T10:00:00.000Z",
-      "topic": "LLM"
-    },
-    {
-      "text": "Andrej Karpathy's LLM Wiki Workflow: How It Works (and Why Meetings Are the Missing Source) | Proudfrog April 4, 2026 # Andrej Karpathy's LLM Wiki Workflow: How It Works (and Why Meetings Are the Missing Source) Andrej Karpathy's Obsidian LLM wiki workflow explained: how he uses LLMs to compile raw documents into a self-maintaining personal knowledge base, why it skips RAG, and what it means for meeting transcripts. knowledge-graphai-knowledgeobsidianllmworkflow In April 2026, Andrej Karpat",
-      "source_url": "https://proudfrog.com/en/insights/karpathy-llm-wiki-meeting-knowledge",
-      "date": "2026-04-04T14:37:22.000Z",
-      "topic": "LLM"
-    },
-    {
-      "text": "Karpathy's LLM Wiki: The Complete Guide to His Idea File EN On April 3, 2026, Andrej Karpathy — co-founder of OpenAI, former AI lead at Tesla, and the person who coined “vibe coding” — posted a tweet titled “LLM Knowledge Bases” describing how he now uses LLMs to build personal knowledge wikis instead of just generating code. That tweet went massively viral. The next day, he followed up with something new: an “idea file” — a GitHub gist that lays out the complete architecture, philosophy, and",
-      "source_url": "https://antigravity.codes/blog/karpathy-llm-wiki-idea-file",
-      "date": "2026-04-04T11:03:32.000Z",
-      "topic": "LLM"
-    },
-    {
-      "text": "Karpathy Reveals LLM Knowledge Base Architecture That Replaces RAG Systems - The SaaS Sentinel # Karpathy Reveals LLM Knowledge Base Architecture That Replaces RAG Systems ## Quick Facts - Andrej Karpathy developed a three-stage LLM knowledge base system that processes raw data into self-maintained markdown wikis - The approach handles 100 articles and 400,000 words without traditional RAG infrastructure or vector databases - System enables full traceability where every AI claim links back to",
-      "source_url": "https://saassentinel.com/2026/04/04/karpathy-reveals-llm-knowledge-base-architecture-that-replaces-rag-systems/",
-      "date": "2026-04-04T09:08:58.000Z",
-      "topic": "LLM"
-    },
-    {
-      "text": "Karpathy Unveils AI-Driven Knowledge Base That Bypasses Traditional Retrieval Methods — USA Daily Report # Karpathy Unveils AI-Driven Knowledge Base That Bypasses Traditional Retrieval Methods Michael Carter· April 4, 2026 · 3 min read Image via knowmax-ai-website.s3.amazonaws.com Andrej Karpathy, the AI visionary once at OpenAI and Tesla, is pushing the boundaries of artificial intelligence with a new architecture that ditches",
-      "source_url": "https://usadailyreport.com/tech/karpathy-unveils-ai-driven-knowledge-base-that-bypasses-traditional-retrieval-me",
-      "date": "2026-04-04T05:01:38.000Z",
-      "topic": "AI"
-    },
-    {
-      "text": "Karpathy Stopped Using LLMs to Write Code.He’s Using Them to Think. | by Reliable Data Engineering | Apr, 2026 | Medium Sign up Get app Sign up # Karpathy Stopped Using LLMs to Write Code.He’s Using Them to Think. ## In a detailed X post, Andrej Karpathy described a workflow where LLMs don’t just answer questions — they compile, maintain, and evolve a personal knowledge base as a living artifact. It’s the most practical rethink of how to use these tools that’s appeared in a while. 2 min re",
-      "source_url": "https://medium.com/@reliabledataengineering/karpathy-stopped-using-llms-to-write-code-hes-using-them-to-think-3bb693cb478d",
-      "date": "2026-04-04T03:17:57.000Z",
-      "topic": "LLM"
-    },
-    {
-      "text": "Karpathy shares 'LLM Knowledge Base' architecture that bypasses RAG with an evolving markdown library maintained by AI | VentureBeat 4:30 pm, PT, April 3, 2026 Credit: VentureBeat made with Midjourney AI vibe coders have yet another reason to thank Andrej Karpathy, the coiner of the term. The former Director of AI at Tesla and co-founder of OpenAI, now running his own independent AI project, recently [posted on X describing a \"LLM Knowledg",
-      "source_url": "https://venturebeat.com/data/karpathy-shares-llm-knowledge-base-architecture-that-bypasses-rag-with-an",
-      "date": "2026-04-03T23:30:50.000Z",
-      "topic": "LLM"
-    },
-    {
-      "text": "Building Personal Knowledge Bases with LLMs: The Karpathy Method | HowAIWorks.ai # Building Personal Knowledge Bases with LLMs: The Karpathy Method Explore Andrej Karpathy's workflow for using LLMs to incrementally compile and manage a massive personal knowledge base in Obsidian. April 3, 2026by HowAIWorks Team LLMKnowledge BaseObsidianProductivityAndrej KarpathyMarkdownAI AgentsAutomated Wiki ## Introduction In recent years, LLMs have fundamentally changed how we interact with code. Howev",
-      "source_url": "https://howaiworks.ai/blog/andrej-karpathy-llm-knowledge-bases",
-      "date": "2026-04-03T09:10:12.000Z",
-      "topic": "LLM"
-    },
-    {
-      "text": "The Karpathy Loop: How a 630-Line Script Is Rewriting the Rules of AI Research | by Mustafa Genc | Apr, 2026 | GoPenAI Sign up Get app Sign up ## GoPenAI Follow publication Where the ChatGPT community comes together to share insights and stories. Follow publication # The Karpathy Loop: How a 630-Line Script Is Rewriting the Rules of AI Research 15 min read 6 days ago -- Listen Share 60,000 GitHub stars. A Fortune feature. Shopify’s entire templating engine rewritten overnight. And",
-      "source_url": "https://blog.gopenai.com/the-karpathy-loop-how-a-630-line-script-is-rewriting-the-rules-of-ai-research-21190138f253",
-      "date": "2026-04-03T07:01:01.000Z",
-      "topic": "LLM"
-    }
-  ]
+    "id":  "karpathy",
+    "name":  "Andrej Karpathy",
+    "platform":  "x",
+    "handle":  "@karpathy",
+    "bio":  "AI researcher, former Tesla AI Director, OpenAI co-founder. Deep learning and LLM 전문가."
 }

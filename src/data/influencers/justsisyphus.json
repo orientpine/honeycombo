@@ -1,69 +1,7 @@
 {
-  "id": "justsisyphus",
-  "name": "Sisyphus",
-  "platform": "x",
-  "handle": "@justsisyphus",
-  "bio": "Oh My OpenCode 공식 X 계정. AI 에이전트 개발 및 오픈소스 프로젝트 업데이트.",
-  "opinions": [
-    {
-      "text": "# Repository: code-yeongyu/oh-my-openagent omo; the best agent harness - previously oh-my-opencode - Stars: 50684 - Forks: 4062 - Watchers: 50684 - Open issues: 492 - Primary language: TypeScript - Languages: TypeScript (95.5%), HTML (4.2%), Python (0.2%), JavaScript (0.1%) - License: Other (NOASSERTION) - Topics: ai, ai-agents, amp, anthropic, chatgpt, claude, claude-code, claude-skills, cursor, gemini, ide, openai, opencode, orchestration, tui, typescript - Default branch: dev - Homepage: h...",
-      "source_url": "https://github.com/code-yeongyu/oh-my-openagent",
-      "date": "2026-04-12T08:33:51.428Z",
-      "topic": "LLM"
-    },
-    {
-      "text": "# Issue: code-yeongyu/oh-my-openagent #3155 - Repository: code-yeongyu/oh-my-openagent | omo; the best agent harness - previously oh-my-opencode | 49K stars | TypeScript ## [Bug]: Execute /start-work but the agent executed is Sisyphus (main agent) not Altas (plan executor) - Author: @itokun99 - State: closed (completed) - Labels: bug - Created: 2026-04-06T10:21:34Z - Updated: 2026-04-07T01:31:55Z - Closed: 2026-04-07T01:31:54Z - Closed by: [@code-yeongyu](https:",
-      "source_url": "https://github.com/code-yeongyu/oh-my-openagent/issues/3155",
-      "date": "2026-04-06T10:21:34.000Z",
-      "topic": "AI Agent"
-    },
-    {
-      "text": "# Issue: code-yeongyu/oh-my-openagent #3146 - Repository: code-yeongyu/oh-my-openagent | omo; the best agent harness - previously oh-my-opencode | 49K stars | TypeScript ## [Bug]: OMO agents (Sisyphus, Hephaestus, Prometheus) not showing in UI type selector - Author: @tomcaokol-glitch - State: closed (completed) - Reactions: 👍 1 - Created: 2026-04-05T18:39:25Z - Updated: 2026-04-07T06:59:28Z - Closed: 2026-04-07T06:57:54Z - Closed by: [@code-yeongyu](ht",
-      "source_url": "https://github.com/code-yeongyu/oh-my-openagent/issues/3146",
-      "date": "2026-04-05T18:39:25.000Z",
-      "topic": "AI Agent"
-    },
-    {
-      "text": "# Issue: code-yeongyu/oh-my-openagent #3125 - Repository: code-yeongyu/oh-my-openagent | omo; the best agent harness - previously oh-my-opencode | 50K stars | TypeScript ## [Bug]: OMO agents (Sisyphus, Prometheus, Atlas, etc.) missing after upgrading to OpenCode 1.3.14 - Author: @regulusleow - State: closed (completed) - Reactions: 👍 7 - Created: 2026-04-04T19:32:21Z - Updated: 2026-04-08T10:32:45Z - Closed: 2026-04-05T04:29:58Z - Closed by: [@regulusleow](h",
-      "source_url": "https://github.com/code-yeongyu/oh-my-openagent/issues/3125",
-      "date": "2026-04-04T19:32:21.000Z",
-      "topic": "AI Agent"
-    },
-    {
-      "text": "# Gist: oh-my-opencode.jsonc.glm5.1 - Author: @noizbuster - Public gist (1 file) - Created: 2026-04-02T02:42:17Z - Updated: 2026-04-02T02:49:43Z ## oh-my-opencode.jsonc.glm5.1 ```1 { \"$schema\": \"https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/dev/assets/oh-my-opencode.schema.json\", \"agents\": { \"sisyphus\": { // Claude Opus 4.6 Max \"model\": \"zai-coding-plan/glm-5.1\", \"variant\": \"xhigh\", \"fallback_models\": [ \"zai-c",
-      "source_url": "https://gist.github.com/noizbuster/68072bf5d1ee7f0fefd93a9ba2f5f27a",
-      "date": "2026-04-02T02:42:17.000Z",
-      "topic": "LLM"
-    },
-    {
-      "text": "# Issue: code-yeongyu/oh-my-openagent #2985 - Repository: code-yeongyu/oh-my-openagent | omo; the best agent harness - previously oh-my-opencode | 46K stars | TypeScript ## Thank you! - Author: @tobias-weiss-ai-xr - State: open - Created: 2026-03-31T14:48:15Z - Updated: 2026-03-31T14:48:15Z Thank you for creating oh-my-opencode! This configuration framework is what makes OpenCode truly customizable. With oh-my-opencode, I can configure per-agent mode",
-      "source_url": "https://github.com/code-yeongyu/oh-my-openagent/issues/2985",
-      "date": "2026-03-31T14:48:15.000Z",
-      "topic": "AI Agent"
-    },
-    {
-      "text": "# Issue: code-yeongyu/oh-my-openagent #2967 - Repository: code-yeongyu/oh-my-openagent | omo; the best agent harness - previously oh-my-opencode | 47K stars | TypeScript ## [Bug] Sisyphus-Junior toast stuck spinning — thinking param conflicts with GLM-5-turbo's native reasoning, causing empty content and broken completion detection - Author: @zswll2 - State: closed (completed) - Created: 2026-03-31T00:37:52Z - Updated: 2026-03-31T07:36:44Z - Closed: 2026-03-31T07:",
-      "source_url": "https://github.com/code-yeongyu/oh-my-openagent/issues/2967",
-      "date": "2026-03-31T00:37:52.000Z",
-      "topic": "AI Agent"
-    },
-    {
-      "text": "# Issue: code-yeongyu/oh-my-openagent #2964 - Repository: code-yeongyu/oh-my-openagent | omo; the best agent harness - previously oh-my-opencode | 45K stars | TypeScript ## [Bug]: oh-my-opencode agent fails to recognize its role, while custom agents function correctly. - Author: @pan17 - State: open - Labels: bug - Created: 2026-03-30T18:56:09Z - Updated: 2026-03-31T10:37:56Z ### Prerequisites - [x] I will write this issue in English (see our [Language Policy](ht",
-      "source_url": "https://github.com/code-yeongyu/oh-my-openagent/issues/2964",
-      "date": "2026-03-30T18:56:09.000Z",
-      "topic": "AI Agent"
-    },
-    {
-      "text": "# Repository: oneforce/oh-my-openagent-gemini 基于oh-my-openagent 调整的给gemini cli 使用的, 具体参考 readme-gemini.md - Stars: 0 - Forks: 0 - Watchers: 0 - Open issues: 0 - Primary language: TypeScript - Languages: TypeScript (79.2%), JavaScript (16.3%), HTML (4.2%), Python (0.3%) - License: Other (NOASSERTION) - Default branch: gemini-cli - Created: 2026-03-30T07:08:07Z - Last push: 2026-03-30T07:10:26Z - Contributors: 180 (top: code-yeongyu, github-actions[bot], sisyphus-dev-ai, justsisyphus, acamq, kdc",
-      "source_url": "https://github.com/oneforce/oh-my-openagent-gemini",
-      "date": "2026-03-30T07:08:07.000Z",
-      "topic": "LLM"
-    },
-    {
-      "text": "# Issue: code-yeongyu/oh-my-openagent #2941 - Repository: code-yeongyu/oh-my-openagent | omo; the best agent harness - previously oh-my-opencode | 48K stars | TypeScript ## [Bug]: sisyphus-junior keep using gpt-5.4-mini although I have set in oh-my-opencode.json - Author: @devanenWl - State: open - Labels: bug - Reactions: 👍 1 - Created: 2026-03-29T17:26:22Z - Updated: 2026-04-03T08:16:22Z ### Prerequisites - [x] I will write this issue in English (see our [",
-      "source_url": "https://github.com/code-yeongyu/oh-my-openagent/issues/2941",
-      "date": "2026-03-29T17:26:22.000Z",
-      "topic": "LLM"
-    }
-  ]
+    "id":  "justsisyphus",
+    "name":  "Sisyphus",
+    "platform":  "x",
+    "handle":  "@justsisyphus",
+    "bio":  "Oh My OpenCode 공식 X 계정. AI 에이전트 개발 및 오픈소스 프로젝트 업데이트."
 }

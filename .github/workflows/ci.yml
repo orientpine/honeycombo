@@ -31,6 +31,12 @@ jobs:
       - name: Validate content
         run: bun run validate
 
+      - name: Validate docs format
+        run: bun run validate:docs
+
+      - name: Check docs coverage
+        run: bun run validate:docs -- --check-coverage
+        continue-on-error: true
       - name: Build
         run: bun run build
 

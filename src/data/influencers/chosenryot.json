@@ -1,69 +1,7 @@
 {
-  "id": "chosenryot",
-  "name": "Ryot",
-  "platform": "x",
-  "handle": "@chosenryot",
-  "bio": "Co-founder @ Xitadel. DeFi & Solana 생태계 전문가. 한국 Web3 커뮤니티 기여자.",
-  "opinions": [
-    {
-      "text": "Solana Foundation Launches Security Overhaul as DeFi Attacks Mount - CoinNews # Solana Foundation Launches Security Overhaul as DeFi Attacks Mount Solana Foundation Launches Major Security Overhaul Altcoins Share Last updated April 7, 2026 Altcoins The Solana Foundation has launched an aggressive, sweeping security overhaul aimed at fortifying the DeFi ecosystem built on its network – and the timing couldn’t be more charged. The announcement arrives with adversaries innovating at pace, c",
-      "source_url": "https://coinnews.com/news/solana-foundation-security-overhaul-defi-attacks/",
-      "date": "2026-04-07T09:38:50.000Z",
-      "topic": "AI"
-    },
-    {
-      "text": "Drift Protocol $285M Exploit: Largest DeFi Hack of 2026 | Coira Drift Protocol $285M Exploit: Largest DeFi Hack of 2026 | Coira Skip to main content Coira Search...⌘K Settings Technology Free # Drift Protocol Loses $285M in Largest DeFi Hack of 2026 North Korean hackers drained Solana's biggest perps DEX using socia",
-      "source_url": "https://coira.io/news/drift-protocol-285m-exploit-solana-lazarus",
-      "date": "2026-04-06T12:30:00.000Z",
-      "topic": "AI"
-    },
-    {
-      "text": "Drift Protocol $285M Hack: Fake Token Drains Solana in 12 Min | byteiota Drift Protocol, a major Solana-based decentralized exchange, lost $285 million in just 12 minutes on April 1, 2026—making it the largest DeFi hack of the year and the second-largest in Solana’s history. The attack combined social engineering with a sophisticated technical exploit involving Solana’s “durable nonces” feature and a fake token called CarbonVote (CVT). [TRM Labs suspects North Korean hackers](https://www",
-      "source_url": "https://byteiota.com/drift-protocol-285m-hack/",
-      "date": "2026-04-04T04:41:57.000Z",
-      "topic": "LLM"
-    },
-    {
-      "text": "Is Your Crypto Funding Pyonyang? Inside Solana-Based Drift Protocol $286 Million Exploit | Bitcoinist.com Trusted Editorial content, reviewed by leading industry experts and seasoned editors. Ad Disclosure Blockchain analytics firm Elliptic says the $286 million exploit of Solana-based Drift Protocol is most likely linked to the Democratic People’s Republic of Korea (DPRK). ## Solana Suffered One Of The Largest Crypto Exploits In History On April 1st, the DEX Drift Protocol suffered a major",
-      "source_url": "https://bitcoinist.com/your-crypto-funding-pyonyang-solana-drift-exploit/",
-      "date": "2026-04-03T12:36:59.000Z",
-      "topic": "AI"
-    },
-    {
-      "text": "Drift Protocol Hack: $285 Million Stolen from Solana in 12 Minutes | Fibo 📋 En bref (TL;DR) - Drift Protocol hacked: the Solana DeFi protocol lost $285 million on April 1, 2026 - Novel technique: hackers exploited Solana’s “durable nonces” to pre-sign fraudulent transactions weeks in advance - North Korea suspected: Elliptic and TRM Labs attribute the attack to the Lazarus Group, linked to the DPRK regime - Circle criticized: the USDC issuer had 6 hours to freeze stolen funds during US busine",
-      "source_url": "https://fibo-crypto.fr/en/blog/drift-protocol-hack-285-million-stolen-from-solana-in-12-minutes/",
-      "date": "2026-04-03T07:48:14.000Z",
-      "topic": "Tech"
-    },
-    {
-      "text": "Solana-based Drift Protocol Blames $270 Million Hack on ‘Durable Nonce’ - The Market Periodical Sign in Crypto News - Altcoins - Bitcoin - DeFi - Ethereum",
-      "source_url": "https://themarketperiodical.com/2026/04/03/solana-based-drift-protocol-blames-270-million-hack-on-durable-nonce/",
-      "date": "2026-04-03T07:23:00.000Z",
-      "topic": "Tech"
-    },
-    {
-      "text": "Drift Protocol Hack: $280M Solana DeFi Exploit and Governance Takeover Explained | Cryip - Home - News - Research & Analysis - Reviews & Comparisons - Learn Crypto - Features No Result View All Result - Home - News - [Research",
-      "source_url": "https://cryip.co/drift-protocol-hack-280m-solana-defi-exploit-and-governance-takeover-explained/",
-      "date": "2026-04-02T12:24:05.000Z",
-      "topic": "Research"
-    },
-    {
-      "text": "Solana Hack Drains $285M From Drift Protocol ### The Clean 16: Every Crypto Asset the SEC Just Declared a Commodity ### U.S. Debt Hits 100% of GDP as Fiscal Crisis Warnings Intensify ### IRS Refund Delays 2026: Why Refunds Are Late and “Where’s My Refund” Isn’t Updating ### SEC Declares XRP a Digital Commodity and Admits a Decade of Crypto Failure ### China Generates 40% More Power Than the US and EU, Ditching Oil ### Trump’s $65B Iran War Could Have Ended Homelessness and Rebuilt Gaza #",
-      "source_url": "https://blocknow.com/solana-hack-drift-protocol-285m-april-fools/",
-      "date": "2026-04-02T12:00:19.000Z",
-      "topic": "AI"
-    },
-    {
-      "text": "Open App 38 Score 86 Extreme High Risk ↓ ## Strykr Analysis Bearish Strykr Pulse 38/100. Solana DeFi just took a credibility hit that will take months to repair. Threat Level 4/5. Contagion risk is real, with TVL outflows and trust evaporating. If you wanted to see what a real DeFi stress test looks like, Drift Protocol just handed you the syllabus, the exam, and the answer key, all in one panicked, Solana-powered package. On April 1, 2026, the Solana-based",
-      "source_url": "https://strykr.ai/news/solana-drift-protocol-270m-meltdown-defi-faces-first-1775089878",
-      "date": "2026-04-02T00:31:18.000Z",
-      "topic": "AGI"
-    },
-    {
-      "text": "Drift Protocol SOL Exploit Sees Over $200M Drained: Biggest DeFi Hack of 2026? – Crypto News Bitcoin News Powered by Crypto News Published:Apr 1, 2026, 2:16 PM # Drift Protocol SOL Exploit Sees Over $200M Drained: Biggest DeFi Hack of 2026? Onchain analysts flagged an estimated $200 million or more, drained from Drift Protocol accounts on April 1, 2026, making it one of the largest [decentralized finance](http://www.bitcoin.com/get-started/wh",
-      "source_url": "https://news.bitcoin.com/drift-protocol-sol-exploit-sees-over-200m-drained-biggest-defi-hack-of-2026/",
-      "date": "2026-04-01T18:16:53.000Z",
-      "topic": "AI"
-    }
-  ]
+    "id":  "chosenryot",
+    "name":  "Ryot",
+    "platform":  "x",
+    "handle":  "@chosenryot",
+    "bio":  "Co-founder @ Xitadel. DeFi \u0026 Solana 생태계 전문가. 한국 Web3 커뮤니티 기여자."
 }
