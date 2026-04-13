@@ -11,9 +11,8 @@
 ## 동작 흐름
 
 ```
-influencer-sources.json (인플루언서 목록)
-  → src/data/influencers/*.json (개별 데이터 파일)
-  → Astro Content Collection (빌드 시 로드)
+src/data/influencers/*.json (개별 데이터 파일 — Content Collection 소스)
+  → Astro Content Collection (getCollection('influencers'), 빌드 시 로드)
   → /influencers/ 페이지 렌더링 (X / Threads 섹션 분리)
 ```
 
@@ -41,7 +40,7 @@ influencer-sources.json (인플루언서 목록)
 | `src/pages/influencers.astro` | 인플루언서 목록 페이지 (X/Threads 섹션 분리) |
 | `src/components/InfluencerCard.astro` | 개별 인플루언서 카드 컴포넌트 (프로필 링크 포함) |
 | `src/schemas/influencer.ts` | Zod 스키마 (`id`, `name`, `platform`, `handle`, `bio`) |
-| `src/config/influencer-sources.json` | 인플루언서 마스터 목록 (추가/수정 시 이 파일 편집) |
+| `src/config/influencer-sources.json` | 인플루언서 마스터 목록 (참고용, 코드에서 직접 import하지 않음) |
 | `src/data/influencers/*.json` | 개별 인플루언서 데이터 파일 (Content Collection 소스) |
 | `src/content.config.ts` | Astro Content Collection 정의 (`influencers` 컬렉션) |
 
@@ -70,7 +69,7 @@ influencer-sources.json (인플루언서 목록)
 
 ## 인플루언서 추가 방법
 
-1. `src/config/influencer-sources.json`에 새 항목 추가:
+1. `src/data/influencers/{id}.json` 데이터 파일 생성 (**실제 빌드에 사용되는 소스**):
    ```json
    {
      "id": "new-person",
@@ -80,7 +79,7 @@ influencer-sources.json (인플루언서 목록)
      "bio": "간단한 소개 (300자 이내)"
    }
    ```
-2. `src/data/influencers/{id}.json`에 동일한 데이터 파일 생성
+2. (선택) `src/config/influencer-sources.json`에도 동일 항목 추가 (참고용 마스터 목록)
 3. `bun run build`로 빌드 검증
 
 ## 설정값

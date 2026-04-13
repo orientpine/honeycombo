@@ -230,12 +230,15 @@ async function main(): Promise<void> {
     const warnings = analyzeChangeCoverage(await getGitDiffFiles(baseRef));
 
     for (const warning of warnings) {
-      console.warn(`⚠️  ${warning.message}`);
+      console.error(`❌ ${warning.message}`);
     }
 
-    if (warnings.length === 0) {
-      console.log('✅ 문서 변경 범위 검사 통과');
+    if (warnings.length > 0) {
+      console.error(`\n❌ 문서 커버리지 검사 실패: 코드 변경에 대응하는 docs/ 업데이트가 필요합니다.`);
+      process.exit(1);
     }
+
+    console.log('✅ 문서 변경 범위 검사 통과');
   }
 
   console.log(`✅ 모든 문서 유효: ${markdownFiles.length}개 파일`);

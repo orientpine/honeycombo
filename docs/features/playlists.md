@@ -109,6 +109,7 @@
 | `src/components/PlaylistCard.astro` | 플레이리스트 카드 컴포넌트 |
 | `src/components/AddToPlaylist.astro` | 기사에 "플레이리스트에 추가" 드롭다운 |
 | `src/pages/admin/playlists.astro` | 관리자 플레이리스트 승인/반려 UI 페이지 |
+| `src/components/ArticleCard.astro` | 기사 카드 (각 기사에 AddToPlaylist 버튼 포함) |
 
 ### 백엔드 (Cloudflare Functions)
 
@@ -121,8 +122,8 @@
 | `functions/api/playlists/[id]/items/[itemId].ts` | PUT/DELETE (기사 수정/삭제) |
 | `functions/api/playlists/[id]/visibility.ts` | PUT (공개 범위 변경) |
 | `functions/api/admin/playlists/pending.ts` | GET (관리자: 승인 대기 목록) |
-| `functions/api/admin/playlists/[id]/approve.ts` | POST (관리자: 승인) |
-| `functions/api/admin/playlists/[id]/reject.ts` | POST (관리자: 반려) |
+| `functions/api/admin/playlists/[id]/approve.ts` | PUT (관리자: 승인) |
+| `functions/api/admin/playlists/[id]/reject.ts` | PUT (관리자: 반려) |
 
 ### 비즈니스 로직
 

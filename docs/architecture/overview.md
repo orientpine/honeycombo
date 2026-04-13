@@ -73,8 +73,8 @@
 | `api/playlists/[id]/items/[itemId].ts` | PUT/DELETE (기사 수정/삭제) |
 | `api/playlists/[id]/visibility.ts` | PUT (공개 범위 변경) |
 | `api/admin/playlists/pending.ts` | GET (관리자: 승인 대기 목록) |
-| `api/admin/playlists/[id]/approve.ts` | POST (관리자: 승인) |
-| `api/admin/playlists/[id]/reject.ts` | POST (관리자: 반려) |
+| `api/admin/playlists/[id]/approve.ts` | PUT (관리자: 승인) |
+| `api/admin/playlists/[id]/reject.ts` | PUT (관리자: 반려) |
 | `p/[id].ts` | 유저 플레이리스트 SSR (아이템 관리, 기사 검색, 외부 URL 추가) |
 | `lib/auth.ts` | 세션 관리 (upsertUser, createSession, getSession) |
 | `lib/playlists.ts` | 플레이리스트 CRUD, 목록 조회, 포함 여부 확인 |
