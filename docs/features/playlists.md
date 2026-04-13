@@ -69,8 +69,8 @@
 ```
 
 - 소유자에게만 상세 페이지 카드별 관리 버튼(`삭제`, `↑`, `↓`, `💬 메모 수정/추가`)을 노출한다.
-- 삭제 성공 시 카드가 페이드아웃 후 DOM에서 제거된다.
-- 순서 이동은 인접 두 아이템의 `position`을 서로 바꾸는 방식으로 처리한다.
+- 삭제 성공 시 카드가 페이드아웃 후 DOM에서 제거되며, 헤더의 기사 수(`N개 기사`)가 자동으로 -1 갱신된다.
+- 순서 이동은 인접 두 아이템의 `position`을 서로 바꾸는 방식으로 처리한다. 실패 시 `window.location.reload()`로 서버 상태를 즉시 동기화한다.
 - 메모 수정은 카드 내부 인라인 에디터에서 수행하며, 저장 성공 시 화면 표시를 즉시 갱신한다.
 
 ### 공개 플레이리스트 승인
@@ -208,6 +208,7 @@
 
 - [아키텍처 개요](../architecture/overview.md)
 - [플레이리스트 데이터 미스매치 트러블슈팅](../troubleshooting/playlist-data-mismatch.md)
+- [플레이리스트 검색 렌더링·순서 변경 트러블슈팅](../troubleshooting/playlist-detail-search-and-reorder.md)
 
 ## 변경 이력
 
@@ -222,3 +223,4 @@
 | 2026-04-13 | AddToPlaylist 드롭다운 UI 개선 — 브라우저 기본 버튼 스타일 리셋(`appearance`, `font-family`, `outline`), 아이템 간 `border-bottom` 제거, `focus-visible` 상태 추가. Navigation의 auth-dropdown 패턴과 시각적 일관성 확보 |
 | 2026-04-13 | 에디터/커뮤니티 플레이리스트 통합 — playlist_type, tags 지원, 정적 시스템 제거 |
 | 2026-04-13 | 좋아요 시스템 추가, 트렌딩 페이지 연동 |
+| 2026-04-13 | 검색 결과 HTML `\n` 이스케이프 수정, 기사 수 동적 갱신(`updateItemCount`), 순서 변경 실패 시 reload 동기화 반영 |
