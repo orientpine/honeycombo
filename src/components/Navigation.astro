@@ -12,7 +12,7 @@ const navItems = [
 const currentPath = Astro.url.pathname;
 ---
 
-<nav data-testid="nav-main" class="nav">
+<nav data-testid="nav-main" class="nav" transition:persist>
   <div class="container nav-inner">
     <a href="/" class="nav-logo">HONEYCOMBO</a>
     <button class="nav-toggle" id="nav-toggle" aria-label="메뉴 열기" aria-expanded="false">
@@ -70,35 +70,14 @@ const currentPath = Astro.url.pathname;
 </script>
 
 <script>
-document.addEventListener('astro:page-load', () => {
-  const navToggle = document.getElementById('nav-toggle');
-  if (navToggle) {
-    navToggle.addEventListener('click', () => {
-      const links = document.getElementById('nav-links');
-      if (links) {
-        const isOpen = links.classList.toggle('open');
-        navToggle.classList.toggle('open', isOpen);
-        navToggle.setAttribute('aria-expanded', String(isOpen));
-      }
-    });
-  }
-
 const AUTH_CACHE_KEY = 'honeycombo:auth';
 
 function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
 function toAuthCache(user: any): { username: string; avatar_url: string; is_admin: boolean } {
-  return {
-    username: String(user.username || ''),
-    avatar_url: String(user.avatar_url || ''),
-    is_admin: !!user.is_admin,
-  };
+  return { username: String(user.username || ''), avatar_url: String(user.avatar_url || ''), is_admin: !!user.is_admin };
 }
 
 function renderAuthUser(authArea: HTMLElement, user: { username: string; avatar_url: string; is_admin: boolean }) {
@@ -131,30 +110,56 @@ function bindLogout(authArea: HTMLElement) {
   }
 }
 
+// Initial setup — runs once (nav persists via transition:persist)
+const navToggle = document.getElementById('nav-toggle');
+if (navToggle) {
+  navToggle.addEventListener('click', () => {
+    const links = document.getElementById('nav-links');
+    if (links) {
+      const isOpen = links.classList.toggle('open');
+      navToggle.classList.toggle('open', isOpen);
+      navToggle.setAttribute('aria-expanded', String(isOpen));
+    }
+  });
+}
+
+const authArea = document.getElementById('auth-area');
+if (authArea) bindLogout(authArea);
+
+// Update active nav link on client-side navigation (nav persists, active state is stale)
+document.addEventListener('astro:after-swap', () => {
+  const currentPath = window.location.pathname;
+  document.querySelectorAll<HTMLAnchorElement>('.nav-link').forEach(link => {
+    const href = link.getAttribute('href');
+    const isActive = href === currentPath || (href !== '/' && href !== null && currentPath.startsWith(href));
+    link.classList.toggle('active', isActive);
+  });
+});
+
+// Background auth verify on every navigation
+document.addEventListener('astro:page-load', () => {
   const authArea = document.getElementById('auth-area');
-  if (authArea) {
-    bindLogout(authArea);
+  if (!authArea) return;
 
-    let cachedRaw: string | null = null;
-    try { cachedRaw = sessionStorage.getItem(AUTH_CACHE_KEY); } catch (_) {}
+  let cachedRaw: string | null = null;
+  try { cachedRaw = sessionStorage.getItem(AUTH_CACHE_KEY); } catch (_) {}
 
-    fetch('/api/auth/me').then(async (res) => {
-      if (res.ok) {
-        const user = await res.json();
-        const fresh = JSON.stringify(toAuthCache(user));
-        if (fresh !== cachedRaw) {
-          renderAuthUser(authArea, toAuthCache(user));
-          bindLogout(authArea);
-          try { sessionStorage.setItem(AUTH_CACHE_KEY, fresh); } catch (_) {}
-        }
-      } else if (res.status === 401) {
-        if (cachedRaw !== 'guest') {
-          renderLoginBtn(authArea);
-          try { sessionStorage.setItem(AUTH_CACHE_KEY, 'guest'); } catch (_) {}
-        }
+  fetch('/api/auth/me').then(async (res) => {
+    if (res.ok) {
+      const user = await res.json();
+      const fresh = JSON.stringify(toAuthCache(user));
+      if (fresh !== cachedRaw) {
+        renderAuthUser(authArea, toAuthCache(user));
+        bindLogout(authArea);
+        try { sessionStorage.setItem(AUTH_CACHE_KEY, fresh); } catch (_) {}
       }
-    }).catch(() => {});
-  }
+    } else if (res.status === 401) {
+      if (cachedRaw !== 'guest') {
+        renderLoginBtn(authArea);
+        try { sessionStorage.setItem(AUTH_CACHE_KEY, 'guest'); } catch (_) {}
+      }
+    }
+  }).catch(() => {});
 });
 </script>
 
