@@ -11,9 +11,6 @@ const { curatedCount, submittedCount, feedCount } = Astro.props;
   <button class="source-filter-btn active" data-origin="all">
     전체 <span class="source-count">{curatedCount + submittedCount + feedCount}</span>
   </button>
-  <button class="source-filter-btn" data-origin="curated">
-    에디터 추천 <span class="source-count">{curatedCount}</span>
-  </button>
   <button class="source-filter-btn" data-origin="submitted">
     제출 기사 <span class="source-count">{submittedCount}</span>
   </button>

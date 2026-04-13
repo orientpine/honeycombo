@@ -166,11 +166,7 @@ function initAddToPlaylistContainers(root?: Element | Document) {
 // Expose globally for dynamic content (e.g., TagFilter cross-page rendering)
 (window as any).__initAddToPlaylistContainers = initAddToPlaylistContainers;
 
-if (document.readyState === 'loading') {
-  document.addEventListener('astro:page-load', () => initAddToPlaylistContainers());
-} else {
-  initAddToPlaylistContainers();
-}
+document.addEventListener('astro:page-load', () => initAddToPlaylistContainers());
 </script>
 
 <style is:global>
