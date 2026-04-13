@@ -79,19 +79,26 @@ const handler = async (context: AdminContext): Promise<Response> => {
         return json({ error: 'description_snapshot must be a string or null' }, 400);
       }
 
-      const item = await addMustReadItem(env.DB, {
-        id: generateId(),
-        source_id: source_id.trim(),
-        item_type,
-        title_snapshot: title_snapshot.trim(),
-        url_snapshot: url_snapshot.trim(),
-        source_snapshot: typeof source_snapshot === 'string' ? source_snapshot : null,
-        description_snapshot: typeof description_snapshot === 'string' ? description_snapshot : null,
-        position: await getNextPosition(env.DB),
-        added_by: data.user.id,
-      });
+      try {
+        const item = await addMustReadItem(env.DB, {
+          id: generateId(),
+          source_id: source_id.trim(),
+          item_type,
+          title_snapshot: title_snapshot.trim(),
+          url_snapshot: url_snapshot.trim(),
+          source_snapshot: typeof source_snapshot === 'string' ? source_snapshot : null,
+          description_snapshot: typeof description_snapshot === 'string' ? description_snapshot : null,
+          position: await getNextPosition(env.DB),
+          added_by: data.user.id,
+        });
 
-      return json(item, 201);
+        return json(item, 201);
+      } catch (insertErr: unknown) {
+        const msg = insertErr instanceof Error ? insertErr.message : '';
+        if (msg.includes('UNIQUE constraint failed')) {
+          return json({ error: '이미 추가된 기사입니다.' }, 409);
+        }
+        throw insertErr;
     }
 
     return json({ error: 'Method not allowed' }, 405);

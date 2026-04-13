@@ -87,7 +87,14 @@ const PAGE_STYLES = `
 
 export const onRequest: AppPagesFunction = async (context: { env: Env; request: Request }) => {
   const { env, request } = context;
-  const items = await listMustReadItems(env.DB);
+  let items: MustReadItemRow[] = [];
+
+  try {
+    items = await listMustReadItems(env.DB);
+  } catch {
+    // DB not ready or migration not applied — render empty state gracefully
+  }
+
   const canonicalUrl = getCanonicalUrl(request.url);
 
   const html = renderDocument({

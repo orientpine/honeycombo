@@ -15,3 +15,4 @@ CREATE TABLE IF NOT EXISTS must_read_items (
 );
 
 CREATE INDEX IF NOT EXISTS idx_must_read_position ON must_read_items(position);
+CREATE UNIQUE INDEX IF NOT EXISTS uq_must_read_source ON must_read_items(source_id, item_type);

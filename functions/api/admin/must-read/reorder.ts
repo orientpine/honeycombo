@@ -1,5 +1,5 @@
 import { isAdmin } from '../../../lib/admin';
-import { reorderMustReadItems } from '../../../lib/must-read';
+import { listMustReadItems, reorderMustReadItems } from '../../../lib/must-read';
 import type { AppPagesFunction, ContextData, Env } from '../../../lib/types';
 
 type AdminContext = {
@@ -47,6 +47,18 @@ const handler = async (context: AdminContext): Promise<Response> => {
 
     if (!Array.isArray(ids) || ids.length === 0 || !ids.every((id) => typeof id === 'string' && id.length > 0)) {
       return json({ error: 'ids must be a non-empty array of strings' }, 400);
+    }
+
+    const uniqueIds = new Set(ids);
+    if (uniqueIds.size !== ids.length) {
+      return json({ error: 'ids must not contain duplicates' }, 400);
+    }
+
+    const existingItems = await listMustReadItems(env.DB);
+    const existingIds = new Set(existingItems.map(i => i.id));
+    const invalidIds = ids.filter(id => !existingIds.has(id));
+    if (invalidIds.length > 0) {
+      return json({ error: `Unknown item ids: ${invalidIds.join(', ')}` }, 400);
     }
 
     await reorderMustReadItems(env.DB, ids);
