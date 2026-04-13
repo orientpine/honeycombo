@@ -28,8 +28,8 @@
 ### 프론트엔드
 | 파일 | 역할 |
 |------|------|
-| `src/pages/trending.astro` | 트렌딩 페이지 Astro shell + client-side 렌더링 |
-| `functions/trending.ts` | 레거시 SSR fallback (직접 라우팅하지 않음) |
+| `src/pages/trending.astro` | 트렌딩 페이지 Astro shell + client-side 렌더링. `/playlists` 페이지와 동일한 카드 UI 패턴(`playlist-card`, `playlist-header`, `playlist-footer`, `playlist-curator`) 사용 |
+| `functions/trending.ts` | 레거시 SSR fallback (직접 라우팅하지 않음). Astro 페이지와 동일한 `playlist-card` 구조 사용 |
 | `functions/p/[id].ts` | 플레이리스트 상세 페이지 (좋아요 버튼 포함) |
 
 ### 백엔드
@@ -76,3 +76,4 @@
 |------|----------|
 | 2026-04-13 | 최초 작성 — 트렌딩 플레이리스트 기능 문서화 |
 | 2026-04-13 | Astro View Transitions 호환을 위해 `/trending`을 정적 shell + client fetch 구조로 전환 |
+| 2026-04-14 | 카드 UI를 `/playlists` 페이지 패턴(`playlist-card`)으로 통일 — `trending-card` 구조 제거 |

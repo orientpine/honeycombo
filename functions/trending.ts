@@ -25,13 +25,11 @@ function getPageHref(page: number): string {
   return page <= 1 ? '/trending' : `/trending?page=${page}`;
 }
 
-function renderAvatar(playlist: TrendingPlaylistItem): string {
+function renderCuratorAvatar(playlist: TrendingPlaylistItem): string {
   if (playlist.user.avatar_url) {
-    return `<img src="${escapeAttr(playlist.user.avatar_url)}" alt="" class="avatar">`;
+    return `<img src="${escapeAttr(playlist.user.avatar_url)}" alt="" class="curator-avatar" /> `;
   }
-
-  const fallback = playlist.user.username.trim().charAt(0).toUpperCase() || 'H';
-  return `<span class="avatar avatar-fallback" aria-hidden="true">${escapeHtml(fallback)}</span>`;
+  return '';
 }
 
 function renderPagination(currentPage: number, totalPages: number): string {
@@ -82,34 +80,37 @@ function renderCards(playlists: TrendingPlaylistItem[], currentPage: number, isL
       const description = playlist.description?.trim() || `${getOwnerName(playlist)}의 플레이리스트 · ${playlist.item_count}개 기사`;
       const likeButtonLabel = playlist.user_liked ? '좋아요 취소' : '좋아요';
       const likeIcon = playlist.user_liked ? '♥' : '♡';
+      const username = playlist.user.username || 'unknown';
 
       return `
-        <article class="card trending-card">
-          <div class="trending-card-top">
-            <span class="rank-badge">#${rank}</span>
-            <span class="like-count" data-like-count-for="${escapeAttr(playlist.id)}">❤️ ${playlist.like_count}</span>
+        <article class="card playlist-card">
+          <div class="playlist-header">
+            <h3 class="playlist-title"><a href="/p/${escapeAttr(playlist.id)}">${escapeHtml(playlist.title)}</a></h3>
+            <span class="playlist-count">${playlist.item_count}개</span>
           </div>
-          <h2 class="playlist-title"><a href="/p/${escapeAttr(playlist.id)}">${escapeHtml(playlist.title)}</a></h2>
           <p class="playlist-description">${escapeHtml(description)}</p>
-          <div class="playlist-author">
-            ${renderAvatar(playlist)}
-            <span>${escapeHtml(getOwnerName(playlist))}</span>
-          </div>
           <div class="playlist-footer">
-            <span class="badge">${playlist.item_count}개 기사</span>
-            <button
-              type="button"
-              class="btn like-button${playlist.user_liked ? ' is-liked' : ''}"
-              data-playlist-id="${escapeAttr(playlist.id)}"
-              data-liked="${playlist.user_liked ? 'true' : 'false'}"
-              data-like-count="${playlist.like_count}"
-              data-authenticated="${isLoggedIn ? 'true' : 'false'}"
-              aria-pressed="${playlist.user_liked ? 'true' : 'false'}"
-              aria-label="${escapeAttr(likeButtonLabel)}"
-            >
-              <span class="like-button-icon" aria-hidden="true">${likeIcon}</span>
-              <span class="like-button-label">좋아요</span>
-            </button>
+            <span class="playlist-curator">
+              ${renderCuratorAvatar(playlist)}
+              by @${escapeHtml(username)}
+            </span>
+            <span class="trending-stats">
+              <span class="rank-badge">#${rank}</span>
+              <span class="like-count" data-like-count-for="${escapeAttr(playlist.id)}">❤️ ${playlist.like_count}</span>
+              <button
+                type="button"
+                class="btn like-button${playlist.user_liked ? ' is-liked' : ''}"
+                data-playlist-id="${escapeAttr(playlist.id)}"
+                data-liked="${playlist.user_liked ? 'true' : 'false'}"
+                data-like-count="${playlist.like_count}"
+                data-authenticated="${isLoggedIn ? 'true' : 'false'}"
+                aria-pressed="${playlist.user_liked ? 'true' : 'false'}"
+                aria-label="${escapeAttr(likeButtonLabel)}"
+              >
+                <span class="like-button-icon" aria-hidden="true">${likeIcon}</span>
+                <span class="like-button-label">좋아요</span>
+              </button>
+            </span>
           </div>
         </article>`;
     })
@@ -165,19 +166,79 @@ const PAGE_STYLES = `
         align-items: stretch;
       }
 
-      .trending-card {
+      /* Card structure — playlists page 패턴 일치 */
+      .playlist-card {
         display: flex;
         flex-direction: column;
-        gap: var(--space-md);
-        min-height: 100%;
+        gap: var(--space-sm);
+        color: var(--color-text);
       }
 
-      .trending-card-top,
-      .playlist-footer,
-      .playlist-author {
+      .playlist-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+
+      .playlist-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+      }
+
+      .playlist-title a {
+        color: var(--color-text);
+        text-decoration: none;
+      }
+
+      .playlist-title a:hover {
+        color: var(--color-primary);
+      }
+
+      .playlist-count {
+        font-size: 0.8rem;
+        color: var(--color-text-muted);
+        background: var(--color-bg-secondary);
+        padding: 2px var(--space-sm);
+        border-radius: var(--radius-sm);
+        white-space: nowrap;
+      }
+
+      .playlist-description {
+        font-size: 0.875rem;
+        color: var(--color-text-muted);
+        line-height: 1.5;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .playlist-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: auto;
+      }
+
+      .playlist-curator {
+        font-size: 0.8rem;
+        color: var(--color-text-muted);
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        gap: 4px;
+      }
+
+      .curator-avatar {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      /* Trending-specific: rank + likes + button */
+      .trending-stats {
+        display: flex;
+        align-items: center;
         gap: var(--space-sm);
       }
 
@@ -185,55 +246,25 @@ const PAGE_STYLES = `
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-width: 3rem;
-        padding: 0.35rem 0.75rem;
+        min-width: 2.5rem;
+        padding: 0.2rem 0.5rem;
         border-radius: 999px;
         background: var(--color-accent);
         color: var(--color-text);
         font-weight: 800;
+        font-size: 0.8rem;
       }
 
       .like-count {
         color: var(--color-text-muted);
+        font-size: 0.8rem;
         font-weight: 600;
-      }
-
-      .playlist-title {
-        font-size: 1.2rem;
-        line-height: 1.4;
-      }
-
-      .playlist-title a {
-        color: var(--color-text);
-      }
-
-      .playlist-title a:hover {
-        color: var(--color-primary);
-      }
-
-      .playlist-description {
-        color: var(--color-text-muted);
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-        overflow: hidden;
-        min-height: 3.2em;
-      }
-
-      .playlist-author {
-        justify-content: flex-start;
-        color: var(--color-text);
-        font-weight: 600;
-      }
-
-      .playlist-footer {
-        margin-top: auto;
-        align-items: flex-end;
       }
 
       .like-button {
-        min-width: 6.5rem;
+        font-size: 0.8rem;
         font-weight: 700;
+        padding: var(--space-xs) var(--space-sm);
       }
 
       .like-button.is-liked {
@@ -254,12 +285,14 @@ const PAGE_STYLES = `
       }
 
       @media (max-width: 768px) {
-        .trending-card-top, .playlist-footer {
-          align-items: flex-start;
+        .playlist-footer {
           flex-direction: column;
+          align-items: flex-start;
+          gap: var(--space-sm);
         }
-        .playlist-footer .btn {
+        .trending-stats {
           width: 100%;
+          justify-content: flex-end;
         }
       }`;
 
