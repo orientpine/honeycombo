@@ -22,19 +22,30 @@ const { curatedCount, submittedCount, feedCount } = Astro.props;
   </button>
 </div>
 
+<p class="source-filter-empty" data-testid="source-filter-empty" style="display:none;">
+  이 페이지에 해당하는 기사가 없습니다.
+</p>
+
 <script>
 function filterByOrigin(origin: string) {
   const cards = document.querySelectorAll<HTMLElement>('[data-testid="article-card"]');
   const buttons = document.querySelectorAll<HTMLElement>('[data-testid="source-filter"] .source-filter-btn');
+  const emptyState = document.querySelector<HTMLElement>('[data-testid="source-filter-empty"]');
 
   buttons.forEach(btn => {
     btn.classList.toggle('active', btn.dataset.origin === origin);
   });
 
+  let visibleCount = 0;
   cards.forEach(card => {
     const show = origin === 'all' || card.dataset.origin === origin;
     card.style.display = show ? '' : 'none';
+    if (show) visibleCount++;
   });
+
+  if (emptyState) {
+    emptyState.style.display = visibleCount === 0 && origin !== 'all' ? '' : 'none';
+  }
 
   const url = new URL(window.location.href);
   if (origin === 'all') {
@@ -47,7 +58,20 @@ function filterByOrigin(origin: string) {
 
 function initSourceFilter() {
   const buttons = document.querySelectorAll<HTMLElement>('[data-testid="source-filter"] .source-filter-btn');
+  const cards = document.querySelectorAll<HTMLElement>('[data-testid="article-card"]');
   const validOrigins = new Set(Array.from(buttons).map(b => b.dataset.origin));
+
+  // Recalculate counts from rendered cards (page-local) to avoid global/page mismatch
+  const localCounts: Record<string, number> = { all: cards.length, curated: 0, submitted: 0, feed: 0 };
+  cards.forEach(card => {
+    const origin = card.dataset.origin;
+    if (origin && origin in localCounts) localCounts[origin]++;
+  });
+  buttons.forEach(btn => {
+    const origin = btn.dataset.origin || 'all';
+    const countEl = btn.querySelector('.source-count');
+    if (countEl && origin in localCounts) countEl.textContent = String(localCounts[origin]);
+  });
 
   buttons.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -104,5 +128,11 @@ if (document.readyState === 'loading') {
 }
 .source-filter-btn.active .source-count {
   opacity: 1;
+}
+.source-filter-empty {
+  text-align: center;
+  padding: var(--space-xl);
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
 }
 </style>
