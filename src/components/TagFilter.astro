@@ -13,21 +13,146 @@ const { tags } = Astro.props;
   ))}
 </div>
 
-<script>
-function filterByTag(tag: string) {
-  const cards = document.querySelectorAll('[data-testid="article-card"]');
-  const buttons = document.querySelectorAll('[data-testid="tag-filter"] .tag');
+<!-- Container for dynamically-rendered cross-page results -->
+<div class="tag-filtered-results" id="tag-filtered-results" style="display:none;">
+  <div class="tag-filtered-header">
+    <span id="tag-filtered-count"></span>
+  </div>
+  <div class="article-grid grid grid-3" id="tag-filtered-grid"></div>
+</div>
 
+<script>
+interface ClientArticle {
+  _id: string;
+  title: string;
+  url: string;
+  source: string;
+  type: string;
+  description?: string;
+  tags: string[];
+  date: string;
+  thumbnail_url?: string;
+  articleOrigin: 'curated' | 'submitted' | 'feed';
+  slug?: string;
+  isExternal: boolean;
+}
+
+let allArticlesCache: ClientArticle[] | null = null;
+
+function getAllArticles(): ClientArticle[] {
+  if (allArticlesCache) return allArticlesCache;
+  const el = document.getElementById('all-articles-data');
+  if (!el?.textContent) return [];
+  try {
+    allArticlesCache = JSON.parse(el.textContent) as ClientArticle[];
+  } catch {
+    allArticlesCache = [];
+  }
+  return allArticlesCache;
+}
+
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function renderCard(a: ClientArticle): string {
+  const articleUrl = a.isExternal ? a.url : `/articles/${a.slug || a._id}`;
+  const target = a.isExternal ? ' target="_blank" rel="noopener noreferrer"' : '';
+  const formatted = new Date(a.date).toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' });
+  const title = escapeHtml(a.title);
+  const source = escapeHtml(a.source);
+
+  const thumb = a.thumbnail_url
+    ? `<div class="article-thumbnail"><img src="${escapeHtml(a.thumbnail_url)}" alt="" loading="lazy" width="300" height="160" /></div>`
+    : '';
+
+  const originBadge = a.articleOrigin === 'curated'
+    ? '<span class="badge badge-curated">에디터 추천</span>'
+    : a.articleOrigin === 'submitted'
+      ? '<span class="badge badge-submitted">검토 중</span>'
+      : '';
+
+  const typeBadge = a.type === 'youtube' ? '<span class="badge badge-primary">YouTube</span>' : '';
+
+  const desc = a.description
+    ? `<p class="article-description">${escapeHtml(a.description.length > 200 ? a.description.slice(0, 200) + '...' : a.description)}</p>`
+    : '';
+
+  const tagsHtml = a.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('');
+  const tagsAttr = a.tags.map(t => escapeHtml(t)).join(',');
+
+  return `<article class="card article-card" data-testid="article-card" data-tags="${tagsAttr}" data-origin="${a.articleOrigin}">
+  ${thumb}
+  <div class="article-body">
+    <div class="article-meta">
+      ${originBadge}
+      <span class="badge">${source}</span>
+      ${typeBadge}
+      <time class="article-date" datetime="${a.date}">${formatted}</time>
+    </div>
+    <h3 class="article-title">
+      <a href="${escapeHtml(articleUrl)}"${target}>${title}</a>
+    </h3>
+    ${desc}
+    <div class="article-tags">${tagsHtml}</div>
+  </div>
+</article>`;
+}
+
+function filterByTag(tag: string) {
+  const ssrCards = document.querySelectorAll('[data-testid="article-list"] [data-testid="article-card"]');
+  const buttons = document.querySelectorAll('[data-testid="tag-filter"] .tag');
+  const ssrList = document.querySelector('[data-testid="article-list"]') as HTMLElement | null;
+  const pagination = document.querySelector('.pagination') as HTMLElement | null;
+  const filteredContainer = document.getElementById('tag-filtered-results');
+  const filteredGrid = document.getElementById('tag-filtered-grid');
+  const filteredCount = document.getElementById('tag-filtered-count');
+
+  // Update active button state
   buttons.forEach(btn => {
     btn.classList.toggle('active', (btn as HTMLElement).dataset.tag === tag);
   });
 
-  cards.forEach(card => {
-    const cardTags = (card as HTMLElement).dataset.tags?.split(',') || [];
-    const show = tag === 'all' || cardTags.includes(tag);
-    (card as HTMLElement).style.display = show ? '' : 'none';
-  });
+  if (tag === 'all') {
+    // Restore original SSR-rendered view
+    ssrCards.forEach(card => {
+      (card as HTMLElement).style.display = '';
+    });
+    if (ssrList) ssrList.style.display = '';
+    if (pagination) pagination.style.display = '';
+    if (filteredContainer) filteredContainer.style.display = 'none';
 
+    // Re-apply source filter if active
+    const activeOrigin = document.querySelector<HTMLElement>('[data-testid="source-filter"] .source-filter-btn.active');
+    if (activeOrigin && activeOrigin.dataset.origin && activeOrigin.dataset.origin !== 'all') {
+      const origin = activeOrigin.dataset.origin;
+      ssrCards.forEach(card => {
+        const el = card as HTMLElement;
+        el.style.display = el.dataset.origin === origin ? '' : 'none';
+      });
+    }
+  } else {
+    // Load all articles from embedded JSON and filter by tag
+    const articles = getAllArticles();
+    const matched = articles.filter(a => a.tags.includes(tag));
+
+    // Hide SSR-rendered list and pagination
+    if (ssrList) ssrList.style.display = 'none';
+    if (pagination) pagination.style.display = 'none';
+
+    // Render filtered results
+    if (filteredContainer && filteredGrid && filteredCount) {
+      filteredContainer.style.display = '';
+      filteredCount.textContent = `"${escapeHtml(tag)}" 태그 기사 ${matched.length}건`;
+      filteredGrid.innerHTML = matched.map(renderCard).join('');
+    }
+  }
+
+  // Update URL param
   const url = new URL(window.location.href);
   if (tag === 'all') {
     url.searchParams.delete('tag');
@@ -67,4 +192,12 @@ if (document.readyState === 'loading') {
 .tag-filter { display: flex; flex-wrap: wrap; gap: var(--space-xs); align-items: center; margin-bottom: var(--space-lg); }
 .tag-filter-label { font-size: 0.875rem; color: var(--color-text-muted); margin-right: var(--space-xs); }
 .tag-filter .tag { cursor: pointer; border: none; font-family: inherit; font-size: 0.75rem; }
+
+.tag-filtered-results { margin-top: var(--space-md); }
+.tag-filtered-header {
+  margin-bottom: var(--space-md);
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
 </style>

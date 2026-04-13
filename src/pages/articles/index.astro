@@ -7,6 +7,7 @@ import TagFilter from '../../components/TagFilter.astro';
 import PersonalizationBar from '../../components/PersonalizationBar.astro';
 import SourceFilter from '../../components/SourceFilter.astro';
 import { compareArticles } from '../../lib/article-sort';
+import { serializeArticles } from '../../lib/serialize-articles';
 
 const ITEMS_PER_PAGE = 20;
 
@@ -43,6 +44,7 @@ const allTags = [...new Set(allArticles.flatMap(a => a.tags))].sort();
 const curatedCount = allArticles.filter(a => a._type === 'curated').length;
 const submittedCount = allArticles.filter(a => a._type === 'submitted').length;
 const feedCount = allArticles.filter(a => a._type === 'feed').length;
+const allArticlesJson = serializeArticles(allArticles);
 ---
 
 <BaseLayout title="기사 목록 — HoneyCombo" description="최신 기술 뉴스와 큐레이션 기사">
@@ -83,6 +85,7 @@ const feedCount = allArticles.filter(a => a._type === 'feed').length;
   )}
   
   <Pagination currentPage={1} totalPages={totalPages} baseUrl="/articles" />
+  <script type="application/json" id="all-articles-data" set:html={allArticlesJson} />
 </BaseLayout>
 
 <style>
