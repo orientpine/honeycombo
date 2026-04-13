@@ -13,9 +13,13 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <style>
       /* Decap CMS publish dropdown — prevent text truncation */
-      [class*="Dropdown"] ul {
+      #nc-root ul[role="menu"] {
         min-width: max-content !important;
+      }
+      #nc-root [role="menuitem"] {
         white-space: nowrap !important;
+        overflow: visible !important;
+        text-overflow: unset !important;
       }
     </style>
   </head>
