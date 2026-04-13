@@ -32,7 +32,7 @@ const currentPath = Astro.url.pathname;
         </li>
       ))}
     </ul>
-    <div id="auth-area" class="auth-area"></div>
+    <div id="auth-area" class="auth-area"><a href="/api/auth/github/login" class="auth-login-btn">로그인</a></div>
   </div>
 </nav>
 
@@ -109,15 +109,8 @@ if (authArea) {
       } catch (_) {
         try { sessionStorage.removeItem(AUTH_CACHE_KEY); } catch (_e) {}
         cachedRaw = null;
-        renderLoginBtn(authArea);
       }
     }
-    authArea.classList.add('loaded');
-  } else {
-    // No cache (first visit): show login button immediately to prevent blank flash.
-    // Logged-in users see a single swap on first visit only; cached from then on.
-    renderLoginBtn(authArea);
-    authArea.classList.add('loaded');
   }
 
   // Background verify — re-render only when rendering-relevant fields actually differ.
@@ -133,16 +126,16 @@ if (authArea) {
         renderAuthUser(authArea, toAuthCache(user));
         try { sessionStorage.setItem(AUTH_CACHE_KEY, fresh); } catch (_) {}
       }
-    } else {
+    } else if (res.status === 401) {
+      // Only treat explicit 401 as guest — don't overwrite on transient 5xx/429
       if (cachedRaw !== 'guest') {
         renderLoginBtn(authArea);
         try { sessionStorage.setItem(AUTH_CACHE_KEY, 'guest'); } catch (_) {}
       }
     }
-    authArea.classList.add('loaded');
+    // On other errors (5xx, 429, etc.): keep current UI, don't update cache
   }).catch(() => {
-    if (!cachedRaw) renderLoginBtn(authArea);
-    authArea.classList.add('loaded');
+    // Network error: keep current UI (server-rendered login button or cached state)
   });
 }
 </script>
@@ -211,13 +204,8 @@ if (authArea) {
 .nav-link:hover { background: var(--color-bg-secondary); color: var(--color-text); text-decoration: none; }
 .nav-link.active { background: var(--color-primary); color: white; }
 .auth-area {
-  opacity: 0;
-  transition: opacity 0.3s ease;
   display: flex;
   align-items: center;
-}
-.auth-area.loaded {
-  opacity: 1;
 }
 .auth-area :global(.auth-user) {
   position: relative;
