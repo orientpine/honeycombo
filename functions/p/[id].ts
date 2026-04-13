@@ -1,6 +1,7 @@
 import { getSession } from '../lib/auth';
 import { parseCookies } from '../lib/cookies';
 import { escapeAttr, escapeHtml } from '../lib/escape';
+import { renderDocument } from '../lib/layout';
 import { getLikeStatus } from '../lib/likes';
 import { getPlaylist } from '../lib/playlists';
 import type { AppPagesFunction, LikeStatusResponse, PlaylistDetail, PlaylistItemRow } from '../lib/types';
@@ -225,109 +226,11 @@ function renderOwnerControls(playlist: PlaylistDetail): string {
     </section>`;
 }
 
-function renderDocument(options: {
-  pageTitle: string;
-  metaTitle: string;
-  description: string;
-  canonicalUrl: string;
-  robots?: string;
-  body: string;
-  script?: string;
-}): string {
-  const { pageTitle, metaTitle, description, canonicalUrl, robots, body, script } = options;
+// ---------------------------------------------------------------------------
+// Page-specific styles (layout/nav/footer/base styles come from shared layout)
+// ---------------------------------------------------------------------------
 
-  return `<!DOCTYPE html>
-<html lang="ko">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="${escapeAttr(description)}">
-    <title>${escapeHtml(pageTitle)}</title>
-    <link rel="canonical" href="${escapeAttr(canonicalUrl)}">
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <meta property="og:title" content="${escapeAttr(metaTitle)}">
-    <meta property="og:description" content="${escapeAttr(description)}">
-    <meta property="og:url" content="${escapeAttr(canonicalUrl)}">
-    <meta property="og:type" content="article">
-    <meta property="og:site_name" content="HoneyCombo">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="${escapeAttr(metaTitle)}">
-    <meta name="twitter:description" content="${escapeAttr(description)}">
-    ${robots ? `<meta name="robots" content="${escapeAttr(robots)}">` : ''}
-    <style>
-      :root {
-        --color-bg: #ffffff;
-        --color-bg-secondary: #f8f9fa;
-        --color-text: #1a1a2e;
-        --color-text-muted: #6c757d;
-        --color-primary: #2563eb;
-        --color-primary-hover: #1d4ed8;
-        --color-border: #e2e8f0;
-        --color-accent: #f59e0b;
-        --color-danger: #ef4444;
-        --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
-        --space-xs: 0.25rem;
-        --space-sm: 0.5rem;
-        --space-md: 1rem;
-        --space-lg: 1.5rem;
-        --space-xl: 2rem;
-        --space-2xl: 3rem;
-        --radius-sm: 4px;
-        --radius-md: 8px;
-        --radius-lg: 12px;
-        --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
-        --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
-        --max-width: 1200px;
-      }
-
-      @media (prefers-color-scheme: dark) {
-        :root {
-          --color-bg: #0f172a;
-          --color-bg-secondary: #1e293b;
-          --color-text: #f1f5f9;
-          --color-text-muted: #94a3b8;
-          --color-primary: #3b82f6;
-          --color-primary-hover: #60a5fa;
-          --color-border: #334155;
-        }
-      }
-
-      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-      html { font-size: 16px; scroll-behavior: smooth; }
-      body {
-        font-family: var(--font-sans);
-        background: var(--color-bg);
-        color: var(--color-text);
-        line-height: 1.6;
-        min-height: 100vh;
-      }
-
-      a { color: var(--color-primary); text-decoration: none; }
-      a:hover { color: var(--color-primary-hover); text-decoration: underline; }
-      img { max-width: 100%; height: auto; }
-      .container { max-width: var(--max-width); margin: 0 auto; padding: 0 var(--space-md); }
-      .card {
-        background: var(--color-bg);
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius-md);
-        padding: var(--space-md);
-        transition: box-shadow 0.2s, border-color 0.2s;
-      }
-
-      .badge {
-        display: inline-flex;
-        align-items: center;
-        padding: 2px var(--space-sm);
-        border-radius: var(--radius-sm);
-        font-size: 0.75rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        background: var(--color-bg-secondary);
-        color: var(--color-text-muted);
-        border: 1px solid var(--color-border);
-      }
-
+const PAGE_STYLES = `
       .badge-editor {
         background: rgba(245, 158, 11, 0.1);
         color: #d97706;
@@ -348,29 +251,6 @@ function renderDocument(options: {
         color: var(--color-text-muted);
         border-radius: 999px;
         border: 1px solid var(--color-border);
-      }
-
-      .site-header {
-        border-bottom: 1px solid var(--color-border);
-        background: var(--color-bg);
-      }
-
-      .site-header-inner, .site-footer-inner {
-        max-width: var(--max-width);
-        margin: 0 auto;
-        padding: var(--space-md);
-      }
-
-      .brand {
-        display: inline-flex;
-        align-items: center;
-        gap: var(--space-sm);
-        font-weight: 800;
-        font-size: 1.1rem;
-      }
-
-      .main-content {
-        padding: var(--space-xl) 0 var(--space-2xl);
       }
 
       .playlist-detail {
@@ -449,23 +329,6 @@ function renderDocument(options: {
 
       .like-icon {
         font-size: 1.1em;
-      }
-
-      .avatar {
-        width: 2rem;
-        height: 2rem;
-        border-radius: 999px;
-        object-fit: cover;
-        background: var(--color-bg-secondary);
-        border: 1px solid var(--color-border);
-      }
-
-      .avatar-fallback {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.85rem;
-        font-weight: 700;
       }
 
       .items {
@@ -608,14 +471,19 @@ function renderDocument(options: {
       }
 
       .btn-visibility {
-        background: rgba(37, 99, 235, 0.1);
+        background: rgba(245, 124, 34, 0.1);
         color: var(--color-primary);
-        border-color: rgba(37, 99, 235, 0.2);
+        border-color: rgba(245, 124, 34, 0.2);
         white-space: nowrap;
       }
 
       .btn-visibility:hover {
-        background: rgba(37, 99, 235, 0.2);
+        background: rgba(245, 124, 34, 0.2);
+      }
+
+      .btn-danger {
+        border-color: rgba(239, 68, 68, 0.35);
+        color: var(--color-danger);
       }
 
       .article-search-section {
@@ -709,32 +577,7 @@ function renderDocument(options: {
         border-color: var(--color-primary);
       }
 
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: var(--space-xs);
-        padding: 0.75rem 1rem;
-        border-radius: var(--radius-sm);
-        border: 1px solid var(--color-border);
-        background: var(--color-bg);
-        color: var(--color-text);
-        font: inherit;
-        cursor: pointer;
-      }
-
-      .btn:hover {
-        border-color: var(--color-primary);
-        color: var(--color-primary);
-        text-decoration: none;
-      }
-
-      .btn-danger {
-        border-color: rgba(239, 68, 68, 0.35);
-        color: var(--color-danger);
-      }
-
-      .empty-state, .message-card {
+      .message-card {
         text-align: center;
         padding: var(--space-2xl) var(--space-lg);
       }
@@ -749,21 +592,7 @@ function renderDocument(options: {
         margin-bottom: var(--space-lg);
       }
 
-      .site-footer {
-        border-top: 1px solid var(--color-border);
-        color: var(--color-text-muted);
-      }
-
       @media (max-width: 768px) {
-        .container, .site-header-inner, .site-footer-inner {
-          padding: 0 var(--space-sm);
-        }
-
-        .site-header-inner, .site-footer-inner {
-          padding-top: var(--space-md);
-          padding-bottom: var(--space-md);
-        }
-
         .playlist-meta,
         .owner-controls,
         .visibility-section,
@@ -779,29 +608,7 @@ function renderDocument(options: {
         .owner-actions .btn {
           width: 100%;
         }
-      }
-    </style>
-  </head>
-  <body>
-    <header class="site-header">
-      <div class="site-header-inner">
-        <a href="/" class="brand">🍯 HoneyCombo</a>
-      </div>
-    </header>
-    <main class="main-content">
-      <div class="container">
-        ${body}
-      </div>
-    </main>
-    <footer class="site-footer">
-      <div class="site-footer-inner">
-        <p>© 2026 HoneyCombo</p>
-      </div>
-    </footer>
-    ${script ?? ''}
-  </body>
-</html>`;
-}
+      }`;
 
 function renderStatusPage(status: number, title: string, message: string, canonicalUrl: string): Response {
   const html = renderDocument({
@@ -809,7 +616,9 @@ function renderStatusPage(status: number, title: string, message: string, canoni
     metaTitle: `${title} — HoneyCombo`,
     description: message,
     canonicalUrl,
+    currentPath: '',
     robots: 'noindex, nofollow',
+    styles: PAGE_STYLES,
     body: `
       <section class="playlist-detail">
         <div class="message-card card">
@@ -867,7 +676,10 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
     metaTitle: playlist.title,
     description,
     canonicalUrl,
+    currentPath: `/p/${playlistId}`,
+    ogType: 'article',
     robots: playlist.visibility === 'unlisted' ? 'noindex, nofollow' : undefined,
+    styles: PAGE_STYLES,
     body: `
       <article class="playlist-detail">
         <header class="playlist-header">

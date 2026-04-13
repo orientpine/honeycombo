@@ -1,6 +1,7 @@
 import { getSession } from './lib/auth';
 import { parseCookies } from './lib/cookies';
 import { escapeAttr, escapeHtml } from './lib/escape';
+import { renderDocument } from './lib/layout';
 import { getTrendingPlaylists } from './lib/likes';
 import type { AppPagesFunction, Env, TrendingPlaylistItem } from './lib/types';
 
@@ -115,167 +116,11 @@ function renderCards(playlists: TrendingPlaylistItem[], currentPage: number, isL
     .join('');
 }
 
-function renderDocument(options: {
-  pageTitle: string;
-  metaTitle: string;
-  description: string;
-  canonicalUrl: string;
-  body: string;
-  script?: string;
-}): string {
-  const { pageTitle, metaTitle, description, canonicalUrl, body, script } = options;
+// ---------------------------------------------------------------------------
+// Page-specific styles (layout/nav/footer/base styles come from shared layout)
+// ---------------------------------------------------------------------------
 
-  return `<!DOCTYPE html>
-<html lang="ko">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="${escapeAttr(description)}">
-    <title>${escapeHtml(pageTitle)}</title>
-    <link rel="canonical" href="${escapeAttr(canonicalUrl)}">
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <meta property="og:title" content="${escapeAttr(metaTitle)}">
-    <meta property="og:description" content="${escapeAttr(description)}">
-    <meta property="og:url" content="${escapeAttr(canonicalUrl)}">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="HoneyCombo">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="${escapeAttr(metaTitle)}">
-    <meta name="twitter:description" content="${escapeAttr(description)}">
-    <style>
-      :root {
-        --color-bg: #F7F6F3;
-        --color-bg-secondary: #FFF8F0;
-        --color-text: #2F2B31;
-        --color-text-muted: #6B6168;
-        --color-primary: #F57C22;
-        --color-primary-hover: #EE7320;
-        --color-border: #E8DDD4;
-        --color-accent: #FCB924;
-        --color-success: #10b981;
-        --color-danger: #ef4444;
-        --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
-        --font-mono: 'Fira Code', 'Cascadia Code', monospace;
-        --space-xs: 0.25rem;
-        --space-sm: 0.5rem;
-        --space-md: 1rem;
-        --space-lg: 1.5rem;
-        --space-xl: 2rem;
-        --space-2xl: 3rem;
-        --radius-sm: 4px;
-        --radius-md: 8px;
-        --radius-lg: 12px;
-        --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
-        --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
-        --max-width: 1200px;
-        --nav-height: 60px;
-      }
-
-      @media (prefers-color-scheme: dark) {
-        :root {
-          --color-bg: #1A1517;
-          --color-bg-secondary: #2A2226;
-          --color-text: #F7F6F3;
-          --color-text-muted: #A89B96;
-          --color-primary: #F58B3F;
-          --color-primary-hover: #FCB924;
-          --color-border: #3D3235;
-        }
-      }
-
-      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-      html { font-size: 16px; scroll-behavior: smooth; }
-      body {
-        font-family: var(--font-sans);
-        background: var(--color-bg);
-        color: var(--color-text);
-        line-height: 1.6;
-        min-height: 100vh;
-      }
-
-      a { color: var(--color-primary); text-decoration: none; }
-      a:hover { color: var(--color-primary-hover); text-decoration: underline; }
-      img { max-width: 100%; height: auto; }
-
-      .container { max-width: var(--max-width); margin: 0 auto; padding: 0 var(--space-md); }
-      .grid { display: grid; gap: var(--space-md); }
-      .grid-3 { grid-template-columns: repeat(3, 1fr); }
-
-      .card {
-        background: var(--color-bg);
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius-md);
-        padding: var(--space-md);
-        transition: box-shadow 0.2s, border-color 0.2s;
-      }
-
-      .card:hover { box-shadow: var(--shadow-md); border-color: var(--color-primary); }
-
-      .badge {
-        display: inline-flex;
-        align-items: center;
-        padding: 2px var(--space-sm);
-        border-radius: var(--radius-sm);
-        font-size: 0.75rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        background: var(--color-bg-secondary);
-        color: var(--color-text-muted);
-        border: 1px solid var(--color-border);
-      }
-
-      .pagination {
-        display: flex;
-        gap: var(--space-sm);
-        justify-content: center;
-        align-items: center;
-        padding: var(--space-xl) 0;
-        flex-wrap: wrap;
-      }
-
-      .pagination a {
-        padding: var(--space-sm) var(--space-md);
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius-sm);
-        font-weight: 500;
-      }
-
-      .pagination a:hover, .pagination a.active {
-        background: var(--color-primary);
-        color: white;
-        border-color: var(--color-primary);
-        text-decoration: none;
-      }
-
-      .pagination-gap {
-        color: var(--color-text-muted);
-        padding: 0 var(--space-xs);
-      }
-
-      .site-header {
-        border-bottom: 1px solid var(--color-border);
-        background: var(--color-bg);
-      }
-
-      .site-header-inner, .site-footer-inner {
-        max-width: var(--max-width);
-        margin: 0 auto;
-        padding: var(--space-md);
-      }
-
-      .brand {
-        display: inline-flex;
-        align-items: center;
-        gap: var(--space-sm);
-        font-weight: 800;
-        font-size: 1.1rem;
-      }
-
-      .main-content {
-        padding: var(--space-xl) 0 var(--space-2xl);
-      }
-
+const PAGE_STYLES = `
       .page-shell {
         display: flex;
         flex-direction: column;
@@ -381,45 +226,9 @@ function renderDocument(options: {
         font-weight: 600;
       }
 
-      .avatar {
-        width: 2rem;
-        height: 2rem;
-        border-radius: 999px;
-        object-fit: cover;
-        background: var(--color-bg-secondary);
-        border: 1px solid var(--color-border);
-      }
-
-      .avatar-fallback {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
-      }
-
       .playlist-footer {
         margin-top: auto;
         align-items: flex-end;
-      }
-
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: var(--space-xs);
-        padding: 0.75rem 1rem;
-        border-radius: var(--radius-sm);
-        border: 1px solid var(--color-border);
-        background: var(--color-bg);
-        color: var(--color-text);
-        font: inherit;
-        cursor: pointer;
-      }
-
-      .btn:hover {
-        border-color: var(--color-primary);
-        color: var(--color-primary);
-        text-decoration: none;
       }
 
       .like-button {
@@ -444,24 +253,7 @@ function renderDocument(options: {
         cursor: wait;
       }
 
-      .empty-state {
-        text-align: center;
-        padding: var(--space-2xl) var(--space-lg);
-        color: var(--color-text-muted);
-      }
-
-      .site-footer {
-        border-top: 1px solid var(--color-border);
-        color: var(--color-text-muted);
-      }
-
       @media (max-width: 768px) {
-        .grid-3 { grid-template-columns: 1fr; }
-        .container, .site-header-inner, .site-footer-inner { padding: 0 var(--space-sm); }
-        .site-header-inner, .site-footer-inner {
-          padding-top: var(--space-md);
-          padding-bottom: var(--space-md);
-        }
         .trending-card-top, .playlist-footer {
           align-items: flex-start;
           flex-direction: column;
@@ -469,29 +261,7 @@ function renderDocument(options: {
         .playlist-footer .btn {
           width: 100%;
         }
-      }
-    </style>
-  </head>
-  <body>
-    <header class="site-header">
-      <div class="site-header-inner">
-        <a href="/" class="brand">🍯 HoneyCombo</a>
-      </div>
-    </header>
-    <main class="main-content">
-      <div class="container">
-        ${body}
-      </div>
-    </main>
-    <footer class="site-footer">
-      <div class="site-footer-inner">
-        <p>© 2026 HoneyCombo</p>
-      </div>
-    </footer>
-    ${script ?? ''}
-  </body>
-</html>`;
-}
+      }`;
 
 export const onRequest: AppPagesFunction = async (context: { env: Env; request: Request }) => {
   const { env, request } = context;
@@ -508,6 +278,8 @@ export const onRequest: AppPagesFunction = async (context: { env: Env; request: 
     metaTitle: '트렌딩 플레이리스트 — HoneyCombo',
     description: '커뮤니티가 가장 좋아하는 기술 기사 플레이리스트',
     canonicalUrl,
+    currentPath: '/trending',
+    styles: PAGE_STYLES,
     body: `
       <section class="page-shell">
         <header class="page-header">
