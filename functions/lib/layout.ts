@@ -31,7 +31,7 @@ function renderNavigation(currentPath: string): string {
   }).join('\n          ');
 
   return `
-    <nav class="nav" data-testid="nav-main" data-astro-transition-persist="astro-jicqxufy-1">
+    <nav class="nav" data-testid="nav-main">
       <div class="container nav-inner">
         <a href="/" class="nav-logo">HONEYCOMBO</a>
         <button class="nav-toggle" id="nav-toggle" aria-label="메뉴 열기" aria-expanded="false">
@@ -42,7 +42,7 @@ function renderNavigation(currentPath: string): string {
         <ul class="nav-links" id="nav-links">
           ${links}
         </ul>
-        <div id="auth-area" class="auth-area"><a href="/api/auth/github/login" class="auth-login-btn">로그인</a></div>
+        <div id="auth-area" class="auth-area"></div>
       </div>
     </nav>`;
 }
@@ -280,9 +280,12 @@ const NAV_STYLES = `
 
       /* Auth Area */
       .auth-area {
+        opacity: 0;
+        transition: opacity 0.3s ease;
         display: flex;
         align-items: center;
       }
+      .auth-area.loaded { opacity: 1; }
       .auth-user {
         position: relative;
         display: flex;
@@ -485,9 +488,6 @@ export function renderDocument(options: LayoutOptions): string {
     <meta name="twitter:title" content="${escapeAttr(metaTitle)}">
     <meta name="twitter:description" content="${escapeAttr(description)}">
     ${robots ? `<meta name="robots" content="${escapeAttr(robots)}">` : ''}
-    <meta name="astro-view-transitions-enabled" content="true">
-    <meta name="astro-view-transitions-fallback" content="animate">
-    <script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.j56hQv-j.js"></script>
     <style>
 ${BASE_STYLES}
 ${NAV_STYLES}

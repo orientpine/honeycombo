@@ -98,7 +98,7 @@ function initAddToPlaylistContainer(container: Element) {
         <li>
           <button class="playlist-item-btn${p.contains_item ? ' already-added' : ''}"
                   data-id="${p.id}" ${p.contains_item ? 'disabled' : ''}>
-            ${p.contains_item ? '✓ ' : ''}${p.title}
+            ${p.contains_item ? '✓ ' : '📋 '}${p.title}
             ${p.contains_item ? '<span class="badge-added">추가됨</span>' : ''}
           </button>
         </li>
@@ -222,18 +222,18 @@ if (document.readyState === 'loading') {
   padding: var(--space-xs) 0;
 }
 
-/* Dropdown list items — dynamic content (innerHTML), needs :global() */
-.playlist-list :global(.playlist-loading),
-.playlist-list :global(.playlist-empty),
-.playlist-list :global(.playlist-error),
-.playlist-list :global(.playlist-auth-required) {
+/* Dropdown list items — dynamic content (innerHTML) */
+.playlist-list .playlist-loading,
+.playlist-list .playlist-empty,
+.playlist-list .playlist-error,
+.playlist-list .playlist-auth-required {
   padding: var(--space-md) var(--space-sm);
   font-size: 0.85rem;
   color: var(--color-text-muted);
   text-align: center;
 }
 
-.playlist-list :global(.playlist-auth-required .login-link) {
+.playlist-list .playlist-auth-required .login-link {
   display: inline-block;
   margin-top: var(--space-sm);
   padding: var(--space-xs) var(--space-sm);
@@ -244,7 +244,7 @@ if (document.readyState === 'loading') {
   font-size: 0.85rem;
 }
 
-.playlist-list :global(.playlist-item-btn) {
+.playlist-list .playlist-item-btn {
   width: 100%;
   padding: var(--space-sm) var(--space-md);
   text-align: left;
@@ -260,15 +260,15 @@ if (document.readyState === 'loading') {
   outline: none;
 }
 
-.playlist-list :global(.playlist-item-btn:hover) {
+.playlist-list .playlist-item-btn:hover {
   background: var(--color-bg-secondary);
 }
 
-.playlist-list :global(.playlist-item-btn:focus-visible) {
+.playlist-list .playlist-item-btn:focus-visible {
   background: var(--color-bg-secondary);
 }
 
-.playlist-list :global(.playlist-item-btn.already-added) {
+.playlist-list .playlist-item-btn.already-added {
   color: var(--color-text-muted);
   cursor: default;
   display: flex;
@@ -276,11 +276,11 @@ if (document.readyState === 'loading') {
   align-items: center;
 }
 
-.playlist-list :global(.playlist-item-btn.already-added:hover) {
+.playlist-list .playlist-item-btn.already-added:hover {
   background: none;
 }
 
-.playlist-list :global(.badge-added) {
+.playlist-list .badge-added {
   font-size: 0.75rem;
   color: var(--color-success, #22c55e);
   font-weight: 600;
