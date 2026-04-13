@@ -882,6 +882,14 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
             return escapeHtml(value);
           }
 
+          function updateItemCount(delta) {
+            var el = document.querySelector('.playlist-meta .meta-text');
+            if (el) {
+              var m = el.textContent.match(/(\\d+)/);
+              if (m) { el.textContent = Math.max(0, parseInt(m[1], 10) + delta) + '개 기사'; }
+            }
+          }
+
           let searchIndex = null;
 
           const searchInput = document.querySelector('.search-input');
@@ -949,7 +957,7 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
                   ? '<p class="search-result-desc">' + escapeHtml(article.description.slice(0, 100)) + '</p>'
                   : '';
 
-                return '\n                  <div class="search-result-card card">\n                    <div class="search-result-meta">\n                      <span class="badge">' + safeSource + '</span>\n                      <span class="badge">' + safeType + '</span>\n                    </div>\n                    <h3 class="search-result-title">' + safeTitle + '</h3>\n                    ' + safeDescHtml + '\n                    <button class="btn btn-sm search-add-btn"\n                            data-id="' + safeId + '" data-type="' + safeItemType + '"\n                            data-title="' + escapeAttr(article.title) + '" data-url="' + safeUrl + '"\n                            data-desc="' + safeDescAttr + '">\n                      추가\n                    </button>\n                  </div>\n                ';
+                return '\\n                  <div class="search-result-card card">\\n                    <div class="search-result-meta">\\n                      <span class="badge">' + safeSource + '</span>\\n                      <span class="badge">' + safeType + '</span>\\n                    </div>\\n                    <h3 class="search-result-title">' + safeTitle + '</h3>\\n                    ' + safeDescHtml + '\\n                    <button class="btn btn-sm search-add-btn"\\n                            data-id="' + safeId + '" data-type="' + safeItemType + '"\\n                            data-title="' + escapeAttr(article.title) + '" data-url="' + safeUrl + '"\\n                            data-desc="' + safeDescAttr + '">\\n                      추가\\n                    </button>\\n                  </div>\\n                ';
               }).join('');
 
               searchResults.querySelectorAll('.search-add-btn').forEach((btn) => {
@@ -975,6 +983,7 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
 
                     btn.textContent = '✓ 추가됨';
                     btn.disabled = true;
+                    updateItemCount(1);
                   } catch {
                     window.alert('추가에 실패했습니다.');
                   }
@@ -1094,6 +1103,7 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
                 window.setTimeout(() => {
                   card.remove();
                   syncItemControls();
+                  updateItemCount(-1);
                 }, 300);
               } catch {
                 window.alert('삭제에 실패했습니다.');
