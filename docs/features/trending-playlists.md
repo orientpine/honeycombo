@@ -1,19 +1,19 @@
 # 트렌딩 플레이리스트
 
-> 커뮤니티가 좋아하는 플레이리스트를 좋아요 수 기준으로 순위를 매겨 보여주는 기능.
+> 커뮤니티가 좋아하는 플레이리스트를 좋아요 수 기준으로 순위를 매겨 보여주는 기능. Astro View Transitions와 호환되도록 정적 shell + client fetch 구조를 사용한다.
 
 ## 개요
 
-`/trending` 페이지는 승인된 공개 플레이리스트를 좋아요 수 기준으로 정렬하여 보여준다. 이전에는 기사 키워드 트렌딩 페이지였으나, 플레이리스트 인기 순위 페이지로 전환되었다.
+`/trending` 페이지는 승인된 공개 플레이리스트를 좋아요 수 기준으로 정렬하여 보여준다. 이전에는 기사 키워드 트렌딩 페이지였으나, 플레이리스트 인기 순위 페이지로 전환되었다. 현재는 Astro `BaseLayout.astro` 안에서 정적 shell을 빌드하고, 실제 데이터는 `/api/trending`을 클라이언트에서 fetch한다.
 
 ## 동작 흐름
 
 ### 트렌딩 페이지 조회
-방문자 → /trending
-       → functions/trending.ts (SSR)
+방문자 → /trending (Astro SSG)
+       → `astro:page-load`에서 `/api/trending?page=N` fetch
        → getTrendingPlaylists(DB, page, limit, userId?)
        → 좋아요 수 DESC, updated_at DESC 정렬
-       → HTML 렌더링 (랭킹 카드 + 좋아요 버튼 + 페이지네이션)
+       → 클라이언트 렌더링 (랭킹 카드 + 좋아요 버튼 + 페이지네이션)
 
 - 인증 유저: 자신의 좋아요 여부 표시, 좋아요 토글 가능
 - 비인증 유저: 좋아요 수만 표시, 클릭 시 GitHub 로그인으로 리다이렉션
@@ -25,10 +25,11 @@
 
 ## 관련 파일
 
-### 프론트엔드 (SSR)
+### 프론트엔드
 | 파일 | 역할 |
 |------|------|
-| `functions/trending.ts` | 트렌딩 페이지 SSR 렌더링 |
+| `src/pages/trending.astro` | 트렌딩 페이지 Astro shell + client-side 렌더링 |
+| `functions/trending.ts` | 레거시 SSR fallback (직접 라우팅하지 않음) |
 | `functions/p/[id].ts` | 플레이리스트 상세 페이지 (좋아요 버튼 포함) |
 
 ### 백엔드
@@ -74,3 +75,4 @@
 | 날짜 | 변경 내용 |
 |------|----------|
 | 2026-04-13 | 최초 작성 — 트렌딩 플레이리스트 기능 문서화 |
+| 2026-04-13 | Astro View Transitions 호환을 위해 `/trending`을 정적 shell + client fetch 구조로 전환 |

@@ -1,0 +1,297 @@
+---
+// biome-ignore lint/correctness/noUnusedImports: Astro frontmatter imports are used in template
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="트렌딩 플레이리스트 — HoneyCombo" description="커뮤니티가 가장 좋아하는 기술 기사 플레이리스트">
+  <section class="page-shell trending-page" data-trending-page>
+    <header class="page-header">
+      <div class="page-eyebrow">🔥 트렌딩 플레이리스트</div>
+      <h1 class="page-title">🔥 트렌딩 플레이리스트</h1>
+      <p class="page-description">커뮤니티가 좋아하는 플레이리스트</p>
+    </header>
+
+    <div class="trending-summary" id="trending-summary">
+      <p>총 0개의 공개 플레이리스트</p>
+      <p>불러오는 중...</p>
+    </div>
+
+    <section class="grid grid-3 trending-grid" id="trending-grid" aria-live="polite">
+      <article class="card trending-card skeleton-card">
+        <div class="trending-card-top">
+          <span class="rank-badge skeleton-box"></span>
+          <span class="like-count skeleton-line"></span>
+        </div>
+        <div class="skeleton-line skeleton-title"></div>
+        <div class="skeleton-line skeleton-text"></div>
+        <div class="skeleton-line skeleton-text short"></div>
+        <div class="playlist-author skeleton-author">
+          <span class="avatar avatar-fallback skeleton-avatar"></span>
+          <span class="skeleton-line skeleton-author-line"></span>
+        </div>
+        <div class="playlist-footer">
+          <span class="badge skeleton-badge"></span>
+          <span class="btn like-button skeleton-button"></span>
+        </div>
+      </article>
+      <article class="card trending-card skeleton-card">
+        <div class="trending-card-top">
+          <span class="rank-badge skeleton-box"></span>
+          <span class="like-count skeleton-line"></span>
+        </div>
+        <div class="skeleton-line skeleton-title"></div>
+        <div class="skeleton-line skeleton-text"></div>
+        <div class="skeleton-line skeleton-text short"></div>
+        <div class="playlist-author skeleton-author">
+          <span class="avatar avatar-fallback skeleton-avatar"></span>
+          <span class="skeleton-line skeleton-author-line"></span>
+        </div>
+        <div class="playlist-footer">
+          <span class="badge skeleton-badge"></span>
+          <span class="btn like-button skeleton-button"></span>
+        </div>
+      </article>
+      <article class="card trending-card skeleton-card">
+        <div class="trending-card-top">
+          <span class="rank-badge skeleton-box"></span>
+          <span class="like-count skeleton-line"></span>
+        </div>
+        <div class="skeleton-line skeleton-title"></div>
+        <div class="skeleton-line skeleton-text"></div>
+        <div class="skeleton-line skeleton-text short"></div>
+        <div class="playlist-author skeleton-author">
+          <span class="avatar avatar-fallback skeleton-avatar"></span>
+          <span class="skeleton-line skeleton-author-line"></span>
+        </div>
+        <div class="playlist-footer">
+          <span class="badge skeleton-badge"></span>
+          <span class="btn like-button skeleton-button"></span>
+        </div>
+      </article>
+    </section>
+
+    <div id="trending-pagination"></div>
+  </section>
+</BaseLayout>
+
+<script is:inline src="/scripts/trending-page.js"></script>
+
+<style is:global>
+  .page-shell {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+  }
+
+  .page-header {
+    max-width: 720px;
+  }
+
+  .page-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-sm);
+    color: var(--color-primary);
+    font-weight: 700;
+  }
+
+  .page-title {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    line-height: 1.2;
+    font-weight: 800;
+    margin-bottom: var(--space-sm);
+  }
+
+  .page-description {
+    color: var(--color-text-muted);
+    font-size: 1.05rem;
+  }
+
+  .trending-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+    color: var(--color-text-muted);
+  }
+
+  .trending-grid {
+    align-items: stretch;
+  }
+
+  .trending-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    min-height: 100%;
+  }
+
+  .trending-card-top,
+  .playlist-footer,
+  .playlist-author {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+  }
+
+  .rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 3rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    background: var(--color-accent);
+    color: var(--color-text);
+    font-weight: 800;
+  }
+
+  .like-count {
+    color: var(--color-text-muted);
+    font-weight: 600;
+  }
+
+  .playlist-title {
+    font-size: 1.2rem;
+    line-height: 1.4;
+  }
+
+  .playlist-title a {
+    color: var(--color-text);
+  }
+
+  .playlist-title a:hover {
+    color: var(--color-primary);
+  }
+
+  .playlist-description {
+    color: var(--color-text-muted);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    min-height: 3.2em;
+  }
+
+  .playlist-author {
+    justify-content: flex-start;
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  .playlist-footer {
+    margin-top: auto;
+    align-items: flex-end;
+  }
+
+  .like-button {
+    min-width: 6.5rem;
+    font-weight: 700;
+  }
+
+  .like-button.is-liked {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+  }
+
+  .like-button.is-liked:hover {
+    color: white;
+    background: var(--color-primary-hover);
+    border-color: var(--color-primary-hover);
+  }
+
+  .like-button:disabled {
+    opacity: 0.7;
+    cursor: wait;
+  }
+
+  .skeleton-card {
+    pointer-events: none;
+  }
+
+  .skeleton-box,
+  .skeleton-line,
+  .skeleton-avatar,
+  .skeleton-badge,
+  .skeleton-button {
+    background: linear-gradient(90deg, var(--color-bg-secondary) 25%, rgba(255, 255, 255, 0.5) 50%, var(--color-bg-secondary) 75%);
+    background-size: 200% 100%;
+    animation: trending-skeleton 1.4s ease-in-out infinite;
+    color: transparent;
+  }
+
+  .skeleton-box {
+    min-width: 3rem;
+    min-height: 2rem;
+  }
+
+  .skeleton-title {
+    width: 72%;
+    height: 1.6rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .skeleton-text {
+    width: 100%;
+    height: 1rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .skeleton-text.short {
+    width: 80%;
+  }
+
+  .skeleton-author {
+    justify-content: flex-start;
+  }
+
+  .skeleton-avatar {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+  }
+
+  .skeleton-author-line {
+    width: 7rem;
+    height: 1rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .skeleton-badge {
+    width: 5rem;
+    height: 2rem;
+    border-radius: 999px;
+  }
+
+  .skeleton-button {
+    display: inline-flex;
+    width: 6.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius-md);
+    border: none;
+  }
+
+  @keyframes trending-skeleton {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .trending-card-top, .playlist-footer {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .playlist-footer .btn {
+      width: 100%;
+    }
+  }
+</style>
