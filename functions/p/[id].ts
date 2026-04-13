@@ -1260,67 +1260,28 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
           async function moveItem(itemId, direction) {
             const cards = getItemCards();
             const currentCard = cards.find((card) => card.dataset.itemId === itemId);
-
-            if (!currentCard) {
-              return;
-            }
+            if (!currentCard) return;
 
             const currentIndex = cards.indexOf(currentCard);
             const targetIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
-
-            if (targetIndex < 0 || targetIndex >= cards.length) {
-              return;
-            }
+            if (targetIndex < 0 || targetIndex >= cards.length) return;
 
             const targetCard = cards[targetIndex];
             const targetItemId = targetCard.dataset.itemId;
-            const currentPos = Number(currentCard.dataset.position);
-            const targetPos = Number(targetCard.dataset.position);
+            if (!targetItemId) return;
 
-            if (!targetItemId || !Number.isFinite(currentPos) || !Number.isFinite(targetPos)) {
-              return;
-            }
-
-            var moveBtns = document.querySelectorAll('.item-move-up, .item-move-down');
-            moveBtns.forEach(function(b) { b.disabled = true; });
+            document.querySelectorAll('.item-move-up, .item-move-down').forEach(function(b) { b.disabled = true; });
 
             try {
-              const res = await fetch('/api/playlists/' + playlistId + '/items/swap', {
+              await fetch('/api/playlists/' + playlistId + '/items/swap', {
                 method: 'PUT',
                 credentials: 'same-origin',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ itemA: itemId, itemB: targetItemId, expectedPosA: currentPos, expectedPosB: targetPos })
+                body: JSON.stringify({ itemA: itemId, itemB: targetItemId })
               });
+            } catch {}
 
-              if (res.status === 409) {
-                window.location.reload();
-                return;
-              }
-
-              if (!res.ok) {
-                throw new Error();
-              }
-
-              const parent = currentCard.parentNode;
-              if (!parent) {
-                return;
-              }
-
-              if (direction === 'up') {
-                parent.insertBefore(currentCard, targetCard);
-              } else {
-                parent.insertBefore(targetCard, currentCard);
-              }
-
-              currentCard.dataset.position = String(targetPos);
-              targetCard.dataset.position = String(currentPos);
-              syncItemControls();
-            } catch {
-              window.location.reload();
-            } finally {
-              moveBtns.forEach(function(b) { b.disabled = false; });
-              syncItemControls();
-            }
+            window.location.reload();
           }
 
           document.querySelectorAll('.item-move-up').forEach((btn) => {

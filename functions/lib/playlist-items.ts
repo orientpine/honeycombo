@@ -171,32 +171,29 @@ export async function swapItemPositions(
   userId: string,
   itemIdA: string,
   itemIdB: string,
-  expectedPosA?: number,
-  expectedPosB?: number,
-): Promise<boolean | 'conflict'> {
+): Promise<boolean> {
   if (!(await isPlaylistOwner(db, playlistId, userId))) {
     return false;
   }
 
-  const [a, b] = await Promise.all([
-    db.prepare('SELECT id, position FROM playlist_items WHERE id = ? AND playlist_id = ?').bind(itemIdA, playlistId).first<Pick<PlaylistItemRow, 'id' | 'position'>>(),
-    db.prepare('SELECT id, position FROM playlist_items WHERE id = ? AND playlist_id = ?').bind(itemIdB, playlistId).first<Pick<PlaylistItemRow, 'id' | 'position'>>(),
-  ]);
+  // Single SQL statement — truly atomic, no read-then-write race window.
+  // SQLite evaluates subqueries against pre-UPDATE state, so the CASE reads
+  // the original positions before any row is modified by this statement.
+  const result = await db
+    .prepare(
+      `UPDATE playlist_items
+       SET position = CASE id
+         WHEN ? THEN (SELECT position FROM playlist_items WHERE id = ? AND playlist_id = ?)
+         WHEN ? THEN (SELECT position FROM playlist_items WHERE id = ? AND playlist_id = ?)
+       END
+       WHERE id IN (?, ?) AND playlist_id = ?`,
+    )
+    .bind(itemIdA, itemIdB, playlistId, itemIdB, itemIdA, playlistId, itemIdA, itemIdB, playlistId)
+    .run();
 
-  if (!a || !b) {
+  if (result.meta.changes === 0) {
     return false;
   }
-
-  if (expectedPosA !== undefined && expectedPosB !== undefined) {
-    if (a.position !== expectedPosA || b.position !== expectedPosB) {
-      return 'conflict';
-    }
-  }
-
-  await db.batch([
-    db.prepare('UPDATE playlist_items SET position = ? WHERE id = ? AND playlist_id = ?').bind(b.position, itemIdA, playlistId),
-    db.prepare('UPDATE playlist_items SET position = ? WHERE id = ? AND playlist_id = ?').bind(a.position, itemIdB, playlistId),
-  ]);
 
   await db.prepare('UPDATE user_playlists SET updated_at = CURRENT_TIMESTAMP WHERE id = ?').bind(playlistId).run();
 
