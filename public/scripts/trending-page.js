@@ -36,16 +36,12 @@ document.addEventListener('astro:page-load', () => {
     return page <= 1 ? '/trending' : '/trending?page=' + page;
   }
 
-  function renderAvatar(playlist) {
-    const playlistData = playlist || {};
-
+  function renderCuratorAvatar(playlist) {
+    var playlistData = playlist || {};
     if (playlistData.user && playlistData.user.avatar_url) {
-      return '<img src="' + escapeAttr(playlistData.user.avatar_url) + '" alt="" class="avatar">';
+      return '<img src="' + escapeAttr(playlistData.user.avatar_url) + '" alt="" class="curator-avatar" /> ';
     }
-
-    const username = playlistData.user && playlistData.user.username ? playlistData.user.username.trim() : '';
-    const fallback = username.charAt(0).toUpperCase() || 'H';
-    return '<span class="avatar avatar-fallback" aria-hidden="true">' + escapeHtml(fallback) + '</span>';
+    return '';
   }
 
   function renderPagination(currentPage, totalPages) {
@@ -83,17 +79,48 @@ document.addEventListener('astro:page-load', () => {
       return '<div class="card empty-state">아직 공개된 플레이리스트가 없습니다.</div>';
     }
 
-    const rankOffset = (currentPage - 1) * 20;
+    var rankOffset = (currentPage - 1) * 20;
 
-    return playlists.map((playlist, index) => {
-      const playlistData = playlist || {};
-      const rank = rankOffset + index + 1;
-      const description = (playlistData.description && playlistData.description.trim()) || (getOwnerName(playlistData) + '의 플레이리스트 · ' + Number(playlistData.item_count || 0) + '개 기사');
-      const userLiked = Boolean(playlistData.user_liked);
-      const likeButtonLabel = userLiked ? '좋아요 취소' : '좋아요';
-      const likeIcon = userLiked ? '♥' : '♡';
+    return playlists.map(function(playlist, index) {
+      var playlistData = playlist || {};
+      var rank = rankOffset + index + 1;
+      var description = (playlistData.description && playlistData.description.trim()) || (getOwnerName(playlistData) + '의 플레이리스트 · ' + Number(playlistData.item_count || 0) + '개 기사');
+      var userLiked = Boolean(playlistData.user_liked);
+      var likeButtonLabel = userLiked ? '좋아요 취소' : '좋아요';
+      var likeIcon = userLiked ? '♥' : '♡';
+      var itemCount = Number(playlistData.item_count || 0);
+      var username = (playlistData.user && playlistData.user.username) || 'unknown';
+      var avatarHtml = renderCuratorAvatar(playlistData);
 
-      return '\n        <article class="card trending-card">\n          <div class="trending-card-top">\n            <span class="rank-badge">#' + rank + '</span>\n            <span class="like-count" data-like-count-for="' + escapeAttr(playlistData.id) + '">❤️ ' + Number(playlistData.like_count || 0) + '</span>\n          </div>\n          <h2 class="playlist-title"><a href="/p/' + escapeAttr(playlistData.id) + '">' + escapeHtml(playlistData.title || '') + '</a></h2>\n          <p class="playlist-description">' + escapeHtml(description) + '</p>\n          <div class="playlist-author">\n            ' + renderAvatar(playlistData) + '\n            <span>' + escapeHtml(getOwnerName(playlistData)) + '</span>\n          </div>\n          <div class="playlist-footer">\n            <span class="badge">' + Number(playlistData.item_count || 0) + '개 기사</span>\n            <button\n              type="button"\n              class="btn like-button' + (userLiked ? ' is-liked' : '') + '"\n              data-playlist-id="' + escapeAttr(playlistData.id) + '"\n              data-liked="' + (userLiked ? 'true' : 'false') + '"\n              data-like-count="' + Number(playlistData.like_count || 0) + '"\n              data-authenticated="' + (isAuthenticated ? 'true' : 'false') + '"\n              aria-pressed="' + (userLiked ? 'true' : 'false') + '"\n              aria-label="' + escapeAttr(likeButtonLabel) + '"\n            >\n              <span class="like-button-icon" aria-hidden="true">' + likeIcon + '</span>\n              <span class="like-button-label">좋아요</span>\n            </button>\n          </div>\n        </article>';
+      return '<article class="card playlist-card">' +
+        '<div class="playlist-header">' +
+          '<h3 class="playlist-title"><a href="/p/' + escapeAttr(playlistData.id) + '">' + escapeHtml(playlistData.title || '') + '</a></h3>' +
+          '<span class="playlist-count">' + itemCount + '개</span>' +
+        '</div>' +
+        '<p class="playlist-description">' + escapeHtml(description) + '</p>' +
+        '<div class="playlist-footer">' +
+          '<span class="playlist-curator">' +
+            avatarHtml +
+            'by @' + escapeHtml(username) +
+          '</span>' +
+          '<span class="trending-stats">' +
+            '<span class="rank-badge">#' + rank + '</span>' +
+            '<span class="like-count" data-like-count-for="' + escapeAttr(playlistData.id) + '">❤️ ' + Number(playlistData.like_count || 0) + '</span>' +
+            '<button type="button"' +
+              ' class="btn like-button' + (userLiked ? ' is-liked' : '') + '"' +
+              ' data-playlist-id="' + escapeAttr(playlistData.id) + '"' +
+              ' data-liked="' + (userLiked ? 'true' : 'false') + '"' +
+              ' data-like-count="' + Number(playlistData.like_count || 0) + '"' +
+              ' data-authenticated="' + (isAuthenticated ? 'true' : 'false') + '"' +
+              ' aria-pressed="' + (userLiked ? 'true' : 'false') + '"' +
+              ' aria-label="' + escapeAttr(likeButtonLabel) + '"' +
+            '>' +
+              '<span class="like-button-icon" aria-hidden="true">' + likeIcon + '</span>' +
+              '<span class="like-button-label">좋아요</span>' +
+            '</button>' +
+          '</span>' +
+        '</div>' +
+      '</article>';
     }).join('');
   }
 
@@ -101,23 +128,25 @@ document.addEventListener('astro:page-load', () => {
     summaryNode.innerHTML = '<p>총 0개의 공개 플레이리스트</p><p>불러오는 중...</p>';
     gridNode.innerHTML = '';
 
-    for (let index = 0; index < 3; index += 1) {
+    for (var i = 0; i < 3; i += 1) {
       gridNode.insertAdjacentHTML('beforeend',
-        '<article class="card trending-card skeleton-card">' +
-          '<div class="trending-card-top">' +
-            '<span class="rank-badge skeleton-box"></span>' +
-            '<span class="like-count skeleton-line"></span>' +
+        '<article class="card playlist-card skeleton-card">' +
+          '<div class="playlist-header">' +
+            '<span class="skeleton-line skeleton-title"></span>' +
+            '<span class="playlist-count skeleton-count"></span>' +
           '</div>' +
-          '<div class="skeleton-line skeleton-title"></div>' +
           '<div class="skeleton-line skeleton-text"></div>' +
           '<div class="skeleton-line skeleton-text short"></div>' +
-          '<div class="playlist-author skeleton-author">' +
-            '<span class="avatar avatar-fallback skeleton-avatar"></span>' +
-            '<span class="skeleton-line skeleton-author-line"></span>' +
-          '</div>' +
           '<div class="playlist-footer">' +
-            '<span class="badge skeleton-badge"></span>' +
-            '<span class="btn like-button skeleton-button"></span>' +
+            '<span class="playlist-curator">' +
+              '<span class="skeleton-avatar"></span>' +
+              '<span class="skeleton-line skeleton-author-line"></span>' +
+            '</span>' +
+            '<span class="trending-stats">' +
+              '<span class="rank-badge skeleton-box"></span>' +
+              '<span class="skeleton-line skeleton-like-count"></span>' +
+              '<span class="btn like-button skeleton-button"></span>' +
+            '</span>' +
           '</div>' +
         '</article>'
       );
