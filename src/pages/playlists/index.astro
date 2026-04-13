@@ -179,7 +179,9 @@ document.addEventListener('DOMContentLoaded', () => {
 .page-header { margin-bottom: var(--space-xl); }
 .page-header h1 { font-size: 2rem; font-weight: 800; }
 .page-subtitle { color: var(--color-text-muted); margin-top: var(--space-xs); }
-.empty-state { text-align: center; padding: var(--space-2xl); color: var(--color-text-muted); }
+.empty-state,
+.community-section :global(.empty-state),
+.editor-section :global(.empty-state) { text-align: center; padding: var(--space-2xl); color: var(--color-text-muted); }
 
 .community-section {
   margin-top: var(--space-2xl);
@@ -195,7 +197,11 @@ document.addEventListener('DOMContentLoaded', () => {
   color: var(--color-text-muted);
   margin-bottom: var(--space-lg);
 }
-.loading-state, .error-state {
+.loading-state, .error-state,
+.community-section :global(.loading-state),
+.community-section :global(.error-state),
+.editor-section :global(.loading-state),
+.editor-section :global(.error-state) {
   grid-column: 1 / -1;
   text-align: center;
   padding: var(--space-xl);
