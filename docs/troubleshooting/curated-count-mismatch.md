@@ -62,6 +62,10 @@ rm -rf .astro node_modules/.astro/data-store.json dist && bun run build
 
 ---
 
+## 관련 문서
+
+- [아키텍처 개요](../architecture/overview.md)
+
 ## 변경 이력
 
 | 날짜 | 변경 내용 |

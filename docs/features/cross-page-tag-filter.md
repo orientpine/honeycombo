@@ -47,9 +47,9 @@ allArticles → serializeArticles() → JSON 문자열
 
 ## 제약 사항
 
-- 동적 렌더링 카드에는 `AddToPlaylist` 컴포넌트가 포함되지 않음 (SSR 컴포넌트이므로 JS 재초기화 필요)
 - 인라인 JSON 크기는 기사 수에 비례 (~244건 기준 ~135KB raw, gzip 후 ~30KB)
 - `escapeHtml()`로 XSS 방지 처리됨
+- 동적 렌더링 카드의 `AddToPlaylist` 버튼은 `window.__initAddToPlaylistContainers()`를 통해 JS 재초기화됨
 
 ---
 
@@ -62,3 +62,4 @@ allArticles → serializeArticles() → JSON 문자열
 | 날짜 | 변경 내용 |
 |------|----------|
 | 2026-04-13 | 최초 작성 |
+| 2026-04-13 | AddToPlaylist 미포함 제약 해소 — renderCard()에 HTML 삽입 + JS 재초기화 |

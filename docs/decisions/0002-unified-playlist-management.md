@@ -38,6 +38,11 @@ D1 `user_playlists` 테이블에 `playlist_type` ('community' | 'editor') 컬럼
 
 ---
 
+## 관련 문서
+
+- [아키텍처 개요](../architecture/overview.md)
+- [플레이리스트](../features/playlists.md)
+
 ## 변경 이력
 
 | 날짜 | 변경 내용 |
