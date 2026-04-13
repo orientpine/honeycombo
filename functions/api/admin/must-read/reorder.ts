@@ -61,6 +61,10 @@ const handler = async (context: AdminContext): Promise<Response> => {
       return json({ error: `Unknown item ids: ${invalidIds.join(', ')}` }, 400);
     }
 
+    if (ids.length !== existingItems.length) {
+      return json({ error: 'ids must include all existing items' }, 400);
+    }
+
     await reorderMustReadItems(env.DB, ids);
     return json({ success: true });
   } catch {
