@@ -48,7 +48,7 @@ collections:
           - { label: "대기중", value: "pending" }
           - { label: "승인됨", value: "approved" }
           - { label: "거부됨", value: "rejected" }
-        default: "pending"
+        default: "approved"
 
   # Playlists — individual JSON files in src/data/playlists/
   - name: "playlists"

@@ -12,7 +12,7 @@ export const curatedArticleSchema = z.object({
   submitted_by: z.string().optional(),
   submitted_by_id: z.string().optional(),
   submitted_at: z.coerce.date(),
-  status: z.enum(['pending', 'approved', 'rejected']).default('pending'),
+  status: z.enum(['pending', 'approved', 'rejected']).default('approved'),
   engagement: z
     .object({
       views: z.number().int().min(0).default(0),
