@@ -984,6 +984,7 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
                     btn.textContent = '✓ 추가됨';
                     btn.disabled = true;
                     updateItemCount(1);
+                    window.setTimeout(function() { window.location.reload(); }, 500);
                   } catch {
                     window.alert('추가에 실패했습니다.');
                   }
@@ -1104,6 +1105,10 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
                   card.remove();
                   syncItemControls();
                   updateItemCount(-1);
+                  var itemsEl = document.querySelector('.items');
+                  if (itemsEl && !itemsEl.querySelector('.item-card')) {
+                    itemsEl.innerHTML = '<p class="empty-state">이 플레이리스트에 아직 기사가 없습니다.</p>';
+                  }
                 }, 300);
               } catch {
                 window.alert('삭제에 실패했습니다.');
@@ -1136,22 +1141,14 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
             }
 
             try {
-              const responses = await Promise.all([
-                fetch('/api/playlists/' + playlistId + '/items/' + encodeURIComponent(itemId), {
-                  method: 'PUT',
-                  credentials: 'same-origin',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ position: targetPos })
-                }),
-                fetch('/api/playlists/' + playlistId + '/items/' + encodeURIComponent(targetItemId), {
-                  method: 'PUT',
-                  credentials: 'same-origin',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ position: currentPos })
-                })
-              ]);
+              const res = await fetch('/api/playlists/' + playlistId + '/items/swap', {
+                method: 'PUT',
+                credentials: 'same-origin',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ itemA: itemId, itemB: targetItemId })
+              });
 
-              if (!responses.every((res) => res.ok)) {
+              if (!res.ok) {
                 throw new Error();
               }
 

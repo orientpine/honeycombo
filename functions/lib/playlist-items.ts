@@ -164,3 +164,33 @@ export async function removeItem(
 
   return true;
 }
+
+export async function swapItemPositions(
+  db: D1Database,
+  playlistId: string,
+  userId: string,
+  itemIdA: string,
+  itemIdB: string,
+): Promise<boolean> {
+  if (!(await isPlaylistOwner(db, playlistId, userId))) {
+    return false;
+  }
+
+  const [a, b] = await Promise.all([
+    db.prepare('SELECT id, position FROM playlist_items WHERE id = ? AND playlist_id = ?').bind(itemIdA, playlistId).first<Pick<PlaylistItemRow, 'id' | 'position'>>(),
+    db.prepare('SELECT id, position FROM playlist_items WHERE id = ? AND playlist_id = ?').bind(itemIdB, playlistId).first<Pick<PlaylistItemRow, 'id' | 'position'>>(),
+  ]);
+
+  if (!a || !b) {
+    return false;
+  }
+
+  await db.batch([
+    db.prepare('UPDATE playlist_items SET position = ? WHERE id = ? AND playlist_id = ?').bind(b.position, itemIdA, playlistId),
+    db.prepare('UPDATE playlist_items SET position = ? WHERE id = ? AND playlist_id = ?').bind(a.position, itemIdB, playlistId),
+  ]);
+
+  await db.prepare('UPDATE user_playlists SET updated_at = CURRENT_TIMESTAMP WHERE id = ?').bind(playlistId).run();
+
+  return true;
+}
