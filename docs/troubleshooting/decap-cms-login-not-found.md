@@ -61,12 +61,16 @@ if (!code) {
 | 파일 | 변경 내용 |
 |------|----------|
 | `functions/api/auth.ts` | GitHub OAuth 리다이렉트 로직 추가 (1단계) |
+| `functions/api/auth.ts` | postMessage 핸드셰이크 추가 — `authorizing:github` 선행 전송 |
+| `public/admin/config.yml` | `base_url: https://honeycombo.pages.dev` 추가 (Netlify 기본값 방지) |
 
 ## 예방 조치
 
 - Decap CMS의 `auth_endpoint`는 반드시 **리다이렉트(1단계) + 콜백(2단계)** 모두 처리해야 한다.
 - 사이트 자체 auth와 Decap CMS auth는 별도 시스템이므로, 한쪽 수정 시 다른 쪽에 영향이 없는지 확인할 것.
 - GitHub OAuth App의 "Authorization callback URL"에 `/api/auth`가 등록되어 있는지 확인.
+- `config.yml`에 `base_url`이 없으면 Decap CMS는 기본값인 `api.netlify.com`으로 OAuth를 시도한다. Cloudflare Pages 등 비-Netlify 호스트에서는 반드시 `base_url`을 명시해야 한다.
+- OAuth 콜백의 postMessage는 반드시 **핸드셰이크 프로토콜**(`authorizing:github` → CMS 응답 대기 → `authorization:github:success:...`)을 따라야 한다. 토큰을 직접 보내면 CMS가 수신하지 않는다.
 
 ---
 
@@ -79,3 +83,4 @@ if (!code) {
 | 날짜 | 변경 내용 |
 |------|----------|
 | 2026-04-12 | 최초 작성 |
+| 2026-04-13 | base_url 누락, postMessage 핸드셰이크 수정 내용 추가 |
