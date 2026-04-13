@@ -57,6 +57,11 @@
 
 Astro View Transitions 환경에서 외부 스크립트를 사용할 때는 `<script src="..." is:inline>`을 직접 사용하지 말고, `astro:page-load` 이벤트 핸들러 내에서 동적으로 `document.createElement('script')`로 생성해야 한다. 기존 코드베이스의 `ArticleCard.astro`, `Navigation.astro` 등이 이 패턴을 따르고 있으므로 참고할 것.
 
+## 관련 문서
+
+- [아키텍처 개요](../architecture/overview.md)
+- [Cloudflare Pages 자동 배포 실패](./cloudflare-pages-auto-deploy-failure.md)
+
 ---
 
 ## 변경 이력
