@@ -98,7 +98,7 @@ function initAddToPlaylistContainer(container: Element) {
         <li>
           <button class="playlist-item-btn${p.contains_item ? ' already-added' : ''}"
                   data-id="${p.id}" ${p.contains_item ? 'disabled' : ''}>
-            ${p.contains_item ? '✓ ' : ''}${p.title}
+            ${p.contains_item ? '✓ ' : '📋 '}${p.title}
             ${p.contains_item ? '<span class="badge-added">추가됨</span>' : ''}
           </button>
         </li>
