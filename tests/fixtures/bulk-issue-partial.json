@@ -1,7 +1,7 @@
 {
   "number": 101,
   "title": "📦 Bulk Submit",
-  "body": "### Link List\n\nhttps://example.com/valid-bulk | 기사 | AI | Valid article\nnot-a-valid-url | 기사 | test | Invalid URL\nhttps://example.com/another-valid | 기타 | dev | Another valid article",
+  "body": "### Link List\n\nhttps://example.com/valid-bulk | Article | AI | Valid article\nnot-a-valid-url | Article | test | Invalid URL\nhttps://example.com/another-valid | Other | dev | Another valid article",
   "labels": [{ "name": "submission" }, { "name": "bulk" }],
   "user": { "login": "bulkuser" }
 }

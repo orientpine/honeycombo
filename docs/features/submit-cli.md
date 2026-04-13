@@ -35,7 +35,7 @@ CLI 인자 → scripts/submit-cli.ts 파싱/검증 → gh issue create → GitHu
 - `gh auth status`가 통과해야 실제 실행이 가능하다.
 - 대량 제출은 빈 줄/주석 줄(`#`)을 제외하고 최대 20개 항목만 포함한다.
 - 태그는 최대 5개까지만 본문에 포함한다.
-- **태그와 한줄 소개는 반드시 영어로 작성해야 한다.** 유형(`기사`, `YouTube` 등)은 시스템 값이므로 한국어 그대로 사용한다.
+- **Tags and short descriptions must be written in English.**
 
 ---
 
