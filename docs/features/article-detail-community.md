@@ -6,6 +6,21 @@
 
 커뮤니티 성격 프로젝트에 어울리는 상호작용 기능을 기사 상세페이지와 목록 카드에 추가했다.
 
+## 동작 흐름
+
+```
+기사 상세페이지 로드
+  → astro:page-load 이벤트 발생
+  → BookmarkButton: localStorage에서 북마크 상태 복원
+  → Giscus: 동적으로 script 요소 생성 → iframe 렌더링
+  → ShareButtons: 클릭 시 clipboard/window.open/navigator.share
+
+기사 목록 페이지 로드
+  → BookmarkButton: localStorage에서 전체 북마크 상태 복원
+  → IntersectionObserver: 뷰포트 진입 카드에 대해 Giscus API fetch
+  → sessionStorage 캐시 확인 → 없으면 API 호출 → 댓글 수 표시
+```
+
 ## 기능 목록
 
 ### 1. 공유 버튼 (ShareButtons)
@@ -49,6 +64,15 @@
 | `public/_headers` | CSP 헤더 (giscus.app 허용) |
 
 ## 설계 결정
+
+## 설정값
+
+| 이름 | 위치 | 기본값 | 설명 |
+|------|------|--------|------|
+| `honeycombo:bookmarks` | localStorage | `[]` | 북마크된 기사 ID 배열 |
+| `honeycombo:comment-counts` | sessionStorage | `{}` | 댓글 수 캐시 (path → count) |
+| `REPO_ID` | `Comments.astro` | `R_kgDOR_fpgQ` | GitHub repo ID (Giscus) |
+| `CATEGORY_ID` | `Comments.astro` | `DIC_kwDOR_fpgc4C6lgR` | GitHub Discussions category ID |
 
 - **북마크를 localStorage로 구현**: 서버 비용 없이 즉시 동작. 크로스 디바이스는 기존 플레이리스트 기능으로 대체 가능.
 - **댓글 수를 클라이언트에서 fetch**: SSG 빌드 시점에 GitHub API 토큰 불필요. IntersectionObserver + sessionStorage로 성능 최적화.
