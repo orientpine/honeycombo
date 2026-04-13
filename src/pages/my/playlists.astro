@@ -142,6 +142,17 @@ document.addEventListener('DOMContentLoaded', () => {
         statusBadgeHtml = `<span class="badge ${statusClass}">${statusText}</span>`;
       }
 
+      // Visibility action button
+      let visibilityActionHtml = '';
+      if (!isPublic || playlist.status === 'draft') {
+        visibilityActionHtml = `<button class="btn btn-sm visibility-btn visibility-btn-public" data-id="${playlist.id}" data-visibility="public">🌐 공개 신청</button>`;
+      } else if (playlist.status === 'approved') {
+        visibilityActionHtml = `<button class="btn btn-sm visibility-btn visibility-btn-unlisted" data-id="${playlist.id}" data-visibility="unlisted">🔒 비공개로 전환</button>`;
+      } else if (playlist.status === 'rejected') {
+        visibilityActionHtml = `<button class="btn btn-sm visibility-btn visibility-btn-public" data-id="${playlist.id}" data-visibility="public">🔄 재신청</button>`;
+      }
+      // pending: no action button needed
+
       card.innerHTML = `
         <div class="playlist-header">
           <h3 class="playlist-title">
@@ -164,6 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         <div class="playlist-footer">
           <time class="playlist-date">업데이트: ${formattedDate}</time>
+          ${visibilityActionHtml}
         </div>
       `;
       
@@ -199,6 +211,42 @@ document.addEventListener('DOMContentLoaded', () => {
             target.disabled = false;
             target.style.opacity = '1';
           }
+        }
+      });
+    });
+
+    // Add visibility toggle event listeners
+    document.querySelectorAll('.visibility-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const target = e.currentTarget as HTMLButtonElement;
+        const id = target.getAttribute('data-id');
+        const visibility = target.getAttribute('data-visibility');
+        if (!id || !visibility) return;
+
+        const label = visibility === 'public' ? '공개 신청' : '비공개 전환';
+        if (!confirm(`이 플레이리스트를 ${label}하시겠습니까?${visibility === 'public' ? '\n에디터 승인 후 공개됩니다.' : ''}`)) return;
+
+        target.disabled = true;
+        const originalText = target.textContent || '';
+        target.textContent = '처리 중...';
+
+        try {
+          const res = await fetch(`/api/playlists/${id}/visibility`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ visibility })
+          });
+
+          if (!res.ok) {
+            const data = await res.json().catch(() => ({}));
+            throw new Error(data.error || `${label}에 실패했습니다.`);
+          }
+
+          await loadPlaylists();
+        } catch (err) {
+          alert(err instanceof Error ? err.message : '처리 중 오류가 발생했습니다.');
+          target.disabled = false;
+          target.textContent = originalText;
         }
       });
     });
@@ -404,6 +452,11 @@ document.addEventListener('DOMContentLoaded', () => {
   margin-top: auto;
   padding-top: var(--space-sm);
   border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
 }
 
 .playlist-date {
@@ -432,6 +485,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
 .delete-btn:hover {
   background: rgba(239, 68, 68, 0.1);
+}
+
+.visibility-btn {
+  padding: var(--space-xs) var(--space-sm);
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.visibility-btn-public {
+  background: rgba(37, 99, 235, 0.1);
+  color: var(--color-primary);
+  border-color: rgba(37, 99, 235, 0.2);
+}
+
+.visibility-btn-public:hover:not(:disabled) {
+  background: rgba(37, 99, 235, 0.2);
+}
+
+.visibility-btn-unlisted {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-muted);
+}
+
+.visibility-btn-unlisted:hover:not(:disabled) {
+  background: var(--color-bg-secondary);
+  border-color: var(--color-text-muted);
+}
+
+.visibility-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 @media (max-width: 640px) {

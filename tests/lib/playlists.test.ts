@@ -47,7 +47,7 @@ describe('playlists repository', () => {
 
     const queries = controller.getQueries();
     expect(queries[0]).toMatchObject({
-      params: ['pl_testid123', 'user_1', 'My playlist', 'Great links', 'unlisted'],
+      params: ['pl_testid123', 'user_1', 'My playlist', 'Great links', 'unlisted', 'draft'],
     });
     expect(queries[0]?.sql).toContain('INSERT INTO user_playlists');
     expect(queries[1]?.sql).toContain('FROM user_playlists');

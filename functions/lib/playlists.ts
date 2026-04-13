@@ -72,13 +72,14 @@ export async function createPlaylist(
 ): Promise<PlaylistRow> {
   const id = generateId();
   const visibility = input.visibility ?? 'unlisted';
+  const status = visibility === 'public' ? 'pending' : 'draft';
 
   await db
     .prepare(
       `INSERT INTO user_playlists (id, user_id, title, description, visibility, status)
-       VALUES (?, ?, ?, ?, ?, 'draft')`,
+       VALUES (?, ?, ?, ?, ?, ?)`,
     )
-    .bind(id, userId, input.title, input.description ?? null, visibility)
+    .bind(id, userId, input.title, input.description ?? null, visibility, status)
     .run();
 
   const playlist = await getPlaylistRow(db, id);

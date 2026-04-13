@@ -145,6 +145,42 @@ function renderItems(items: PlaylistItemRow[], isOwner: boolean, playlistId: str
 }
 
 function renderOwnerControls(playlist: PlaylistDetail): string {
+  const isUnlisted = playlist.visibility === 'unlisted';
+  const isPublicDraft = playlist.visibility === 'public' && playlist.status === 'draft';
+  const isPending = playlist.visibility === 'public' && playlist.status === 'pending';
+  const isApproved = playlist.visibility === 'public' && playlist.status === 'approved';
+  const isRejected = playlist.visibility === 'public' && playlist.status === 'rejected';
+
+  let visibilityTitle = '';
+  let visibilityDesc = '';
+  let visibilityBtnLabel = '';
+  let visibilityBtnAction = '';
+  let visibilityBtnClass = 'btn';
+
+  if (isUnlisted || isPublicDraft) {
+    visibilityTitle = '\uD83C\uDF10 \uACF5\uAC1C \uC2E0\uCCAD';
+    visibilityDesc = '\uC774 \uD50C\uB808\uC774\uB9AC\uC2A4\uD2B8\uB97C \uCEE4\uBBA4\uB2C8\uD2F0\uC5D0 \uACF5\uAC1C \uC2E0\uCCAD\uD569\uB2C8\uB2E4. \uC5D0\uB514\uD130 \uC2B9\uC778 \uD6C4 \uACF5\uAC1C\uB429\uB2C8\uB2E4.';
+    visibilityBtnLabel = '\uACF5\uAC1C \uC2E0\uCCAD';
+    visibilityBtnAction = 'public';
+    visibilityBtnClass = 'btn btn-visibility';
+  } else if (isPending) {
+    visibilityTitle = '\u23F3 \uC2B9\uC778 \uB300\uAE30 \uC911';
+    visibilityDesc = '\uC5D0\uB514\uD130 \uC2B9\uC778\uC744 \uAE30\uB2E4\uB9AC\uACE0 \uC788\uC2B5\uB2C8\uB2E4.';
+    visibilityBtnLabel = '\uBE44\uACF5\uAC1C\uB85C \uC804\uD658';
+    visibilityBtnAction = 'unlisted';
+  } else if (isApproved) {
+    visibilityTitle = '\u2705 \uACF5\uAC1C \uC911';
+    visibilityDesc = '\uC774 \uD50C\uB808\uC774\uB9AC\uC2A4\uD2B8\uB294 \uCEE4\uBBA4\uB2C8\uD2F0\uC5D0 \uACF5\uAC1C\uB418\uC5B4 \uC788\uC2B5\uB2C8\uB2E4.';
+    visibilityBtnLabel = '\uBE44\uACF5\uAC1C\uB85C \uC804\uD658';
+    visibilityBtnAction = 'unlisted';
+  } else if (isRejected) {
+    visibilityTitle = '\u274C \uBC18\uB824\uB428';
+    visibilityDesc = '\uACF5\uAC1C \uC2E0\uCCAD\uC774 \uBC18\uB824\uB418\uC5C8\uC2B5\uB2C8\uB2E4. \uC218\uC815 \uD6C4 \uC7AC\uC2E0\uCCAD\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4.';
+    visibilityBtnLabel = '\uC7AC\uC2E0\uCCAD';
+    visibilityBtnAction = 'public';
+    visibilityBtnClass = 'btn btn-visibility';
+  }
+
   return `
     <section class="owner-controls card">
       <div>
@@ -156,6 +192,13 @@ function renderOwnerControls(playlist: PlaylistDetail): string {
         <a href="/p/new" class="btn">새 플레이리스트</a>
         <button type="button" class="btn btn-danger" onclick="deletePlaylist()">삭제</button>
       </div>
+    </section>
+    <section class="visibility-section card">
+      <div>
+        <h2>${visibilityTitle}</h2>
+        <p>${visibilityDesc}</p>
+      </div>
+      <button type="button" class="${visibilityBtnClass}" onclick="toggleVisibility('${visibilityBtnAction}')">${escapeHtml(visibilityBtnLabel)}</button>
     </section>
     <section class="article-search-section">
       <h2>기사 추가</h2>
@@ -482,6 +525,34 @@ function renderDocument(options: {
         flex-wrap: wrap;
       }
 
+      .visibility-section {
+        margin-top: var(--space-md);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--space-md);
+      }
+
+      .visibility-section h2 {
+        font-size: 1.1rem;
+        margin-bottom: var(--space-xs);
+      }
+
+      .visibility-section p {
+        color: var(--color-text-muted);
+      }
+
+      .btn-visibility {
+        background: rgba(37, 99, 235, 0.1);
+        color: var(--color-primary);
+        border-color: rgba(37, 99, 235, 0.2);
+        white-space: nowrap;
+      }
+
+      .btn-visibility:hover {
+        background: rgba(37, 99, 235, 0.2);
+      }
+
       .article-search-section {
         margin-top: var(--space-xl);
         padding-top: var(--space-xl);
@@ -630,6 +701,7 @@ function renderDocument(options: {
 
         .playlist-meta,
         .owner-controls,
+        .visibility-section,
         .item-card-header {
           flex-direction: column;
           align-items: flex-start;
@@ -762,6 +834,31 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
               window.location.href = '/my/playlists';
             } catch (error) {
               window.alert(error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다.');
+            }
+          }
+
+          async function toggleVisibility(visibility) {
+            const label = visibility === 'public' ? '\uACF5\uAC1C \uC2E0\uCCAD' : '\uBE44\uACF5\uAC1C \uC804\uD658';
+            if (!window.confirm(label + '\uD558\uC2DC\uACA0\uC2B5\uB2C8\uAE4C?' + (visibility === 'public' ? '\n\uC5D0\uB514\uD130 \uC2B9\uC778 \uD6C4 \uACF5\uAC1C\uB429\uB2C8\uB2E4.' : ''))) {
+              return;
+            }
+
+            try {
+              const res = await fetch('/api/playlists/' + playlistId + '/visibility', {
+                method: 'PUT',
+                credentials: 'same-origin',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ visibility: visibility })
+              });
+
+              if (!res.ok) {
+                const data = await res.json().catch(function() { return {}; });
+                throw new Error(data.error || label + '\uC5D0 \uC2E4\uD328\uD588\uC2B5\uB2C8\uB2E4.');
+              }
+
+              window.location.reload();
+            } catch (error) {
+              window.alert(error instanceof Error ? error.message : '\uC54C \uC218 \uC5C6\uB294 \uC624\uB958\uAC00 \uBC1C\uC0DD\uD588\uC2B5\uB2C8\uB2E4.');
             }
           }
 
