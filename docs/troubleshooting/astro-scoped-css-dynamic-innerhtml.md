@@ -68,11 +68,30 @@ rm -rf dist .astro/data-store && bun run build
 
 **실제 사례**: `AddToPlaylist.astro`에서 `.playlist-list :global(.playlist-item-btn)` 패턴을 적용했으나, 빌드 캐시로 인해 `.playlist-item-btn[data-astro-cid-5jelms7w]`로 계속 컴파일됨 → 동적 `innerHTML` 버튼에 `border: none` 등 스타일이 적용되지 않아 브라우저 기본 버튼 테두리가 노출됨.
 
+### `<style is:global>` 안에서 `:global()` 금지
+
+`<style is:global>` 블록은 이미 모든 셀렉터를 글로벌로 처리한다. 이 안에서 `:global()` 래퍼를 중복 사용하면 **프로덕션 빌드가 해당 CSS 룰을 완전히 제거**한다. dev 모드에서는 정상 동작하므로 발견이 매우 어렵다.
+
+```css
+/* ❌ 프로덕션 빌드에서 제거됨 */
+<style is:global>
+.parent :global(.child) { ... }
+</style>
+
+/* ✅ 정상 동작 */
+<style is:global>
+.parent .child { ... }
+</style>
+```
+
+상세 사례: [playlist-dropdown-ui-regression.md](./playlist-dropdown-ui-regression.md) 참조.
+
 ---
 
 ## 관련 문서
 
 - [Astro Scoped Styles 공식 문서](https://docs.astro.build/en/guides/styling/#scoped-styles)
+- [playlist-dropdown-ui-regression.md](./playlist-dropdown-ui-regression.md) — `<style is:global>` + `:global()` 빌드 누락 문제
 - [플레이리스트 기능 문서](../features/playlists.md)
 
 ## 변경 이력
@@ -81,3 +100,4 @@ rm -rf dist .astro/data-store && bun run build
 |------|----------|
 | 2026-04-12 | 최초 작성 |
 | 2026-04-13 | 빌드 캐시 주의사항 추가 — AddToPlaylist 드롭다운 사례 |
+| 2026-04-14 | `<style is:global>` + `:global()` 금지 규칙 추가 |

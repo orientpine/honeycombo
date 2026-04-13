@@ -77,6 +77,74 @@ padding: var(--space-sm) var(--space-md);  /* 8px 16px */
 2. **드롭다운 일관성 체크리스트**: 새 드롭다운이나 기존 드롭다운 수정 시, auth-dropdown 패턴과 비교한다 (`border-radius`, `padding`, 아이템 스타일).
 3. **`padding` 축 주의**: `padding: A B`에서 A는 수직, B는 수평. 값 순서가 뒤바뀌기 쉬우므로, 의미를 주석으로 남기는 것을 권장한다.
 4. **TagFilter.astro 주의**: AddToPlaylist의 HTML 마크업을 인라인으로 복제하고 있으므로, AddToPlaylist 구조 변경 시 TagFilter도 함께 확인한다.
+5. **`<style is:global>` 안에서 `:global()` 래퍼 금지**: 프로덕션 빌드에서 해당 CSS 룰이 제거된다. dev 모드에서는 정상 동작하므로 발견이 어렵다. 아래 「추가 발견」 섹션 참조.
+
+## 추가 발견 — `<style is:global>` + `:global()` 프로덕션 빌드 문제
+
+### 증상
+
+드롭다운 내 플레이리스트 아이템 버튼이 브라우저 기본 스타일(appearance: auto, 회색 배경, 2px outset 테두리)로 렌더링. CSS 리셋(`appearance: none`, `background: none`, `border: none`)이 전혀 적용되지 않음.
+
+**특징**: dev 모드(`bun run dev`)에서는 정상 동작하지만, 프로덕션 빌드(`bun run build`) 결과물에서만 발생.
+
+### 원인
+
+`<style is:global>` 블록 내에서 추가로 `:global()` 래퍼를 사용하면, Astro 프로덕션 빌더가 해당 CSS 룰을 **완전히 제거**함.
+
+```css
+/* ❌ 빌드 시 제거됨 */
+<style is:global>
+.playlist-list :global(.playlist-item-btn) {
+  appearance: none;
+  background: none;
+}
+</style>
+
+/* ✅ 정상 동작 */
+<style is:global>
+.playlist-list .playlist-item-btn {
+  appearance: none;
+  background: none;
+}
+</style>
+```
+
+- `<style is:global>`은 이미 **모든 셀렉터를 글로벌로** 처리함
+- 그 안에서 `:global()`을 중복 사용하면 빌더가 해당 룰을 제거하는 버그/의도치 않은 동작 발생
+- dev 모드는 인라인 스타일 주입 방식이라 이 문제가 드러나지 않음
+
+### 해결 방법
+
+`:global()` 래퍼를 모두 제거하고 평범한 셀렉터로 변경:
+
+```diff
+- .playlist-list :global(.playlist-item-btn) {
++ .playlist-list .playlist-item-btn {
+
+- .playlist-list :global(.playlist-auth-required) {
++ .playlist-list .playlist-auth-required {
+
+- .playlist-list :global(.badge-added) {
++ .playlist-list .badge-added {
+```
+
+총 8개 셀렉터에서 `:global()` 제거.
+
+### 검증 방법
+
+이 문제는 빌드 결과물을 직접 검사해야 발견 가능:
+
+```bash
+# 빌드 후 셀렉터 존재 여부 확인
+bun run build
+grep 'playlist-item-btn' dist/articles/index.html
+
+# 결과가 없으면 CSS가 누락된 것
+```
+
+또는 배포된 사이트에서 브라우저 DevTools로 computed style 확인:
+- `appearance: auto` → CSS 미적용
+- `appearance: none` → CSS 정상 적용
 
 ## 작업 회고 — 왜 간단한 작업이 오래 걸렸는가
 
@@ -102,10 +170,12 @@ padding: var(--space-sm) var(--space-md);  /* 8px 16px */
 ## 관련 문서
 
 - [hover-gap-dropdown.md](./hover-gap-dropdown.md) — 드롭다운 마우스 이동 시 닫힘 문제
-- [astro-scoped-css-dynamic-innerhtml.md](./astro-scoped-css-dynamic-innerhtml.md) — Astro scoped CSS와 동적 innerHTML 이슈
+- [astro-scoped-css-dynamic-innerhtml.md](./astro-scoped-css-dynamic-innerhtml.md) — Astro scoped CSS와 동적 innerHTML 이슈 (관련 문제)
 
 ## 변경 이력
 
 | 날짜 | 변경 내용 |
 |------|----------|
 | 2026-04-14 | 최초 작성 — View Transitions 리팩터링 후 드롭다운 UI 리그레션 기록 |
+| 2026-04-14 | 추가 발견 — `<style is:global>` + `:global()` 프로덕션 빌드 누락 문제 기록 |
+| 2026-04-14 | 플레이리스트 아이템에 📋 아이콘 추가 |
