@@ -49,43 +49,102 @@ if (navToggle) {
   });
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
-  const authArea = document.getElementById('auth-area');
-  if (!authArea) return;
+const AUTH_CACHE_KEY = 'honeycombo:auth';
 
-  try {
-    const res = await fetch('/api/auth/me');
-    if (res.ok) {
-      const user = await res.json();
-      const avatarUrl = user.avatar_url ? user.avatar_url : '/default-avatar.png';
-      authArea.innerHTML = `
-        <div class="auth-user">
-          <img src="` + avatarUrl + `" alt="` + user.username + `" class="auth-avatar" />
-          <span class="auth-username">` + user.username + `</span>
-          <div class="auth-dropdown">
-            <a href="/my/playlists" class="auth-dropdown-item">내 플레이리스트</a>
-            ` + (user.is_admin ? `<a href="/admin/must-read" class="auth-dropdown-item auth-dropdown-admin">⭐ Must-read 관리</a><a href="/admin/playlists" class="auth-dropdown-item auth-dropdown-admin">🛡️ 플레이리스트 관리</a><a href="/admin" class="auth-dropdown-item auth-dropdown-admin">🛡️ 기사 검토 (CMS)</a>` : '') + `
-            <button id="logout-btn" class="auth-dropdown-item text-danger">로그아웃</button>
-          </div>
-        </div>
-      `;
-      
-      const logoutBtn = document.getElementById('logout-btn');
-      if (logoutBtn) {
-        logoutBtn.addEventListener('click', async () => {
-          await fetch('/api/auth/logout', { method: 'POST' });
-          window.location.reload();
-        });
-      }
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// Extract only rendering-relevant fields for stable cache comparison
+function toAuthCache(user: any): { username: string; avatar_url: string; is_admin: boolean } {
+  return {
+    username: String(user.username || ''),
+    avatar_url: String(user.avatar_url || ''),
+    is_admin: !!user.is_admin,
+  };
+}
+
+function renderAuthUser(authArea: HTMLElement, user: { username: string; avatar_url: string; is_admin: boolean }) {
+  const avatarUrl = user.avatar_url.startsWith('https://') ? escapeHtml(user.avatar_url) : '/default-avatar.png';
+  const safeName = escapeHtml(user.username);
+  authArea.innerHTML =
+    '<div class="auth-user">' +
+    '<img src="' + avatarUrl + '" alt="' + safeName + '" class="auth-avatar" />' +
+    '<span class="auth-username">' + safeName + '</span>' +
+    '<div class="auth-dropdown">' +
+    '<a href="/my/playlists" class="auth-dropdown-item">내 플레이리스트</a>' +
+    (user.is_admin ? '<a href="/admin/must-read" class="auth-dropdown-item auth-dropdown-admin">⭐ Must-read 관리</a><a href="/admin/playlists" class="auth-dropdown-item auth-dropdown-admin">🛡️ 플레이리스트 관리</a><a href="/admin" class="auth-dropdown-item auth-dropdown-admin">🛡️ 기사 검토 (CMS)</a>' : '') +
+    '<button class="auth-dropdown-item text-danger auth-logout-btn">로그아웃</button>' +
+    '</div>' +
+    '</div>';
+  const logoutBtn = authArea.querySelector<HTMLButtonElement>('.auth-logout-btn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', async () => {
+      try { sessionStorage.removeItem(AUTH_CACHE_KEY); } catch (_) {}
+      await fetch('/api/auth/logout', { method: 'POST' });
+      window.location.reload();
+    });
+  }
+}
+
+function renderLoginBtn(authArea: HTMLElement) {
+  authArea.innerHTML = '<a href="/api/auth/github/login" class="auth-login-btn">로그인</a>';
+}
+
+const authArea = document.getElementById('auth-area');
+if (authArea) {
+  let cachedRaw: string | null = null;
+  try { cachedRaw = sessionStorage.getItem(AUTH_CACHE_KEY); } catch (_) {}
+
+  if (cachedRaw) {
+    if (cachedRaw === 'guest') {
+      renderLoginBtn(authArea);
     } else {
-      authArea.innerHTML = `<a href="/api/auth/github/login" class="auth-login-btn">로그인</a>`;
+      try {
+        renderAuthUser(authArea, JSON.parse(cachedRaw));
+      } catch (_) {
+        try { sessionStorage.removeItem(AUTH_CACHE_KEY); } catch (_e) {}
+        cachedRaw = null;
+        renderLoginBtn(authArea);
+      }
     }
-  } catch (err) {
-    authArea.innerHTML = `<a href="/api/auth/github/login" class="auth-login-btn">로그인</a>`;
-  } finally {
+    authArea.classList.add('loaded');
+  } else {
+    // No cache (first visit): show login button immediately to prevent blank flash.
+    // Logged-in users see a single swap on first visit only; cached from then on.
+    renderLoginBtn(authArea);
     authArea.classList.add('loaded');
   }
-});
+
+  // Background verify — re-render only when rendering-relevant fields actually differ.
+  // Trade-off: cached state may briefly show stale user info (e.g. admin links after
+  // session expiry). This is acceptable because (1) admin API endpoints return 403,
+  // (2) dropdown is hidden until hover, (3) the alternative (no cache = blank flash
+  // on every navigation) is the original problem this fix addresses.
+  fetch('/api/auth/me').then(async (res) => {
+    if (res.ok) {
+      const user = await res.json();
+      const fresh = JSON.stringify(toAuthCache(user));
+      if (fresh !== cachedRaw) {
+        renderAuthUser(authArea, toAuthCache(user));
+        try { sessionStorage.setItem(AUTH_CACHE_KEY, fresh); } catch (_) {}
+      }
+    } else {
+      if (cachedRaw !== 'guest') {
+        renderLoginBtn(authArea);
+        try { sessionStorage.setItem(AUTH_CACHE_KEY, 'guest'); } catch (_) {}
+      }
+    }
+    authArea.classList.add('loaded');
+  }).catch(() => {
+    if (!cachedRaw) renderLoginBtn(authArea);
+    authArea.classList.add('loaded');
+  });
+}
 </script>
 
 <style>
