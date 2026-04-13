@@ -51,6 +51,18 @@
 - **sessionStorage 캐시**: 세션 내 중복 요청 방지
 - 댓글 아이콘 클릭 시 상세페이지 `#comments` 앵커로 이동
 
+### 5. 에디터 추천 뱃지
+
+- `articleOrigin === 'curated'`인 기사에 "에디터 추천" 뱃지 표시
+- `ArticleCard.astro`: SSR 렌더링 카드에 뱃지 적용
+- `TagFilter.astro`: 태그 필터링 시 동적 렌더링 카드에도 동일 뱃지 적용
+
+### 6. 댓글 UI 개선
+
+- 댓글 섹션에 말풍선 아이콘 + "GitHub Discussions" powered-by 라벨 추가
+- `giscus-container` 래퍼로 전환하여 View Transitions 호환성 개선
+- 반응형 헤더 레이아웃 (모바일에서 세로 정렬)
+
 ## 관련 파일
 
 | 파일 | 역할 |
@@ -95,3 +107,4 @@
 | 날짜 | 변경 내용 |
 |------|----------|
 | 2026-04-14 | 최초 작성 |
+| 2026-04-14 | 에디터 추천 뱃지 추가 (ArticleCard, TagFilter), 댓글 UI 개선 (Comments) |
