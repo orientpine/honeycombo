@@ -106,8 +106,8 @@
 | `/` | `index.astro` | 메인 (최신 기사) |
 | `/articles` | `articles/index.astro` | 기사 목록 (SourceFilter: 전체/에디터추천/제출기사/RSS) |
 | `/articles/[slug]` | `articles/[...slug].astro` | 개별 기사 (curated만) |
-| `/trending` | `functions/trending.ts` | 트렌딩 플레이리스트 (SSR, 좋아요 수 순위) |
-| `/must-read` | `functions/must-read.ts` | 필독 기사 (SSR, D1 에디터 관리) |
+| `/trending` | `trending.astro` | 트렌딩 플레이리스트 (Astro SSG shell + client fetch, 좋아요 수 순위) |
+| `/must-read` | `must-read.astro` | 필독 기사 (Astro SSG shell + client fetch, D1 에디터 관리) |
 | `/influencers` | `influencers.astro` | 추천 인플루언서 (X/Threads 섹션 분리) |
 | `/playlists` | `playlists/index.astro` | 에디터+커뮤니티 플레이리스트 목록 (D1 API 기반) |
 | `/p/new` | `p/new.astro` | 유저 플레이리스트 생성 폼 |
@@ -133,13 +133,13 @@
 - `src/config/ai-keywords.json`으로 AI 관련 기사만 허용 (키워드 allowlist)
 - 중복 URL 자동 제거
 
-### 2. 트렌딩 플레이리스트 (SSR)
+### 2. 트렌딩 플레이리스트 (Astro SSG + client fetch)
 
 ```
-방문자 → /trending → functions/trending.ts → D1 (좋아요 순 쿼리)
+방문자 → /trending (Astro 정적 HTML) → 브라우저 fetch /api/trending → D1 (좋아요 순 쿼리)
 ```
 
-- 공개 승인된 플레이리스트를 좋아요 수 기준으로 실시간 정렬하여 제공한다.
+- Astro `BaseLayout` + View Transitions를 사용하면서 공개 승인된 플레이리스트를 좋아요 수 기준으로 실시간 정렬하여 제공한다.
 
 ### 3. 기사 제출
 
@@ -213,4 +213,5 @@ src/ (pages + components + data + content) → astro build → dist/
 | 2026-04-13 | 기사 승인 시 플레이리스트 자동 추가 기능, webhook 엔드포인트, on-article-approved 워크플로우 추가 |
 | 2026-04-13 | GitHub OAuth 로그인 시 submissions catch-up 동기화 흐름 반영 |
 | 2026-04-13 | Must-read: 자동 계산 → 에디터 수동 관리 전환. D1/SSR 기반, 관리자 UI 추가, 레거시 파일 삭제 |
+| 2026-04-13 | `/trending`, `/must-read`를 Astro SSG shell + client fetch 구조로 전환해 View Transitions 깜빡임 제거 |
 | 2026-04-13 | merge=approval 전환, 에디터 자동 merge, editors.json 추가 |
