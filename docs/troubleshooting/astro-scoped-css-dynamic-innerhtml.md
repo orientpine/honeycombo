@@ -58,14 +58,26 @@ Astro 컴포넌트에서 `innerHTML`로 동적 요소를 생성할 때는 반드
 
 **패턴**: 정적 부모 요소를 앵커로 활용하여 `.static-parent :global(.dynamic-child)` 형태로 작성하면 글로벌 오염 없이 동적 요소를 스타일링할 수 있다.
 
+### 빌드 캐시 주의
+
+`:global()` 패턴을 적용한 뒤 `bun run build`를 실행해도 **이전 빌드 캐시**가 남아 있으면 scoped 셀렉터(`[data-astro-cid-*]`)가 그대로 출력될 수 있다. 소스 코드에는 `:global()`이 정상 적용돼 있어도 빌드 결과물에는 반영되지 않는 함정이 있으므로, CSS 스코핑 관련 변경 후에는 반드시 캐시를 삭제한 뒤 빌드한다.
+
+```bash
+rm -rf dist .astro/data-store && bun run build
+```
+
+**실제 사례**: `AddToPlaylist.astro`에서 `.playlist-list :global(.playlist-item-btn)` 패턴을 적용했으나, 빌드 캐시로 인해 `.playlist-item-btn[data-astro-cid-5jelms7w]`로 계속 컴파일됨 → 동적 `innerHTML` 버튼에 `border: none` 등 스타일이 적용되지 않아 브라우저 기본 버튼 테두리가 노출됨.
+
 ---
 
 ## 관련 문서
 
 - [Astro Scoped Styles 공식 문서](https://docs.astro.build/en/guides/styling/#scoped-styles)
+- [플레이리스트 기능 문서](../features/playlists.md)
 
 ## 변경 이력
 
 | 날짜 | 변경 내용 |
 |------|----------|
 | 2026-04-12 | 최초 작성 |
+| 2026-04-13 | 빌드 캐시 주의사항 추가 — AddToPlaylist 드롭다운 사례 |
