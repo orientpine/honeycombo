@@ -38,7 +38,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 </BaseLayout>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('astro:page-load', () => {
   const loadingEl = document.getElementById('loading');
   const authRequiredEl = document.getElementById('auth-required');
   const forbiddenEl = document.getElementById('forbidden');

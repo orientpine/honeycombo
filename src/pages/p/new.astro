@@ -102,7 +102,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 </BaseLayout>
 
 <script>
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('astro:page-load', async () => {
   const loadingEl = document.getElementById('auth-check-loading');
   const authRequiredEl = document.getElementById('auth-required');
   const formEl = document.getElementById('playlist-form') as HTMLFormElement;
