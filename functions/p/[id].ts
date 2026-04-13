@@ -821,8 +821,10 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
               return;
             }
 
+            const delBtn = document.querySelector('.owner-controls .btn-danger');
+            if (delBtn) { delBtn.disabled = true; delBtn.textContent = '삭제 중...'; }
             try {
-              const res = await fetch('/api/playlists/${encodeURIComponent(playlist.id)}', {
+              const res = await fetch('/api/playlists/' + playlistId, {
                 method: 'DELETE',
                 credentials: 'same-origin'
               });
@@ -833,15 +835,19 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
 
               window.location.href = '/my/playlists';
             } catch (error) {
+              if (delBtn) { delBtn.disabled = false; delBtn.textContent = '삭제'; }
               window.alert(error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다.');
             }
           }
 
           async function toggleVisibility(visibility) {
             const label = visibility === 'public' ? '\uACF5\uAC1C \uC2E0\uCCAD' : '\uBE44\uACF5\uAC1C \uC804\uD658';
-            if (!window.confirm(label + '\uD558\uC2DC\uACA0\uC2B5\uB2C8\uAE4C?' + (visibility === 'public' ? '\n\uC5D0\uB514\uD130 \uC2B9\uC778 \uD6C4 \uACF5\uAC1C\uB429\uB2C8\uB2E4.' : ''))) {
+            if (!window.confirm(label + '\uD558\uC2DC\uACA0\uC2B5\uB2C8\uAE4C?' + (visibility === 'public' ? '\\n\uC5D0\uB514\uD130 \uC2B9\uC778 \uD6C4 \uACF5\uAC1C\uB429\uB2C8\uB2E4.' : ''))) {
               return;
             }
+
+            const visBtn = document.querySelector('.visibility-section button');
+            if (visBtn) { visBtn.disabled = true; visBtn.textContent = '\uCC98\uB9AC \uC911...'; }
 
             try {
               const res = await fetch('/api/playlists/' + playlistId + '/visibility', {
@@ -858,6 +864,7 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
 
               window.location.reload();
             } catch (error) {
+              if (visBtn) { visBtn.disabled = false; visBtn.textContent = label; }
               window.alert(error instanceof Error ? error.message : '\uC54C \uC218 \uC5C6\uB294 \uC624\uB958\uAC00 \uBC1C\uC0DD\uD588\uC2B5\uB2C8\uB2E4.');
             }
           }
@@ -975,7 +982,7 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
               });
             }
 
-            searchResults.style.display = 'block';
+            searchResults.style.display = '';
           }
 
           if (toggleBtn && extForm) {
@@ -1027,9 +1034,7 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
                   throw new Error();
                 }
 
-                extForm.reset();
-                extForm.style.display = 'none';
-                window.alert('추가되었습니다. 새로고침하면 목록에 반영됩니다.');
+                window.location.reload();
               } catch {
                 window.alert('추가에 실패했습니다.');
               }
