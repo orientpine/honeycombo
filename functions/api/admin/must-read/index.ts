@@ -99,6 +99,7 @@ const handler = async (context: AdminContext): Promise<Response> => {
           return json({ error: '이미 추가된 기사입니다.' }, 409);
         }
         throw insertErr;
+      }
     }
 
     return json({ error: 'Method not allowed' }, 405);
