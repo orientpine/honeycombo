@@ -1,0 +1,12 @@
+{
+  "id": "cms-test-flat",
+  "title": "[테스트] 플랫 경로 테스트 기사",
+  "url": "https://example.com/flat-test",
+  "source": "테스트",
+  "type": "article",
+  "description": "루트 레벨 파일 테스트",
+  "tags": ["test"],
+  "submitted_by": "sisyphus-agent",
+  "submitted_at": "2026-04-13T20:00:00.000Z",
+  "status": "pending"
+}
