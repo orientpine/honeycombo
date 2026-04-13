@@ -38,6 +38,10 @@
 - `src/components/ArticleCard.astro` — SSR 렌더링 시 뱃지 출력 제거
 - `src/components/TagFilter.astro` — 클라이언트 필터링 시 뱃지 HTML 생성 제거
 
+## 관련 문서
+
+- [아키텍처 개요](../architecture/overview.md)
+
 ---
 
 ## 변경 이력
