@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
+    "prebuild": "rm -f node_modules/.astro/data-store.json",
     "build": "astro build",
     "preview": "bun run build && wrangler pages dev dist",
     "check": "astro check",
