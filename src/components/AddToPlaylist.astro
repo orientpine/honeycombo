@@ -208,17 +208,18 @@ document.addEventListener('DOMContentLoaded', () => {
   padding: 0 var(--space-xs);
 }
 
-.playlist-loading,
-.playlist-empty,
-.playlist-error,
-.playlist-auth-required {
+/* Dropdown list items — dynamic content (innerHTML), needs :global() */
+.playlist-list :global(.playlist-loading),
+.playlist-list :global(.playlist-empty),
+.playlist-list :global(.playlist-error),
+.playlist-list :global(.playlist-auth-required) {
   padding: var(--space-md) var(--space-sm);
   font-size: 0.85rem;
   color: var(--color-text-muted);
   text-align: center;
 }
 
-.playlist-auth-required .login-link {
+.playlist-list :global(.playlist-auth-required .login-link) {
   display: inline-block;
   margin-top: var(--space-sm);
   padding: var(--space-xs) var(--space-sm);
@@ -229,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
   font-size: 0.85rem;
 }
 
-.playlist-item-btn {
+.playlist-list :global(.playlist-item-btn) {
   width: 100%;
   padding: var(--space-sm);
   text-align: left;
@@ -246,15 +247,15 @@ document.addEventListener('DOMContentLoaded', () => {
   outline: none;
 }
 
-.playlist-item-btn:hover {
+.playlist-list :global(.playlist-item-btn:hover) {
   background: var(--color-bg-secondary);
 }
 
-.playlist-item-btn:focus-visible {
+.playlist-list :global(.playlist-item-btn:focus-visible) {
   background: var(--color-bg-secondary);
 }
 
-.playlist-item-btn.already-added {
+.playlist-list :global(.playlist-item-btn.already-added) {
   color: var(--color-text-muted);
   cursor: default;
   display: flex;
@@ -262,11 +263,11 @@ document.addEventListener('DOMContentLoaded', () => {
   align-items: center;
 }
 
-.playlist-item-btn.already-added:hover {
+.playlist-list :global(.playlist-item-btn.already-added:hover) {
   background: none;
 }
 
-.badge-added {
+.playlist-list :global(.badge-added) {
   font-size: 0.75rem;
   color: var(--color-success, #22c55e);
   font-weight: 600;

@@ -360,7 +360,9 @@ document.addEventListener('DOMContentLoaded', () => {
   color: var(--color-danger);
 }
 
-.btn {
+/* Buttons — used in both static and dynamic content */
+.my-playlists-content :global(.btn),
+.header-actions :global(.btn) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -376,47 +378,50 @@ document.addEventListener('DOMContentLoaded', () => {
   cursor: pointer;
 }
 
-.btn:hover {
+.my-playlists-content :global(.btn:hover),
+.header-actions :global(.btn:hover) {
   background: var(--color-bg-secondary);
 }
 
-.btn-primary { 
-  background: var(--color-primary); 
-  color: white; 
+.my-playlists-content :global(.btn-primary),
+.header-actions :global(.btn-primary) {
+  background: var(--color-primary);
+  color: white;
   border-color: var(--color-primary);
 }
 
-.btn-primary:hover { 
-  background: var(--color-primary-hover); 
-  color: white; 
-  text-decoration: none; 
+.my-playlists-content :global(.btn-primary:hover),
+.header-actions :global(.btn-primary:hover) {
+  background: var(--color-primary-hover);
+  color: white;
+  text-decoration: none;
 }
 
-.btn-secondary {
+.header-actions :global(.btn-secondary) {
   background: var(--color-bg-secondary);
   color: var(--color-text);
   border-color: var(--color-border);
 }
 
-.btn-secondary:hover {
+.header-actions :global(.btn-secondary:hover) {
   background: var(--color-border);
 }
 
-/* Playlist Card Styles */
-.playlist-card {
+/* Playlist Card Styles — dynamic content (innerHTML), needs :global() */
+.my-playlists-content :global(.playlist-card) {
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
 }
 
-.playlist-header {
+.my-playlists-content :global(.playlist-header) {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: var(--space-sm);
 }
 
-.playlist-title {
+.my-playlists-content :global(.playlist-title) {
   font-size: 1.2rem;
   font-weight: 700;
   line-height: 1.4;
@@ -427,16 +432,16 @@ document.addEventListener('DOMContentLoaded', () => {
   flex-wrap: wrap;
 }
 
-.playlist-title a {
+.my-playlists-content :global(.playlist-title a) {
   color: var(--color-text);
   text-decoration: none;
 }
 
-.playlist-title a:hover {
+.my-playlists-content :global(.playlist-title a:hover) {
   color: var(--color-primary);
 }
 
-.playlist-description {
+.my-playlists-content :global(.playlist-description) {
   font-size: 0.9rem;
   color: var(--color-text-muted);
   line-height: 1.5;
@@ -447,7 +452,7 @@ document.addEventListener('DOMContentLoaded', () => {
   margin: 0;
 }
 
-.playlist-meta {
+.my-playlists-content :global(.playlist-meta) {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -455,60 +460,60 @@ document.addEventListener('DOMContentLoaded', () => {
   gap: var(--space-sm);
 }
 
-.badges {
+.my-playlists-content :global(.badges) {
   display: flex;
   gap: var(--space-xs);
   flex-wrap: wrap;
 }
 
-.badge-unlisted {
+.my-playlists-content :global(.badge-unlisted) {
   background: var(--color-bg-secondary);
   color: var(--color-text-muted);
   border-color: var(--color-border);
 }
 
-.badge-public {
+.my-playlists-content :global(.badge-public) {
   background: rgba(37, 99, 235, 0.1);
   color: var(--color-primary);
   border-color: rgba(37, 99, 235, 0.2);
 }
 
-.badge-draft {
+.my-playlists-content :global(.badge-draft) {
   background: var(--color-bg-secondary);
   color: var(--color-text-muted);
 }
 
-.badge-pending {
+.my-playlists-content :global(.badge-pending) {
   background: rgba(245, 158, 11, 0.1);
   color: #d97706;
   border-color: rgba(245, 158, 11, 0.2);
 }
 
-.badge-approved {
+.my-playlists-content :global(.badge-approved) {
   background: rgba(16, 185, 129, 0.1);
   color: var(--color-success);
   border-color: rgba(16, 185, 129, 0.2);
 }
 
-.badge-rejected {
+.my-playlists-content :global(.badge-rejected) {
   background: rgba(239, 68, 68, 0.1);
   color: var(--color-danger);
   border-color: rgba(239, 68, 68, 0.2);
 }
 
-.badge-editor {
+.my-playlists-content :global(.badge-editor) {
   background: rgba(245, 158, 11, 0.1);
   color: #d97706;
   border-color: rgba(245, 158, 11, 0.2);
 }
 
-.playlist-tags {
+.my-playlists-content :global(.playlist-tags) {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-xs);
 }
 
-.tag {
+.my-playlists-content :global(.tag) {
   font-size: 0.75rem;
   padding: 2px 8px;
   background: var(--color-bg-secondary);
@@ -517,7 +522,7 @@ document.addEventListener('DOMContentLoaded', () => {
   border: 1px solid var(--color-border);
 }
 
-.playlist-count {
+.my-playlists-content :global(.playlist-count) {
   font-size: 0.85rem;
   font-weight: 500;
   color: var(--color-text);
@@ -526,7 +531,7 @@ document.addEventListener('DOMContentLoaded', () => {
   border-radius: var(--radius-sm);
 }
 
-.playlist-footer {
+.my-playlists-content :global(.playlist-footer) {
   margin-top: auto;
   padding-top: var(--space-sm);
   border-top: 1px solid var(--color-border);
@@ -537,12 +542,12 @@ document.addEventListener('DOMContentLoaded', () => {
   gap: var(--space-sm);
 }
 
-.playlist-date {
+.my-playlists-content :global(.playlist-date) {
   font-size: 0.8rem;
   color: var(--color-text-muted);
 }
 
-.btn-icon {
+.my-playlists-content :global(.btn-icon) {
   background: none;
   border: none;
   font-size: 1.2rem;
@@ -556,16 +561,16 @@ document.addEventListener('DOMContentLoaded', () => {
   opacity: 0.6;
 }
 
-.btn-icon:hover {
+.my-playlists-content :global(.btn-icon:hover) {
   background: var(--color-bg-secondary);
   opacity: 1;
 }
 
-.delete-btn:hover {
+.my-playlists-content :global(.delete-btn:hover) {
   background: rgba(239, 68, 68, 0.1);
 }
 
-.visibility-btn {
+.my-playlists-content :global(.visibility-btn) {
   padding: var(--space-xs) var(--space-sm);
   font-size: 0.8rem;
   font-weight: 500;
@@ -577,27 +582,27 @@ document.addEventListener('DOMContentLoaded', () => {
   color: var(--color-text);
 }
 
-.visibility-btn-public {
+.my-playlists-content :global(.visibility-btn-public) {
   background: rgba(37, 99, 235, 0.1);
   color: var(--color-primary);
   border-color: rgba(37, 99, 235, 0.2);
 }
 
-.visibility-btn-public:hover:not(:disabled) {
+.my-playlists-content :global(.visibility-btn-public:hover:not(:disabled)) {
   background: rgba(37, 99, 235, 0.2);
 }
 
-.visibility-btn-unlisted {
+.my-playlists-content :global(.visibility-btn-unlisted) {
   background: var(--color-bg-secondary);
   color: var(--color-text-muted);
 }
 
-.visibility-btn-unlisted:hover:not(:disabled) {
+.my-playlists-content :global(.visibility-btn-unlisted:hover:not(:disabled)) {
   background: var(--color-bg-secondary);
   border-color: var(--color-text-muted);
 }
 
-.visibility-btn:disabled {
+.my-playlists-content :global(.visibility-btn:disabled) {
   opacity: 0.6;
   cursor: not-allowed;
 }
@@ -606,7 +611,7 @@ document.addEventListener('DOMContentLoaded', () => {
   .flex-between {
     flex-direction: column;
   }
-  .flex-between .btn {
+  .flex-between :global(.btn) {
     width: 100%;
   }
 }

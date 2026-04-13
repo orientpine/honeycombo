@@ -456,7 +456,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   margin-top: var(--space-xs);
 }
 
-.tag-badge {
+/* Tag badges — dynamic content (appendChild), needs :global() */
+.submit-content :global(.tag-badge) {
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -468,7 +469,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   color: var(--color-text);
 }
 
-.tag-remove {
+.submit-content :global(.tag-remove) {
   background: none;
   border: none;
   color: var(--color-text-muted);
@@ -481,7 +482,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   justify-content: center;
 }
 
-.tag-remove:hover {
+.submit-content :global(.tag-remove:hover) {
   color: var(--color-danger);
 }
 </style>
