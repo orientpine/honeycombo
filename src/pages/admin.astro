@@ -11,6 +11,13 @@
     <meta name="robots" content="noindex, nofollow" />
     <title>HoneyCombo Admin</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <style>
+      /* Decap CMS publish dropdown — prevent text truncation */
+      [class*="Dropdown"] ul {
+        min-width: max-content !important;
+        white-space: nowrap !important;
+      }
+    </style>
   </head>
   <body>
     <!-- Decap CMS loaded via CDN — no npm install needed -->
