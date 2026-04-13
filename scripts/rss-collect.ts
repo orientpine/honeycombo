@@ -10,6 +10,7 @@ import { listJsonFiles } from './utils/list-json-files';
 const ROOT = process.cwd();
 const FEEDS_CONFIG = join(ROOT, 'src/config/feeds.json');
 const SPAM_KEYWORDS_PATH = join(ROOT, 'src/config/spam-keywords.json');
+const AI_KEYWORDS_PATH = join(ROOT, 'src/config/ai-keywords.json');
 const FEEDS_OUTPUT_DIR = join(ROOT, 'src/data/feeds');
 const MAX_ARTICLES_PER_RUN = 50;
 const FEED_TIMEOUT_MS = 30_000;
@@ -28,6 +29,7 @@ type ParsedFeed = Awaited<ReturnType<Parser['parseURL']>>;
 export interface CollectFeedsOptions {
   feedsConfigPath?: string;
   spamKeywordsPath?: string;
+  aiKeywordsPath?: string;
   outputDir?: string;
   parser?: Parser;
   now?: Date;
@@ -59,6 +61,11 @@ export function truncateText(value: string | undefined, max: number): string {
 
 export function isSpam(title: string, description: string, keywords: string[]): boolean {
   const haystack = `${title} ${description}`.toLowerCase();
+  return keywords.some((keyword) => haystack.includes(keyword.toLowerCase()));
+}
+
+export function isAIRelated(title: string, description: string, tags: string[], keywords: string[]): boolean {
+  const haystack = `${title} ${description} ${tags.join(' ')}`.toLowerCase();
   return keywords.some((keyword) => haystack.includes(keyword.toLowerCase()));
 }
 
@@ -139,6 +146,17 @@ export async function loadSpamKeywords(spamKeywordsPath = SPAM_KEYWORDS_PATH): P
   }
 }
 
+export async function loadAIKeywords(aiKeywordsPath = AI_KEYWORDS_PATH): Promise<string[]> {
+  try {
+    const content = await readFile(aiKeywordsPath, 'utf-8');
+    const parsed = JSON.parse(content) as unknown;
+    return Array.isArray(parsed) ? parsed.filter((value): value is string => typeof value === 'string') : [];
+  } catch (error) {
+    console.warn(`Failed to load AI keywords: ${aiKeywordsPath}`, error);
+    return [];
+  }
+}
+
 async function fetchFeedData(feedConfig: FeedConfig, parser: Parser): Promise<ParsedFeed> {
   let lastError: unknown;
 
@@ -184,6 +202,7 @@ export async function collectFeeds(options: CollectFeedsOptions = {}): Promise<C
   const {
     feedsConfigPath = FEEDS_CONFIG,
     spamKeywordsPath = SPAM_KEYWORDS_PATH,
+    aiKeywordsPath = AI_KEYWORDS_PATH,
     outputDir = FEEDS_OUTPUT_DIR,
     parser = new Parser({ timeout: FEED_TIMEOUT_MS }),
     now = new Date(),
@@ -194,6 +213,7 @@ export async function collectFeeds(options: CollectFeedsOptions = {}): Promise<C
   const enabledFeeds = feedConfigs.filter((feed) => feed.enabled);
   const existingIds = await loadExistingIds(outputDir);
   const spamKeywords = await loadSpamKeywords(spamKeywordsPath);
+  const aiKeywords = await loadAIKeywords(aiKeywordsPath);
 
   let saved = 0;
   let skipped = 0;
@@ -222,6 +242,11 @@ export async function collectFeeds(options: CollectFeedsOptions = {}): Promise<C
 
       if (isSpam(article.title, article.description ?? '', spamKeywords)) {
         console.warn(`Spam filtered: ${article.title}`);
+        skipped += 1;
+        continue;
+      }
+
+      if (aiKeywords.length > 0 && !isAIRelated(article.title, article.description ?? '', article.tags, aiKeywords)) {
         skipped += 1;
         continue;
       }

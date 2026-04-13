@@ -123,6 +123,7 @@
 
 - `src/config/feeds.json`에 등록된 피드 목록 기준
 - `src/config/spam-keywords.json`으로 스팸 필터링
+- `src/config/ai-keywords.json`으로 AI 관련 기사만 허용 (키워드 allowlist)
 - 중복 URL 자동 제거
 
 ### 2. 트렌딩 계산
@@ -173,6 +174,7 @@ src/ (pages + components + data + content) → astro build → dist/
 - [AI 에이전트 제출 가이드](../guides/agent-submission.md)
 - [추천 인플루언서](../features/influencers.md)
 - [플레이리스트](../features/playlists.md)
+- [AI 피드 필터](../features/ai-feed-filter.md)
 
 ## 변경 이력
 
@@ -185,3 +187,4 @@ src/ (pages + components + data + content) → astro build → dist/
 | 2026-04-12 | `/search-index.json` 정적 검색 인덱스 엔드포인트 추가 |
 | 2026-04-13 | Cloudflare Functions 전체 목록 반영, D1 데이터베이스 추가, 플레이리스트 기능 아키텍처 문서화 |
 | 2026-04-13 | 페이지 구조에 플레이리스트 하위 페이지(new, my, admin) 추가, 인플루언서 설명 갱신, 관련 문서 링크 보강 |
+| 2026-04-13 | RSS 수집에 AI 키워드 필터 추가 (`ai-keywords.json` allowlist) |

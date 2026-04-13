@@ -5,6 +5,7 @@ import { join } from 'path';
 import {
   collectFeeds,
   generateId,
+  isAIRelated,
   isSpam,
   normalizeFeedItem,
   truncateText,
@@ -16,6 +17,7 @@ const TEST_DIR = join(ROOT, 'tests/tmp-rss-test');
 const OUTPUT_DIR = join(TEST_DIR, 'output');
 const FEEDS_CONFIG_PATH = join(TEST_DIR, 'feeds.json');
 const SPAM_KEYWORDS_PATH = join(TEST_DIR, 'spam-keywords.json');
+const AI_KEYWORDS_PATH = join(TEST_DIR, 'ai-keywords.json');
 const VALID_RSS_PATH = join(ROOT, 'tests/fixtures/valid-rss.xml');
 const MALFORMED_RSS_PATH = join(ROOT, 'tests/fixtures/malformed-rss.xml');
 
@@ -37,6 +39,7 @@ describe('rss-collect', () => {
     await mkdir(OUTPUT_DIR, { recursive: true });
     await writeFile(FEEDS_CONFIG_PATH, JSON.stringify([TEST_FEED], null, 2));
     await writeFile(SPAM_KEYWORDS_PATH, JSON.stringify(['viral', 'buy now'], null, 2));
+    await writeFile(AI_KEYWORDS_PATH, JSON.stringify(['ai', 'artificial intelligence', 'machine learning', 'llm'], null, 2));
   });
 
   afterEach(async () => {
@@ -84,29 +87,26 @@ describe('rss-collect', () => {
     const firstRun = await collectFeeds({
       feedsConfigPath: FEEDS_CONFIG_PATH,
       spamKeywordsPath: SPAM_KEYWORDS_PATH,
+      aiKeywordsPath: AI_KEYWORDS_PATH,
       outputDir: OUTPUT_DIR,
       parser,
       now: new Date('2026-04-10T12:00:00.000Z'),
       fetchFeedData: async () => parser.parseString(xml),
     });
 
-    expect(firstRun).toEqual({ saved: 2, skipped: 0, errors: [] });
+    expect(firstRun).toEqual({ saved: 1, skipped: 1, errors: [] });
 
     const firstId = generateId('AI Breakthrough in 2026', 'https://example.com/ai-breakthrough');
-    const secondId = generateId('New JavaScript Framework Released', 'https://example.com/new-js-framework');
 
     expect(await readJson(`2026/04/${firstId}.json`)).toMatchObject({
       id: firstId,
       title: 'AI Breakthrough in 2026',
     });
-    expect(await readJson(`2026/04/${secondId}.json`)).toMatchObject({
-      id: secondId,
-      title: 'New JavaScript Framework Released',
-    });
 
     const secondRun = await collectFeeds({
       feedsConfigPath: FEEDS_CONFIG_PATH,
       spamKeywordsPath: SPAM_KEYWORDS_PATH,
+      aiKeywordsPath: AI_KEYWORDS_PATH,
       outputDir: OUTPUT_DIR,
       parser,
       now: new Date('2026-04-10T12:00:00.000Z'),
@@ -134,6 +134,7 @@ describe('rss-collect', () => {
     const result = await collectFeeds({
       feedsConfigPath: FEEDS_CONFIG_PATH,
       spamKeywordsPath: SPAM_KEYWORDS_PATH,
+      aiKeywordsPath: AI_KEYWORDS_PATH,
       outputDir: OUTPUT_DIR,
       parser,
       fetchFeedData: async () => parser.parseString(spamXml),
@@ -150,6 +151,7 @@ describe('rss-collect', () => {
     const result = await collectFeeds({
       feedsConfigPath: FEEDS_CONFIG_PATH,
       spamKeywordsPath: SPAM_KEYWORDS_PATH,
+      aiKeywordsPath: AI_KEYWORDS_PATH,
       outputDir: OUTPUT_DIR,
       parser,
       fetchFeedData: async () => parser.parseString(malformedXml),
@@ -159,5 +161,41 @@ describe('rss-collect', () => {
     expect(result.skipped).toBe(0);
     expect(result.errors).toHaveLength(1);
     expect(result.errors[0]).toContain('Skipped feed test-feed');
+  });
+
+  it('detects AI-related articles by title, description, and tags', () => {
+    const keywords = ['ai', 'machine learning', 'llm'];
+
+    expect(isAIRelated('New AI Model Released', '', [], keywords)).toBe(true);
+    expect(isAIRelated('Weather Report', 'sunny skies', ['news'], keywords)).toBe(false);
+    expect(isAIRelated('Tech News', 'A new LLM was announced', ['tech'], keywords)).toBe(true);
+    expect(isAIRelated('Update', '', ['ai', 'tech'], keywords)).toBe(true);
+  });
+
+  it('skips non-AI articles during collection', async () => {
+    const parser = new Parser();
+    const nonAiXml = `<?xml version="1.0" encoding="UTF-8"?>
+      <rss version="2.0">
+        <channel>
+          <title>General Tech Feed</title>
+          <item>
+            <title>Best Coffee Makers for 2026</title>
+            <link>https://example.com/coffee</link>
+            <description>A roundup of the best coffee makers.</description>
+            <pubDate>Fri, 10 Apr 2026 08:00:00 GMT</pubDate>
+          </item>
+        </channel>
+      </rss>`;
+
+    const result = await collectFeeds({
+      feedsConfigPath: FEEDS_CONFIG_PATH,
+      spamKeywordsPath: SPAM_KEYWORDS_PATH,
+      aiKeywordsPath: AI_KEYWORDS_PATH,
+      outputDir: OUTPUT_DIR,
+      parser,
+      fetchFeedData: async () => parser.parseString(nonAiXml),
+    });
+
+    expect(result).toEqual({ saved: 0, skipped: 1, errors: [] });
   });
 });
