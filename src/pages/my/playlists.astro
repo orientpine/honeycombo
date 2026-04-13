@@ -8,7 +8,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       <h1>📋 내 플레이리스트</h1>
       <p class="page-subtitle">내가 만든 플레이리스트를 관리하세요</p>
     </div>
-    <a href="/p/new" class="btn btn-primary">새 플레이리스트 만들기</a>
+    <div class="header-actions" id="header-actions">
+      <a href="/p/new" class="btn btn-primary">새 플레이리스트 만들기</a>
+    </div>
   </div>
 
   <div class="my-playlists-content">
@@ -56,7 +58,18 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const res = await fetch('/api/auth/me');
       if (res.ok) {
+        const userData = await res.json();
         isAuthed = true;
+        if (userData.is_admin) {
+          const headerActions = document.getElementById('header-actions');
+          if (headerActions) {
+            const editorBtn = document.createElement('a');
+            editorBtn.href = '/p/new?type=editor';
+            editorBtn.className = 'btn btn-secondary';
+            editorBtn.textContent = '새 에디터 플레이리스트';
+            headerActions.insertBefore(editorBtn, headerActions.firstChild);
+          }
+        }
         await loadPlaylists();
       } else {
         isAuthed = false;
@@ -113,11 +126,11 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       // Visibility badge
-      const isPublic = playlist.visibility === 'public';
+      const isEditor = playlist.playlist_type === 'editor';
+      const isPublic = playlist.visibility === 'public' || isEditor;
       const visibilityIcon = isPublic ? '🌐' : '🔒';
       const visibilityText = isPublic ? '공개' : '비공개';
       const visibilityClass = isPublic ? 'badge-public' : 'badge-unlisted';
-
       // Status badge (only relevant for public)
       let statusBadgeHtml = '';
       if (isPublic) {
@@ -144,12 +157,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Visibility action button
       let visibilityActionHtml = '';
-      if (!isPublic || playlist.status === 'draft') {
-        visibilityActionHtml = `<button class="btn btn-sm visibility-btn visibility-btn-public" data-id="${playlist.id}" data-visibility="public">🌐 공개 신청</button>`;
-      } else if (playlist.status === 'approved') {
-        visibilityActionHtml = `<button class="btn btn-sm visibility-btn visibility-btn-unlisted" data-id="${playlist.id}" data-visibility="unlisted">🔒 비공개로 전환</button>`;
-      } else if (playlist.status === 'rejected') {
-        visibilityActionHtml = `<button class="btn btn-sm visibility-btn visibility-btn-public" data-id="${playlist.id}" data-visibility="public">🔄 재신청</button>`;
+      if (!isEditor) {
+        if (!isPublic || playlist.status === 'draft') {
+          visibilityActionHtml = `<button class="btn btn-sm visibility-btn visibility-btn-public" data-id="${playlist.id}" data-visibility="public">🌐 공개 신청</button>`;
+        } else if (playlist.status === 'approved') {
+          visibilityActionHtml = `<button class="btn btn-sm visibility-btn visibility-btn-unlisted" data-id="${playlist.id}" data-visibility="unlisted">🔒 비공개로 전환</button>`;
+        } else if (playlist.status === 'rejected') {
+          visibilityActionHtml = `<button class="btn btn-sm visibility-btn visibility-btn-public" data-id="${playlist.id}" data-visibility="public">🔄 재신청</button>`;
+        }
       }
       // pending: no action button needed
 
@@ -157,6 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="playlist-header">
           <h3 class="playlist-title">
             <a href="/p/${playlist.id}">${escapeHtml(playlist.title)}</a>
+            ${isEditor ? '<span class="badge badge-editor">🏷️ 에디터</span>' : ''}
           </h3>
           <div class="playlist-actions">
             <button class="btn-icon delete-btn" data-id="${playlist.id}" aria-label="삭제" title="삭제">🗑️</button>
@@ -164,6 +180,8 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         
         ${playlist.description ? `<p class="playlist-description">${escapeHtml(playlist.description)}</p>` : ''}
+        
+        ${renderTags(playlist.tags)}
         
         <div class="playlist-meta">
           <div class="badges">
@@ -269,6 +287,25 @@ document.addEventListener('DOMContentLoaded', () => {
          .replace(/'/g, "&#039;");
   }
 
+  function renderTags(tagsData: any) {
+    if (!tagsData) return '';
+    let tags: string[] = [];
+    if (typeof tagsData === 'string') {
+      try {
+        tags = JSON.parse(tagsData);
+      } catch (e) {
+        return '';
+      }
+    } else if (Array.isArray(tagsData)) {
+      tags = tagsData;
+    }
+    if (!tags || tags.length === 0) return '';
+    
+    return `<div class="playlist-tags">
+      ${tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}
+    </div>`;
+  }
+
   if (retryBtn) {
     retryBtn.addEventListener('click', loadPlaylists);
   }
@@ -289,6 +326,12 @@ document.addEventListener('DOMContentLoaded', () => {
   align-items: flex-start;
   flex-wrap: wrap;
   gap: var(--space-md);
+}
+
+.header-actions {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
 }
 
 .state-message {
@@ -349,6 +392,16 @@ document.addEventListener('DOMContentLoaded', () => {
   text-decoration: none; 
 }
 
+.btn-secondary {
+  background: var(--color-bg-secondary);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+.btn-secondary:hover {
+  background: var(--color-border);
+}
+
 /* Playlist Card Styles */
 .playlist-card {
   display: flex;
@@ -368,6 +421,10 @@ document.addEventListener('DOMContentLoaded', () => {
   font-weight: 700;
   line-height: 1.4;
   margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
 }
 
 .playlist-title a {
@@ -437,6 +494,27 @@ document.addEventListener('DOMContentLoaded', () => {
   background: rgba(239, 68, 68, 0.1);
   color: var(--color-danger);
   border-color: rgba(239, 68, 68, 0.2);
+}
+
+.badge-editor {
+  background: rgba(245, 158, 11, 0.1);
+  color: #d97706;
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.playlist-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.tag {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  background: var(--color-bg-secondary);
+  color: var(--color-text-muted);
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
 }
 
 .playlist-count {

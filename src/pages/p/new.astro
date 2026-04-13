@@ -46,7 +46,30 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <div class="form-hint">최대 500자</div>
       </div>
 
-      <div class="form-group">
+      <div class="form-group" id="editor-type-group" style="display:none">
+        <label>플레이리스트 타입</label>
+        <label class="radio-label">
+          <input type="checkbox" id="editor-toggle" />
+          <div class="radio-content">
+            <span class="radio-title">🏷️ 에디터 플레이리스트</span>
+            <span class="radio-desc">에디터 큐레이션으로 등록됩니다. 승인 없이 즉시 공개됩니다.</span>
+          </div>
+        </label>
+      </div>
+
+      <div class="form-group" id="tags-group" style="display:none">
+        <label for="tag-input">태그</label>
+        <input 
+          type="text" 
+          id="tag-input" 
+          placeholder="태그 입력 후 Enter (최대 5개)"
+          class="form-control"
+        />
+        <div id="tags-container" class="tags-container"></div>
+        <div class="form-hint">쉼표(,)나 Enter로 태그를 추가하세요</div>
+      </div>
+
+      <div class="form-group" id="visibility-group">
         <label>공개 범위</label>
         <div class="radio-group">
           <label class="radio-label">
@@ -88,13 +111,33 @@ document.addEventListener('DOMContentLoaded', async () => {
   const btnSpinner = submitBtn?.querySelector('.btn-spinner') as HTMLElement;
   const errorEl = document.getElementById('form-error');
 
+  let isAdmin = false;
+  let tags: string[] = [];
+
   // Check auth
   try {
     const res = await fetch('/api/auth/me');
     if (res.ok) {
+      const userData = await res.json();
+      isAdmin = userData.is_admin === true;
+      
       // Authed
       if (loadingEl) loadingEl.style.display = 'none';
       if (formEl) formEl.style.display = 'block';
+      
+      if (isAdmin) {
+        const editorGroup = document.getElementById('editor-type-group');
+        if (editorGroup) editorGroup.style.display = 'flex';
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('type') === 'editor') {
+          const editorToggle = document.getElementById('editor-toggle') as HTMLInputElement;
+          if (editorToggle) {
+            editorToggle.checked = true;
+            handleEditorToggle(true);
+          }
+        }
+      }
     } else {
       // Not authed
       if (loadingEl) loadingEl.style.display = 'none';
@@ -103,6 +146,86 @@ document.addEventListener('DOMContentLoaded', async () => {
   } catch (err) {
     if (loadingEl) loadingEl.style.display = 'none';
     if (authRequiredEl) authRequiredEl.style.display = 'block';
+  }
+
+  const editorToggle = document.getElementById('editor-toggle') as HTMLInputElement;
+  if (editorToggle) {
+    editorToggle.addEventListener('change', (e) => {
+      handleEditorToggle((e.target as HTMLInputElement).checked);
+    });
+  }
+
+  function handleEditorToggle(isChecked: boolean) {
+    const visibilityGroup = document.getElementById('visibility-group');
+    const tagsGroup = document.getElementById('tags-group');
+    
+    if (visibilityGroup) {
+      visibilityGroup.style.display = isChecked ? 'none' : 'flex';
+    }
+    if (tagsGroup) {
+      tagsGroup.style.display = isChecked ? 'flex' : 'none';
+    }
+  }
+
+  const tagInput = document.getElementById('tag-input') as HTMLInputElement;
+  const tagsContainer = document.getElementById('tags-container');
+
+  if (tagInput && tagsContainer) {
+    tagInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ',') {
+        e.preventDefault();
+        addTag(tagInput.value);
+      }
+    });
+    
+    tagInput.addEventListener('blur', () => {
+      addTag(tagInput.value);
+    });
+  }
+
+  function addTag(value: string) {
+    const tag = value.trim().replace(/^#/, '').replace(/,/g, '');
+    if (!tag) return;
+    
+    if (tags.length >= 5) {
+      showError('태그는 최대 5개까지만 추가할 수 있습니다.');
+      if (tagInput) tagInput.value = '';
+      return;
+    }
+    
+    if (!tags.includes(tag)) {
+      tags.push(tag);
+      renderTags();
+    }
+    
+    if (tagInput) tagInput.value = '';
+    if (errorEl) errorEl.style.display = 'none';
+  }
+
+  function removeTag(index: number) {
+    tags.splice(index, 1);
+    renderTags();
+  }
+
+  function renderTags() {
+    if (!tagsContainer) return;
+    tagsContainer.innerHTML = '';
+    tags.forEach((tag, index) => {
+      const tagEl = document.createElement('span');
+      tagEl.className = 'tag-badge';
+      tagEl.innerHTML = `
+        ${tag}
+        <button type="button" class="tag-remove" data-index="${index}">&times;</button>
+      `;
+      tagsContainer.appendChild(tagEl);
+    });
+    
+    document.querySelectorAll('.tag-remove').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const index = parseInt((e.currentTarget as HTMLButtonElement).getAttribute('data-index') || '0', 10);
+        removeTag(index);
+      });
+    });
   }
 
   // Handle form submit
@@ -146,7 +269,9 @@ document.addEventListener('DOMContentLoaded', async () => {
           body: JSON.stringify({
             title,
             description,
-            visibility
+            visibility: editorToggle?.checked ? 'public' : visibility,
+            playlist_type: editorToggle?.checked ? 'editor' : 'community',
+            tags: editorToggle?.checked ? tags : []
           }),
         });
 
@@ -323,4 +448,40 @@ document.addEventListener('DOMContentLoaded', async () => {
 .btn-primary { background: var(--color-primary); color: white; }
 .btn-primary:hover { background: var(--color-primary-hover); color: white; text-decoration: none; }
 .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; }
+
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: var(--space-xs);
+}
+
+.tag-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  color: var(--color-text);
+}
+
+.tag-remove {
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tag-remove:hover {
+  color: var(--color-danger);
+}
 </style>

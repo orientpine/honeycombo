@@ -1,8 +1,9 @@
 import { getSession } from '../lib/auth';
 import { parseCookies } from '../lib/cookies';
 import { escapeAttr, escapeHtml } from '../lib/escape';
+import { getLikeStatus } from '../lib/likes';
 import { getPlaylist } from '../lib/playlists';
-import type { AppPagesFunction, PlaylistDetail, PlaylistItemRow } from '../lib/types';
+import type { AppPagesFunction, LikeStatusResponse, PlaylistDetail, PlaylistItemRow } from '../lib/types';
 
 function getCanonicalUrl(requestUrl: string, playlistId: string): string {
   const origin = new URL(requestUrl).origin;
@@ -157,7 +158,10 @@ function renderOwnerControls(playlist: PlaylistDetail): string {
   let visibilityBtnAction = '';
   let visibilityBtnClass = 'btn';
 
-  if (isUnlisted || isPublicDraft) {
+  if (playlist.playlist_type === 'editor') {
+    // Editor playlists are always public and approved, no visibility controls needed
+    visibilityTitle = '';
+  } else if (isUnlisted || isPublicDraft) {
     visibilityTitle = '\uD83C\uDF10 \uACF5\uAC1C \uC2E0\uCCAD';
     visibilityDesc = '\uC774 \uD50C\uB808\uC774\uB9AC\uC2A4\uD2B8\uB97C \uCEE4\uBBA4\uB2C8\uD2F0\uC5D0 \uACF5\uAC1C \uC2E0\uCCAD\uD569\uB2C8\uB2E4. \uC5D0\uB514\uD130 \uC2B9\uC778 \uD6C4 \uACF5\uAC1C\uB429\uB2C8\uB2E4.';
     visibilityBtnLabel = '\uACF5\uAC1C \uC2E0\uCCAD';
@@ -180,7 +184,6 @@ function renderOwnerControls(playlist: PlaylistDetail): string {
     visibilityBtnAction = 'public';
     visibilityBtnClass = 'btn btn-visibility';
   }
-
   return `
     <section class="owner-controls card">
       <div>
@@ -193,13 +196,14 @@ function renderOwnerControls(playlist: PlaylistDetail): string {
         <button type="button" class="btn btn-danger" onclick="deletePlaylist()">삭제</button>
       </div>
     </section>
+    ${visibilityTitle ? `
     <section class="visibility-section card">
       <div>
         <h2>${visibilityTitle}</h2>
         <p>${visibilityDesc}</p>
       </div>
       <button type="button" class="${visibilityBtnClass}" onclick="toggleVisibility('${visibilityBtnAction}')">${escapeHtml(visibilityBtnLabel)}</button>
-    </section>
+    </section>` : ''}
     <section class="article-search-section">
       <h2>기사 추가</h2>
       <div class="search-box">
@@ -324,6 +328,28 @@ function renderDocument(options: {
         border: 1px solid var(--color-border);
       }
 
+      .badge-editor {
+        background: rgba(245, 158, 11, 0.1);
+        color: #d97706;
+        border-color: rgba(245, 158, 11, 0.2);
+      }
+
+      .playlist-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-xs);
+        margin-bottom: var(--space-md);
+      }
+
+      .tag {
+        font-size: 0.8rem;
+        padding: 2px 10px;
+        background: var(--color-bg-secondary);
+        color: var(--color-text-muted);
+        border-radius: 999px;
+        border: 1px solid var(--color-border);
+      }
+
       .site-header {
         border-bottom: 1px solid var(--color-border);
         background: var(--color-bg);
@@ -384,6 +410,45 @@ function renderDocument(options: {
         gap: var(--space-sm);
         font-weight: 600;
         color: var(--color-text);
+      }
+
+      .like-section {
+        display: flex;
+        align-items: center;
+        gap: var(--space-md);
+        margin-top: var(--space-sm);
+        flex-wrap: wrap;
+      }
+
+      .like-count-display {
+        color: var(--color-text-muted);
+        font-weight: 600;
+      }
+
+      .like-btn {
+        font-weight: 700;
+        min-width: 7rem;
+      }
+
+      .like-btn.is-liked {
+        background: var(--color-primary);
+        border-color: var(--color-primary);
+        color: white;
+      }
+
+      .like-btn.is-liked:hover {
+        background: var(--color-primary-hover);
+        border-color: var(--color-primary-hover);
+        color: white;
+      }
+
+      .like-btn:disabled {
+        opacity: 0.7;
+        cursor: wait;
+      }
+
+      .like-icon {
+        font-size: 1.1em;
       }
 
       .avatar {
@@ -780,6 +845,13 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
   const user = cookies.session ? await getSession(env.DB, cookies.session) : null;
   const isOwner = user?.id === playlist.user.id;
 
+  // Like status (only for public+approved playlists)
+  let likeStatus: LikeStatusResponse | null = null;
+  const isPublicApproved = playlist.visibility === 'public' && playlist.status === 'approved';
+  if (isPublicApproved) {
+    likeStatus = await getLikeStatus(env.DB, playlistId, user?.id);
+  }
+
   if (!canViewPlaylist(playlist, user?.id)) {
     return renderStatusPage(403, '접근할 수 없는 플레이리스트입니다', '이 플레이리스트는 작성자만 볼 수 있습니다.', canonicalUrl);
   }
@@ -805,15 +877,84 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
             <span class="playlist-owner">${renderAvatar(playlist)}<span>by ${escapeHtml(visibleName)}</span></span>
             <span class="meta-text">${playlist.items.length}개 기사</span>
             <span class="badge">${escapeHtml(getVisibilityLabel(playlist))}</span>
+            ${playlist.playlist_type === 'editor' ? '<span class="badge badge-editor">🏷️ 에디터 큐레이션</span>' : ''}
             <time class="updated-at">최종 업데이트: ${escapeHtml(formatDate(playlist.updated_at))}</time>
           </div>
+          ${likeStatus ? `
+            <div class="like-section">
+              <span class="like-count-display">❤️ ${likeStatus.like_count}명이 좋아합니다</span>
+              <button type="button"
+                class="btn like-btn${likeStatus.liked ? ' is-liked' : ''}"
+                data-playlist-id="${escapeAttr(playlist.id)}"
+                data-liked="${likeStatus.liked ? 'true' : 'false'}"
+                data-like-count="${likeStatus.like_count}"
+                data-authenticated="${user ? 'true' : 'false'}">
+                <span class="like-icon">${likeStatus.liked ? '♥' : '♡'}</span>
+                <span>${likeStatus.liked ? '좋아요 취소' : '좋아요'}</span>
+              </button>
+            </div>
+          ` : ''}
+          ${playlist.tags && playlist.tags.length > 0 ? `<div class="playlist-tags">${playlist.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
           <p class="meta-text">${escapeHtml(ownerName)}가 모은 기술 콘텐츠를 한 번에 확인해보세요.</p>
         </header>
         <section class="items">${renderItems(playlist.items, isOwner, playlist.id)}</section>
         ${isOwner ? renderOwnerControls(playlist) : ''}
       </article>`,
-    script: isOwner
-      ? `<script>
+    script: [
+      likeStatus ? `<script>
+          (function() {
+            const likeBtn = document.querySelector('.like-btn');
+            if (!likeBtn) return;
+
+            const loginUrl = '/api/auth/github/login?return_to=' + encodeURIComponent(window.location.pathname);
+
+            likeBtn.addEventListener('click', async function() {
+              const playlistId = likeBtn.dataset.playlistId;
+              const isAuthenticated = likeBtn.dataset.authenticated === 'true';
+
+              if (!isAuthenticated) {
+                window.location.href = loginUrl;
+                return;
+              }
+
+              const prevLiked = likeBtn.dataset.liked === 'true';
+              const prevCount = Number(likeBtn.dataset.likeCount || '0');
+              const nextLiked = !prevLiked;
+              const nextCount = Math.max(0, prevCount + (nextLiked ? 1 : -1));
+
+              likeBtn.disabled = true;
+              updateLikeBtn(nextLiked, nextCount);
+
+              try {
+                const res = await fetch('/api/playlists/' + encodeURIComponent(playlistId) + '/like', {
+                  method: 'POST',
+                  credentials: 'same-origin'
+                });
+                if (!res.ok) throw new Error();
+                const data = await res.json();
+                updateLikeBtn(Boolean(data.liked), Number(data.like_count || 0));
+              } catch {
+                updateLikeBtn(prevLiked, prevCount);
+                window.alert('좋아요 처리에 실패했습니다.');
+              } finally {
+                likeBtn.disabled = false;
+              }
+            });
+
+            function updateLikeBtn(liked, count) {
+              likeBtn.dataset.liked = liked ? 'true' : 'false';
+              likeBtn.dataset.likeCount = String(count);
+              likeBtn.classList.toggle('is-liked', liked);
+              const icon = likeBtn.querySelector('.like-icon');
+              if (icon) icon.textContent = liked ? '♥' : '♡';
+              const label = likeBtn.querySelector('span:last-child');
+              if (label) label.textContent = liked ? '좋아요 취소' : '좋아요';
+              const countEl = document.querySelector('.like-count-display');
+              if (countEl) countEl.textContent = '❤️ ' + count + '명이 좋아합니다';
+            }
+          })();
+        </script>` : '',
+      isOwner ? `<script>
           const playlistId = '${encodeURIComponent(playlist.id)}';
 
           async function deletePlaylist() {
@@ -1140,13 +1281,21 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
               return;
             }
 
+            var moveBtns = document.querySelectorAll('.item-move-up, .item-move-down');
+            moveBtns.forEach(function(b) { b.disabled = true; });
+
             try {
               const res = await fetch('/api/playlists/' + playlistId + '/items/swap', {
                 method: 'PUT',
                 credentials: 'same-origin',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ itemA: itemId, itemB: targetItemId })
+                body: JSON.stringify({ itemA: itemId, itemB: targetItemId, expectedPosA: currentPos, expectedPosB: targetPos })
               });
+
+              if (res.status === 409) {
+                window.location.reload();
+                return;
+              }
 
               if (!res.ok) {
                 throw new Error();
@@ -1168,7 +1317,9 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
               syncItemControls();
             } catch {
               window.location.reload();
-            }
+            } finally {
+              moveBtns.forEach(function(b) { b.disabled = false; });
+              syncItemControls();
           }
 
           document.querySelectorAll('.item-move-up').forEach((btn) => {
@@ -1283,8 +1434,8 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
           });
 
           syncItemControls();
-        </script>`
-      : undefined,
+        </script>` : '',
+    ].filter(Boolean).join('\n') || undefined,
   });
 
   return new Response(html, {

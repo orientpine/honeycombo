@@ -13,10 +13,25 @@ function normalizeLimit(limit: number): number {
   return Number.isFinite(limit) && limit > 0 ? Math.floor(limit) : 12;
 }
 
+function parseTags(raw: string | null): string[] {
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.filter((t): t is string => typeof t === 'string') : [];
+  } catch {
+    return [];
+  }
+}
+
+function serializeTags(tags?: string[]): string | null {
+  if (!tags || tags.length === 0) return null;
+  return JSON.stringify(tags.slice(0, 5));
+}
+
 async function getPlaylistRow(db: D1Database, playlistId: string): Promise<PlaylistRow | null> {
   return db
     .prepare(
-      `SELECT id, user_id, title, description, visibility, status, created_at, updated_at
+      `SELECT id, user_id, title, description, visibility, status, playlist_type, tags, created_at, updated_at
        FROM user_playlists
        WHERE id = ?`,
     )
@@ -27,7 +42,7 @@ async function getPlaylistRow(db: D1Database, playlistId: string): Promise<Playl
 export async function listPendingPlaylists(db: D1Database): Promise<PendingPlaylistRow[]> {
   const result = await db
     .prepare(
-      `SELECT p.id, p.user_id, p.title, p.description, p.visibility, p.status, p.created_at, p.updated_at,
+      `SELECT p.id, p.user_id, p.title, p.description, p.visibility, p.status, p.playlist_type, p.tags, p.created_at, p.updated_at,
               u.username, u.avatar_url
        FROM user_playlists p
        JOIN users u ON p.user_id = u.id
@@ -68,18 +83,22 @@ async function getPlaylistOwner(db: D1Database, playlistId: string): Promise<str
 export async function createPlaylist(
   db: D1Database,
   userId: string,
-  input: { title: string; description?: string; visibility?: 'unlisted' | 'public' },
+  input: { title: string; description?: string; visibility?: 'unlisted' | 'public'; playlist_type?: 'community' | 'editor'; tags?: string[] },
 ): Promise<PlaylistRow> {
   const id = generateId();
-  const visibility = input.visibility ?? 'unlisted';
-  const status = visibility === 'public' ? 'pending' : 'draft';
+  const playlistType = input.playlist_type ?? 'community';
+  const tags = serializeTags(input.tags);
+
+  // Editor playlists are always public + auto-approved
+  const visibility = playlistType === 'editor' ? 'public' : (input.visibility ?? 'unlisted');
+  const status = playlistType === 'editor' ? 'approved' : (visibility === 'public' ? 'pending' : 'draft');
 
   await db
     .prepare(
-      `INSERT INTO user_playlists (id, user_id, title, description, visibility, status)
-       VALUES (?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO user_playlists (id, user_id, title, description, visibility, status, playlist_type, tags)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
     )
-    .bind(id, userId, input.title, input.description ?? null, visibility, status)
+    .bind(id, userId, input.title, input.description ?? null, visibility, status, playlistType, tags)
     .run();
 
   const playlist = await getPlaylistRow(db, id);
@@ -94,7 +113,8 @@ export async function createPlaylist(
 export async function getPlaylist(db: D1Database, playlistId: string): Promise<PlaylistDetail | null> {
   const playlist = await db
     .prepare(
-      `SELECT p.id, p.title, p.description, p.visibility, p.status, p.created_at, p.updated_at,
+      `SELECT p.id, p.title, p.description, p.visibility, p.status, p.playlist_type, p.tags,
+              p.created_at, p.updated_at,
               u.id AS user_id, u.username, u.display_name, u.avatar_url
        FROM user_playlists p
        INNER JOIN users u ON u.id = p.user_id
@@ -102,7 +122,7 @@ export async function getPlaylist(db: D1Database, playlistId: string): Promise<P
     )
     .bind(playlistId)
     .first<
-      Pick<PlaylistRow, 'id' | 'title' | 'description' | 'visibility' | 'status' | 'created_at' | 'updated_at'> & {
+      Pick<PlaylistRow, 'id' | 'title' | 'description' | 'visibility' | 'status' | 'playlist_type' | 'tags' | 'created_at' | 'updated_at'> & {
         user_id: string;
       } & Pick<UserRow, 'username' | 'display_name' | 'avatar_url'>
     >();
@@ -128,6 +148,8 @@ export async function getPlaylist(db: D1Database, playlistId: string): Promise<P
     description: playlist.description,
     visibility: playlist.visibility,
     status: playlist.status,
+    playlist_type: playlist.playlist_type,
+    tags: parseTags(playlist.tags),
     created_at: playlist.created_at,
     updated_at: playlist.updated_at,
     user: {
@@ -144,16 +166,19 @@ export async function listPublicPlaylists(
   db: D1Database,
   page: number,
   limit: number,
+  playlistType?: 'community' | 'editor',
 ): Promise<PlaylistListResponse> {
   const currentPage = normalizePage(page);
   const pageSize = normalizeLimit(limit);
   const offset = (currentPage - 1) * pageSize;
 
+  const typeFilter = playlistType ? ` AND p.playlist_type = '${playlistType}'` : '';
+
   const countRow = await db
     .prepare(
       `SELECT COUNT(*) AS total
-       FROM user_playlists
-       WHERE visibility = 'public' AND status = 'approved'`,
+       FROM user_playlists p
+       WHERE p.visibility = 'public' AND p.status = 'approved'${typeFilter}`,
     )
     .first<{ total: number | string }>();
 
@@ -161,7 +186,8 @@ export async function listPublicPlaylists(
 
   const result = await db
     .prepare(
-      `SELECT p.id, p.user_id, p.title, p.description, p.visibility, p.status, p.created_at, p.updated_at,
+      `SELECT p.id, p.user_id, p.title, p.description, p.visibility, p.status, p.playlist_type, p.tags,
+              p.created_at, p.updated_at,
               u.username, u.display_name, u.avatar_url,
               (
                 SELECT COUNT(*)
@@ -170,7 +196,7 @@ export async function listPublicPlaylists(
               ) AS item_count
        FROM user_playlists p
        INNER JOIN users u ON u.id = p.user_id
-       WHERE p.visibility = 'public' AND p.status = 'approved'
+       WHERE p.visibility = 'public' AND p.status = 'approved'${typeFilter}
        ORDER BY p.updated_at DESC
        LIMIT ? OFFSET ?`,
     )
@@ -185,6 +211,8 @@ export async function listPublicPlaylists(
       description: playlist.description,
       visibility: playlist.visibility,
       status: playlist.status,
+      playlist_type: playlist.playlist_type,
+      tags: playlist.tags,
       created_at: playlist.created_at,
       updated_at: playlist.updated_at,
       user: {
@@ -217,7 +245,8 @@ export async function listUserPlaylists(
 
   const result = await db
     .prepare(
-      `SELECT p.id, p.user_id, p.title, p.description, p.visibility, p.status, p.created_at, p.updated_at,
+      `SELECT p.id, p.user_id, p.title, p.description, p.visibility, p.status, p.playlist_type, p.tags,
+              p.created_at, p.updated_at,
               (
                 SELECT COUNT(*)
                 FROM playlist_items pi
@@ -241,7 +270,7 @@ export async function updatePlaylist(
   db: D1Database,
   playlistId: string,
   userId: string,
-  input: { title?: string; description?: string },
+  input: { title?: string; description?: string; tags?: string[] },
 ): Promise<PlaylistRow | null> {
   const ownerId = await getPlaylistOwner(db, playlistId);
 
@@ -260,6 +289,11 @@ export async function updatePlaylist(
   if (input.description !== undefined) {
     updates.push('description = ?');
     values.push(input.description);
+  }
+
+  if (input.tags !== undefined) {
+    updates.push('tags = ?');
+    values.push(serializeTags(input.tags));
   }
 
   if (updates.length === 0) {
@@ -302,7 +336,16 @@ export async function setVisibility(
     return null;
   }
 
-  const status = visibility === 'public' ? 'pending' : 'draft';
+  // Check if this is an editor playlist — editor playlists auto-approve
+  const row = await db
+    .prepare('SELECT playlist_type FROM user_playlists WHERE id = ?')
+    .bind(playlistId)
+    .first<Pick<PlaylistRow, 'playlist_type'>>();
+
+  const isEditor = row?.playlist_type === 'editor';
+  const status = visibility === 'public'
+    ? (isEditor ? 'approved' : 'pending')
+    : 'draft';
 
   await db
     .prepare(

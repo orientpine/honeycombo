@@ -1,3 +1,4 @@
+import { isAdmin } from '../../lib/admin';
 import { createPlaylist, listPublicPlaylists, listUserPlaylists } from '../../lib/playlists';
 import { validatePlaylistDescription, validatePlaylistTitle } from '../../lib/validate';
 import type { AppPagesFunction, CreatePlaylistInput } from '../../lib/types';
@@ -31,7 +32,7 @@ function parsePositiveInt(value: string | null, fallback: number): number {
   return Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : fallback;
 }
 
-async function parseCreateInput(request: Request): Promise<CreatePlaylistInput | Response> {
+async function parseCreateInput(request: Request, userIsAdmin: boolean): Promise<CreatePlaylistInput | Response> {
   let body: unknown;
 
   try {
@@ -44,7 +45,7 @@ async function parseCreateInput(request: Request): Promise<CreatePlaylistInput |
     return json({ error: 'Invalid request body' }, 400);
   }
 
-  const { title, description, visibility } = body;
+  const { title, description, visibility, playlist_type, tags } = body;
 
   if (typeof title !== 'string') {
     return json({ error: 'Title is required' }, 400);
@@ -70,10 +71,31 @@ async function parseCreateInput(request: Request): Promise<CreatePlaylistInput |
     return json({ error: 'Visibility must be unlisted or public' }, 400);
   }
 
+  // playlist_type validation: only admin can create editor playlists
+  if (playlist_type !== undefined && playlist_type !== 'community' && playlist_type !== 'editor') {
+    return json({ error: 'playlist_type must be community or editor' }, 400);
+  }
+
+  if (playlist_type === 'editor' && !userIsAdmin) {
+    return json({ error: 'Only admins can create editor playlists' }, 403);
+  }
+
+  // tags validation: array of strings, max 5
+  if (tags !== undefined) {
+    if (!Array.isArray(tags) || !tags.every((t: unknown) => typeof t === 'string')) {
+      return json({ error: 'Tags must be an array of strings' }, 400);
+    }
+    if (tags.length > 5) {
+      return json({ error: 'Maximum 5 tags allowed' }, 400);
+    }
+  }
+
   return {
     title,
     ...(typeof description === 'string' ? { description } : {}),
     ...(visibility === 'unlisted' || visibility === 'public' ? { visibility } : {}),
+    ...(playlist_type === 'community' || playlist_type === 'editor' ? { playlist_type } : {}),
+    ...(Array.isArray(tags) ? { tags: tags as string[] } : {}),
   };
 }
 
@@ -87,6 +109,7 @@ export const onRequest: AppPagesFunction[] = [
       const mine = url.searchParams.get('mine') === 'true';
       const sourceId = url.searchParams.get('source_id');
       const itemType = url.searchParams.get('item_type');
+      const typeParam = url.searchParams.get('type');
 
       if (mine) {
         if (!data.user) {
@@ -100,7 +123,8 @@ export const onRequest: AppPagesFunction[] = [
 
       const page = parsePositiveInt(url.searchParams.get('page'), 1);
       const limit = parsePositiveInt(url.searchParams.get('limit'), 12);
-      const playlists = await listPublicPlaylists(env.DB, page, limit);
+      const playlistType = typeParam === 'editor' ? 'editor' : typeParam === 'community' ? 'community' : undefined;
+      const playlists = await listPublicPlaylists(env.DB, page, limit, playlistType);
       return json(playlists);
     }
 
@@ -109,7 +133,8 @@ export const onRequest: AppPagesFunction[] = [
         return withRateLimitHeaders(json({ error: 'Unauthorized' }, 401));
       }
 
-      const parsed = await parseCreateInput(request);
+      const userIsAdmin = isAdmin(env, data.user.id);
+      const parsed = await parseCreateInput(request, userIsAdmin);
       if (parsed instanceof Response) {
         return withRateLimitHeaders(parsed);
       }

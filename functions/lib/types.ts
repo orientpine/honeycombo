@@ -1,5 +1,5 @@
 /**
- * Shared types for user playlist feature
+ * Shared types for user playlist feature (incl. likes & trending)
  * Used across Pages Functions (API + SSR)
  */
 
@@ -46,6 +46,8 @@ export interface PlaylistRow {
   description: string | null;
   visibility: 'unlisted' | 'public';
   status: 'draft' | 'pending' | 'approved' | 'rejected';
+  playlist_type: 'community' | 'editor';
+  tags: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -66,6 +68,12 @@ export interface PlaylistItemRow {
   added_at: string;
 }
 
+export interface PlaylistLikeRow {
+  user_id: string;
+  playlist_id: string;
+  created_at: string;
+}
+
 // ---------------------------------------------------------------------------
 // API input DTOs
 // ---------------------------------------------------------------------------
@@ -73,11 +81,14 @@ export interface CreatePlaylistInput {
   title: string;
   description?: string;
   visibility?: 'unlisted' | 'public';
+  playlist_type?: 'community' | 'editor';
+  tags?: string[];
 }
 
 export interface UpdatePlaylistInput {
   title?: string;
   description?: string;
+  tags?: string[];
 }
 
 export interface AddItemInput {
@@ -104,6 +115,8 @@ export interface PlaylistDetail {
   description: string | null;
   visibility: 'unlisted' | 'public';
   status: 'draft' | 'pending' | 'approved' | 'rejected';
+  playlist_type: 'community' | 'editor';
+  tags: string[];
   created_at: string;
   updated_at: string;
   user: {
@@ -120,6 +133,34 @@ export interface PlaylistListResponse {
     user: Pick<UserRow, 'username' | 'display_name' | 'avatar_url'>;
     item_count: number;
   })[];
+  total: number;
+  page: number;
+  totalPages: number;
+}
+
+export interface LikeStatusResponse {
+  liked: boolean;
+  like_count: number;
+}
+
+export interface TrendingPlaylistItem {
+  id: string;
+  title: string;
+  description: string | null;
+  visibility: 'unlisted' | 'public';
+  status: 'draft' | 'pending' | 'approved' | 'rejected';
+  playlist_type: 'community' | 'editor';
+  tags: string[];
+  created_at: string;
+  updated_at: string;
+  user: Pick<UserRow, 'username' | 'display_name' | 'avatar_url'>;
+  item_count: number;
+  like_count: number;
+  user_liked: boolean;
+}
+
+export interface TrendingPlaylistsResponse {
+  playlists: TrendingPlaylistItem[];
   total: number;
   page: number;
   totalPages: number;

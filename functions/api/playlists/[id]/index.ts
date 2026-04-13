@@ -70,6 +70,19 @@ async function parseUpdateInput(request: Request): Promise<UpdatePlaylistInput |
     }
   }
 
+  if ('tags' in body) {
+    if (body.tags !== undefined && (!Array.isArray(body.tags) || !body.tags.every((t: unknown) => typeof t === 'string'))) {
+      return json({ error: 'Tags must be an array of strings' }, 400);
+    }
+
+    if (Array.isArray(body.tags)) {
+      if (body.tags.length > 5) {
+        return json({ error: 'Maximum 5 tags allowed' }, 400);
+      }
+      input.tags = body.tags as string[];
+    }
+  }
+
   return input;
 }
 

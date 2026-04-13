@@ -4,8 +4,6 @@ import { curatedArticleSchema } from './schemas/curated-article';
 import { feedArticleSchema } from './schemas/feed-article';
 import { influencerSchema } from './schemas/influencer';
 import { mustReadSchema } from './schemas/must-read';
-import { playlistSchema } from './schemas/playlist';
-import { trendingSchema } from './schemas/trending';
 
 const curated = defineCollection({
   loader: glob({ pattern: '**/*.json', base: './src/content/curated' }),
@@ -17,24 +15,15 @@ const feeds = defineCollection({
   schema: feedArticleSchema,
 });
 
-const trending = defineCollection({
-  loader: glob({ pattern: '*.json', base: './src/data/trending' }),
-  schema: trendingSchema,
-});
-
 const mustRead = defineCollection({
   loader: glob({ pattern: '*.json', base: './src/data/must-read' }),
   schema: mustReadSchema,
 });
 
-const playlists = defineCollection({
-  loader: glob({ pattern: '*.json', base: './src/data/playlists' }),
-  schema: playlistSchema,
-});
 
 const influencers = defineCollection({
   loader: glob({ pattern: '*.json', base: './src/data/influencers' }),
   schema: influencerSchema,
 });
 
-export const collections = { curated, feeds, trending, mustRead, playlists, influencers };
+export const collections = { curated, feeds, mustRead, influencers };
