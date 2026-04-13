@@ -10,7 +10,7 @@
 
 ```text
 GitHub Issue → scripts/process-submission.ts → submitted_by_id 저장
-승인 이벤트 → functions/webhooks/submission-approved.ts
+PR merge 이벤트 (새 파일 감지) → functions/webhooks/submission-approved.ts
           → users.id 조회
           → 최근 플레이리스트 재사용 또는 `내 제출 기사` 자동 생성
           → playlist_items 추가
@@ -32,11 +32,11 @@ GitHub Issue → scripts/process-submission.ts → submitted_by_id 저장
 | `functions/lib/webhooks.ts` | Bearer webhook secret 상수 시간 비교 검증 |
 | `functions/lib/playlists.ts` | 최근 플레이리스트 재사용 / 자동 플레이리스트 생성 |
 | `functions/api/auth/github/callback.ts` | OAuth 로그인 직후 deferred submissions catch-up |
-| `functions/webhooks/submission-approved.ts` | 승인 기사 auto-playlist 반영 |
+| `functions/webhooks/submission-approved.ts` | 신규 파일 추가 감지 시 auto-playlist 반영 |
 | `functions/webhooks/submission-removed.ts` | 승인 취소/삭제 시 정리 |
 | `migrations/0004_auto_playlist.sql` | `is_auto_created`, `submissions` 스키마 |
 
-## 설정값 / 환경변수
+## 설정값
 
 | 이름 | 위치 | 타입 | 설명 |
 |------|------|------|------|
@@ -67,3 +67,4 @@ GitHub Issue → scripts/process-submission.ts → submitted_by_id 저장
 | 2026-04-13 | 최초 작성 |
 | 2026-04-13 | Wave 4: OAuth callback catch-up과 `synced_to_playlist` 갱신 흐름 반영 |
 | 2026-04-13 | 환경변수 설정 가이드 보강 (WEBHOOK_SECRET, SITE_URL), _routes.json 제약 추가 |
+| 2026-04-13 | merge=approval 전환: status 변경 감지 → 신규 파일 추가 감지로 webhook 트리거 변경 |

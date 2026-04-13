@@ -40,7 +40,7 @@
 | `content/` | 콘텐츠 컬렉션 | Astro Content Collections. `curated/` 큐레이션 기사 |
 | `data/` | 데이터 파일 | JSON 기반 데이터 (feeds, trending, influencers) |
 | `schemas/` | 스키마 정의 | TypeScript 타입/유효성 검사 (curated-article, feed-article 등) |
-| `config/` | 설정 파일 | feeds.json, spam-keywords.json, ranking-overrides.json |
+| `config/` | 설정 파일 | feeds.json, spam-keywords.json, editors.json, ranking-overrides.json |
 | `lib/` | 유틸리티 | 공유 로직 (article-sort 등) |
 | `styles/` | 스타일 | CSS |
 
@@ -97,7 +97,7 @@
 | `rss-collect.yml` | RSS 수집 스케줄 |
 | ~~`trending-calc.yml`~~ | 삭제됨 — Must-read가 D1 에디터 관리로 전환 |
 | `process-submission.yml` | 기사 제출 처리 + 외부 사용자 자동 라벨링 |
-| `on-article-approved.yml` | 기사 승인/삭제 감지 → webhook 호출 |
+| `on-article-approved.yml` | PR merge 시 신규 파일 추가(diff-filter=A) 감지 → webhook 호출 |
 
 ## 페이지 구조
 
@@ -145,12 +145,14 @@
 
 ```
 GitHub Issue (single/bulk) → scripts/process-submission.ts → PR (src/content/curated/)
+  ├─ 에디터 제출 → PR 자동 merge → 즉시 게시
+  └─ 유저 제출 → PR 수동 merge = 승인 → 게시
 ```
 
 - 제출 시 GitHub Issue 작성자의 numeric user id(`submitted_by_id`)도 함께 저장해 승인 webhook에서 D1 사용자와 매칭한다.
 ### 4. 기사 승인 시 플레이리스트 자동 추가
 
-Decap CMS (status→approved) → git push master → on-article-approved.yml → POST /webhooks/submission-approved → D1 (플레이리스트 자동 추가)
+PR merge (새 파일 감지) → git push master → on-article-approved.yml → POST /webhooks/submission-approved → D1 (플레이리스트 자동 추가)
 
 미로그인 제출자 → submissions 적재 → `/api/auth/github/callback` 로그인 시 catch-up → 자동 플레이리스트 반영
 
@@ -211,3 +213,4 @@ src/ (pages + components + data + content) → astro build → dist/
 | 2026-04-13 | 기사 승인 시 플레이리스트 자동 추가 기능, webhook 엔드포인트, on-article-approved 워크플로우 추가 |
 | 2026-04-13 | GitHub OAuth 로그인 시 submissions catch-up 동기화 흐름 반영 |
 | 2026-04-13 | Must-read: 자동 계산 → 에디터 수동 관리 전환. D1/SSR 기반, 관리자 UI 추가, 레거시 파일 삭제 |
+| 2026-04-13 | merge=approval 전환, 에디터 자동 merge, editors.json 추가 |
