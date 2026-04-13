@@ -3,9 +3,8 @@ interface Props {
   source: string;
   date: Date | string;
   tags: string[];
-  url: string;
 }
-const { source, date, tags, url } = Astro.props;
+const { source, date, tags } = Astro.props;
 const formattedDate = new Date(date).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
 
@@ -17,9 +16,6 @@ const formattedDate = new Date(date).toLocaleDateString('ko-KR', { year: 'numeri
   <div class="meta-tags">
     {tags.map(tag => <span class="tag">{tag}</span>)}
   </div>
-  <a href={url} target="_blank" rel="noopener noreferrer" class="source-link">
-    원문 보기 →
-  </a>
 </div>
 
 <style>
@@ -27,6 +23,4 @@ const formattedDate = new Date(date).toLocaleDateString('ko-KR', { year: 'numeri
 .meta-row { display: flex; align-items: center; gap: var(--space-sm); flex-wrap: wrap; }
 .meta-row time { color: var(--color-text-muted); font-size: 0.875rem; }
 .meta-tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
-.source-link { display: inline-flex; align-items: center; gap: var(--space-xs); font-size: 0.875rem; font-weight: 500; color: var(--color-primary); }
-.source-link:hover { text-decoration: underline; }
 </style>
