@@ -13,7 +13,6 @@ const EXCLUDED_DATA_DIRS = [
   'src/data/feeds',
   'src/data/trending',
   'src/data/must-read',
-  'src/data/influencers',
 ] as const;
 const FEATURE_REQUIRED_SECTIONS = ['개요', '동작 흐름', '관련 파일', '설정값', '제약 사항'] as const;
 const DECISION_REQUIRED_SECTIONS = ['맥락', '결정', '고려한 대안', '결과'] as const;

@@ -303,8 +303,10 @@ describe('analyzeChangeCoverage', () => {
     expect(analyzeChangeCoverage(['src/data/must-read/article.json'])).toEqual([]);
   });
 
-  it('no warning when src/data/influencers/ only changed', () => {
-    expect(analyzeChangeCoverage(['src/data/influencers/profile.json'])).toEqual([]);
+  it('warns when src/data/influencers/ changed without docs/', () => {
+    expect(analyzeChangeCoverage(['src/data/influencers/profile.json'])).toEqual([
+      { message: '코드 변경이 감지됐지만 docs/ 변경이 없습니다.' },
+    ]);
   });
 
   it('no warning when both code and docs changed', () => {
