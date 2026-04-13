@@ -65,3 +65,4 @@ articles 페이지 로드
 | 2026-04-13 | 카운트 버그 수정 — 클라이언트 JS가 서버 총 카운트를 페이지 로컬 카운트로 덮어쓰는 문제 수정 |
 | 2026-04-13 | merge=approval 전환: status 기반 → source 기반 구분, 뱃지 텍스트 변경 |
 | 2026-04-14 | 에디터 추천 뱃지 완전 제거 — ArticleCard/TagFilter 렌더링 + global.css 스타일 삭제 |
+| 2026-04-14 | GeekNews Weekly #353 중복 기사 정리 — 긴 제목(submission-9) 삭제, 짧은 제목(submission-22) 유지 |

@@ -17,55 +17,61 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </div>
 
     <section class="grid grid-3 trending-grid" id="trending-grid" aria-live="polite">
-      <article class="card trending-card skeleton-card">
-        <div class="trending-card-top">
-          <span class="rank-badge skeleton-box"></span>
-          <span class="like-count skeleton-line"></span>
+      <article class="card playlist-card skeleton-card">
+        <div class="playlist-header">
+          <span class="skeleton-line skeleton-title"></span>
+          <span class="playlist-count skeleton-count"></span>
         </div>
-        <div class="skeleton-line skeleton-title"></div>
         <div class="skeleton-line skeleton-text"></div>
         <div class="skeleton-line skeleton-text short"></div>
-        <div class="playlist-author skeleton-author">
-          <span class="avatar avatar-fallback skeleton-avatar"></span>
-          <span class="skeleton-line skeleton-author-line"></span>
-        </div>
         <div class="playlist-footer">
-          <span class="badge skeleton-badge"></span>
-          <span class="btn like-button skeleton-button"></span>
+          <span class="playlist-curator">
+            <span class="skeleton-avatar"></span>
+            <span class="skeleton-line skeleton-author-line"></span>
+          </span>
+          <span class="trending-stats">
+            <span class="rank-badge skeleton-box"></span>
+            <span class="skeleton-line skeleton-like-count"></span>
+            <span class="btn like-button skeleton-button"></span>
+          </span>
         </div>
       </article>
-      <article class="card trending-card skeleton-card">
-        <div class="trending-card-top">
-          <span class="rank-badge skeleton-box"></span>
-          <span class="like-count skeleton-line"></span>
+      <article class="card playlist-card skeleton-card">
+        <div class="playlist-header">
+          <span class="skeleton-line skeleton-title"></span>
+          <span class="playlist-count skeleton-count"></span>
         </div>
-        <div class="skeleton-line skeleton-title"></div>
         <div class="skeleton-line skeleton-text"></div>
         <div class="skeleton-line skeleton-text short"></div>
-        <div class="playlist-author skeleton-author">
-          <span class="avatar avatar-fallback skeleton-avatar"></span>
-          <span class="skeleton-line skeleton-author-line"></span>
-        </div>
         <div class="playlist-footer">
-          <span class="badge skeleton-badge"></span>
-          <span class="btn like-button skeleton-button"></span>
+          <span class="playlist-curator">
+            <span class="skeleton-avatar"></span>
+            <span class="skeleton-line skeleton-author-line"></span>
+          </span>
+          <span class="trending-stats">
+            <span class="rank-badge skeleton-box"></span>
+            <span class="skeleton-line skeleton-like-count"></span>
+            <span class="btn like-button skeleton-button"></span>
+          </span>
         </div>
       </article>
-      <article class="card trending-card skeleton-card">
-        <div class="trending-card-top">
-          <span class="rank-badge skeleton-box"></span>
-          <span class="like-count skeleton-line"></span>
+      <article class="card playlist-card skeleton-card">
+        <div class="playlist-header">
+          <span class="skeleton-line skeleton-title"></span>
+          <span class="playlist-count skeleton-count"></span>
         </div>
-        <div class="skeleton-line skeleton-title"></div>
         <div class="skeleton-line skeleton-text"></div>
         <div class="skeleton-line skeleton-text short"></div>
-        <div class="playlist-author skeleton-author">
-          <span class="avatar avatar-fallback skeleton-avatar"></span>
-          <span class="skeleton-line skeleton-author-line"></span>
-        </div>
         <div class="playlist-footer">
-          <span class="badge skeleton-badge"></span>
-          <span class="btn like-button skeleton-button"></span>
+          <span class="playlist-curator">
+            <span class="skeleton-avatar"></span>
+            <span class="skeleton-line skeleton-author-line"></span>
+          </span>
+          <span class="trending-stats">
+            <span class="rank-badge skeleton-box"></span>
+            <span class="skeleton-line skeleton-like-count"></span>
+            <span class="btn like-button skeleton-button"></span>
+          </span>
         </div>
       </article>
     </section>
@@ -121,19 +127,79 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     align-items: stretch;
   }
 
-  .trending-card {
+  /* Card structure — playlists page 패턴 일치 */
+  .trending-page .playlist-card {
     display: flex;
     flex-direction: column;
-    gap: var(--space-md);
-    min-height: 100%;
+    gap: var(--space-sm);
+    color: var(--color-text);
   }
 
-  .trending-card-top,
-  .playlist-footer,
-  .playlist-author {
+  .trending-page .playlist-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .trending-page .playlist-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  .trending-page .playlist-title a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .trending-page .playlist-title a:hover {
+    color: var(--color-primary);
+  }
+
+  .trending-page .playlist-count {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    background: var(--color-bg-secondary);
+    padding: 2px var(--space-sm);
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+  }
+
+  .trending-page .playlist-description {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .trending-page .playlist-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+  }
+
+  .trending-page .playlist-curator {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 4px;
+  }
+
+  .trending-page .curator-avatar {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  /* Trending-specific: rank + likes + button */
+  .trending-stats {
+    display: flex;
+    align-items: center;
     gap: var(--space-sm);
   }
 
@@ -141,55 +207,25 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 3rem;
-    padding: 0.35rem 0.75rem;
+    min-width: 2.5rem;
+    padding: 0.2rem 0.5rem;
     border-radius: 999px;
     background: var(--color-accent);
     color: var(--color-text);
     font-weight: 800;
+    font-size: 0.8rem;
   }
 
   .like-count {
     color: var(--color-text-muted);
+    font-size: 0.8rem;
     font-weight: 600;
-  }
-
-  .playlist-title {
-    font-size: 1.2rem;
-    line-height: 1.4;
-  }
-
-  .playlist-title a {
-    color: var(--color-text);
-  }
-
-  .playlist-title a:hover {
-    color: var(--color-primary);
-  }
-
-  .playlist-description {
-    color: var(--color-text-muted);
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-    min-height: 3.2em;
-  }
-
-  .playlist-author {
-    justify-content: flex-start;
-    color: var(--color-text);
-    font-weight: 600;
-  }
-
-  .playlist-footer {
-    margin-top: auto;
-    align-items: flex-end;
   }
 
   .like-button {
-    min-width: 6.5rem;
+    font-size: 0.8rem;
     font-weight: 700;
+    padding: var(--space-xs) var(--space-sm);
   }
 
   .like-button.is-liked {
@@ -209,6 +245,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     cursor: wait;
   }
 
+  /* Skeleton loading */
   .skeleton-card {
     pointer-events: none;
   }
@@ -216,7 +253,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .skeleton-box,
   .skeleton-line,
   .skeleton-avatar,
-  .skeleton-badge,
+  .skeleton-count,
+  .skeleton-like-count,
   .skeleton-button {
     background: linear-gradient(90deg, var(--color-bg-secondary) 25%, rgba(255, 255, 255, 0.5) 50%, var(--color-bg-secondary) 75%);
     background-size: 200% 100%;
@@ -224,14 +262,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     color: transparent;
   }
 
-  .skeleton-box {
-    min-width: 3rem;
-    min-height: 2rem;
-  }
-
   .skeleton-title {
     width: 72%;
-    height: 1.6rem;
+    height: 1.4rem;
     border-radius: var(--radius-sm);
   }
 
@@ -245,33 +278,41 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     width: 80%;
   }
 
-  .skeleton-author {
-    justify-content: flex-start;
-  }
-
   .skeleton-avatar {
-    width: 2rem;
-    height: 2rem;
-    border-radius: 999px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
   }
 
   .skeleton-author-line {
-    width: 7rem;
-    height: 1rem;
+    width: 5rem;
+    height: 0.8rem;
     border-radius: var(--radius-sm);
   }
 
-  .skeleton-badge {
-    width: 5rem;
-    height: 2rem;
+  .skeleton-box {
+    min-width: 2.5rem;
+    min-height: 1.5rem;
     border-radius: 999px;
+  }
+
+  .skeleton-count {
+    width: 2rem;
+    height: 1.2rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .skeleton-like-count {
+    width: 3rem;
+    height: 0.8rem;
+    border-radius: var(--radius-sm);
   }
 
   .skeleton-button {
     display: inline-flex;
-    width: 6.5rem;
-    height: 2.5rem;
-    border-radius: var(--radius-md);
+    width: 4.5rem;
+    height: 1.8rem;
+    border-radius: var(--radius-sm);
     border: none;
   }
 
@@ -285,13 +326,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
 
   @media (max-width: 768px) {
-    .trending-card-top, .playlist-footer {
-      align-items: flex-start;
+    .trending-page .playlist-footer {
       flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-sm);
     }
 
-    .playlist-footer .btn {
+    .trending-stats {
       width: 100%;
+      justify-content: flex-end;
     }
   }
 </style>
