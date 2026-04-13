@@ -70,9 +70,7 @@ function renderCard(a: ClientArticle): string {
     ? `<div class="article-thumbnail"><img src="${escapeHtml(a.thumbnail_url)}" alt="" loading="lazy" width="300" height="160" /></div>`
     : '';
 
-  const originBadge = a.articleOrigin === 'curated'
-    ? '<span class="badge badge-curated">에디터 추천</span>'
-    : '';
+  const originBadge = '';
 
   const typeBadge = a.type === 'youtube' ? '<span class="badge badge-primary">YouTube</span>' : '';
 
