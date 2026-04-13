@@ -36,7 +36,41 @@ const currentPath = Astro.url.pathname;
   </div>
 </nav>
 
+<!-- Pre-paint: render cached auth state synchronously before first paint.
+     Astro deferred scripts run AFTER paint; this inline script runs BEFORE. -->
+<script is:inline>
+(function() {
+  var KEY = 'honeycombo:auth';
+  var raw;
+  try { raw = sessionStorage.getItem(KEY); } catch(e) { return; }
+  if (!raw || raw === 'guest') return; // Server-rendered login button is correct
+  var user;
+  try { user = JSON.parse(raw); } catch(e) {
+    try { sessionStorage.removeItem(KEY); } catch(e2) {}
+    return;
+  }
+  var el = document.getElementById('auth-area');
+  if (!el) return;
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  var avatar = (user.avatar_url && user.avatar_url.indexOf('https://') === 0) ? esc(user.avatar_url) : '/default-avatar.png';
+  var name = esc(user.username || '');
+  el.innerHTML =
+    '<div class="auth-user">' +
+    '<img src="' + avatar + '" alt="' + name + '" class="auth-avatar" />' +
+    '<span class="auth-username">' + name + '</span>' +
+    '<div class="auth-dropdown">' +
+    '<a href="/my/playlists" class="auth-dropdown-item">내 플레이리스트</a>' +
+    (user.is_admin ? '<a href="/admin/must-read" class="auth-dropdown-item auth-dropdown-admin">⭐ Must-read 관리</a><a href="/admin/playlists" class="auth-dropdown-item auth-dropdown-admin">🛡️ 플레이리스트 관리</a><a href="/admin" class="auth-dropdown-item auth-dropdown-admin">🛡️ 기사 검토 (CMS)</a>' : '') +
+    '<button class="auth-dropdown-item text-danger auth-logout-btn">로그아웃</button>' +
+    '</div>' +
+    '</div>';
+})();
+</script>
+
 <script>
+// Deferred: background verification + logout binding (runs after paint)
 const navToggle = document.getElementById('nav-toggle');
 if (navToggle) {
   navToggle.addEventListener('click', () => {
@@ -59,7 +93,6 @@ function escapeHtml(str: string): string {
     .replace(/"/g, '&quot;');
 }
 
-// Extract only rendering-relevant fields for stable cache comparison
 function toAuthCache(user: any): { username: string; avatar_url: string; is_admin: boolean } {
   return {
     username: String(user.username || ''),
@@ -81,6 +114,13 @@ function renderAuthUser(authArea: HTMLElement, user: { username: string; avatar_
     '<button class="auth-dropdown-item text-danger auth-logout-btn">로그아웃</button>' +
     '</div>' +
     '</div>';
+}
+
+function renderLoginBtn(authArea: HTMLElement) {
+  authArea.innerHTML = '<a href="/api/auth/github/login" class="auth-login-btn">로그인</a>';
+}
+
+function bindLogout(authArea: HTMLElement) {
   const logoutBtn = authArea.querySelector<HTMLButtonElement>('.auth-logout-btn');
   if (logoutBtn) {
     logoutBtn.addEventListener('click', async () => {
@@ -91,27 +131,13 @@ function renderAuthUser(authArea: HTMLElement, user: { username: string; avatar_
   }
 }
 
-function renderLoginBtn(authArea: HTMLElement) {
-  authArea.innerHTML = '<a href="/api/auth/github/login" class="auth-login-btn">로그인</a>';
-}
-
 const authArea = document.getElementById('auth-area');
 if (authArea) {
+  // Bind logout on whatever was rendered by inline script (or default login btn)
+  bindLogout(authArea);
+
   let cachedRaw: string | null = null;
   try { cachedRaw = sessionStorage.getItem(AUTH_CACHE_KEY); } catch (_) {}
-
-  if (cachedRaw) {
-    if (cachedRaw === 'guest') {
-      renderLoginBtn(authArea);
-    } else {
-      try {
-        renderAuthUser(authArea, JSON.parse(cachedRaw));
-      } catch (_) {
-        try { sessionStorage.removeItem(AUTH_CACHE_KEY); } catch (_e) {}
-        cachedRaw = null;
-      }
-    }
-  }
 
   // Background verify — re-render only when rendering-relevant fields actually differ.
   // Trade-off: cached state may briefly show stale user info (e.g. admin links after
@@ -124,19 +150,16 @@ if (authArea) {
       const fresh = JSON.stringify(toAuthCache(user));
       if (fresh !== cachedRaw) {
         renderAuthUser(authArea, toAuthCache(user));
+        bindLogout(authArea);
         try { sessionStorage.setItem(AUTH_CACHE_KEY, fresh); } catch (_) {}
       }
     } else if (res.status === 401) {
-      // Only treat explicit 401 as guest — don't overwrite on transient 5xx/429
       if (cachedRaw !== 'guest') {
         renderLoginBtn(authArea);
         try { sessionStorage.setItem(AUTH_CACHE_KEY, 'guest'); } catch (_) {}
       }
     }
-    // On other errors (5xx, 429, etc.): keep current UI, don't update cache
-  }).catch(() => {
-    // Network error: keep current UI (server-rendered login button or cached state)
-  });
+  }).catch(() => {});
 }
 </script>
 
