@@ -1,0 +1,719 @@
+---
+// biome-ignore lint/correctness/noUnusedImports: Astro frontmatter imports are used in template
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Must-read 관리 — HoneyCombo">
+  <div class="page-header">
+    <h1>⭐ Must-read 관리</h1>
+    <p class="page-subtitle">필독 기사를 직접 선정하고 관리합니다</p>
+  </div>
+
+  <div class="admin-content">
+    <div id="loading" class="state-message">
+      <p>불러오는 중...</p>
+    </div>
+
+    <div id="auth-required" class="state-message" style="display: none;">
+      <p>관리자 로그인이 필요합니다.</p>
+      <a href="/api/auth/github/login" class="btn btn-primary">GitHub로 로그인</a>
+    </div>
+
+    <div id="forbidden" class="state-message" style="display: none;">
+      <p>관리자 권한이 없습니다.</p>
+      <a href="/" class="btn">홈으로 돌아가기</a>
+    </div>
+
+    <div id="error-state" class="state-message error-message" style="display: none;">
+      <p id="error-text">목록을 불러오는데 실패했습니다.</p>
+      <button id="retry-btn" class="btn">다시 시도</button>
+    </div>
+
+    <div id="empty-state" class="state-message" style="display: none;">
+      <p>현재 Must-read 항목이 없습니다. 왼쪽에서 기사를 검색해 추가해보세요.</p>
+    </div>
+
+    <div id="must-read-content" class="must-read-layout" style="display: none;">
+      <section class="search-section card">
+        <h2>기사 검색</h2>
+        <input type="text" id="search-input" class="search-input" placeholder="제목 또는 출처로 검색..." />
+        <div id="search-results"></div>
+      </section>
+
+      <section class="list-section card">
+        <h2>현재 Must-read 목록 <span id="item-count"></span></h2>
+        <div id="must-read-list"></div>
+      </section>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  type SearchIndexEntry = {
+    id: string;
+    title: string;
+    url: string;
+    description: string;
+    source: string;
+    type: 'curated' | 'feed';
+  };
+
+  type MustReadItem = {
+    id: string;
+    source_id: string;
+    item_type: 'curated' | 'feed';
+    title_snapshot: string;
+    url_snapshot: string;
+    source_snapshot: string | null;
+    description_snapshot: string | null;
+    position: number;
+    added_by: string;
+    added_at: string;
+  };
+
+  const loadingEl = document.getElementById('loading');
+  const authRequiredEl = document.getElementById('auth-required');
+  const forbiddenEl = document.getElementById('forbidden');
+  const errorStateEl = document.getElementById('error-state');
+  const errorTextEl = document.getElementById('error-text');
+  const emptyStateEl = document.getElementById('empty-state');
+  const contentEl = document.getElementById('must-read-content');
+  const searchInputEl = document.getElementById('search-input') as HTMLInputElement | null;
+  const searchResultsEl = document.getElementById('search-results');
+  const listEl = document.getElementById('must-read-list');
+  const itemCountEl = document.getElementById('item-count');
+  const retryBtn = document.getElementById('retry-btn');
+
+  let searchIndex: SearchIndexEntry[] | null = null;
+  let currentItems: MustReadItem[] = [];
+  let debounceTimer: number | undefined;
+
+  function hideAll() {
+    [loadingEl, authRequiredEl, forbiddenEl, errorStateEl, emptyStateEl, contentEl].forEach(el => {
+      if (el) el.style.display = 'none';
+    });
+  }
+
+  function escapeHtml(unsafe: string) {
+    return unsafe
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/\"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function parseMustReadItems(data: unknown): MustReadItem[] {
+    if (data === null || typeof data !== 'object' || !('items' in data)) {
+      return [];
+    }
+
+    const { items } = data;
+
+    if (!Array.isArray(items)) {
+      return [];
+    }
+
+    return items.filter((item): item is MustReadItem => (
+      item !== null &&
+      typeof item === 'object' &&
+      'id' in item && typeof item.id === 'string' &&
+      'source_id' in item && typeof item.source_id === 'string' &&
+      'item_type' in item && (item.item_type === 'curated' || item.item_type === 'feed') &&
+      'title_snapshot' in item && typeof item.title_snapshot === 'string' &&
+      'url_snapshot' in item && typeof item.url_snapshot === 'string' &&
+      'source_snapshot' in item && (typeof item.source_snapshot === 'string' || item.source_snapshot === null) &&
+      'description_snapshot' in item && (typeof item.description_snapshot === 'string' || item.description_snapshot === null) &&
+      'position' in item && typeof item.position === 'number' &&
+      'added_by' in item && typeof item.added_by === 'string' &&
+      'added_at' in item && typeof item.added_at === 'string'
+    ));
+  }
+
+  function parseSearchIndex(data: unknown): SearchIndexEntry[] {
+    if (!Array.isArray(data)) {
+      return [];
+    }
+
+    return data.filter((item): item is SearchIndexEntry => (
+      item !== null &&
+      typeof item === 'object' &&
+      'id' in item && typeof item.id === 'string' &&
+      'title' in item && typeof item.title === 'string' &&
+      'url' in item && typeof item.url === 'string' &&
+      'description' in item && typeof item.description === 'string' &&
+      'source' in item && typeof item.source === 'string' &&
+      'type' in item && (item.type === 'curated' || item.type === 'feed')
+    ));
+  }
+
+  function renderItemCount() {
+    if (!itemCountEl) return;
+    itemCountEl.textContent = `(${currentItems.length})`;
+  }
+
+  function renderMustReadList(items: MustReadItem[]) {
+    if (!listEl) return;
+
+    if (items.length === 0) {
+      listEl.innerHTML = '<div class="inline-empty">아직 추가된 Must-read 항목이 없습니다.</div>';
+      return;
+    }
+
+    listEl.innerHTML = items.map((item, index) => {
+      const source = item.source_snapshot || '출처 없음';
+
+      return `
+        <div class="must-read-item" data-id="${escapeHtml(item.id)}">
+          <span class="item-rank">#${index + 1}</span>
+          <div class="item-info">
+            <div class="item-title"><a href="${escapeHtml(item.url_snapshot)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title_snapshot)}</a></div>
+            <div class="item-meta"><span class="badge">${escapeHtml(source)}</span></div>
+          </div>
+          <div class="item-actions">
+            <button class="btn btn-move" data-action="move" data-id="${escapeHtml(item.id)}" data-dir="up" title="위로" ${index === 0 ? 'disabled' : ''}>▲</button>
+            <button class="btn btn-move" data-action="move" data-id="${escapeHtml(item.id)}" data-dir="down" title="아래로" ${index === items.length - 1 ? 'disabled' : ''}>▼</button>
+            <button class="btn btn-remove" data-action="remove" data-id="${escapeHtml(item.id)}" title="삭제">✕</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderSearchResults(results: SearchIndexEntry[], query: string) {
+    if (!searchResultsEl) return;
+
+    if (!query || query.length < 2) {
+      searchResultsEl.innerHTML = '<div class="search-placeholder">검색어를 2자 이상 입력하세요.</div>';
+      return;
+    }
+
+    if (results.length === 0) {
+      searchResultsEl.innerHTML = '<div class="search-placeholder">검색 결과가 없습니다.</div>';
+      return;
+    }
+
+    searchResultsEl.innerHTML = results.map((article) => {
+      const alreadyAdded = currentItems.some(item => item.source_id === article.id && item.item_type === article.type);
+      const typeLabel = article.type === 'curated' ? 'curated' : 'feed';
+      const addLabel = alreadyAdded ? '이미 추가됨' : '추가';
+      const descAttr = article.description.replace(/\r?\n/g, ' ');
+
+      return `
+        <div class="search-result" data-id="${escapeHtml(article.id)}">
+          <div class="search-result-info">
+            <div class="search-result-title">${escapeHtml(article.title)}</div>
+            <div class="search-result-meta">
+              <span class="badge">${escapeHtml(article.source)}</span>
+              <span class="badge badge-type">${escapeHtml(typeLabel)}</span>
+            </div>
+          </div>
+          <button class="btn btn-add" data-action="add" data-id="${escapeHtml(article.id)}" data-type="${escapeHtml(article.type)}" data-title="${escapeHtml(article.title)}" data-url="${escapeHtml(article.url)}" data-source="${escapeHtml(article.source)}" data-desc="${escapeHtml(descAttr)}" ${alreadyAdded ? 'disabled' : ''}>${addLabel}</button>
+        </div>
+      `;
+    }).join('');
+  }
+
+  async function loadSearchIndex() {
+    if (searchIndex) {
+      return searchIndex;
+    }
+
+    const res = await fetch('/search-index.json');
+
+    if (!res.ok) {
+      throw new Error('검색 인덱스를 불러오는데 실패했습니다.');
+    }
+
+    searchIndex = parseSearchIndex(await res.json());
+    return searchIndex;
+  }
+
+  async function handleSearch(query: string) {
+    try {
+      const trimmed = query.trim();
+      if (!trimmed || trimmed.length < 2) {
+        renderSearchResults([], trimmed);
+        return;
+      }
+
+      const index = await loadSearchIndex();
+      const lowered = trimmed.toLowerCase();
+      const results = index.filter((article) => (
+        article.title.toLowerCase().includes(lowered) ||
+        article.source.toLowerCase().includes(lowered)
+      )).slice(0, 10);
+
+      renderSearchResults(results, trimmed);
+    } catch (err: unknown) {
+      if (searchResultsEl) {
+        searchResultsEl.innerHTML = `<div class="search-placeholder search-error">${escapeHtml(err instanceof Error ? err.message : '검색 중 오류가 발생했습니다.')}</div>`;
+      }
+    }
+  }
+
+  async function loadMustRead() {
+    hideAll();
+    if (loadingEl) loadingEl.style.display = 'block';
+
+    try {
+      const authRes = await fetch('/api/auth/me');
+      if (!authRes.ok) {
+        hideAll();
+        if (authRequiredEl) authRequiredEl.style.display = 'block';
+        return;
+      }
+
+      const res = await fetch('/api/admin/must-read');
+
+      if (res.status === 403) {
+        hideAll();
+        if (forbiddenEl) forbiddenEl.style.display = 'block';
+        return;
+      }
+
+      if (!res.ok) {
+        throw new Error('목록을 불러오는데 실패했습니다.');
+      }
+
+      currentItems = parseMustReadItems(await res.json())
+        .sort((a, b) => a.position - b.position);
+
+      renderItemCount();
+      renderMustReadList(currentItems);
+
+      hideAll();
+      if (contentEl) contentEl.style.display = 'grid';
+      if (currentItems.length === 0 && emptyStateEl) emptyStateEl.style.display = 'flex';
+
+      const currentQuery = searchInputEl?.value.trim() || '';
+      renderSearchResults([], currentQuery);
+      if (currentQuery.length >= 2) {
+        await handleSearch(currentQuery);
+      }
+    } catch (err: unknown) {
+      hideAll();
+      if (errorStateEl) errorStateEl.style.display = 'block';
+      if (errorTextEl) {
+        errorTextEl.textContent = err instanceof Error ? err.message : '알 수 없는 오류';
+      }
+    }
+  }
+
+  async function addMustRead(button: HTMLButtonElement) {
+    button.disabled = true;
+    button.textContent = '추가 중...';
+
+    try {
+      const res = await fetch('/api/admin/must-read', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          source_id: button.dataset.id,
+          item_type: button.dataset.type,
+          title_snapshot: button.dataset.title,
+          url_snapshot: button.dataset.url,
+          source_snapshot: button.dataset.source,
+          description_snapshot: button.dataset.desc,
+        }),
+      });
+
+      if (res.status === 403) {
+        hideAll();
+        if (forbiddenEl) forbiddenEl.style.display = 'block';
+        return;
+      }
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        const message = data !== null && typeof data === 'object' && 'error' in data && typeof data.error === 'string'
+          ? data.error
+          : '추가에 실패했습니다.';
+        throw new Error(message);
+      }
+
+      await loadMustRead();
+    } catch (err: unknown) {
+      window.alert(err instanceof Error ? err.message : '추가에 실패했습니다.');
+      button.disabled = false;
+      button.textContent = '추가';
+    }
+  }
+
+  async function removeMustRead(id: string) {
+    const res = await fetch(`/api/admin/must-read/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+    });
+
+    if (res.status === 403) {
+      hideAll();
+      if (forbiddenEl) forbiddenEl.style.display = 'block';
+      return;
+    }
+
+    if (!res.ok) {
+      const data = await res.json().catch(() => null);
+      const message = data !== null && typeof data === 'object' && 'error' in data && typeof data.error === 'string'
+        ? data.error
+        : '삭제에 실패했습니다.';
+      throw new Error(message);
+    }
+
+    await loadMustRead();
+  }
+
+  async function reorderMustRead(id: string, direction: 'up' | 'down') {
+    const currentIndex = currentItems.findIndex(item => item.id === id);
+    if (currentIndex === -1) return;
+
+    const targetIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
+    if (targetIndex < 0 || targetIndex >= currentItems.length) return;
+
+    const reordered = [...currentItems];
+    const [moved] = reordered.splice(currentIndex, 1);
+    if (!moved) return;
+    reordered.splice(targetIndex, 0, moved);
+
+    const res = await fetch('/api/admin/must-read/reorder', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ids: reordered.map(item => item.id) }),
+    });
+
+    if (res.status === 403) {
+      hideAll();
+      if (forbiddenEl) forbiddenEl.style.display = 'block';
+      return;
+    }
+
+    if (!res.ok) {
+      window.location.reload();
+      return;
+    }
+
+    currentItems = reordered.map((item, index) => ({ ...item, position: index }));
+    renderItemCount();
+    renderMustReadList(currentItems);
+
+    const currentQuery = searchInputEl?.value.trim() || '';
+    if (currentQuery.length >= 2) {
+      await handleSearch(currentQuery);
+    }
+  }
+
+  if (searchInputEl) {
+    renderSearchResults([], '');
+    searchInputEl.addEventListener('input', (e) => {
+      const target = e.currentTarget as HTMLInputElement;
+      window.clearTimeout(debounceTimer);
+      debounceTimer = window.setTimeout(() => {
+        void handleSearch(target.value);
+      }, 300);
+    });
+  }
+
+  if (listEl) {
+    listEl.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement | null;
+      const button = target?.closest('button');
+      if (!(button instanceof HTMLButtonElement)) return;
+
+      const action = button.dataset.action;
+      const id = button.dataset.id;
+
+      if (action === 'remove' && id) {
+        void removeMustRead(id).catch((err: unknown) => {
+          window.alert(err instanceof Error ? err.message : '삭제에 실패했습니다.');
+        });
+      }
+
+      if (action === 'move' && id && (button.dataset.dir === 'up' || button.dataset.dir === 'down')) {
+        void reorderMustRead(id, button.dataset.dir).catch(() => {
+          window.location.reload();
+        });
+      }
+    });
+  }
+
+  if (searchResultsEl) {
+    searchResultsEl.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement | null;
+      const button = target?.closest('button');
+      if (!(button instanceof HTMLButtonElement)) return;
+      if (button.dataset.action !== 'add') return;
+      void addMustRead(button);
+    });
+  }
+
+  if (retryBtn) {
+    retryBtn.addEventListener('click', () => {
+      void loadMustRead();
+    });
+  }
+
+  void loadMustRead();
+});
+</script>
+
+<style>
+.page-header { margin-bottom: var(--space-xl); }
+.page-header h1 { font-size: 2rem; font-weight: 800; }
+.page-subtitle { color: var(--color-text-muted); margin-top: var(--space-xs); }
+
+.admin-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.state-message {
+  padding: var(--space-2xl) var(--space-xl);
+  text-align: center;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.state-message p {
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+}
+
+.error-message {
+  background: rgba(239, 68, 68, 0.05);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.error-message p {
+  color: var(--color-danger);
+}
+
+.must-read-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-md);
+  align-items: start;
+}
+
+.search-section,
+.list-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  min-height: 100%;
+}
+
+.search-section h2,
+.list-section h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.search-input {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font: inherit;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+}
+
+.admin-content :global(.btn) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.15s;
+  text-decoration: none;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.admin-content :global(.btn:hover:not(:disabled)) {
+  background: var(--color-bg-secondary);
+  text-decoration: none;
+}
+
+.admin-content :global(.btn:disabled) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.admin-content :global(.btn-primary) {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.admin-content :global(.btn-primary:hover) {
+  background: var(--color-primary-hover);
+  color: white;
+}
+
+.admin-content :global(.badge) {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.admin-content :global(.badge-type) {
+  text-transform: uppercase;
+}
+
+.admin-content :global(.search-placeholder),
+.admin-content :global(.inline-empty) {
+  padding: var(--space-lg);
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--color-border);
+  background: var(--color-bg-secondary);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.admin-content :global(.search-error) {
+  color: var(--color-danger);
+}
+
+.admin-content :global(.search-result),
+.admin-content :global(.must-read-item) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-md);
+  align-items: center;
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+}
+
+.admin-content :global(.search-result + .search-result),
+.admin-content :global(.must-read-item + .must-read-item) {
+  margin-top: var(--space-sm);
+}
+
+.admin-content :global(.search-result-info),
+.admin-content :global(.item-info) {
+  min-width: 0;
+}
+
+.admin-content :global(.search-result-title),
+.admin-content :global(.item-title) {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.5;
+  margin-bottom: var(--space-xs);
+}
+
+.admin-content :global(.item-title a) {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.admin-content :global(.item-title a:hover) {
+  color: var(--color-primary);
+}
+
+.admin-content :global(.search-result-meta),
+.admin-content :global(.item-meta) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.admin-content :global(.item-rank) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 3.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-md);
+  background: rgba(245, 158, 11, 0.12);
+  color: var(--color-primary);
+  font-weight: 800;
+}
+
+.admin-content :global(.must-read-item) {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.admin-content :global(.item-actions) {
+  display: flex;
+  gap: var(--space-xs);
+  align-items: center;
+}
+
+.admin-content :global(.btn-add) {
+  min-width: 5.5rem;
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--color-success, #10b981);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.admin-content :global(.btn-add:hover:not(:disabled)) {
+  background: rgba(16, 185, 129, 0.2);
+}
+
+.admin-content :global(.btn-remove) {
+  color: var(--color-danger);
+  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.admin-content :global(.btn-remove:hover:not(:disabled)) {
+  background: rgba(239, 68, 68, 0.16);
+}
+
+.admin-content :global(.btn-move) {
+  padding-inline: var(--space-md);
+}
+
+@media (max-width: 900px) {
+  .must-read-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-content :global(.search-result),
+  .admin-content :global(.must-read-item) {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-content :global(.item-actions),
+  .admin-content :global(.search-result .btn) {
+    width: 100%;
+  }
+
+  .admin-content :global(.item-actions) {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .admin-content :global(.item-rank) {
+    width: fit-content;
+  }
+}
+</style>

@@ -74,6 +74,19 @@ export interface PlaylistLikeRow {
   created_at: string;
 }
 
+export interface MustReadItemRow {
+  id: string;
+  source_id: string;
+  item_type: 'curated' | 'feed';
+  title_snapshot: string;
+  url_snapshot: string;
+  source_snapshot: string | null;
+  description_snapshot: string | null;
+  position: number;
+  added_by: string;
+  added_at: string;
+}
+
 // ---------------------------------------------------------------------------
 // API input DTOs
 // ---------------------------------------------------------------------------

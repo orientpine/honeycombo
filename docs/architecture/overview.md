@@ -13,7 +13,6 @@
 │        │                 │                          │
 │        ▼                 ▼                          │
 │  src/data/feeds/    src/content/                    │
-│  src/data/must-read/ curated/                       │
 └────────────────────────┬────────────────────────────┘
                          │ git push (master)
                          ▼
@@ -39,7 +38,7 @@
 | `components/` | UI 컴포넌트 | `.astro` 컴포넌트 (ArticleCard, Navigation 등) |
 | `layouts/` | 레이아웃 | 페이지 공통 레이아웃 |
 | `content/` | 콘텐츠 컬렉션 | Astro Content Collections. `curated/` 큐레이션 기사 |
-| `data/` | 데이터 파일 | JSON 기반 데이터 (feeds, trending, must-read, influencers) |
+| `data/` | 데이터 파일 | JSON 기반 데이터 (feeds, trending, influencers) |
 | `schemas/` | 스키마 정의 | TypeScript 타입/유효성 검사 (curated-article, feed-article 등) |
 | `config/` | 설정 파일 | feeds.json, spam-keywords.json, ranking-overrides.json |
 | `lib/` | 유틸리티 | 공유 로직 (article-sort 등) |
@@ -50,7 +49,7 @@
 | 파일 | 역할 | 실행 주체 |
 |------|------|----------|
 | `rss-collect.ts` | RSS 피드 수집 → `src/data/feeds/` | GitHub Actions (scheduled) |
-| `calc-must-read.ts` | 필독 기사 선정 → `src/data/must-read/` | GitHub Actions (scheduled) |
+| `calc-must-read.ts` | ~~필독 기사 선정~~ (삭제됨 — D1 에디터 관리로 전환) | — |
 | `process-submission.ts` | 단건/대량 기사 제출 Issue → PR 변환 | GitHub Actions (on issue) |
 | `validate.ts` | 콘텐츠 유효성 검사 | CI, 로컬 |
 | `validate-docs.ts` | 문서 형식·커버리지 검증 | CI, 로컬 |
@@ -74,6 +73,11 @@
 `api/playlists/[id]/like.ts` | GET/POST 좋아요 API |
 `api/trending.ts` | GET 트렌딩 API (JSON) |
 `trending.ts` | 트렌딩 페이지 SSR 렌더링 |
+| `must-read.ts` | Must-read 페이지 SSR 렌더링 (D1 에디터 관리) |
+| `api/admin/must-read/index.ts` | GET/POST Must-read 관리 API |
+| `api/admin/must-read/[id].ts` | DELETE Must-read 항목 삭제 |
+| `api/admin/must-read/reorder.ts` | PUT Must-read 순서 변경 |
+| `lib/must-read.ts` | Must-read D1 CRUD 연산 |
 | `p/[id].ts` | 유저 플레이리스트 SSR (아이템 관리, 기사 검색, 외부 URL 추가) |
 | `lib/auth.ts` | 세션 관리 (upsertUser, createSession, getSession) |
 | `lib/playlists.ts` | 플레이리스트 CRUD, 목록 조회, 포함 여부 확인 |
@@ -88,7 +92,7 @@
 | `ci.yml` | CI (validate, validate:docs, build, test) |
 | `content-update-base.yml` | 콘텐츠 업데이트 공통 베이스 |
 | `rss-collect.yml` | RSS 수집 스케줄 |
-| `trending-calc.yml` | 필독 기사 선정 스케줄 |
+| ~~`trending-calc.yml`~~ | 삭제됨 — Must-read가 D1 에디터 관리로 전환 |
 | `process-submission.yml` | 기사 제출 처리 + 외부 사용자 자동 라벨링 |
 
 ## 페이지 구조
@@ -99,13 +103,14 @@
 | `/articles` | `articles/index.astro` | 기사 목록 (SourceFilter: 전체/에디터추천/제출기사/RSS) |
 | `/articles/[slug]` | `articles/[...slug].astro` | 개별 기사 (curated만) |
 | `/trending` | `functions/trending.ts` | 트렌딩 플레이리스트 (SSR, 좋아요 수 순위) |
-| `/must-read` | `must-read.astro` | 필독 기사 |
+| `/must-read` | `functions/must-read.ts` | 필독 기사 (SSR, D1 에디터 관리) |
 | `/influencers` | `influencers.astro` | 추천 인플루언서 (X/Threads 섹션 분리) |
 | `/playlists` | `playlists/index.astro` | 에디터+커뮤니티 플레이리스트 목록 (D1 API 기반) |
 | `/p/new` | `p/new.astro` | 유저 플레이리스트 생성 폼 |
 | `/p/{id}` | `functions/p/[id].ts` | 유저 플레이리스트 상세 (SSR, 기사 검색/관리) |
 | `/my/playlists` | `my/playlists.astro` | 내 플레이리스트 관리 |
 | `/admin/playlists` | `admin/playlists.astro` | 관리자 플레이리스트 승인 페이지 |
+| `/admin/must-read` | `admin/must-read.astro` | 관리자 Must-read 선정 페이지 |
 | `/search-index.json` | `search-index.json.ts` | 플레이리스트 상세 기사 검색용 정적 JSON 인덱스 |
 | `/submit` | `submit.astro` | 기사 제출 |
 | `/admin` | `admin.astro` | Decap CMS 관리자 |
@@ -174,6 +179,7 @@ src/ (pages + components + data + content) → astro build → dist/
 - [플레이리스트](../features/playlists.md)
 - [AI 피드 필터](../features/ai-feed-filter.md)
 - [트렌딩 플레이리스트](../features/trending-playlists.md)
+- [Must-read 에디터 관리](../features/must-read-management.md)
 
 ## 변경 이력
 
@@ -189,3 +195,4 @@ src/ (pages + components + data + content) → astro build → dist/
 | 2026-04-13 | RSS 수집에 AI 키워드 필터 추가 (`ai-keywords.json` allowlist) |
 | 2026-04-13 | 에디터 플레이리스트 정적 시스템 제거, D1 통합 반영 |
 | 2026-04-13 | 키워드 트렌딩 → 플레이리스트 트렌딩(SSR) 전환, 좋아요 시스템 추가 |
+| 2026-04-13 | Must-read: 자동 계산 → 에디터 수동 관리 전환. D1/SSR 기반, 관리자 UI 추가, 레거시 파일 삭제 |

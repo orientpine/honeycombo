@@ -299,9 +299,6 @@ describe('analyzeChangeCoverage', () => {
     expect(analyzeChangeCoverage(['src/data/trending/article.json'])).toEqual([]);
   });
 
-  it('no warning when src/data/must-read/ only changed', () => {
-    expect(analyzeChangeCoverage(['src/data/must-read/article.json'])).toEqual([]);
-  });
 
   it('warns when src/data/influencers/ changed without docs/', () => {
     expect(analyzeChangeCoverage(['src/data/influencers/profile.json'])).toEqual([

@@ -105,20 +105,6 @@ collections:
           - { label: "날짜", name: "date", widget: "datetime" }
           - { label: "주제", name: "topic", widget: "string" }
 
-  # Must-read — individual JSON files in src/data/must-read/
-  - name: "must-read"
-    label: "Must-read"
-    label_singular: "Must-read"
-    folder: "src/data/must-read"
-    create: true
-    format: "json"
-    extension: "json"
-    identifier_field: "id"
-    fields:
-      - { label: "ID", name: "id", widget: "string" }
-      - { label: "날짜", name: "date", widget: "string", hint: "YYYY-MM-DD" }
-      - { label: "기사 ID 목록", name: "items", widget: "list" }
-      - { label: "핀 설정자", name: "pinned_by", widget: "string", required: false }
 
   # Ranking overrides — single file
   - name: "ranking-config"

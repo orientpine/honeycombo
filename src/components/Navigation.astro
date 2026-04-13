@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           <span class="auth-username">` + user.username + `</span>
           <div class="auth-dropdown">
             <a href="/my/playlists" class="auth-dropdown-item">내 플레이리스트</a>
-            ` + (user.is_admin ? `<a href="/admin/playlists" class="auth-dropdown-item auth-dropdown-admin">🛡️ 플레이리스트 관리</a><a href="/admin" class="auth-dropdown-item auth-dropdown-admin">🛡️ 기사 검토 (CMS)</a>` : '') + `
+            ` + (user.is_admin ? `<a href="/admin/must-read" class="auth-dropdown-item auth-dropdown-admin">⭐ Must-read 관리</a><a href="/admin/playlists" class="auth-dropdown-item auth-dropdown-admin">🛡️ 플레이리스트 관리</a><a href="/admin" class="auth-dropdown-item auth-dropdown-admin">🛡️ 기사 검토 (CMS)</a>` : '') + `
             <button id="logout-btn" class="auth-dropdown-item text-danger">로그아웃</button>
           </div>
         </div>
