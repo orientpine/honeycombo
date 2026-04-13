@@ -150,7 +150,7 @@ function initPersonalization() {
 }
 
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initPersonalization);
+  document.addEventListener('astro:page-load', initPersonalization);
 } else {
   initPersonalization();
 }

@@ -25,141 +25,155 @@ interface Props {
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const containers = document.querySelectorAll('.add-to-playlist-container');
+function initAddToPlaylistContainer(container: Element) {
+  if (container.hasAttribute('data-playlist-init')) return;
+  container.setAttribute('data-playlist-init', 'true');
+
+  const btn = container.querySelector('.add-to-playlist-btn') as HTMLButtonElement;
+  const dropdown = container.querySelector('.playlist-dropdown') as HTMLDivElement;
+  const list = container.querySelector('.playlist-list') as HTMLUListElement;
+  const toast = container.querySelector('.playlist-toast') as HTMLDivElement;
   
-  containers.forEach(container => {
-    const btn = container.querySelector('.add-to-playlist-btn') as HTMLButtonElement;
-    const dropdown = container.querySelector('.playlist-dropdown') as HTMLDivElement;
-    const list = container.querySelector('.playlist-list') as HTMLUListElement;
-    const toast = container.querySelector('.playlist-toast') as HTMLDivElement;
+  const articleId = container.getAttribute('data-article-id');
+  const title = container.getAttribute('data-title');
+  const url = container.getAttribute('data-url');
+  const description = container.getAttribute('data-description');
+  const sourceType = container.getAttribute('data-source-type');
+
+  let isDropdownOpen = false;
+
+  const showToast = (message: string, isError = false) => {
+    toast.textContent = message;
+    toast.className = `playlist-toast ${isError ? 'error' : 'success'}`;
+    toast.style.display = 'block';
+    setTimeout(() => {
+      toast.style.display = 'none';
+    }, 3000);
+  };
+
+  btn.addEventListener('click', async (e) => {
+    e.stopPropagation();
     
-    const articleId = container.getAttribute('data-article-id');
-    const title = container.getAttribute('data-title');
-    const url = container.getAttribute('data-url');
-    const description = container.getAttribute('data-description');
-    const sourceType = container.getAttribute('data-source-type');
+    if (isDropdownOpen) {
+      dropdown.style.display = 'none';
+      isDropdownOpen = false;
+      return;
+    }
 
-    let isDropdownOpen = false;
+    // Close other dropdowns
+    document.querySelectorAll('.playlist-dropdown').forEach(d => {
+      (d as HTMLDivElement).style.display = 'none';
+    });
 
-    const showToast = (message: string, isError = false) => {
-      toast.textContent = message;
-      toast.className = `playlist-toast ${isError ? 'error' : 'success'}`;
-      toast.style.display = 'block';
-      setTimeout(() => {
-        toast.style.display = 'none';
-      }, 3000);
-    };
+    dropdown.style.display = 'block';
+    isDropdownOpen = true;
+    list.innerHTML = '<li class="playlist-loading">불러오는 중...</li>';
 
-    btn.addEventListener('click', async (e) => {
-      e.stopPropagation();
-      
-      if (isDropdownOpen) {
-        dropdown.style.display = 'none';
-        isDropdownOpen = false;
+    try {
+      const authRes = await fetch('/api/auth/me');
+      if (!authRes.ok) {
+        list.innerHTML = `
+          <li class="playlist-auth-required">
+            로그인이 필요합니다.<br/>
+            <a href="#" class="login-link" onclick="window.location.href='/api/auth/github/login?return_to='+encodeURIComponent(window.location.pathname);return false;">로그인하기</a>
+          </li>
+        `;
         return;
       }
 
-      // Close other dropdowns
-      document.querySelectorAll('.playlist-dropdown').forEach(d => {
-        (d as HTMLDivElement).style.display = 'none';
-      });
+      const playlistsRes = await fetch(
+        `/api/playlists?mine=true&source_id=${encodeURIComponent(articleId!)}&item_type=${encodeURIComponent(sourceType!)}`
+      );
+      if (!playlistsRes.ok) throw new Error('Failed to fetch playlists');
+      
+      const playlistData = await playlistsRes.json();
+      const playlists: Array<{ id: string; title: string; contains_item?: boolean }> = playlistData.playlists || [];
+      
+      if (playlists.length === 0) {
+        list.innerHTML = '<li class="playlist-empty">플레이리스트가 없습니다.</li>';
+        return;
+      }
 
-      dropdown.style.display = 'block';
-      isDropdownOpen = true;
-      list.innerHTML = '<li class="playlist-loading">불러오는 중...</li>';
+      list.innerHTML = playlists.map((p: any) => `
+        <li>
+          <button class="playlist-item-btn${p.contains_item ? ' already-added' : ''}"
+                  data-id="${p.id}" ${p.contains_item ? 'disabled' : ''}>
+            ${p.contains_item ? '✓ ' : ''}${p.title}
+            ${p.contains_item ? '<span class="badge-added">추가됨</span>' : ''}
+          </button>
+        </li>
+      `).join('');
 
-      try {
-        const authRes = await fetch('/api/auth/me');
-        if (!authRes.ok) {
-          list.innerHTML = `
-            <li class="playlist-auth-required">
-              로그인이 필요합니다.<br/>
-              <a href="#" class="login-link" onclick="window.location.href='/api/auth/github/login?return_to='+encodeURIComponent(window.location.pathname);return false;">로그인하기</a>
-            </li>
-          `;
-          return;
-        }
+      // Add click handlers to items
+      list.querySelectorAll('.playlist-item-btn').forEach(itemBtn => {
+        itemBtn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          const playlistId = itemBtn.getAttribute('data-id');
+          
+          try {
+            const addRes = await fetch(`/api/playlists/${playlistId}/items`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                item_type: sourceType,
+                source_id: articleId,
+                title_snapshot: title,
+                url_snapshot: url,
+                description_snapshot: description
+              })
+            });
 
-        const playlistsRes = await fetch(
-          `/api/playlists?mine=true&source_id=${encodeURIComponent(articleId!)}&item_type=${encodeURIComponent(sourceType!)}`
-        );
-        if (!playlistsRes.ok) throw new Error('Failed to fetch playlists');
-        
-        const playlistData = await playlistsRes.json();
-        const playlists: Array<{ id: string; title: string; contains_item?: boolean }> = playlistData.playlists || [];
-        
-        if (playlists.length === 0) {
-          list.innerHTML = '<li class="playlist-empty">플레이리스트가 없습니다.</li>';
-          return;
-        }
-
-        list.innerHTML = playlists.map((p: any) => `
-          <li>
-            <button class="playlist-item-btn${p.contains_item ? ' already-added' : ''}"
-                    data-id="${p.id}" ${p.contains_item ? 'disabled' : ''}>
-              ${p.contains_item ? '✓ ' : ''}${p.title}
-              ${p.contains_item ? '<span class="badge-added">추가됨</span>' : ''}
-            </button>
-          </li>
-        `).join('');
-
-        // Add click handlers to items
-        list.querySelectorAll('.playlist-item-btn').forEach(itemBtn => {
-          itemBtn.addEventListener('click', async (e) => {
-            e.stopPropagation();
-            const playlistId = itemBtn.getAttribute('data-id');
-            
-            try {
-              const addRes = await fetch(`/api/playlists/${playlistId}/items`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  item_type: sourceType,
-                  source_id: articleId,
-                  title_snapshot: title,
-                  url_snapshot: url,
-                  description_snapshot: description
-                })
-              });
-
-              if (!addRes.ok) {
-                if (addRes.status === 409) {
-                  showToast('이미 추가된 기사입니다.', true);
-                } else {
-                  showToast('추가에 실패했습니다.', true);
-                }
-                dropdown.style.display = 'none';
-                isDropdownOpen = false;
-                return;
+            if (!addRes.ok) {
+              if (addRes.status === 409) {
+                showToast('이미 추가된 기사입니다.', true);
+              } else {
+                showToast('추가에 실패했습니다.', true);
               }
-              
-              showToast('플레이리스트에 추가되었습니다.');
               dropdown.style.display = 'none';
               isDropdownOpen = false;
-            } catch (err) {
-              showToast('추가에 실패했습니다.', true);
+              return;
             }
-          });
+            
+            showToast('플레이리스트에 추가되었습니다.');
+            dropdown.style.display = 'none';
+            isDropdownOpen = false;
+          } catch (err) {
+            showToast('추가에 실패했습니다.', true);
+          }
         });
+      });
 
-      } catch (err) {
-        list.innerHTML = '<li class="playlist-error">오류가 발생했습니다.</li>';
-      }
-    });
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!container.contains(e.target as Node)) {
-        dropdown.style.display = 'none';
-        isDropdownOpen = false;
-      }
-    });
+    } catch (err) {
+      list.innerHTML = '<li class="playlist-error">오류가 발생했습니다.</li>';
+    }
   });
-});
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!container.contains(e.target as Node)) {
+      dropdown.style.display = 'none';
+      isDropdownOpen = false;
+    }
+  });
+}
+
+function initAddToPlaylistContainers(root?: Element | Document) {
+  const scope = root || document;
+  const containers = scope.querySelectorAll('.add-to-playlist-container:not([data-playlist-init])');
+  containers.forEach(initAddToPlaylistContainer);
+}
+
+// Expose globally for dynamic content (e.g., TagFilter cross-page rendering)
+(window as any).__initAddToPlaylistContainers = initAddToPlaylistContainers;
+
+if (document.readyState === 'loading') {
+  document.addEventListener('astro:page-load', () => initAddToPlaylistContainers());
+} else {
+  initAddToPlaylistContainers();
+}
 </script>
 
-<style>
+<style is:global>
 .add-to-playlist-container {
   position: relative;
   display: inline-block;

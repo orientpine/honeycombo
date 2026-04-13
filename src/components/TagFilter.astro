@@ -73,7 +73,7 @@ function renderCard(a: ClientArticle): string {
   const originBadge = a.articleOrigin === 'curated'
     ? '<span class="badge badge-curated">에디터 추천</span>'
     : a.articleOrigin === 'submitted'
-      ? '<span class="badge badge-submitted">검토 중</span>'
+      ? '<span class="badge badge-submitted">커뮤니티</span>'
       : '';
 
   const typeBadge = a.type === 'youtube' ? '<span class="badge badge-primary">YouTube</span>' : '';
@@ -84,6 +84,8 @@ function renderCard(a: ClientArticle): string {
 
   const tagsHtml = a.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('');
   const tagsAttr = a.tags.map(t => escapeHtml(t)).join(',');
+
+  const sourceType = a.articleOrigin === 'feed' ? 'feed' : 'curated';
 
   return `<article class="card article-card" data-testid="article-card" data-tags="${tagsAttr}" data-origin="${a.articleOrigin}">
   ${thumb}
@@ -99,6 +101,19 @@ function renderCard(a: ClientArticle): string {
     </h3>
     ${desc}
     <div class="article-tags">${tagsHtml}</div>
+    <div class="add-to-playlist-container" data-article-id="${escapeHtml(a._id)}" data-title="${title}" data-url="${escapeHtml(a.url)}" data-description="${escapeHtml(a.description || '')}" data-source-type="${sourceType}">
+      <button class="add-to-playlist-btn tag">➕ 플레이리스트에 추가</button>
+      <div class="playlist-dropdown" style="display: none;">
+        <div class="playlist-dropdown-header">플레이리스트 선택</div>
+        <ul class="playlist-list">
+          <li class="playlist-loading">불러오는 중...</li>
+        </ul>
+        <div class="playlist-dropdown-footer">
+          <a href="/p/new" class="new-playlist-link">➕ 새 플레이리스트 만들기</a>
+        </div>
+      </div>
+      <div class="playlist-toast" style="display: none;"></div>
+    </div>
   </div>
 </article>`;
 }
@@ -149,9 +164,12 @@ function filterByTag(tag: string) {
       filteredContainer.style.display = '';
       filteredCount.textContent = `"${escapeHtml(tag)}" 태그 기사 ${matched.length}건`;
       filteredGrid.innerHTML = matched.map(renderCard).join('');
+      // Initialize AddToPlaylist buttons for dynamically rendered cards
+      if ((window as any).__initAddToPlaylistContainers) {
+        (window as any).__initAddToPlaylistContainers(filteredGrid);
+      }
     }
   }
-
   // Update URL param
   const url = new URL(window.location.href);
   if (tag === 'all') {
@@ -182,7 +200,7 @@ function initTagFilter() {
 }
 
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initTagFilter);
+  document.addEventListener('astro:page-load', initTagFilter);
 } else {
   initTagFilter();
 }

@@ -142,7 +142,7 @@ jobs:
 
           gh pr create \
             --title "$PR_TITLE" \
-            --body "Auto-generated from GitHub Issue #$ISSUE_NUM. Review and approve to publish." \
+            --body "Closes #$ISSUE_NUM. Auto-generated submission." \
             --base master \
             --head "$BRANCH" \
             --label "submission"
@@ -168,8 +168,7 @@ jobs:
             echo "Editor detected (ID: $ISSUE_USER_ID) — auto-merging PR"
             PR_URL=$(gh pr list --head "$BRANCH" --json url --jq '.[0].url')
             if [ -n "$PR_URL" ]; then
-              gh pr merge "$PR_URL" --merge --delete-branch
-              gh issue close "$ISSUE_NUM" --comment "✅ 에디터 제출 — 자동 승인 및 게시 완료."
+              gh pr merge "$PR_URL" --merge --auto
               echo "IS_EDITOR=true" >> $GITHUB_ENV
             fi
           else

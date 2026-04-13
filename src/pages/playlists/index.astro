@@ -27,7 +27,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 </BaseLayout>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('astro:page-load', () => {
   const editorListContainer = document.getElementById('editor-list');
   const listContainer = document.getElementById('community-list');
   const loadMoreBtn = document.getElementById('load-more');

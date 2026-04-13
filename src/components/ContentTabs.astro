@@ -68,6 +68,7 @@ const { description, url } = Astro.props;
 </div>
 
 <script>
+  document.addEventListener('astro:page-load', () => {
   document.querySelectorAll('.content-tabs').forEach((tabContainer) => {
     const buttons = tabContainer.querySelectorAll<HTMLButtonElement>('.tab-btn');
     const panels = tabContainer.querySelectorAll<HTMLElement>('.tab-panel');
@@ -114,6 +115,7 @@ const { description, url } = Astro.props;
         }
       });
     });
+  });
   });
 </script>
 

@@ -76,7 +76,7 @@ function initSourceFilter() {
 }
 
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initSourceFilter);
+  document.addEventListener('astro:page-load', initSourceFilter);
 } else {
   initSourceFilter();
 }

@@ -70,18 +70,18 @@ const currentPath = Astro.url.pathname;
 </script>
 
 <script>
-// Deferred: background verification + logout binding (runs after paint)
-const navToggle = document.getElementById('nav-toggle');
-if (navToggle) {
-  navToggle.addEventListener('click', () => {
-    const links = document.getElementById('nav-links');
-    if (links) {
-      const isOpen = links.classList.toggle('open');
-      navToggle.classList.toggle('open', isOpen);
-      navToggle.setAttribute('aria-expanded', String(isOpen));
-    }
-  });
-}
+document.addEventListener('astro:page-load', () => {
+  const navToggle = document.getElementById('nav-toggle');
+  if (navToggle) {
+    navToggle.addEventListener('click', () => {
+      const links = document.getElementById('nav-links');
+      if (links) {
+        const isOpen = links.classList.toggle('open');
+        navToggle.classList.toggle('open', isOpen);
+        navToggle.setAttribute('aria-expanded', String(isOpen));
+      }
+    });
+  }
 
 const AUTH_CACHE_KEY = 'honeycombo:auth';
 
@@ -131,36 +131,31 @@ function bindLogout(authArea: HTMLElement) {
   }
 }
 
-const authArea = document.getElementById('auth-area');
-if (authArea) {
-  // Bind logout on whatever was rendered by inline script (or default login btn)
-  bindLogout(authArea);
+  const authArea = document.getElementById('auth-area');
+  if (authArea) {
+    bindLogout(authArea);
 
-  let cachedRaw: string | null = null;
-  try { cachedRaw = sessionStorage.getItem(AUTH_CACHE_KEY); } catch (_) {}
+    let cachedRaw: string | null = null;
+    try { cachedRaw = sessionStorage.getItem(AUTH_CACHE_KEY); } catch (_) {}
 
-  // Background verify — re-render only when rendering-relevant fields actually differ.
-  // Trade-off: cached state may briefly show stale user info (e.g. admin links after
-  // session expiry). This is acceptable because (1) admin API endpoints return 403,
-  // (2) dropdown is hidden until hover, (3) the alternative (no cache = blank flash
-  // on every navigation) is the original problem this fix addresses.
-  fetch('/api/auth/me').then(async (res) => {
-    if (res.ok) {
-      const user = await res.json();
-      const fresh = JSON.stringify(toAuthCache(user));
-      if (fresh !== cachedRaw) {
-        renderAuthUser(authArea, toAuthCache(user));
-        bindLogout(authArea);
-        try { sessionStorage.setItem(AUTH_CACHE_KEY, fresh); } catch (_) {}
+    fetch('/api/auth/me').then(async (res) => {
+      if (res.ok) {
+        const user = await res.json();
+        const fresh = JSON.stringify(toAuthCache(user));
+        if (fresh !== cachedRaw) {
+          renderAuthUser(authArea, toAuthCache(user));
+          bindLogout(authArea);
+          try { sessionStorage.setItem(AUTH_CACHE_KEY, fresh); } catch (_) {}
+        }
+      } else if (res.status === 401) {
+        if (cachedRaw !== 'guest') {
+          renderLoginBtn(authArea);
+          try { sessionStorage.setItem(AUTH_CACHE_KEY, 'guest'); } catch (_) {}
+        }
       }
-    } else if (res.status === 401) {
-      if (cachedRaw !== 'guest') {
-        renderLoginBtn(authArea);
-        try { sessionStorage.setItem(AUTH_CACHE_KEY, 'guest'); } catch (_) {}
-      }
-    }
-  }).catch(() => {});
-}
+    }).catch(() => {});
+  }
+});
 </script>
 
 <style>
