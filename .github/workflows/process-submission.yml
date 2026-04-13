@@ -147,8 +147,37 @@ jobs:
             --head "$BRANCH" \
             --label "submission"
 
+      - name: Auto-merge if editor
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_USER_ID: ${{ env.ISSUE_USER_ID }}
+        run: |
+          # Read editor list from config
+          EDITOR_IDS=$(jq -r '.editor_github_ids[]' src/config/editors.json 2>/dev/null || true)
+          IS_EDITOR=false
+          for eid in $EDITOR_IDS; do
+            if [ "$eid" = "$ISSUE_USER_ID" ]; then
+              IS_EDITOR=true
+              break
+            fi
+          done
+
+          if [ "$IS_EDITOR" = "true" ]; then
+            ISSUE_NUM="$ISSUE_NUMBER"
+            BRANCH="submission/$ISSUE_NUM"
+            echo "Editor detected (ID: $ISSUE_USER_ID) — auto-merging PR"
+            PR_URL=$(gh pr list --head "$BRANCH" --json url --jq '.[0].url')
+            if [ -n "$PR_URL" ]; then
+              gh pr merge "$PR_URL" --merge --delete-branch
+              gh issue close "$ISSUE_NUM" --comment "✅ 에디터 제출 — 자동 승인 및 게시 완료."
+              echo "IS_EDITOR=true" >> $GITHUB_ENV
+            fi
+          else
+            echo "IS_EDITOR=false" >> $GITHUB_ENV
+          fi
+
       - name: Comment on issue
-        if: success() && github.event_name == 'issues'
+        if: success() && github.event_name == 'issues' && env.IS_EDITOR != 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
