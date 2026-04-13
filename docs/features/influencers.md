@@ -1,28 +1,36 @@
-# 인플루언서 의견
+# 추천 인플루언서
 
-> 기술 분야 주요 인물들의 최신 의견을 자동 수집하고 표시하는 기능.
+> 기술 분야 주요 인물들의 프로필을 플랫폼별(X, Threads)로 모아 보여주는 디렉토리 기능.
 
 ## 개요
 
-기술/AI/Web3 분야 인플루언서들의 최신 인사이트를 Exa API로 자동 수집하여 카드 형태로 표시한다. 사용자가 주요 인물들의 의견을 한곳에서 빠르게 파악할 수 있도록 한다.
+기술/AI/Web3 분야 인플루언서들을 카드 형태로 소개하고, 각 프로필 링크를 통해 바로 팔로우할 수 있도록 한다. X (Twitter)와 Threads 섹션을 분리하여 플랫폼별로 탐색할 수 있다.
+
+> **변경 이력 요약**: 초기에는 Exa API로 인플루언서 의견(opinions)을 자동 수집했으나, X.com 라이브 임베드 → click-to-load 방식을 거쳐 현재는 **정적 프로필 카드 디렉토리**로 단순화되었다. Exa API 의존성과 자동 수집 워크플로우는 완전히 제거됨.
 
 ## 동작 흐름
 
 ```
-influencer-sources.json (소스 설정)
-  → scripts/influencer-collect.ts (Exa API로 수집)
-  → src/data/influencers/*.json (데이터 저장)
+influencer-sources.json (인플루언서 목록)
+  → src/data/influencers/*.json (개별 데이터 파일)
   → Astro Content Collection (빌드 시 로드)
-  → /influencers/ 페이지 렌더링
+  → /influencers/ 페이지 렌더링 (X / Threads 섹션 분리)
 ```
 
-### 자동 수집
-- GitHub Actions 워크플로우(`influencer-collect.yml`)가 매주 월요일 04:00 UTC에 실행
-- Exa API로 각 인플루언서 관련 최신 기사/포스트를 검색
-- 토픽 자동 감지 (LLM, AGI, AI Agent, Robotics, Coding, Research, AI, Tech)
-- 기존 의견과 병합, URL 기준 중복 제거, 최대 10개 유지
+### 페이지 렌더링
+
+1. `influencers.astro`가 Astro Content Collection에서 전체 인플루언서 데이터 로드
+2. `platform` 필드 기준으로 X(`x`)와 Threads(`threads`) 그룹 분리
+3. 각 그룹을 이름순 정렬 후 `InfluencerCard` 컴포넌트로 렌더링
+4. 카드에는 이름, 핸들, bio, 프로필 링크 버튼 표시
+
+### 프로필 링크 생성
+
+- X: `https://x.com/{handle}` (@ 제거)
+- Threads: `https://www.threads.net/@{handle}` (@ 제거)
 
 ### 데이터 검증
+
 - Zod 스키마(`src/schemas/influencer.ts`)로 유효성 검사
 - `scripts/validate.ts`에서 전체 콘텐츠 검증 포함
 
@@ -30,16 +38,16 @@ influencer-sources.json (소스 설정)
 
 | 파일 | 역할 |
 |------|------|
-| `src/pages/influencers.astro` | 인플루언서 목록 페이지 |
-| `src/components/InfluencerCard.astro` | 개별 인플루언서 카드 컴포넌트 |
-| `src/schemas/influencer.ts` | Zod 스키마 + TypeScript 타입 |
-| `src/config/influencer-sources.json` | 수집 대상 인플루언서 설정 |
-| `src/data/influencers/*.json` | 수집된 데이터 파일 |
-| `src/content.config.ts` | Astro Content Collection 정의 |
-| `scripts/influencer-collect.ts` | Exa API 수집 스크립트 |
-| `.github/workflows/influencer-collect.yml` | 주간 자동 수집 워크플로우 |
+| `src/pages/influencers.astro` | 인플루언서 목록 페이지 (X/Threads 섹션 분리) |
+| `src/components/InfluencerCard.astro` | 개별 인플루언서 카드 컴포넌트 (프로필 링크 포함) |
+| `src/schemas/influencer.ts` | Zod 스키마 (`id`, `name`, `platform`, `handle`, `bio`) |
+| `src/config/influencer-sources.json` | 인플루언서 마스터 목록 (추가/수정 시 이 파일 편집) |
+| `src/data/influencers/*.json` | 개별 인플루언서 데이터 파일 (Content Collection 소스) |
+| `src/content.config.ts` | Astro Content Collection 정의 (`influencers` 컬렉션) |
 
 ## 등록된 인플루언서
+
+### X (Twitter) — 7명
 
 | ID | 이름 | 핸들 | 분야 |
 |----|------|------|------|
@@ -51,28 +59,39 @@ influencer-sources.json (소스 설정)
 | `justsisyphus` | Sisyphus | @justsisyphus | AI 에이전트/오픈소스 |
 | `chosenryot` | Ryot | @chosenryot | DeFi/Solana/Web3 |
 
-## 설정값
+### Threads — 4명
 
-| 이름 | 위치 | 기본값 | 설명 |
-|------|------|--------|------|
-| `EXA_API_KEY` | GitHub Secrets | - | Exa API 인증키 (수집 시 필요) |
-| `MAX_OPINIONS` | `scripts/influencer-collect.ts` | `10` | 인플루언서당 최대 의견 수 |
-| `COLLECTION_WINDOW_DAYS` | `scripts/influencer-collect.ts` | `14` | 수집 대상 기간 (일) |
-| `REQUEST_DELAY_MS` | `scripts/influencer-collect.ts` | `1000` | API 요청 간 딜레이 |
+| ID | 이름 | 핸들 | 분야 |
+|----|------|------|------|
+| `dev-roach-log` | Roach | @dev_roach_log | 바이브 코딩/AI 자동화 |
+| `choi-openai` | CHOI | @choi.openai | AI/AGI 콘텐츠 |
+| `boris-cherny` | Boris Cherny | @boris_cherny | Claude Code/TypeScript |
+| `bizmentor-kr` | BizMentor | @bizmentor_kr | GitHub Repo 요약/AI 트렌드 |
 
 ## 인플루언서 추가 방법
 
-1. `src/config/influencer-sources.json`에 새 항목 추가 (id, name, platform, handle, bio, search_query, enabled)
-2. `src/data/influencers/{id}.json` 데이터 파일 생성 (초기 opinions는 빈 배열 가능)
+1. `src/config/influencer-sources.json`에 새 항목 추가:
+   ```json
+   {
+     "id": "new-person",
+     "name": "표시 이름",
+     "platform": "x",
+     "handle": "@handle",
+     "bio": "간단한 소개 (300자 이내)"
+   }
+   ```
+2. `src/data/influencers/{id}.json`에 동일한 데이터 파일 생성
 3. `bun run build`로 빌드 검증
-4. 자동 수집 워크플로우가 다음 실행 시 의견 자동 채움
+
+## 설정값
+
+별도 환경변수나 외부 API 키 없음. 모든 데이터는 정적 JSON 파일로 관리된다.
 
 ## 제약 사항
 
-- Exa API 무료 티어 제한에 따라 수집 빈도 제한
-- 수집된 텍스트는 기사 본문의 일부로, 원문 품질에 따라 노이즈 포함 가능
-- 플랫폼은 x, threads, blog, youtube 중 하나만 지원
-- 의견 텍스트 최대 500자, bio 최대 300자
+- 플랫폼은 `x`, `threads`, `blog`, `youtube` 중 하나만 지원 (현재 `x`와 `threads`만 활성)
+- bio 최대 300자
+- 데이터는 수동 관리 — 자동 수집 없음
 
 ---
 
@@ -84,4 +103,5 @@ influencer-sources.json (소스 설정)
 
 | 날짜 | 변경 내용 |
 |------|----------|
-| 2026-04-12 | 최초 작성 — 7명 인플루언서 등록 (karpathy, yann-lecun, lucas-flatwhite, ralralbral, scobleizer, justsisyphus, chosenryot) |
+| 2026-04-12 | 최초 작성 — Exa API 기반 의견 수집 구조로 7명 등록 |
+| 2026-04-13 | 전면 재작성 — Exa API 제거, 정적 프로필 카드 디렉토리로 전환. Threads 인플루언서 4명 추가 (총 11명). X/Threads 섹션 분리 반영 |

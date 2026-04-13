@@ -70,6 +70,10 @@ if (!code) {
 
 ---
 
+## 관련 문서
+
+- [아키텍처 개요](../architecture/overview.md)
+
 ## 변경 이력
 
 | 날짜 | 변경 내용 |

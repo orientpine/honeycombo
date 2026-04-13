@@ -85,10 +85,15 @@
 
 ```
 유저 → visibility: 'public' 설정 → status: 'pending'
-관리자 → /api/admin/playlists/pending (대기 목록)
-      → /api/admin/playlists/{id}/approve 또는 reject
-      → status: 'approved' → /playlists 목록에 노출
+관리자 → /admin/playlists (승인 관리 UI 페이지)
+       → GET /api/admin/playlists/pending (대기 목록 조회)
+       → PUT /api/admin/playlists/{id}/approve 또는 reject
+       → status: 'approved' → /playlists 목록에 노출
 ```
+
+- 관리자 승인 UI는 `/admin/playlists` 정적 페이지(`src/pages/admin/playlists.astro`)에서 클라이언트 사이드 렌더링으로 동작한다.
+- 로그인 상태 + 관리자 권한 검증 후 대기 목록을 표시한다.
+- 각 카드에서 승인/반려/미리보기 버튼을 제공하며, 처리 완료 시 카드가 페이드아웃 후 제거된다.
 
 ## 관련 파일
 
@@ -103,6 +108,7 @@
 | `src/pages/playlists/[id].astro` | 에디터 플레이리스트 상세 (정적) |
 | `src/components/PlaylistCard.astro` | 플레이리스트 카드 컴포넌트 |
 | `src/components/AddToPlaylist.astro` | 기사에 "플레이리스트에 추가" 드롭다운 |
+| `src/pages/admin/playlists.astro` | 관리자 플레이리스트 승인/반려 UI 페이지 |
 
 ### 백엔드 (Cloudflare Functions)
 
@@ -204,3 +210,4 @@
 | 2026-04-12 | 유저 플레이리스트 상세(`/p/{id}`)에 소유자 전용 아이템 삭제/재정렬/메모 수정 UI 반영 |
 | 2026-04-12 | 유저 플레이리스트 상세(`/p/{id}`)에 기사 검색 추가와 외부 URL 추가 폼, `/search-index.json` 정적 인덱스 반영 |
 | 2026-04-13 | ArticleCard 전체에 AddToPlaylist 버튼 추가, OAuth 복귀 URL 보존, source_id 검증, pending 기사 외부 링크 처리 — 전체 플레이리스트-기사 통합 구현 완료 |
+| 2026-04-13 | 관리자 승인 UI 페이지(`/admin/playlists`) 문서화 반영 |

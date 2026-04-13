@@ -101,8 +101,13 @@
 | `/articles/[slug]` | `articles/[...slug].astro` | 개별 기사 (curated만) |
 | `/trending` | `trending.astro` | 트렌딩 기사 |
 | `/must-read` | `must-read.astro` | 필독 기사 |
-| `/influencers` | `influencers.astro` | 인플루언서 |
-| `/playlists/[slug]` | `playlists/` | 플레이리스트 |
+| `/influencers` | `influencers.astro` | 추천 인플루언서 (X/Threads 섹션 분리) |
+| `/playlists` | `playlists/index.astro` | 에디터+커뮤니티 플레이리스트 목록 |
+| `/playlists/[slug]` | `playlists/[id].astro` | 에디터 플레이리스트 상세 (정적) |
+| `/p/new` | `p/new.astro` | 유저 플레이리스트 생성 폼 |
+| `/p/{id}` | `functions/p/[id].ts` | 유저 플레이리스트 상세 (SSR, 기사 검색/관리) |
+| `/my/playlists` | `my/playlists.astro` | 내 플레이리스트 관리 |
+| `/admin/playlists` | `admin/playlists.astro` | 관리자 플레이리스트 승인 페이지 |
 | `/search-index.json` | `search-index.json.ts` | 플레이리스트 상세 기사 검색용 정적 JSON 인덱스 |
 | `/submit` | `submit.astro` | 기사 제출 |
 | `/admin` | `admin.astro` | Decap CMS 관리자 |
@@ -166,6 +171,8 @@ src/ (pages + components + data + content) → astro build → dist/
 - [기사 소스 필터](../features/source-filter.md)
 - [Decap CMS 로그인 Not Found](../troubleshooting/decap-cms-login-not-found.md)
 - [AI 에이전트 제출 가이드](../guides/agent-submission.md)
+- [추천 인플루언서](../features/influencers.md)
+- [플레이리스트](../features/playlists.md)
 
 ## 변경 이력
 
@@ -177,3 +184,4 @@ src/ (pages + components + data + content) → astro build → dist/
 | 2026-04-12 | SourceFilter 4탭 구조, Decap CMS auth 수정 반영 |
 | 2026-04-12 | `/search-index.json` 정적 검색 인덱스 엔드포인트 추가 |
 | 2026-04-13 | Cloudflare Functions 전체 목록 반영, D1 데이터베이스 추가, 플레이리스트 기능 아키텍처 문서화 |
+| 2026-04-13 | 페이지 구조에 플레이리스트 하위 페이지(new, my, admin) 추가, 인플루언서 설명 갱신, 관련 문서 링크 보강 |
