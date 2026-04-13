@@ -49,8 +49,8 @@ export function serializeArticles(
       date: new Date(date as string | Date).toISOString(),
       ...(a.thumbnail_url ? { thumbnail_url: a.thumbnail_url } : {}),
       articleOrigin: a._type === 'curated' ? 'curated' : a._type === 'submitted' ? 'submitted' : 'feed',
-      ...(a._type === 'curated' ? { slug: a._id } : {}),
-      isExternal: a._type === 'feed' || a._type === 'submitted',
+      slug: a._id,
+      isExternal: false,
     };
   });
 

@@ -73,8 +73,8 @@ const allArticlesJson = serializeArticles(allArticles);
           tags={article.tags}
           date={'submitted_at' in article ? article.submitted_at : article.published_at}
           thumbnail_url={article.thumbnail_url}
-          isExternal={article._type === 'feed' || article._type === 'submitted'}
-          slug={article._type === 'curated' ? article._id : undefined}
+          isExternal={false}
+          slug={article._id}
           articleOrigin={article._type}
         />
       ))}

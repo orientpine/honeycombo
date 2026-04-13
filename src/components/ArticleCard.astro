@@ -17,7 +17,7 @@ interface Props {
   articleOrigin?: 'curated' | 'submitted' | 'feed';  // curated=editor pick, submitted=community submission, feed=RSS
 }
 
-const { id, title, url, source, type, description, tags, date, thumbnail_url, isExternal = true, slug, articleOrigin = 'feed' } = Astro.props;
+const { id, title, url, source, type, description, tags, date, thumbnail_url, isExternal = false, slug, articleOrigin = 'feed' } = Astro.props;
 const sourceType = articleOrigin === 'feed' ? 'feed' : 'curated';
 const articleUrl = isExternal ? url : `/articles/${slug || id}`;
 const articlePath = `/articles/${slug || id}/`;
