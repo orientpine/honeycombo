@@ -13,7 +13,7 @@ interface Props {
   thumbnail_url?: string;
   isExternal?: boolean;  // RSS articles link externally; curated articles link to /articles/[slug]
   slug?: string;
-  articleOrigin?: 'curated' | 'submitted' | 'feed';  // curated=editor approved, submitted=pending review, feed=RSS
+  articleOrigin?: 'curated' | 'submitted' | 'feed';  // curated=editor pick, submitted=community submission, feed=RSS
 }
 
 const { id, title, url, source, type, description, tags, date, thumbnail_url, isExternal = true, slug, articleOrigin = 'feed' } = Astro.props;
@@ -31,7 +31,7 @@ const formattedDate = new Date(date).toLocaleDateString('ko-KR', { year: 'numeri
   <div class="article-body">
     <div class="article-meta">
       {articleOrigin === 'curated' && <span class="badge badge-curated">에디터 추천</span>}
-      {articleOrigin === 'submitted' && <span class="badge badge-submitted">검토 중</span>}
+      {articleOrigin === 'submitted' && <span class="badge badge-submitted">커뮤니티</span>}
       <span class="badge">{source}</span>
       {type === 'youtube' && <span class="badge badge-primary">YouTube</span>}
       <time class="article-date" datetime={new Date(date).toISOString()}>{formattedDate}</time>

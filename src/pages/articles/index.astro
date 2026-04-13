@@ -11,14 +11,8 @@ import { serializeArticles } from '../../lib/serialize-articles';
 
 const ITEMS_PER_PAGE = 20;
 
-// Get approved curated articles (에디터 추천)
-const approvedEntries = await getCollection('curated', (entry: any) => entry.data.status === 'approved').catch((err: unknown) => {
-  console.error('Failed to load collection:', err);
-  return [];
-});
-
-// Get pending curated articles (제출 기사 - 검토 대기)
-const pendingEntries = await getCollection('curated', (entry: any) => entry.data.status === 'pending').catch((err: unknown) => {
+// Get all curated articles (approved = published)
+const curatedEntries = await getCollection('curated', (entry: any) => entry.data.status === 'approved').catch((err: unknown) => {
   console.error('Failed to load collection:', err);
   return [];
 });
@@ -31,8 +25,11 @@ const feedEntries = await getCollection('feeds').catch((err: unknown) => {
 
 // Merge and sort (shared comparator)
 const allArticles = [
-  ...approvedEntries.map((e: any) => ({ ...e.data, _type: 'curated' as const, _id: e.id })),
-  ...pendingEntries.map((e: any) => ({ ...e.data, _type: 'submitted' as const, _id: e.id })),
+  ...curatedEntries.map((e: any) => ({
+    ...e.data,
+    _type: (e.data.source === 'User Submission' || e.data.source === 'YouTube') && e.data.submitted_by ? 'submitted' as const : 'curated' as const,
+    _id: e.id,
+  })),
   ...feedEntries.map((e: any) => ({ ...e.data, _type: 'feed' as const, _id: e.id })),
 ].sort(compareArticles);
 
