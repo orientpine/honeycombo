@@ -98,7 +98,7 @@ function initAddToPlaylistContainer(container: Element) {
         <li>
           <button class="playlist-item-btn${p.contains_item ? ' already-added' : ''}"
                   data-id="${p.id}" ${p.contains_item ? 'disabled' : ''}>
-            ${p.contains_item ? '✓ ' : '📋 '}${p.title}
+            <span class="playlist-item-title">${p.contains_item ? '✓ ' : '📋 '}${p.title}</span>
             ${p.contains_item ? '<span class="badge-added">추가됨</span>' : ''}
           </button>
         </li>
@@ -270,6 +270,14 @@ document.addEventListener('astro:page-load', () => initAddToPlaylistContainers()
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: var(--space-xs);
+}
+
+.playlist-list .playlist-item-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 
 .playlist-list .playlist-item-btn.already-added:hover {
@@ -280,6 +288,8 @@ document.addEventListener('astro:page-load', () => initAddToPlaylistContainers()
   font-size: 0.75rem;
   color: var(--color-success, #22c55e);
   font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .playlist-dropdown-footer {
