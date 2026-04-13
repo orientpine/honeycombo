@@ -40,7 +40,7 @@
 | `components/` | UI 컴포넌트 | `.astro` 컴포넌트 (ArticleCard, Navigation 등) |
 | `layouts/` | 레이아웃 | 페이지 공통 레이아웃 |
 | `content/` | 콘텐츠 컬렉션 | Astro Content Collections. `curated/` 큐레이션 기사 |
-| `data/` | 데이터 파일 | JSON 기반 데이터 (feeds, trending, must-read, playlists, influencers) |
+| `data/` | 데이터 파일 | JSON 기반 데이터 (feeds, trending, must-read, influencers) |
 | `schemas/` | 스키마 정의 | TypeScript 타입/유효성 검사 (curated-article, feed-article 등) |
 | `config/` | 설정 파일 | feeds.json, spam-keywords.json, ranking-overrides.json |
 | `lib/` | 유틸리티 | 공유 로직 (article-sort 등) |
@@ -102,8 +102,7 @@
 | `/trending` | `trending.astro` | 트렌딩 기사 |
 | `/must-read` | `must-read.astro` | 필독 기사 |
 | `/influencers` | `influencers.astro` | 추천 인플루언서 (X/Threads 섹션 분리) |
-| `/playlists` | `playlists/index.astro` | 에디터+커뮤니티 플레이리스트 목록 |
-| `/playlists/[slug]` | `playlists/[id].astro` | 에디터 플레이리스트 상세 (정적) |
+| `/playlists` | `playlists/index.astro` | 에디터+커뮤니티 플레이리스트 목록 (D1 API 기반) |
 | `/p/new` | `p/new.astro` | 유저 플레이리스트 생성 폼 |
 | `/p/{id}` | `functions/p/[id].ts` | 유저 플레이리스트 상세 (SSR, 기사 검색/관리) |
 | `/my/playlists` | `my/playlists.astro` | 내 플레이리스트 관리 |
@@ -188,3 +187,4 @@ src/ (pages + components + data + content) → astro build → dist/
 | 2026-04-13 | Cloudflare Functions 전체 목록 반영, D1 데이터베이스 추가, 플레이리스트 기능 아키텍처 문서화 |
 | 2026-04-13 | 페이지 구조에 플레이리스트 하위 페이지(new, my, admin) 추가, 인플루언서 설명 갱신, 관련 문서 링크 보강 |
 | 2026-04-13 | RSS 수집에 AI 키워드 필터 추가 (`ai-keywords.json` allowlist) |
+| 2026-04-13 | 에디터 플레이리스트 정적 시스템 제거, D1 통합 반영 |

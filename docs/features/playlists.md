@@ -1,26 +1,18 @@
 # 플레이리스트
 
-> 사용자가 기술 기사를 모아 공유할 수 있는 큐레이션 기능. 에디터 플레이리스트(정적)와 유저 플레이리스트(동적) 두 시스템으로 구성된다.
+> 사용자가 기술 기사를 모아 공유할 수 있는 큐레이션 기능. Cloudflare D1 기반의 통합 시스템으로 운영된다.
 
 ## 개요
 
-기술 뉴스 소비자가 관심 주제별로 기사를 묶어 저장·공유할 수 있게 한다. 에디터가 선정한 공식 플레이리스트와 사용자가 자유롭게 만드는 커뮤니티 플레이리스트를 모두 지원한다.
+기술 뉴스 소비자가 관심 주제별로 기사를 묶어 저장·공유할 수 있게 한다. 에디터가 선정한 공식 플레이리스트와 사용자가 자유롭게 만드는 커뮤니티 플레이리스트를 `playlist_type`으로 구분하여 통합 관리한다.
 
-## 두 가지 플레이리스트 시스템
+## 데이터 모델
 
-### 1. 에디터 플레이리스트 (정적)
+플레이리스트는 Cloudflare D1의 `user_playlists` 테이블에 저장되며, 다음 핵심 필드를 포함한다.
 
-- **데이터**: `src/data/playlists/*.json` (Astro data collection)
-- **빌드**: Astro SSG가 빌드 시 정적 HTML 생성
-- **URL**: `/playlists/{id}` (정적 페이지)
-- **용도**: 에디터가 직접 큐레이션한 공식 플레이리스트
-
-### 2. 유저 플레이리스트 (동적)
-
-- **데이터**: Cloudflare D1 데이터베이스 (`user_playlists`, `playlist_items` 테이블)
-- **렌더링**: Cloudflare Pages Functions (SSR)
-- **URL**: `/p/{id}` (동적 서버 렌더링)
-- **용도**: 로그인 사용자가 생성·관리하는 개인 플레이리스트
+- `playlist_type`: 'community' (일반 유저) 또는 'editor' (공식 에디터)
+- `tags`: 플레이리스트 분류를 위한 태그 (쉼표로 구분된 문자열)
+- `status`: 'draft', 'pending', 'approved', 'rejected' (에디터 타입은 생성 시 즉시 'approved' 상태가 됨)
 
 ## 동작 흐름
 
@@ -95,6 +87,7 @@
 - 로그인 상태 + 관리자 권한 검증 후 대기 목록을 표시한다.
 - 각 카드에서 승인/반려/미리보기 버튼을 제공하며, 처리 완료 시 카드가 페이드아웃 후 제거된다.
 
+- 에디터 플레이리스트(`playlist_type: 'editor'`)는 승인 절차를 거치지 않고 생성 즉시 `approved` 상태가 되어 목록에 노출된다. (Auto-approve)
 ## 관련 파일
 
 ### 프론트엔드 (Astro 정적 페이지)
@@ -104,9 +97,7 @@
 | `src/pages/p/new.astro` | 플레이리스트 생성 폼 (인증 필요) |
 | `src/pages/my/playlists.astro` | 내 플레이리스트 관리 페이지 |
 | `src/pages/search-index.json.ts` | 빌드 시 기사 검색용 정적 JSON 인덱스 생성 |
-| `src/pages/playlists/index.astro` | 에디터+커뮤니티 플레이리스트 목록 |
-| `src/pages/playlists/[id].astro` | 에디터 플레이리스트 상세 (정적) |
-| `src/components/PlaylistCard.astro` | 플레이리스트 카드 컴포넌트 |
+ `src/pages/playlists/index.astro` | 에디터+커뮤니티 플레이리스트 목록 (D1 API 기반) |
 | `src/components/AddToPlaylist.astro` | 기사에 "플레이리스트에 추가" 드롭다운 |
 | `src/pages/admin/playlists.astro` | 관리자 플레이리스트 승인/반려 UI 페이지 |
 | `src/components/ArticleCard.astro` | 기사 카드 (각 기사에 AddToPlaylist 버튼 포함) |
@@ -138,9 +129,8 @@
 
 | 파일 | 역할 |
 |------|------|
-| `migrations/0001_user_playlists.sql` | D1 테이블 스키마 (users, sessions, user_playlists, playlist_items) |
-| `src/data/playlists/*.json` | 에디터 플레이리스트 데이터 |
-| `src/schemas/playlist.ts` | 에디터 플레이리스트 Zod 스키마 |
+ `migrations/0001_user_playlists.sql` | D1 테이블 스키마 (users, sessions, user_playlists, playlist_items) |
+ `migrations/0002_playlist_type.sql` | `playlist_type`, `tags` 컬럼 추가 마이그레이션 |
 
 ## API 응답 형태
 
@@ -153,6 +143,8 @@
       "user_id": "...",
       "title": "...",
       "description": "...",
+      "playlist_type": "community|editor",
+      "tags": "...",
       "visibility": "unlisted|public",
       "status": "draft|pending|approved|rejected",
       "item_count": 5,
@@ -213,3 +205,4 @@
 | 2026-04-13 | ArticleCard 전체에 AddToPlaylist 버튼 추가, OAuth 복귀 URL 보존, source_id 검증, pending 기사 외부 링크 처리 — 전체 플레이리스트-기사 통합 구현 완료 |
 | 2026-04-13 | 관리자 승인 UI 페이지(`/admin/playlists`) 문서화 반영 |
 | 2026-04-13 | AddToPlaylist 드롭다운 UI 개선 — 브라우저 기본 버튼 스타일 리셋(`appearance`, `font-family`, `outline`), 아이템 간 `border-bottom` 제거, `focus-visible` 상태 추가. Navigation의 auth-dropdown 패턴과 시각적 일관성 확보 |
+| 2026-04-13 | 에디터/커뮤니티 플레이리스트 통합 — playlist_type, tags 지원, 정적 시스템 제거 |
