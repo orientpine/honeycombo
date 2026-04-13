@@ -12,9 +12,12 @@
     <title>HoneyCombo Admin</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <style>
-      /* Decap CMS publish dropdown — prevent text truncation */
-      #nc-root ul[role="menu"] {
+      /* Decap CMS publish dropdown — prevent text truncation
+         DOM: div[role="menu"] > ul (DropdownList) > div[role="menuitem"] */
+      #nc-root [role="menu"] > ul {
         min-width: max-content !important;
+        width: max-content !important;
+        overflow: visible !important;
       }
       #nc-root [role="menuitem"] {
         white-space: nowrap !important;
