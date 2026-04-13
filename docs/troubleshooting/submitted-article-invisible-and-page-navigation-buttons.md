@@ -80,6 +80,11 @@ Astro ClientRouter 환경에서 `astro:page-load`는 초기 로드 시에도 발
 2. 클라이언트 사이드 필터링이 서버 사이드 pagination과 공존할 때, JSON 데이터 기반 크로스 페이지 렌더링 방식 사용. DOM 카드 show/hide는 현재 페이지만 커버.
 3. `SortableArticle` 등 타입 정의 변경 시, 해당 타입을 참조하는 모든 함수 동시 검토.
 
+## 관련 문서
+
+- [아키텍처 개요](../architecture/overview.md)
+- [제출 CLI 가이드](../guides/agent-submission.md)
+
 ---
 
 ## 변경 이력
