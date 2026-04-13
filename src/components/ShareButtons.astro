@@ -1,0 +1,102 @@
+---
+interface Props {
+  title: string;
+  url: string; // Full canonical URL (e.g. https://honeycombo.pages.dev/articles/...)
+}
+const { title, url } = Astro.props;
+---
+
+<div class="share-buttons">
+  <button class="share-btn" data-action="copy" data-url={url} title="링크 복사">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+    <span>복사</span>
+  </button>
+  <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`} target="_blank" rel="noopener noreferrer" class="share-btn" title="X(Twitter)에 공유">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+    </svg>
+    <span>X</span>
+  </a>
+  <button class="share-btn share-native-btn" data-action="share" data-url={url} data-title={title} title="공유하기" style="display:none;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+      <polyline points="16 6 12 2 8 6"></polyline>
+      <line x1="12" y1="2" x2="12" y2="15"></line>
+    </svg>
+    <span>공유</span>
+  </button>
+</div>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    // Copy link
+    document.querySelectorAll<HTMLButtonElement>('[data-action="copy"]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const url = btn.dataset.url;
+        if (!url) return;
+        try {
+          await navigator.clipboard.writeText(url);
+          const label = btn.querySelector('span');
+          if (label) {
+            const original = label.textContent;
+            label.textContent = '복사됨!';
+            btn.classList.add('copied');
+            setTimeout(() => { label.textContent = original; btn.classList.remove('copied'); }, 2000);
+          }
+        } catch { /* clipboard API not available */ }
+      });
+    });
+
+    // Web Share API (mobile)
+    document.querySelectorAll<HTMLButtonElement>('.share-native-btn').forEach(btn => {
+      if (navigator.share) {
+        btn.style.display = 'inline-flex';
+        btn.addEventListener('click', () => {
+          navigator.share({
+            title: btn.dataset.title || '',
+            url: btn.dataset.url || '',
+          }).catch(() => {});
+        });
+      }
+    });
+  });
+</script>
+
+<style>
+  .share-buttons {
+    display: flex;
+    gap: var(--space-xs);
+    align-items: center;
+  }
+
+  .share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-bg);
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-decoration: none;
+    line-height: 1;
+  }
+
+  .share-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  .share-btn.copied {
+    border-color: var(--color-success);
+    color: var(--color-success);
+  }
+</style>

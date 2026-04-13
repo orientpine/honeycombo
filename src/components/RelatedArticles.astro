@@ -8,10 +8,26 @@ interface Props {
 }
 const { currentId, tags, maxItems = 3 } = Astro.props;
 
+// Fetch from both curated and feeds collections
 const allCurated = await getCollection('curated', e => e.data.status === 'approved' && e.id !== currentId).catch(() => []);
-const related = allCurated
-  .filter(e => e.data.tags.some(t => tags.includes(t)))
-  .slice(0, maxItems);
+const allFeeds = await getCollection('feeds', e => e.id !== currentId).catch(() => []);
+
+// Score by matching tag count, sort by score desc then date desc
+const related = [...allCurated, ...allFeeds]
+  .map(entry => {
+    const matchCount = entry.data.tags.filter((t: string) => tags.includes(t)).length;
+    const date = 'submitted_at' in entry.data ? entry.data.submitted_at : entry.data.published_at;
+    return { entry, matchCount, dateMs: new Date(date).getTime() };
+  })
+  .filter(item => item.matchCount > 0)
+  .sort((a, b) => b.matchCount - a.matchCount || b.dateMs - a.dateMs)
+  .slice(0, maxItems)
+  .map(item => item.entry);
+
+const getDate = (entry: any) => {
+  const d = 'submitted_at' in entry.data ? entry.data.submitted_at : entry.data.published_at;
+  return new Date(d).toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' });
+};
 ---
 
 {related.length > 0 && (
@@ -22,7 +38,10 @@ const related = allCurated
         <li>
           <a href={`/articles/${article.id}`} class="related-link">
             <span class="related-article-title">{article.data.title}</span>
-            <span class="related-source">{article.data.source}</span>
+            <div class="related-meta">
+              <span class="related-source">{article.data.source}</span>
+              <time>{getDate(article)}</time>
+            </div>
           </a>
         </li>
       ))}
@@ -34,8 +53,14 @@ const related = allCurated
 .related-articles { margin-top: var(--space-2xl); padding-top: var(--space-xl); border-top: 1px solid var(--color-border); }
 .related-title { font-size: 1.25rem; font-weight: 700; margin-bottom: var(--space-md); }
 .related-list { list-style: none; display: flex; flex-direction: column; gap: var(--space-sm); }
-.related-link { display: flex; justify-content: space-between; align-items: center; padding: var(--space-sm); border: 1px solid var(--color-border); border-radius: var(--radius-sm); text-decoration: none; color: var(--color-text); transition: border-color 0.15s; }
-.related-link:hover { border-color: var(--color-primary); color: var(--color-primary); text-decoration: none; }
-.related-article-title { font-weight: 500; }
+.related-link { display: flex; justify-content: space-between; align-items: center; gap: var(--space-md); padding: var(--space-sm) var(--space-md); border: 1px solid var(--color-border); border-radius: var(--radius-md); text-decoration: none; color: var(--color-text); transition: border-color 0.15s, box-shadow 0.15s; }
+.related-link:hover { border-color: var(--color-primary); box-shadow: var(--shadow-sm); color: var(--color-text); text-decoration: none; }
+.related-article-title { font-weight: 500; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.related-meta { display: flex; align-items: center; gap: var(--space-sm); flex-shrink: 0; }
 .related-source { font-size: 0.8rem; color: var(--color-text-muted); }
+.related-meta time { font-size: 0.75rem; color: var(--color-text-muted); }
+@media (max-width: 768px) {
+  .related-link { flex-direction: column; align-items: flex-start; gap: var(--space-xs); }
+  .related-article-title { white-space: normal; }
+}
 </style>
