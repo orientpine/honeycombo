@@ -1320,6 +1320,7 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
             } finally {
               moveBtns.forEach(function(b) { b.disabled = false; });
               syncItemControls();
+            }
           }
 
           document.querySelectorAll('.item-move-up').forEach((btn) => {
