@@ -1,5 +1,6 @@
 ---
 import AddToPlaylist from './AddToPlaylist.astro';
+import BookmarkButton from './BookmarkButton.astro';
 
 interface Props {
   id: string;
@@ -19,10 +20,11 @@ interface Props {
 const { id, title, url, source, type, description, tags, date, thumbnail_url, isExternal = true, slug, articleOrigin = 'feed' } = Astro.props;
 const sourceType = articleOrigin === 'feed' ? 'feed' : 'curated';
 const articleUrl = isExternal ? url : `/articles/${slug || id}`;
+const articlePath = `/articles/${slug || id}/`;
 const formattedDate = new Date(date).toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' });
 ---
 
-<article class="card article-card" data-testid="article-card" data-tags={tags.join(',')} data-origin={articleOrigin}>
+<article class="card article-card" data-testid="article-card" data-tags={tags.join(',')} data-origin={articleOrigin} data-article-path={articlePath}>
   {thumbnail_url && (
     <div class="article-thumbnail">
       <img src={thumbnail_url} alt={title} loading="lazy" width="300" height="160" />
@@ -30,8 +32,6 @@ const formattedDate = new Date(date).toLocaleDateString('ko-KR', { year: 'numeri
   )}
   <div class="article-body">
     <div class="article-meta">
-      {articleOrigin === 'curated' && <span class="badge badge-curated">에디터 추천</span>}
-      {articleOrigin === 'submitted' && <span class="badge badge-submitted">커뮤니티</span>}
       <span class="badge">{source}</span>
       {type === 'youtube' && <span class="badge badge-primary">YouTube</span>}
       <time class="article-date" datetime={new Date(date).toISOString()}>{formattedDate}</time>
@@ -45,13 +45,24 @@ const formattedDate = new Date(date).toLocaleDateString('ko-KR', { year: 'numeri
     <div class="article-tags">
       {tags.map(tag => <span class="tag">{tag}</span>)}
     </div>
-    <AddToPlaylist
-      articleId={id}
-      title={title}
-      url={url}
-      description={description}
-      sourceType={sourceType}
-    />
+    <div class="article-footer">
+      <div class="article-stats">
+        <BookmarkButton articleId={slug || id} size="sm" />
+        <a href={`/articles/${slug || id}/#comments`} class="comment-indicator" data-comment-path={articlePath}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <span class="comment-count-value">&ndash;</span>
+        </a>
+      </div>
+      <AddToPlaylist
+        articleId={id}
+        title={title}
+        url={url}
+        description={description}
+        sourceType={sourceType}
+      />
+    </div>
   </div>
 </article>
 
@@ -66,4 +77,61 @@ const formattedDate = new Date(date).toLocaleDateString('ko-KR', { year: 'numeri
 .article-title a:hover { color: var(--color-primary); text-decoration: none; }
 .article-description { font-size: 0.875rem; color: var(--color-text-muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .article-tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+.article-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: var(--space-xs); }
+.article-stats { display: flex; align-items: center; gap: var(--space-sm); }
+.comment-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.comment-indicator:hover { color: var(--color-primary); text-decoration: none; }
+.comment-count-value { font-variant-numeric: tabular-nums; min-width: 1ch; }
 </style>
+
+<script>
+  // Comment count fetcher — Giscus API + IntersectionObserver + sessionStorage cache
+  // Module script: runs once, persists across View Transitions
+  document.addEventListener('astro:page-load', () => {
+    const CACHE_KEY = 'honeycombo:comment-counts';
+    let cache: Record<string, number> = {};
+    try { cache = JSON.parse(sessionStorage.getItem(CACHE_KEY) || '{}'); } catch {}
+
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const el = entry.target as HTMLElement;
+        const path = el.dataset.commentPath;
+        if (!path) continue;
+        observer.unobserve(el);
+
+        const countEl = el.querySelector('.comment-count-value');
+        if (!countEl) continue;
+
+        // Use cached value if available
+        if (path in cache) {
+          countEl.textContent = String(cache[path]);
+          return;
+        }
+
+        // Fetch from Giscus API
+        fetch(`https://giscus.app/api/discussions?repo=orientpine%2Fhoneycombo&term=${encodeURIComponent(path)}&category=General&number=0&strict=false&first=1`)
+          .then(r => r.status === 404 ? null : r.json())
+          .then(data => {
+            const count = data?.discussion?.totalCommentCount ?? data?.discussion?.comments?.totalCount ?? 0;
+            cache[path] = count;
+            try { sessionStorage.setItem(CACHE_KEY, JSON.stringify(cache)); } catch {}
+            countEl.textContent = String(count);
+          })
+          .catch(() => { countEl.textContent = '0'; });
+      }
+    }, { rootMargin: '200px' });
+
+    document.querySelectorAll<HTMLElement>('[data-comment-path]').forEach(el => {
+      observer.observe(el);
+    });
+  });
+</script>
