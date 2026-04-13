@@ -11,22 +11,7 @@ const isConfigured = Boolean(REPO_ID && CATEGORY_ID);
 {isConfigured ? (
   <section class="comments-section" data-testid="comments">
     <h2 class="comments-title">댓글</h2>
-  <script src="https://giscus.app/client.js"
-      data-repo="orientpine/honeycombo"
-      data-repo-id={REPO_ID}
-      data-category="General"
-      data-category-id={CATEGORY_ID}
-      data-mapping="pathname"
-      data-strict="0"
-      data-reactions-enabled="1"
-      data-emit-metadata="0"
-      data-input-position="bottom"
-      data-theme="preferred_color_scheme"
-      data-lang="ko"
-      crossorigin="anonymous"
-      async
-      is:inline
-    ></script>
+    <div class="giscus"></div>
   </section>
 ) : (
   <section class="comments-section" data-testid="comments">
@@ -37,6 +22,34 @@ const isConfigured = Boolean(REPO_ID && CATEGORY_ID);
     </div>
   </section>
 )}
+
+<script>
+document.addEventListener('astro:page-load', () => {
+  const container = document.querySelector('.giscus');
+  if (!container) return;
+
+  // Clear previous Giscus instance
+  container.innerHTML = '';
+
+  const script = document.createElement('script');
+  script.src = 'https://giscus.app/client.js';
+  script.setAttribute('data-repo', 'orientpine/honeycombo');
+  script.setAttribute('data-repo-id', 'R_kgDOR_fpgQ');
+  script.setAttribute('data-category', 'General');
+  script.setAttribute('data-category-id', 'DIC_kwDOR_fpgc4C6lgR');
+  script.setAttribute('data-mapping', 'pathname');
+  script.setAttribute('data-strict', '0');
+  script.setAttribute('data-reactions-enabled', '1');
+  script.setAttribute('data-emit-metadata', '0');
+  script.setAttribute('data-input-position', 'bottom');
+  script.setAttribute('data-theme', 'preferred_color_scheme');
+  script.setAttribute('data-lang', 'ko');
+  script.crossOrigin = 'anonymous';
+  script.async = true;
+
+  container.appendChild(script);
+});
+</script>
 
 <style>
 .comments-section { margin-top: var(--space-2xl); padding-top: var(--space-xl); border-top: 1px solid var(--color-border); }
