@@ -100,6 +100,21 @@
 - 1인 1좋아요만 가능하며, 다시 누르면 취소되는 토글 방식이다.
 - 좋아요 수는 트렌딩 순위 산정의 핵심 지표로 사용된다.
 
+### 승인 기사 자동 추가 (auto-playlist)
+
+```text
+승인 webhook → functions/webhooks/submission-approved.ts
+            → users.id = submitted_by_id 조회
+            → 최근 플레이리스트 재사용 또는 `내 제출 기사` 자동 생성
+            → curated 아이템 추가
+미가입 사용자 → submissions 테이블에 deferred 저장
+삭제 webhook  → functions/webhooks/submission-removed.ts → playlist_items/submissions 정리
+```
+
+- 자동 생성 플레이리스트는 `visibility: 'unlisted'`, `status: 'draft'`, `playlist_type: 'community'`, `is_auto_created = 1` 로 생성된다.
+- 이미 같은 curated 기사가 존재하면 `DuplicateItemError`를 `already_exists` 응답으로 변환해 중복 삽입을 막는다.
+- 제출 파이프라인(`scripts/process-submission.ts`)은 GitHub Issue 작성자의 numeric user id를 `submitted_by_id`로 함께 저장한다.
+
 ## 관련 파일
 
 ### 프론트엔드 (Astro 정적 페이지)
@@ -128,6 +143,8 @@
 | `functions/api/admin/playlists/[id]/approve.ts` | PUT (관리자: 승인) |
 | `functions/api/admin/playlists/[id]/reject.ts` | PUT (관리자: 반려) |
 | `functions/api/playlists/[id]/like.ts` | GET/POST 좋아요 API |
+| `functions/webhooks/submission-approved.ts` | 승인 기사 auto-playlist webhook |
+| `functions/webhooks/submission-removed.ts` | 승인 취소/삭제 정리 webhook |
 
 ### 비즈니스 로직
 
@@ -138,6 +155,7 @@
 | `functions/lib/types.ts` | PlaylistRow, PlaylistDetail, UserPlaylistWithCount 등 타입 |
 | `functions/lib/validate.ts` | 제목/설명 길이 검증, URL 검증 |
 | `functions/lib/likes.ts` | 좋아요 토글, 상태 조회, 트렌딩 쿼리 |
+| `functions/lib/webhooks.ts` | webhook Bearer secret 검증 |
 
 ### 데이터
 
@@ -146,6 +164,7 @@
  `migrations/0001_user_playlists.sql` | D1 테이블 스키마 (users, sessions, user_playlists, playlist_items) |
  `migrations/0002_playlist_type.sql` | `playlist_type`, `tags` 컬럼 추가 마이그레이션 |
 | `migrations/0002_playlist_likes.sql` | playlist_likes 테이블 스키마 |
+| `migrations/0004_auto_playlist.sql` | auto-created playlist / deferred submissions 스키마 |
 
 ## API 응답 형태
 
@@ -207,6 +226,7 @@
 ## 관련 문서
 
 - [아키텍처 개요](../architecture/overview.md)
+- [기사 승인 시 플레이리스트 자동 추가](./auto-playlist-add.md)
 - [플레이리스트 데이터 미스매치 트러블슈팅](../troubleshooting/playlist-data-mismatch.md)
 - [플레이리스트 검색 렌더링·순서 변경 트러블슈팅](../troubleshooting/playlist-detail-search-and-reorder.md)
 
@@ -224,3 +244,5 @@
 | 2026-04-13 | 에디터/커뮤니티 플레이리스트 통합 — playlist_type, tags 지원, 정적 시스템 제거 |
 | 2026-04-13 | 좋아요 시스템 추가, 트렌딩 페이지 연동 |
 | 2026-04-13 | 검색 결과 HTML `\n` 이스케이프 수정, 기사 수 동적 갱신(`updateItemCount`), 순서 변경 실패 시 reload 동기화 반영 |
+| 2026-04-13 | 승인 기사 auto-playlist webhook, auto-created playlist 생성 규칙, deferred submissions 흐름 문서화 |
+| 2026-04-13 | GitHub Actions 승인 감지와 OAuth catch-up 기반 auto-playlist 동기화 반영 |

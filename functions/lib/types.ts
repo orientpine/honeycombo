@@ -19,6 +19,7 @@ export interface Env {
   // Admin
   ADMIN_GITHUB_IDS: string; // comma-separated GitHub user IDs
   ALLOWED_ORIGIN?: string;
+  WEBHOOK_SECRET?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -50,6 +51,15 @@ export interface PlaylistRow {
   tags: string | null;
   created_at: string;
   updated_at: string;
+}
+
+export interface SubmissionRow {
+  article_id: string;
+  submitted_by_id: string;
+  title: string;
+  url: string;
+  synced_to_playlist: number;
+  created_at: string;
 }
 
 export type UserPlaylistWithCount = PlaylistRow & { item_count: number; contains_item?: boolean };

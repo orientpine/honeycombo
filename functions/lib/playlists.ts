@@ -110,6 +110,35 @@ export async function createPlaylist(
   return playlist;
 }
 
+export async function getOrCreateAutoPlaylist(db: D1Database, userId: string): Promise<PlaylistRow> {
+  const existingPlaylist = await db
+    .prepare('SELECT * FROM user_playlists WHERE user_id = ? ORDER BY updated_at DESC LIMIT 1')
+    .bind(userId)
+    .first<PlaylistRow>();
+
+  if (existingPlaylist) {
+    return existingPlaylist;
+  }
+
+  const id = generateId();
+
+  await db
+    .prepare(
+      `INSERT INTO user_playlists (id, user_id, title, visibility, status, playlist_type, is_auto_created)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    )
+    .bind(id, userId, '내 제출 기사', 'unlisted', 'draft', 'community', 1)
+    .run();
+
+  const playlist = await getPlaylistRow(db, id);
+
+  if (!playlist) {
+    throw new Error('Failed to create auto playlist');
+  }
+
+  return playlist;
+}
+
 export async function getPlaylist(db: D1Database, playlistId: string): Promise<PlaylistDetail | null> {
   const playlist = await db
     .prepare(
@@ -259,11 +288,15 @@ export async function listUserPlaylists(
     .bind(...(containment ? [containment.item_type, containment.source_id, userId] : [userId]))
     .all<PlaylistRow & { item_count: number | string; contains_item?: number | boolean }>();
 
-  return result.results.map((row) => ({
-    ...row,
-    item_count: Number(row.item_count),
-    ...(row.contains_item !== undefined ? { contains_item: Boolean(row.contains_item) } : {}),
-  }));
+  return result.results.map((row): UserPlaylistWithCount => {
+    const { contains_item, item_count, ...playlist } = row;
+
+    return {
+      ...playlist,
+      item_count: Number(item_count),
+      ...(contains_item !== undefined ? { contains_item: Boolean(contains_item) } : {}),
+    };
+  });
 }
 
 export async function updatePlaylist(

@@ -61,7 +61,7 @@
 |------|------|
 | `api/auth.ts` | GitHub OAuth (Decap CMS 인증) |
 | `api/auth/github/login.ts` | 사용자 GitHub OAuth 로그인 (return_to 쿠키 지원) |
-| `api/auth/github/callback.ts` | OAuth 콜백, 세션 생성, 원래 페이지로 리디렉션 |
+| `api/auth/github/callback.ts` | OAuth 콜백, 세션 생성, auto-playlist catch-up 후 원래 페이지로 리디렉션 |
 | `api/auth/me.ts` | 현재 로그인 사용자 정보 |
 | `api/auth/logout.ts` | 로그아웃 |
 | `api/playlists/index.ts` | GET(목록)/POST(생성), contains_item 포함 여부 지원 |
@@ -80,10 +80,13 @@
 | `lib/must-read.ts` | Must-read D1 CRUD 연산 |
 | `p/[id].ts` | 유저 플레이리스트 SSR (아이템 관리, 기사 검색, 외부 URL 추가) |
 | `lib/auth.ts` | 세션 관리 (upsertUser, createSession, getSession) |
-| `lib/playlists.ts` | 플레이리스트 CRUD, 목록 조회, 포함 여부 확인 |
+| `lib/playlists.ts` | 플레이리스트 CRUD, 자동 플레이리스트 생성/조회, 포함 여부 확인 |
 | `lib/playlist-items.ts` | 아이템 추가/수정/삭제, 중복 방지 (DuplicateItemError) |
 | `lib/types.ts` | TypeScript 타입 정의 |
 | `lib/validate.ts` | URL/제목/source_id 검증 |
+| `webhooks/submission-approved.ts` | 기사 승인 시 플레이리스트 자동 추가 webhook |
+| `webhooks/submission-removed.ts` | 기사 삭제/거부 시 플레이리스트 자동 정리 webhook |
+| `lib/webhooks.ts` | Webhook shared secret 검증 유틸리티 |
 
 ### `.github/workflows/` — CI/CD
 
@@ -94,6 +97,7 @@
 | `rss-collect.yml` | RSS 수집 스케줄 |
 | ~~`trending-calc.yml`~~ | 삭제됨 — Must-read가 D1 에디터 관리로 전환 |
 | `process-submission.yml` | 기사 제출 처리 + 외부 사용자 자동 라벨링 |
+| `on-article-approved.yml` | 기사 승인/삭제 감지 → webhook 호출 |
 
 ## 페이지 구조
 
@@ -143,7 +147,15 @@
 GitHub Issue (single/bulk) → scripts/process-submission.ts → PR (src/content/curated/)
 ```
 
-### 4. 빌드
+- 제출 시 GitHub Issue 작성자의 numeric user id(`submitted_by_id`)도 함께 저장해 승인 webhook에서 D1 사용자와 매칭한다.
+### 4. 기사 승인 시 플레이리스트 자동 추가
+
+Decap CMS (status→approved) → git push master → on-article-approved.yml → POST /webhooks/submission-approved → D1 (플레이리스트 자동 추가)
+
+미로그인 제출자 → submissions 적재 → `/api/auth/github/callback` 로그인 시 catch-up → 자동 플레이리스트 반영
+
+
+### 5. 빌드
 
 ```
 src/ (pages + components + data + content) → astro build → dist/
@@ -180,6 +192,7 @@ src/ (pages + components + data + content) → astro build → dist/
 - [AI 피드 필터](../features/ai-feed-filter.md)
 - [트렌딩 플레이리스트](../features/trending-playlists.md)
 - [Must-read 에디터 관리](../features/must-read-management.md)
+- [기사 승인 시 플레이리스트 자동 추가](../features/auto-playlist-add.md)
 
 ## 변경 이력
 
@@ -195,4 +208,6 @@ src/ (pages + components + data + content) → astro build → dist/
 | 2026-04-13 | RSS 수집에 AI 키워드 필터 추가 (`ai-keywords.json` allowlist) |
 | 2026-04-13 | 에디터 플레이리스트 정적 시스템 제거, D1 통합 반영 |
 | 2026-04-13 | 키워드 트렌딩 → 플레이리스트 트렌딩(SSR) 전환, 좋아요 시스템 추가 |
+| 2026-04-13 | 기사 승인 시 플레이리스트 자동 추가 기능, webhook 엔드포인트, on-article-approved 워크플로우 추가 |
+| 2026-04-13 | GitHub OAuth 로그인 시 submissions catch-up 동기화 흐름 반영 |
 | 2026-04-13 | Must-read: 자동 계산 → 에디터 수동 관리 전환. D1/SSR 기반, 관리자 UI 추가, 레거시 파일 삭제 |

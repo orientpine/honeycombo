@@ -1,0 +1,104 @@
+name: On Article Approved
+
+on:
+  push:
+    branches: [master]
+    paths: ['src/content/curated/**']
+
+concurrency:
+  group: article-approval
+  cancel-in-progress: false
+
+jobs:
+  detect-approval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Detect article status transitions
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
+          AFTER_SHA: ${{ github.sha }}
+          WEBHOOK_URL: ${{ vars.SITE_URL }}/webhooks/submission-approved
+          REMOVAL_URL: ${{ vars.SITE_URL }}/webhooks/submission-removed
+          WEBHOOK_SECRET: ${{ secrets.WEBHOOK_SECRET }}
+        run: |
+          set -euo pipefail
+
+          # Handle zero SHA (first push, force push, etc.)
+          if [ "$BEFORE_SHA" = "0000000000000000000000000000000000000000" ]; then
+            echo "Initial or force push — scanning all curated files"
+            CHANGED=$(find src/content/curated -name '*.json' 2>/dev/null || true)
+            DELETED=""
+          else
+            CHANGED=$(git diff --name-only --diff-filter=ACMR "$BEFORE_SHA..$AFTER_SHA" -- 'src/content/curated/' | grep '\.json$' || true)
+            DELETED=$(git diff --name-only --diff-filter=D "$BEFORE_SHA..$AFTER_SHA" -- 'src/content/curated/' | grep '\.json$' || true)
+          fi
+
+          # Process changed/added files — look for approved articles with submitted_by_id
+          for file in $CHANGED; do
+            [ -f "$file" ] || continue
+
+            STATUS=$(jq -r '.status // empty' "$file" 2>/dev/null || echo "")
+            SUBMITTED_BY_ID=$(jq -r '.submitted_by_id // empty' "$file" 2>/dev/null || echo "")
+
+            if [ "$STATUS" = "approved" ] && [ -n "$SUBMITTED_BY_ID" ]; then
+              # Check if this was a status transition (not just a metadata edit)
+              if [ "$BEFORE_SHA" != "0000000000000000000000000000000000000000" ]; then
+                OLD_STATUS=$(git show "$BEFORE_SHA:$file" 2>/dev/null | jq -r '.status // empty' 2>/dev/null || echo "")
+                if [ "$OLD_STATUS" = "approved" ]; then
+                  echo "Skipping $file — already approved, no transition"
+                  continue
+                fi
+              fi
+
+              ARTICLE_ID=$(jq -r '.id' "$file")
+              TITLE=$(jq -r '.title' "$file")
+              URL=$(jq -r '.url' "$file")
+              DESC=$(jq -r '.description // empty' "$file")
+
+              echo "Notifying approval: $ARTICLE_ID (submitted by ID: $SUBMITTED_BY_ID)"
+              HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$WEBHOOK_URL" \
+                -H "Authorization: Bearer $WEBHOOK_SECRET" \
+                -H "Content-Type: application/json" \
+                -d "{\"article_id\":\"$ARTICLE_ID\",\"submitted_by_id\":\"$SUBMITTED_BY_ID\",\"title\":$(echo "$TITLE" | jq -Rs .),\"url\":\"$URL\",\"description\":$(echo "$DESC" | jq -Rs .)}" \
+                --max-time 30 || echo "000")
+
+              if [ "$HTTP_CODE" = "000" ] || [ "$HTTP_CODE" -ge 500 ]; then
+                echo "::warning::Webhook call failed for $ARTICLE_ID (HTTP $HTTP_CODE)"
+              else
+                echo "Webhook response: HTTP $HTTP_CODE"
+              fi
+            fi
+
+            # Check for rejection transition (approved → rejected)
+            if [ "$STATUS" = "rejected" ] && [ "$BEFORE_SHA" != "0000000000000000000000000000000000000000" ]; then
+              OLD_STATUS=$(git show "$BEFORE_SHA:$file" 2>/dev/null | jq -r '.status // empty' 2>/dev/null || echo "")
+              if [ "$OLD_STATUS" = "approved" ]; then
+                ARTICLE_ID=$(jq -r '.id' "$file")
+                echo "Article rejected after approval: $ARTICLE_ID — removing from playlists"
+                curl -s -X POST "$REMOVAL_URL" \
+                  -H "Authorization: Bearer $WEBHOOK_SECRET" \
+                  -H "Content-Type: application/json" \
+                  -d "{\"article_id\":\"$ARTICLE_ID\"}" \
+                  --max-time 30 || echo "::warning::Removal webhook failed for $ARTICLE_ID"
+              fi
+            fi
+          done
+
+          # Process deleted files
+          for file in $DELETED; do
+            ARTICLE_ID=$(git show "$BEFORE_SHA:$file" 2>/dev/null | jq -r '.id // empty' 2>/dev/null || echo "")
+            if [ -n "$ARTICLE_ID" ]; then
+              echo "Article deleted: $ARTICLE_ID — removing from playlists"
+              curl -s -X POST "$REMOVAL_URL" \
+                -H "Authorization: Bearer $WEBHOOK_SECRET" \
+                -H "Content-Type: application/json" \
+                -d "{\"article_id\":\"$ARTICLE_ID\"}" \
+                --max-time 30 || echo "::warning::Removal webhook failed for $ARTICLE_ID"
+            fi
+          done
+
+          echo "Done processing article status transitions"

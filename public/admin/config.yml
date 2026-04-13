@@ -39,6 +39,7 @@ collections:
       - { label: "설명", name: "description", widget: "text", required: false, pattern: [".{0,1000}", "최대 1000자"] }
       - { label: "태그", name: "tags", widget: "list", min: 1, max: 5, hint: "1~5개" }
       - { label: "제출자", name: "submitted_by", widget: "string", required: false }
+      - { label: "제출자 ID", name: "submitted_by_id", widget: "hidden", required: false }
       - { label: "제출일", name: "submitted_at", widget: "datetime" }
       - label: "상태"
         name: "status"

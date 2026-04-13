@@ -1,5 +1,7 @@
 #!/usr/bin/env bun
 
+/// <reference types="bun" />
+
 import { createHash } from 'crypto';
 import { mkdir, readFile, writeFile } from 'fs/promises';
 import { dirname, join } from 'path';
@@ -16,7 +18,7 @@ export interface IssueData {
   title: string;
   body: string;
   labels: Array<{ name: string }>;
-  user: { login: string };
+  user: { login: string; id: number };
 }
 
 export interface ParsedSubmission {
@@ -308,6 +310,7 @@ export async function processSubmission(
     description: note.slice(0, 1000) || undefined,
     tags,
     submitted_by: issue.user.login,
+    submitted_by_id: String(issue.user.id),
     submitted_at: submittedAt,
     status: 'pending',
   });
@@ -387,6 +390,7 @@ export async function processBulkSubmission(
         description: note.slice(0, 1000) || undefined,
         tags,
         submitted_by: issue.user.login,
+        submitted_by_id: String(issue.user.id),
         submitted_at: submittedAt,
         status: 'pending',
       });
@@ -420,6 +424,7 @@ async function readIssueFromEnvironment(): Promise<IssueData | null> {
   const issueNumber = Number.parseInt(process.env.ISSUE_NUMBER || '0', 10);
   const issueBody = process.env.ISSUE_BODY || '';
   const issueUser = process.env.ISSUE_USER || 'anonymous';
+  const issueUserId = Number.parseInt(process.env.ISSUE_USER_ID || '0', 10);
   const issueTitle = process.env.ISSUE_TITLE || '';
 
   if (!issueNumber || !issueBody) {
@@ -432,11 +437,20 @@ async function readIssueFromEnvironment(): Promise<IssueData | null> {
     body: issueBody,
     labels: (process.env.ISSUE_LABELS || 'submission')
       .split(',')
-      .map((label) => label.trim())
+      .map((label: string) => label.trim())
       .filter(Boolean)
-      .map((name) => ({ name })),
-    user: { login: issueUser },
+      .map((name: string) => ({ name })),
+    user: { login: issueUser, id: issueUserId },
   };
+}
+
+function requireIssue(issue: IssueData | null): IssueData {
+  if (issue) {
+    return issue;
+  }
+
+  console.error('Missing ISSUE_NUMBER or ISSUE_BODY environment variables');
+  process.exit(1);
 }
 
 if (import.meta.main) {
@@ -449,15 +463,12 @@ if (import.meta.main) {
       ? await readMockIssue(args[mockIssueFlag + 1])
       : await readIssueFromEnvironment();
 
-  if (!issue) {
-    console.error('Missing ISSUE_NUMBER or ISSUE_BODY environment variables');
-    process.exit(1);
-  }
+  const resolvedIssue = requireIssue(issue);
 
-  const isBulkIssue = isBulkFlag || issue.labels.some((label) => label.name === 'bulk');
+  const isBulkIssue = isBulkFlag || resolvedIssue.labels.some((label) => label.name === 'bulk');
 
   if (isBulkIssue) {
-    const result = await processBulkSubmission(issue);
+    const result = await processBulkSubmission(resolvedIssue);
     console.log(`✅ ${result.succeeded.length}/${result.total} succeeded, ❌ ${result.failed.length}/${result.total} failed`);
 
     if (result.failed.length > 0) {
@@ -473,7 +484,7 @@ if (import.meta.main) {
     process.exit(0);
   }
 
-  const result = await processSubmission(issue);
+  const result = await processSubmission(resolvedIssue);
   console.log(result.success ? `✅ ${result.message}` : `❌ ${result.message}`);
 
   if (!result.success) {

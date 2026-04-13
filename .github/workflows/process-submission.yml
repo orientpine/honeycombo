@@ -74,6 +74,7 @@ jobs:
           if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
             ISSUE_JSON=$(gh api repos/$REPOSITORY/issues/$ISSUE_NUMBER_INPUT)
             ISSUE_USER=$(echo "$ISSUE_JSON" | jq -r '.user.login')
+            ISSUE_USER_ID=$(echo "$ISSUE_JSON" | jq -r '.user.id')
             LABELS=$(echo "$ISSUE_JSON" | jq -r '[.labels[].name] | join(",")')
             echo "ISSUE_NUMBER=$ISSUE_NUMBER_INPUT" >> $GITHUB_ENV
             echo "ISSUE_TITLE<<EOF" >> $GITHUB_ENV
@@ -83,6 +84,7 @@ jobs:
             echo "$ISSUE_JSON" | jq -r '.body' >> $GITHUB_ENV
             echo "EOF" >> $GITHUB_ENV
             echo "ISSUE_USER=$ISSUE_USER" >> $GITHUB_ENV
+            echo "ISSUE_USER_ID=$ISSUE_USER_ID" >> $GITHUB_ENV
             echo "ISSUE_LABELS=$LABELS" >> $GITHUB_ENV
           else
             echo "ISSUE_NUMBER=$ISSUE_NUMBER_EVENT" >> $GITHUB_ENV
@@ -93,6 +95,7 @@ jobs:
             echo "$ISSUE_BODY_EVENT" >> $GITHUB_ENV
             echo "EOF" >> $GITHUB_ENV
             echo "ISSUE_USER=$ISSUE_USER_EVENT" >> $GITHUB_ENV
+            echo "ISSUE_USER_ID=${{ github.event.issue.user.id }}" >> $GITHUB_ENV
             if [ -n "$AUTO_LABELS" ]; then
               echo "ISSUE_LABELS=$AUTO_LABELS" >> $GITHUB_ENV
             else
@@ -103,6 +106,7 @@ jobs:
       - name: Process submission
         env:
           ISSUE_LABELS: ${{ env.ISSUE_LABELS }}
+          ISSUE_USER_ID: ${{ env.ISSUE_USER_ID }}
         run: bun run scripts/process-submission.ts
 
       - name: Validate generated content
