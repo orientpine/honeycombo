@@ -1,0 +1,17 @@
+{
+  "id": "384c4502b3cf0e8c",
+  "title": "𝗪𝗵𝗮𝘁 𝗜 𝗟𝗲𝗮𝗿𝗻𝗲𝗱 𝗳𝗿𝗼𝗺 𝗖𝗵𝗮𝗽𝘁𝗲𝗿 𝟮 𝗼𝗳 𝗔𝗜 𝗘𝗻𝗴𝗶𝗻𝗲𝗲𝗿𝗶𝗻𝗴: 𝗪𝗵𝘆 𝗦𝗮𝗺𝗽𝗹𝗶𝗻𝗴 𝗖𝗵𝗮𝗻𝗴𝗲𝘀 𝗘𝘃𝗲𝗿𝘆𝘁𝗵𝗶𝗻𝗴",
+  "url": "https://dev.to/yoditdevn8n/-1bmh",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "When people talk about AI models, the focus is usually on training, such as how much data was used, how big the model is, or what architecture it uses. That’s where most of the attention goes. But Chapter 2 of AI Engineering made me focus on something that has a direct impact on how models behave in practice: 𝗦𝗮𝗺𝗽𝗹𝗶𝗻𝗴. Sampling is how a model selects one output from many possible options. It might seem like a small detail, but it explains a lot of what we see in real-world usage, especially inconsistency and hallucinations. 𝗧𝗿𝗮𝗶𝗻𝗶𝗻𝗴 𝗜𝘀𝗻’𝘁 𝗝𝘂𝘀𝘁 𝗔𝗯𝗼𝘂𝘁 𝗠𝗼𝗿𝗲 𝗗𝗮𝘁𝗮 It’s easy to assume that more data leads to better performance, but that assumption breaks down quickly. A model trained on a smaller amount of high-quality data can outperform a larger model trained on low-quality data. What matters is finding the right balance between quantity, quality, and diversity. The model needs enough exposure to learn patterns, the data needs to be reliable, and it...",
+  "tags": [
+    "dev",
+    "ai",
+    "deeplearning",
+    "llm",
+    "machinelearning"
+  ],
+  "published_at": "2026-04-13T04:42:09.000Z",
+  "feed_id": "devto"
+}

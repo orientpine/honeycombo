@@ -1,0 +1,17 @@
+{
+  "id": "d7f7354b54e77cbb",
+  "title": "Building Secure AI Systems from Design to Deployment",
+  "url": "https://dev.to/vishaluttammane/building-secure-ai-systems-from-design-to-deployment-27ee",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "Secure AI systems require a lifecycle-centric approach where security is embedded across design, development, and deployment. Unlike traditional software, AI systems introduce unique risks due to their dependence on data, probabilistic behavior, and adaptive learning processes. The attack surface spans datasets, training pipelines, model artifacts, and inference endpoints. Threat models must therefore include adversarial inputs, data poisoning, model extraction, and privacy leakage, alongside conventional vulnerabilities such as unauthorized access and misconfigured infrastructure. During the design phase, formal threat modeling and trust boundary definition are critical. Assets such as training datasets, feature pipelines, model weights, and prediction APIs must be classified based on sensitivity. Attack vectors include poisoning during data ingestion, evasion at inference time, and inversion attacks that attempt to reconstruct sensitive training data. Security architecture should...",
+  "tags": [
+    "dev",
+    "aisecurity",
+    "machinelearningsecurity",
+    "cybersecurity",
+    "mlops"
+  ],
+  "published_at": "2026-04-13T04:49:44.000Z",
+  "feed_id": "devto"
+}

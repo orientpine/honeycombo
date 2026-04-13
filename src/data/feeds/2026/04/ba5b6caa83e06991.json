@@ -1,0 +1,17 @@
+{
+  "id": "ba5b6caa83e06991",
+  "title": "Stop Automating Your AI's Memory. Talk to It Instead.",
+  "url": "https://dev.to/nickmeinhold/stop-automating-your-ais-memory-talk-to-it-instead-3cnj",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "Everyone building AI agent memory right now is solving the same problem: how do you persist knowledge across context windows? The answers are increasingly sophisticated — sleep-inspired consolidation, Ebbinghaus decay curves, knowledge graphs, FSRS scheduling, surprise-gated writes. They're all missing something obvious. My AI coding assistant (Claude) and I have been building a memory system together over the past few months. It started simple — markdown files with session notes — and evolved into a multi-phase consolidation pipeline: three sequential agents that extract knowledge, build forward plans, and craft prompts for the next session. It worked. Memories persisted. New instances could pick up where the last one left off. But something was off. The memories were accurate but lifeless. They captured what happened without capturing why it mattered. Forward plans were technically correct but missed the thread of what was actually exciting. The system was consolidating — but was...",
+  "tags": [
+    "dev",
+    "ai",
+    "memory",
+    "llm",
+    "neuroscience"
+  ],
+  "published_at": "2026-04-13T04:55:06.000Z",
+  "feed_id": "devto"
+}

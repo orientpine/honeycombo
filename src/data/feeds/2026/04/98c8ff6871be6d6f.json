@@ -1,0 +1,14 @@
+{
+  "id": "98c8ff6871be6d6f",
+  "title": "Runtime MCP Discovery Needs Trust Filters Before Giant Indexes Become Useful",
+  "url": "https://dev.to/supertrained/runtime-mcp-discovery-needs-trust-filters-before-giant-indexes-become-useful-5eh9",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "Runtime MCP Discovery Needs Trust Filters Before Giant Indexes Become Useful A giant MCP index sounds obviously useful. More servers should mean better coverage. It is progress, but only if the discovery layer solves the right problem. Once an agent can browse a large live catalog for itself, discovery stops being a convenience feature and starts becoming part of the control plane. That changes the design goal. How many tools can the agent find? It becomes: How many safe, relevant, caller-appropriate tools can the agent see before it starts choosing? That is a much harder question. The current MCP ecosystem has a real discovery problem. There are too many demos, too many abandoned experiments, too many half-working endpoints, and too many directories that make every entry look equally real. Instead of one tool or one narrow catalog, the agent gets access to a broad ecosystem: local helpers remote MCP servers read-only knowledge tools write-capable integrations adjacent AI tools outs...",
+  "tags": [
+    "dev",
+    "api"
+  ],
+  "published_at": "2026-04-13T04:42:38.000Z",
+  "feed_id": "devto"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "0019c98b035e5a43",
+  "title": "How Conversation Memory Improves Conversation experience",
+  "url": "https://dev.to/balagmadhu/how-conversation-memory-improves-conversation-experience-19g8",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "Intro: Experimental setup Goal: Test how including conversation history (memory) affects the search queries that the query-generation component produces and therefore the relevance of retrieved RAG documents. Source / domain used in evaluation: legal/regulatory text (example: EU AI Act) — representative of domains that rely on precise terminology and structured references. Beyond Vector Search: Building a \"Reasoning Engine\" in Copilot Studio Bala Madhusoodhanan Mar 17 #copilotstudio #powerfuldevs #systemdesign #powerplatform 7 reactions Add Comment RAG platform: Copilot Studio (using the \"Create search query\" component that builds queries from user input + optional conversation history). Two configurations: Interaction thread used (Startup Journey) — five turns: We're building an AI tool that screens job applicants' CVs. Does the EU AI Act apply to us? You mentioned it's high-risk. What exactly does that mean for us in practice? What documents do we need to prepare before we can lau...",
+  "tags": [
+    "dev",
+    "copilotstudio",
+    "powerfuldevs",
+    "powerplatform",
+    "ai"
+  ],
+  "published_at": "2026-04-13T04:55:33.000Z",
+  "feed_id": "devto"
+}

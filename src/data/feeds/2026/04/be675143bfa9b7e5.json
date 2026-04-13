@@ -1,0 +1,17 @@
+{
+  "id": "be675143bfa9b7e5",
+  "title": "Your Portfolio Is Already Outdated (Even If It Looks Perfect)",
+  "url": "https://dev.to/bhavya_kapil_0feb7d6e6f64/your-portfolio-is-already-outdated-even-if-it-looks-perfect-1e08",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "You spent hours polishing your portfolio. And yet… it might still be working against you. Not because it looks bad — Let’s get into it. Recruiters and clients don’t hire you for how your portfolio looks. They care about: How you think How you solve problems How you communicate your decisions If your portfolio only shows visuals and GitHub links, it’s incomplete. Instead of writing: “Built an eCommerce website using React” Explain: What problem you solved Why you chose that tech stack Challenges you faced What impact your solution created A simple structure: Problem Approach Challenges Solution Results Anyone can replicate a UI. What stands out is: Your reasoning Your decision-making How you debug and optimize Add sections like: “What I’d improve next” “What went wrong and what I learned” This builds credibility quickly. A slow portfolio is a deal-breaker. Test your site here: https://pagespeed.web.dev/ Focus on: Load speed Core Web Vitals Accessibility Simple improvement: If your po...",
+  "tags": [
+    "dev",
+    "portfolio",
+    "webdev",
+    "ai",
+    "programming"
+  ],
+  "published_at": "2026-04-13T05:05:31.000Z",
+  "feed_id": "devto"
+}
