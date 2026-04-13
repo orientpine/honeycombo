@@ -47,7 +47,7 @@ describe('playlists repository', () => {
 
     const queries = controller.getQueries();
     expect(queries[0]).toMatchObject({
-      params: ['pl_testid123', 'user_1', 'My playlist', 'Great links', 'unlisted', 'draft'],
+      params: ['pl_testid123', 'user_1', 'My playlist', 'Great links', 'unlisted', 'draft', 'community', null],
     });
     expect(queries[0]?.sql).toContain('INSERT INTO user_playlists');
     expect(queries[1]?.sql).toContain('FROM user_playlists');
@@ -62,6 +62,8 @@ describe('playlists repository', () => {
         description: 'Great links',
         visibility: 'public',
         status: 'approved',
+        playlist_type: 'community',
+        tags: null,
         created_at: '2026-04-12T00:00:00.000Z',
         updated_at: '2026-04-12T00:00:00.000Z',
         user_id: 'user_1',
@@ -107,6 +109,8 @@ describe('playlists repository', () => {
       description: 'Great links',
       visibility: 'public',
       status: 'approved',
+      playlist_type: 'community',
+      tags: [],
       created_at: '2026-04-12T00:00:00.000Z',
       updated_at: '2026-04-12T00:00:00.000Z',
       user: {
@@ -178,7 +182,8 @@ describe('playlists repository', () => {
     });
 
     const queries = controller.getQueries();
-    expect(queries[0]?.sql).toContain("visibility = 'public' AND status = 'approved'");
+    expect(queries[0]?.sql).toContain('p.visibility =');
+    expect(queries[0]?.sql).toContain("p.visibility = 'public' AND p.status = 'approved'");
     expect(queries[0]?.sql).toContain('SELECT COUNT(*)');
     expect(queries[1]?.sql).toContain('FROM user_playlists p');
     expect(queries[1]?.sql).toContain('ORDER BY p.updated_at DESC');
@@ -271,6 +276,7 @@ describe('playlists repository', () => {
   it('setVisibility auto-sets status pending when changing to public', async () => {
     controller.setResults([
       { user_id: 'user_1' },
+      { playlist_type: 'community' },
       [],
       { ...basePlaylist, visibility: 'public', status: 'pending' },
     ]);
@@ -284,12 +290,13 @@ describe('playlists repository', () => {
     });
 
     const queries = controller.getQueries();
-    expect(queries[1]?.params).toEqual(['public', 'pending', 'pl_1']);
+    expect(queries[2]?.params).toEqual(['public', 'pending', 'pl_1']);
   });
 
   it('setVisibility resets status to draft when changing to unlisted', async () => {
     controller.setResults([
       { user_id: 'user_1' },
+      { playlist_type: 'community' },
       [],
       { ...basePlaylist, visibility: 'unlisted', status: 'draft' },
     ]);
@@ -300,6 +307,6 @@ describe('playlists repository', () => {
       visibility: 'unlisted',
       status: 'draft',
     });
-    expect(controller.getQueries()[1]?.params).toEqual(['unlisted', 'draft', 'pl_1']);
+    expect(controller.getQueries()[2]?.params).toEqual(['unlisted', 'draft', 'pl_1']);
   });
 });

@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import * as idLib from '../../functions/lib/id';
-import { addItem, removeItem, updateItem } from '../../functions/lib/playlist-items';
+import { addItem, removeItem, swapItemPositions, updateItem } from '../../functions/lib/playlist-items';
 import type { PlaylistItemRow } from '../../functions/lib/types';
 import { createMockD1 } from '../helpers/d1-mock';
 
@@ -141,5 +141,19 @@ describe('playlist-items repository', () => {
 
     expect(result).toBe(false);
     expect(getQueries()).toHaveLength(1);
+  });
+
+  it('swapItemPositions swaps positions atomically', async () => {
+    const { db, getQueries, setResults } = createMockD1();
+
+    setResults([{ user_id: userId }, [{}], [{}]]);
+
+    const result = await swapItemPositions(db, playlistId, userId, 'item-a', 'item-b');
+
+    expect(result).toBe(true);
+    expect(getQueries()).toHaveLength(3);
+    expect(getQueries()[1]?.sql).toContain('WITH swap AS MATERIALIZED');
+    expect(getQueries()[1]?.params).toEqual(['item-b', playlistId, 'item-a', playlistId]);
+    expect(getQueries()[2]?.sql).toContain('UPDATE user_playlists SET updated_at = CURRENT_TIMESTAMP');
   });
 });
