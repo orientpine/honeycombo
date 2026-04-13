@@ -1170,7 +1170,7 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
               targetCard.dataset.position = String(currentPos);
               syncItemControls();
             } catch {
-              window.alert('순서 변경에 실패했습니다.');
+              window.location.reload();
             }
           }
 
