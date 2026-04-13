@@ -176,19 +176,26 @@ export async function swapItemPositions(
     return false;
   }
 
-  // Single SQL statement — truly atomic, no read-then-write race window.
-  // SQLite evaluates subqueries against pre-UPDATE state, so the CASE reads
-  // the original positions before any row is modified by this statement.
+  // MATERIALIZED CTE forces SQLite to compute original positions as a
+  // temporary result set BEFORE the UPDATE runs. Without MATERIALIZED,
+  // SQLite may inline the CTE and read already-updated rows.
   const result = await db
     .prepare(
-      `UPDATE playlist_items
+      `WITH swap AS MATERIALIZED (
+         SELECT a.id AS id_a, a.position AS pos_a,
+                b.id AS id_b, b.position AS pos_b
+         FROM playlist_items a
+         JOIN playlist_items b ON b.id = ? AND b.playlist_id = ?
+         WHERE a.id = ? AND a.playlist_id = ?
+       )
+       UPDATE playlist_items
        SET position = CASE id
-         WHEN ? THEN (SELECT position FROM playlist_items WHERE id = ? AND playlist_id = ?)
-         WHEN ? THEN (SELECT position FROM playlist_items WHERE id = ? AND playlist_id = ?)
+         WHEN (SELECT id_a FROM swap) THEN (SELECT pos_b FROM swap)
+         WHEN (SELECT id_b FROM swap) THEN (SELECT pos_a FROM swap)
        END
-       WHERE id IN (?, ?) AND playlist_id = ?`,
+       WHERE id IN (SELECT id_a FROM swap UNION ALL SELECT id_b FROM swap)`,
     )
-    .bind(itemIdA, itemIdB, playlistId, itemIdB, itemIdA, playlistId, itemIdA, itemIdB, playlistId)
+    .bind(itemIdB, playlistId, itemIdA, playlistId)
     .run();
 
   if (result.meta.changes === 0) {
