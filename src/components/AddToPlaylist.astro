@@ -184,20 +184,20 @@ document.addEventListener('DOMContentLoaded', () => {
   margin-top: var(--space-xs);
   background: var(--color-bg);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   min-width: 220px;
   z-index: 50;
   overflow: hidden;
+  padding: var(--space-xs) 0;
 }
 
 .playlist-dropdown-header {
-  padding: var(--space-sm) var(--space-md);
-  font-size: 0.8rem;
+  padding: var(--space-xs) var(--space-md) var(--space-xs);
+  font-size: 0.75rem;
   font-weight: 600;
   color: var(--color-text-muted);
-  background: var(--color-bg-secondary);
-  border-bottom: 1px solid var(--color-border);
+  letter-spacing: 0.03em;
 }
 
 .playlist-list {
@@ -205,15 +205,15 @@ document.addEventListener('DOMContentLoaded', () => {
   max-height: 200px;
   overflow-y: auto;
   margin: 0;
-  padding: var(--space-xs) 0;
+  padding: 0 var(--space-xs);
 }
 
 .playlist-loading,
 .playlist-empty,
 .playlist-error,
 .playlist-auth-required {
-  padding: var(--space-md);
-  font-size: 0.9rem;
+  padding: var(--space-md) var(--space-sm);
+  font-size: 0.85rem;
   color: var(--color-text-muted);
   text-align: center;
 }
@@ -231,10 +231,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 .playlist-item-btn {
   width: 100%;
-  padding: var(--space-sm) var(--space-md);
+  padding: var(--space-sm);
   text-align: left;
   background: none;
   border: none;
+  border-radius: var(--radius-sm);
   font-family: inherit;
   font-size: 0.85rem;
   color: var(--color-text);
@@ -272,8 +273,8 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 
 .playlist-dropdown-footer {
-  padding: var(--space-sm) var(--space-md);
-  background: var(--color-bg-secondary);
+  padding: var(--space-xs) var(--space-md) var(--space-sm);
+  margin-top: var(--space-xs);
   border-top: 1px solid var(--color-border);
 }
 

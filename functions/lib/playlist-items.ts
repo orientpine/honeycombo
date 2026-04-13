@@ -171,7 +171,9 @@ export async function swapItemPositions(
   userId: string,
   itemIdA: string,
   itemIdB: string,
-): Promise<boolean> {
+  expectedPosA?: number,
+  expectedPosB?: number,
+): Promise<boolean | 'conflict'> {
   if (!(await isPlaylistOwner(db, playlistId, userId))) {
     return false;
   }
@@ -183,6 +185,12 @@ export async function swapItemPositions(
 
   if (!a || !b) {
     return false;
+  }
+
+  if (expectedPosA !== undefined && expectedPosB !== undefined) {
+    if (a.position !== expectedPosA || b.position !== expectedPosB) {
+      return 'conflict';
+    }
   }
 
   await db.batch([

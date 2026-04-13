@@ -40,15 +40,24 @@ export const onRequest: AppPagesFunction[] = [
       return json({ error: 'itemA and itemB are required strings' }, 400);
     }
 
-    const success = await swapItemPositions(
+    const expectedPosA = typeof body.expectedPosA === 'number' ? body.expectedPosA : undefined;
+    const expectedPosB = typeof body.expectedPosB === 'number' ? body.expectedPosB : undefined;
+
+    const result = await swapItemPositions(
       env.DB,
       params.id,
       data.user.id,
       body.itemA,
       body.itemB,
+      expectedPosA,
+      expectedPosB,
     );
 
-    if (!success) {
+    if (result === 'conflict') {
+      return json({ error: 'Position conflict — reload and retry' }, 409);
+    }
+
+    if (!result) {
       return json({ error: 'Forbidden or items not found' }, 403);
     }
 

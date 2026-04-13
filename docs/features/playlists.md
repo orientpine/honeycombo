@@ -88,6 +88,18 @@
 - 각 카드에서 승인/반려/미리보기 버튼을 제공하며, 처리 완료 시 카드가 페이드아웃 후 제거된다.
 
 - 에디터 플레이리스트(`playlist_type: 'editor'`)는 승인 절차를 거치지 않고 생성 즉시 `approved` 상태가 되어 목록에 노출된다. (Auto-approve)
+### 좋아요 기능
+
+```
+유저 → POST /api/playlists/{id}/like (토글)
+     → D1 playlist_likes INSERT/DELETE
+     → { liked: boolean, like_count: number }
+```
+
+- 플레이리스트 상세 페이지와 트렌딩 페이지에서 좋아요를 누를 수 있다.
+- 1인 1좋아요만 가능하며, 다시 누르면 취소되는 토글 방식이다.
+- 좋아요 수는 트렌딩 순위 산정의 핵심 지표로 사용된다.
+
 ## 관련 파일
 
 ### 프론트엔드 (Astro 정적 페이지)
@@ -115,6 +127,7 @@
 | `functions/api/admin/playlists/pending.ts` | GET (관리자: 승인 대기 목록) |
 | `functions/api/admin/playlists/[id]/approve.ts` | PUT (관리자: 승인) |
 | `functions/api/admin/playlists/[id]/reject.ts` | PUT (관리자: 반려) |
+| `functions/api/playlists/[id]/like.ts` | GET/POST 좋아요 API |
 
 ### 비즈니스 로직
 
@@ -124,6 +137,7 @@
 | `functions/lib/playlist-items.ts` | 아이템 추가/수정/삭제, 포지션 관리 |
 | `functions/lib/types.ts` | PlaylistRow, PlaylistDetail, UserPlaylistWithCount 등 타입 |
 | `functions/lib/validate.ts` | 제목/설명 길이 검증, URL 검증 |
+| `functions/lib/likes.ts` | 좋아요 토글, 상태 조회, 트렌딩 쿼리 |
 
 ### 데이터
 
@@ -131,6 +145,7 @@
 |------|------|
  `migrations/0001_user_playlists.sql` | D1 테이블 스키마 (users, sessions, user_playlists, playlist_items) |
  `migrations/0002_playlist_type.sql` | `playlist_type`, `tags` 컬럼 추가 마이그레이션 |
+| `migrations/0002_playlist_likes.sql` | playlist_likes 테이블 스키마 |
 
 ## API 응답 형태
 
@@ -206,3 +221,4 @@
 | 2026-04-13 | 관리자 승인 UI 페이지(`/admin/playlists`) 문서화 반영 |
 | 2026-04-13 | AddToPlaylist 드롭다운 UI 개선 — 브라우저 기본 버튼 스타일 리셋(`appearance`, `font-family`, `outline`), 아이템 간 `border-bottom` 제거, `focus-visible` 상태 추가. Navigation의 auth-dropdown 패턴과 시각적 일관성 확보 |
 | 2026-04-13 | 에디터/커뮤니티 플레이리스트 통합 — playlist_type, tags 지원, 정적 시스템 제거 |
+| 2026-04-13 | 좋아요 시스템 추가, 트렌딩 페이지 연동 |
