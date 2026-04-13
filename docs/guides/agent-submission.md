@@ -57,7 +57,7 @@ gh auth status
 ## 라벨에 대한 중요 참고
 
 > **외부 사용자 참고**: GitHub API는 push 권한이 없는 사용자의 `--label` 옵션을 무시합니다.
-> HoneyCombo는 Issue **본문의 `### URL` 또는 `### 링크 목록` 패턴을 감지**하여 자동으로 라벨을 붙이고 제출을 처리합니다.
+> HoneyCombo는 Issue **본문의 `### URL` 또는 `### Link List` 패턴을 감지**하여 자동으로 라벨을 붙이고 제출을 처리합니다.
 > **`--label` 옵션은 필요 없습니다.** 본문 형식만 맞으면 됩니다.
 
 ## 단건 제출
@@ -67,20 +67,20 @@ gh auth status
 ```bash
 gh issue create \
   --repo orientpine/honeycombo \
-  --title "📎 자료 등록" \
+  --title "📎 Submit Link" \
   --body "### URL
 
 https://example.com/great-article
 
-### 유형
+### Type
 
 기사
 
-### 태그 (쉼표 구분, 최대 5개)
+### Tags (comma-separated, max 5)
 
 AI, LLM, startup
 
-### 한줄 소개
+### Short Description
 
 An in-depth analysis of practical AI agent usage in production"
 ```
@@ -131,8 +131,8 @@ bun run scripts/submit-cli.ts --bulk items.txt
 ```bash
 gh issue create \
   --repo orientpine/honeycombo \
-  --title "📦 대량 자료 등록" \
-  --body "### 링크 목록
+  --title "📦 Bulk Submit" \
+  --body "### Link List
 
 https://example.com/article-1 | 기사 | AI, LLM | In-depth analysis of AI agents in production
 https://youtube.com/watch?v=abc123 | YouTube | tutorial, AI | Practical AI tutorial for developers
@@ -151,20 +151,20 @@ urls=(
 for url in "${urls[@]}"; do
   gh issue create \
     --repo orientpine/honeycombo \
-    --title "📎 자료 등록" \
+    --title "📎 Submit Link" \
     --body "### URL
 
 $url
 
-### 유형
+### Type
 
 기사
 
-### 태그 (쉼표 구분, 최대 5개)
+### Tags (comma-separated, max 5)
 
 general
 
-### 한줄 소개
+### Short Description
 "
   sleep 2  # GitHub API rate limit 방지
 done
@@ -219,20 +219,20 @@ Run the command below with an authenticated gh CLI:
 
 gh issue create \
   --repo orientpine/honeycombo \
-  --title "📎 자료 등록" \
+  --title "📎 Submit Link" \
   --body "### URL
 
-{여기에 URL}
+{URL}
 
-### 유형
+### Type
 
 {기사 | YouTube | X 스레드 | Threads | 기타}
 
-### 태그 (쉼표 구분, 최대 5개)
+### Tags (comma-separated, max 5)
 
 {tags in English}
 
-### 한줄 소개
+### Short Description
 
 {Short description in English}"
 ```
@@ -245,11 +245,11 @@ Run the command below with an authenticated gh CLI:
 
 gh issue create \
   --repo orientpine/honeycombo \
-  --title "📦 대량 자료 등록" \
-  --body "### 링크 목록
+  --title "📦 Bulk Submit" \
+  --body "### Link List
 
-{URL1} | {유형} | {English tags} | {English description}
-{URL2} | {유형} | {English tags} | {English description}
+{URL1} | {Type} | {English tags} | {English description}
+{URL2} | {Type} | {English tags} | {English description}
 ..."
 ```
 
@@ -260,7 +260,7 @@ gh issue create \
 ```bash
 # 이것만으로 충분합니다
 gh auth login
-gh issue create --repo orientpine/honeycombo --title "📎 자료 등록" --body "### URL\n\nhttps://...\n\n### 유형\n\n기사\n\n### 태그 (쉼표 구분, 최대 5개)\n\nAI\n\n### 한줄 소개\n\nA brief description in English"
+gh issue create --repo orientpine/honeycombo --title "📎 Submit Link" --body "### URL\n\nhttps://...\n\n### Type\n\n기사\n\n### Tags (comma-separated, max 5)\n\nAI\n\n### Short Description\n\nA brief description in English"
 ```
 
 CLI 래퍼(`scripts/submit-cli.ts`)를 사용하려면 프로젝트 클론이 필요합니다:

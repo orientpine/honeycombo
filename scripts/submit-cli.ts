@@ -13,8 +13,8 @@ export interface CliArgs {
 
 const DEFAULT_REPO = 'orientpine/honeycombo';
 const DEFAULT_TYPE = '기사';
-const SINGLE_TITLE = '📎 자료 등록';
-const BULK_TITLE = '📦 대량 자료 등록';
+const SINGLE_TITLE = '📎 Submit Link';
+const BULK_TITLE = '📦 Bulk Submit';
 const VALID_TYPES = new Set(['기사', 'YouTube', 'X 스레드', 'Threads', '기타']);
 const MAX_BULK_ITEMS = 20;
 const MAX_TAGS = 5;
@@ -171,15 +171,15 @@ async function submitSingle(args: CliArgs): Promise<void> {
     '',
     args.url,
     '',
-    '### 유형',
+    '### Type',
     '',
     normalizeType(args.type),
     '',
-    '### 태그 (쉼표 구분, 최대 5개)',
+    '### Tags (comma-separated, max 5)',
     '',
     normalizeTags(args.tags),
     '',
-    '### 한줄 소개',
+    '### Short Description',
     '',
     args.note ?? '',
   ].join('\n');
@@ -235,7 +235,7 @@ async function submitBulk(args: CliArgs): Promise<void> {
   const limitedLines = lines.slice(0, MAX_BULK_ITEMS);
   console.log(`Preparing bulk submission with ${limitedLines.length} item(s)...`);
 
-  const body = ['### 링크 목록', '', ...limitedLines].join('\n');
+  const body = ['### Link List', '', ...limitedLines].join('\n');
 
   const issueUrl = await createIssue({
     repo: args.repo,

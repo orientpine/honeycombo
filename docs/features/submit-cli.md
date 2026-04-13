@@ -12,8 +12,8 @@
 CLI 인자 → scripts/submit-cli.ts 파싱/검증 → gh issue create → GitHub Issue 생성
 ```
 
-- 단건 모드는 `URL / 유형 / 태그 / 한줄 소개`를 템플릿 본문으로 변환한다.
-- 대량 모드는 파이프 구분 파일을 읽어 `### 링크 목록` 본문으로 단일 bulk Issue를 만든다.
+- 단건 모드는 `URL / Type / Tags / Short Description`을 템플릿 본문으로 변환한다.
+- 대량 모드는 파이프 구분 파일을 읽어 `### Link List` 본문으로 단일 bulk Issue를 만든다.
 - `--dry-run` 사용 시 실제 실행 대신 최종 `gh` 명령만 출력한다.
 
 ## 관련 파일

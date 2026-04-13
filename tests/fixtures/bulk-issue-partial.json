@@ -1,7 +1,7 @@
 {
   "number": 101,
-  "title": "📦 대량 자료 등록",
-  "body": "### 링크 목록\n\nhttps://example.com/valid-bulk | 기사 | AI | 유효한 기사\nnot-a-valid-url | 기사 | test | 잘못된 URL\nhttps://example.com/another-valid | 기타 | dev | 또 다른 유효한 기사",
+  "title": "📦 Bulk Submit",
+  "body": "### Link List\n\nhttps://example.com/valid-bulk | 기사 | AI | Valid article\nnot-a-valid-url | 기사 | test | Invalid URL\nhttps://example.com/another-valid | 기타 | dev | Another valid article",
   "labels": [{ "name": "submission" }, { "name": "bulk" }],
   "user": { "login": "bulkuser" }
 }

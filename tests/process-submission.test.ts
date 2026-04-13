@@ -42,7 +42,7 @@ describe('parseIssueBody', () => {
       url: 'https://example.com/great-article',
       type: 'article',
       tags: ['ai', 'llm'],
-      note: '훌륭한 AI 기사입니다.',
+      note: 'A great AI article.',
     });
   });
 
@@ -56,11 +56,11 @@ describe('parseIssueBody', () => {
 
   it('returns null for malformed bodies', () => {
     expect(parseIssueBody('')).toBeNull();
-    expect(parseIssueBody('### 유형\n\n기사')).toBeNull();
+    expect(parseIssueBody('### Type\n\n기사')).toBeNull();
   });
 
   it('limits tags to five entries', () => {
-    const body = '### URL\n\nhttps://example.com\n\n### 유형\n\n기사\n\n### 태그 (쉼표 구분, 최대 5개)\n\na, b, c, d, e, f\n\n### 한줄 소개\n\ntest';
+    const body = '### URL\n\nhttps://example.com\n\n### Type\n\n기사\n\n### Tags (comma-separated, max 5)\n\na, b, c, d, e, f\n\n### Short Description\n\ntest';
     const result = parseIssueBody(body);
 
     expect(result?.tags).toEqual(['a', 'b', 'c', 'd', 'e']);
@@ -77,7 +77,7 @@ describe('parseBulkIssueBody', () => {
       url: 'https://example.com/bulk-article-1',
       type: 'article',
       tags: ['ai', 'llm'],
-      note: '첫 번째 기사',
+      note: 'First article',
     });
     expect(result[1].type).toBe('youtube');
     expect(result[2].type).toBe('other');
@@ -102,14 +102,14 @@ describe('parseBulkIssueBody', () => {
     const lines = Array.from({ length: 25 }, (_, i) =>
       `https://example.com/item-${i} | 기사 | tag${i} | note ${i}`,
     ).join('\n');
-    const body = `### 링크 목록\n\n${lines}`;
+    const body = `### Link List\n\n${lines}`;
     const result = parseBulkIssueBody(body);
 
     expect(result).toHaveLength(20);
   });
 
   it('handles lines with missing optional fields', () => {
-    const body = '### 링크 목록\n\nhttps://example.com/minimal | 기사 | |';
+    const body = '### Link List\n\nhttps://example.com/minimal | 기사 | |';
     const result = parseBulkIssueBody(body);
 
     expect(result).toHaveLength(1);
@@ -218,7 +218,7 @@ describe('processSubmission', () => {
       source: 'YouTube',
       type: 'youtube',
       thumbnail_url: 'https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg',
-      status: 'pending',
+      status: 'approved',
     });
   });
 
@@ -235,7 +235,7 @@ describe('processSubmission', () => {
     const issue: IssueData = {
       number: 101,
       title: 'Submit: not-a-url',
-      body: '### URL\n\nnot-a-url\n\n### 유형\n\n기사\n\n### 태그 (쉼표 구분, 최대 5개)\n\ntest\n\n### 한줄 소개\n\ntest',
+      body: '### URL\n\nnot-a-url\n\n### Type\n\n기사\n\n### Tags (comma-separated, max 5)\n\ntest\n\n### Short Description\n\ntest',
       labels: [{ name: 'submission' }],
       user: { login: 'testuser' },
     };
@@ -250,7 +250,7 @@ describe('processSubmission', () => {
     const issue: IssueData = {
       number: 102,
       title: 'Submit: broken',
-      body: '### 유형\n\n기사',
+      body: '### Type\n\n기사',
       labels: [{ name: 'submission' }],
       user: { login: 'testuser' },
     };

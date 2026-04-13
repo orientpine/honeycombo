@@ -68,17 +68,17 @@ export function parseIssueBody(body: string): ParsedSubmission | null {
         continue;
       }
 
-      if (line === '### 유형') {
+      if (line === '### Type') {
         currentSection = 'type';
         continue;
       }
 
-      if (line.startsWith('### 태그')) {
+      if (line.startsWith('### Tags')) {
         currentSection = 'tags';
         continue;
       }
 
-      if (line === '### 한줄 소개') {
+      if (line === '### Short Description') {
         currentSection = 'note';
         continue;
       }
@@ -144,7 +144,7 @@ export function parseBulkIssueBody(body: string): ParsedSubmission[] {
     }
 
     const lines = body.split('\n').map((line) => line.trim());
-    const sectionIndex = lines.findIndex((line) => line === '### 링크 목록');
+    const sectionIndex = lines.findIndex((line) => line === '### Link List');
 
     if (sectionIndex === -1) {
       return [];

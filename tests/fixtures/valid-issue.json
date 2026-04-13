@@ -1,7 +1,7 @@
 {
   "number": 42,
   "title": "Submit: https://example.com/great-article",
-  "body": "### URL\n\nhttps://example.com/great-article\n\n### 유형\n\n기사\n\n### 태그 (쉼표 구분, 최대 5개)\n\nAI, LLM\n\n### 한줄 소개\n\n훌륭한 AI 기사입니다.",
+  "body": "### URL\n\nhttps://example.com/great-article\n\n### Type\n\n기사\n\n### Tags (comma-separated, max 5)\n\nAI, LLM\n\n### Short Description\n\nA great AI article.",
   "labels": [{ "name": "submission" }],
   "user": { "login": "testuser" }
 }

@@ -5,11 +5,11 @@ body:
   - type: textarea
     id: items
     attributes:
-      label: 링크 목록
+      label: Link List
       description: |
         한 줄에 하나씩 입력하세요. 태그와 설명은 영어로 작성해주세요.
-        형식: URL | 유형 | tags (English, comma-separated) | short description (English)
-        유형: 기사, YouTube, X 스레드, Threads, 기타
+        Format: URL | Type | tags (English, comma-separated) | short description (English)
+        Type options: 기사, YouTube, X 스레드, Threads, 기타
       placeholder: |
         https://example.com/article | 기사 | AI, LLM | Great analysis of AI agents
         https://youtube.com/watch?v=abc | YouTube | tutorial | Practical AI tutorial for developers
