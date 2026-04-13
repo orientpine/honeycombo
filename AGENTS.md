@@ -72,3 +72,61 @@ npx wrangler pages deploy dist --project-name=honeycombo --branch=master
 |------|----------|
 | YYYY-MM-DD | 최초 작성 |
 ```
+
+## CI 통과 체크리스트 (필수)
+
+> **master 브랜치는 보호되어 있다.** PR의 CI가 통과해야만 머지할 수 있으므로, 푸시 전에 반드시 아래 검증을 로컬에서 모두 통과시켜야 한다.
+
+### CI 파이프라인 (`.github/workflows/ci.yml`)
+
+CI는 아래 5단계를 **순서대로** 실행한다. 하나라도 실패하면 PR 머지가 차단된다.
+
+| 단계 | 명령어 | 검증 내용 |
+|------|--------|----------|
+| 1. 콘텐츠 검증 | `bun run validate` | JSON 스키마, 필수 필드 확인 |
+| 2. 문서 형식 검증 | `bun run validate:docs` | `docs/` 내 모든 마크다운 필수 섹션 확인 |
+| 3. 문서 커버리지 검증 | `bun run validate:docs -- --check-coverage` | 코드 변경 시 `docs/` 변경 동반 여부 확인 |
+| 4. 빌드 | `bun run build` | Astro SSG 빌드 성공 여부 |
+| 5. 테스트 | `bun run test` | Vitest 테스트 통과 여부 |
+
+### 푸시 전 로컬 검증 (복사해서 실행)
+
+```bash
+bun run validate && bun run validate:docs && bun run validate:docs -- --check-coverage && bun run build && bun run test
+```
+
+### 자주 실패하는 원인과 해결법
+
+#### 1. 문서 커버리지 실패 (`--check-coverage`)
+
+**원인**: `src/`, `functions/`, `scripts/` 파일을 변경했는데 `docs/` 파일 변경이 없음.
+
+**해결**: 코드를 변경할 때 반드시 `docs/` 문서도 함께 커밋한다.
+
+| 코드 변경 유형 | 필요한 docs 변경 |
+|---------------|----------------|
+| 버그 수정 | `docs/troubleshooting/{주제}.md` 신규 작성 |
+| 기능 추가/수정 | `docs/features/{기능명}.md` 작성 또는 업데이트 |
+| 설계 변경 | `docs/decisions/NNNN-{제목}.md` 신규 작성 |
+
+**예외 디렉토리** (변경해도 docs 불필요): `src/data/feeds/`, `src/data/trending/`, `src/content/curated/`
+
+#### 2. 문서 형식 실패 (`validate:docs`)
+
+**원인**: `docs/` 내 마크다운 파일에 필수 섹션 누락.
+
+**모든 문서 공통 필수 섹션:**
+- `# 제목` (첫 줄)
+- `> 한 줄 요약` (제목 바로 다음)
+- `## 관련 문서`
+- `## 변경 이력`
+
+**문서 유형별 추가 필수 섹션:**
+
+| 유형 (`docs/` 하위 경로) | 추가 필수 섹션 |
+|------------------------|--------------|
+| `features/` | 개요, 동작 흐름, 관련 파일, 설정값, 제약 사항 |
+| `decisions/` | 맥락, 결정, 고려한 대안, 결과 + 상태 키워드(제안/승인/폐기/대체됨) |
+| `troubleshooting/` | 증상, 원인, 해결 방법, 관련 파일 |
+
+**해결**: `docs/_templates/` 의 템플릿을 기반으로 작성하면 누락을 방지할 수 있다.
