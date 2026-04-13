@@ -6,7 +6,7 @@ body:
     id: url
     attributes:
       label: URL
-      description: 등록할 링크를 입력하세요
+      description: 등록할 링크를 입력하세요 (Enter the URL to submit)
       placeholder: "https://example.com/article 또는 https://youtube.com/watch?v=..."
     validations:
       required: true
@@ -29,13 +29,13 @@ body:
     id: tags
     attributes:
       label: 태그 (쉼표 구분, 최대 5개)
-      description: 관련 태그를 입력하세요
+      description: 관련 태그를 영어로 입력하세요 (Enter tags in English)
       placeholder: "AI, LLM, startup"
 
   - type: textarea
     id: note
     attributes:
       label: 한줄 소개
-      description: 이 자료를 추천하는 이유를 간단히 설명해주세요
-      placeholder: "이 기사는..."
+      description: 이 자료를 추천하는 이유를 영어로 간단히 설명해주세요 (Write in English)
+      placeholder: "A practical guide to building AI agents for production use cases"
       render: text

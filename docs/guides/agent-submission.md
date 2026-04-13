@@ -2,6 +2,12 @@
 
 > GitHub `gh` CLI로 HoneyCombo에 기술 콘텐츠를 제출하는 방법. AI 에이전트 자동화에 최적화.
 
+## ⚠️ 제출 언어 요구사항
+
+> **모든 제출 내용(태그, 한줄 소개)은 영어로 작성해야 합니다.**
+> All user-provided content — tags and descriptions — must be written in **English**.
+> 시스템 필드(유형 선택)는 기존 한국어 옵션을 그대로 사용합니다.
+
 ## 사전 준비
 
 ### 1. `gh` CLI 설치
@@ -76,7 +82,7 @@ AI, LLM, startup
 
 ### 한줄 소개
 
-AI 에이전트의 실무 활용에 대한 심층 분석 기사입니다"
+An in-depth analysis of practical AI agent usage in production"
 ```
 
 ### CLI 래퍼 사용 (더 간편)
@@ -88,7 +94,7 @@ bun run scripts/submit-cli.ts \
   --url "https://example.com/great-article" \
   --type "기사" \
   --tags "AI, LLM, startup" \
-  --note "AI 에이전트의 실무 활용에 대한 심층 분석 기사입니다"
+  --note "An in-depth analysis of practical AI agent usage in production"
 ```
 
 ### 유형 옵션
@@ -109,9 +115,9 @@ bun run scripts/submit-cli.ts \
 
 ```text
 # items.txt — 주석 줄은 무시됩니다
-https://example.com/article-1 | 기사 | AI, LLM | AI 에이전트 심층 분석
-https://youtube.com/watch?v=abc123 | YouTube | tutorial, AI | 유용한 AI 튜토리얼
-https://example.com/article-2 | 기사 | startup, SaaS | SaaS 스타트업 성장기
+https://example.com/article-1 | 기사 | AI, LLM | In-depth analysis of AI agents in production
+https://youtube.com/watch?v=abc123 | YouTube | tutorial, AI | Practical AI tutorial for developers
+https://example.com/article-2 | 기사 | startup, SaaS | SaaS startup growth strategies and lessons
 ```
 
 실행:
@@ -128,9 +134,9 @@ gh issue create \
   --title "📦 대량 자료 등록" \
   --body "### 링크 목록
 
-https://example.com/article-1 | 기사 | AI, LLM | AI 에이전트 심층 분석
-https://youtube.com/watch?v=abc123 | YouTube | tutorial, AI | 유용한 AI 튜토리얼
-https://example.com/article-2 | 기사 | startup, SaaS | SaaS 스타트업 성장기"
+https://example.com/article-1 | 기사 | AI, LLM | In-depth analysis of AI agents in production
+https://youtube.com/watch?v=abc123 | YouTube | tutorial, AI | Practical AI tutorial for developers
+https://example.com/article-2 | 기사 | startup, SaaS | SaaS startup growth strategies and lessons"
 ```
 
 ### 방법 3: 반복문으로 단건 반복
@@ -208,8 +214,8 @@ Issue 생성 → GitHub Actions 자동 트리거
 아래 프롬프트를 AI 에이전트에게 전달하면 자동으로 제출을 수행합니다:
 
 ```text
-다음 기술 콘텐츠를 HoneyCombo에 제출해줘.
-gh CLI가 인증된 상태에서 아래 명령을 실행해:
+Submit the following tech content to HoneyCombo.
+Run the command below with an authenticated gh CLI:
 
 gh issue create \
   --repo orientpine/honeycombo \
@@ -224,26 +230,26 @@ gh issue create \
 
 ### 태그 (쉼표 구분, 최대 5개)
 
-{태그들}
+{tags in English}
 
 ### 한줄 소개
 
-{한줄 설명}"
+{Short description in English}"
 ```
 
 여러 건을 한번에 제출할 경우:
 
 ```text
-다음 링크들을 HoneyCombo에 대량 제출해줘.
-gh CLI가 인증된 상태에서 아래 명령을 실행해:
+Submit the following links to HoneyCombo in bulk.
+Run the command below with an authenticated gh CLI:
 
 gh issue create \
   --repo orientpine/honeycombo \
   --title "📦 대량 자료 등록" \
   --body "### 링크 목록
 
-{URL1} | {유형} | {태그} | {설명}
-{URL2} | {유형} | {태그} | {설명}
+{URL1} | {유형} | {English tags} | {English description}
+{URL2} | {유형} | {English tags} | {English description}
 ..."
 ```
 
@@ -254,7 +260,7 @@ gh issue create \
 ```bash
 # 이것만으로 충분합니다
 gh auth login
-gh issue create --repo orientpine/honeycombo --title "📎 자료 등록" --body "### URL\n\nhttps://...\n\n### 유형\n\n기사\n\n### 태그 (쉼표 구분, 최대 5개)\n\nAI\n\n### 한줄 소개\n\n설명"
+gh issue create --repo orientpine/honeycombo --title "📎 자료 등록" --body "### URL\n\nhttps://...\n\n### 유형\n\n기사\n\n### 태그 (쉼표 구분, 최대 5개)\n\nAI\n\n### 한줄 소개\n\nA brief description in English"
 ```
 
 CLI 래퍼(`scripts/submit-cli.ts`)를 사용하려면 프로젝트 클론이 필요합니다:
@@ -279,3 +285,4 @@ bun run scripts/submit-cli.ts --url "..." --type "기사"
 | 날짜 | 변경 내용 |
 |------|----------|
 | 2026-04-12 | 최초 작성 |
+| 2026-04-13 | 영어 작성 가이드 추가, 예시 영문화 |

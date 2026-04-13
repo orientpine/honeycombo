@@ -6,6 +6,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <div class="page-header">
     <h1>📝 자료등록</h1>
     <p class="page-subtitle">좋은 기술 콘텐츠를 공유해주세요</p>
+    <div class="notice-box">
+      <strong>📌 Language Requirement</strong>
+      <p>All submissions (tags, descriptions) must be written in <strong>English</strong>.<br/>태그, 한줄 소개 등 제출 내용은 <strong>영어</strong>로 작성해주세요.</p>
+    </div>
   </div>
 
   <div class="submit-content">
@@ -38,7 +42,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div class="code-block">
         <code>gh issue create --repo orientpine/honeycombo \<br/>
           &nbsp;&nbsp;--title "📎 자료 등록" \<br/>
-          &nbsp;&nbsp;--body "### URL&#10;&#10;https://...&#10;&#10;### 유형&#10;&#10;기사&#10;&#10;### 태그 (쉼표 구분, 최대 5개)&#10;&#10;AI, LLM&#10;&#10;### 한줄 소개&#10;&#10;설명"</code>
+          &nbsp;&nbsp;--body "### URL&#10;&#10;https://...&#10;&#10;### 유형&#10;&#10;기사&#10;&#10;### 태그 (쉼표 구분, 최대 5개)&#10;&#10;AI, LLM&#10;&#10;### 한줄 소개&#10;&#10;A deep dive into practical AI agent usage in production"</code>
       </div>
       <p class="text-muted">자세한 가이드: <a href="https://github.com/orientpine/honeycombo/blob/master/docs/guides/agent-submission.md" target="_blank" rel="noopener noreferrer">AI 에이전트 제출 가이드</a></p>
     </section>
@@ -55,6 +59,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <li>컨퍼런스 발표 자료</li>
             <li>기술 튜토리얼</li>
           </ul>
+          <p class="note-inline">※ 태그·한줄 소개는 반드시 영어로 작성</p>
         </div>
         <div class="card guide-card">
           <h3>❌ 제출 불가</h3>
@@ -111,4 +116,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 .guide-card ul li { font-size: 0.9rem; color: var(--color-text-muted); }
 .process-list { display: flex; flex-direction: column; gap: var(--space-md); padding-left: var(--space-lg); }
 .process-list li { font-size: 0.95rem; line-height: 1.6; }
+.notice-box { background: #fff8e1; border-left: 4px solid #f9a825; padding: var(--space-md) var(--space-lg); border-radius: var(--radius-md); margin-bottom: var(--space-xl); }
+.notice-box strong { display: block; margin-bottom: var(--space-xs); font-size: 1rem; }
+.notice-box p { font-size: 0.9rem; color: var(--color-text-muted); margin: 0; line-height: 1.6; }
+.note-inline { font-size: 0.8rem; color: var(--color-primary); margin-top: var(--space-sm); font-weight: 600; }
 </style>
