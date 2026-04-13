@@ -2,6 +2,7 @@ backend:
   name: github
   repo: orientpine/honeycombo
   branch: master
+  base_url: https://honeycombo.pages.dev
   auth_endpoint: /api/auth
 
 # No media uploads — images are external hotlinks only
