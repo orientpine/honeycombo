@@ -36,12 +36,13 @@ GitHub Issue → scripts/process-submission.ts → submitted_by_id 저장
 | `functions/webhooks/submission-removed.ts` | 승인 취소/삭제 시 정리 |
 | `migrations/0004_auto_playlist.sql` | `is_auto_created`, `submissions` 스키마 |
 
-## 설정값
+## 설정값 / 환경변수
 
-| 이름 | 위치 | 기본값 | 설명 |
-|------|------|--------|------|
-| `WEBHOOK_SECRET` | Cloudflare Pages 환경변수 | — | webhook Bearer 토큰 검증용 shared secret |
-| `ISSUE_USER_ID` | GitHub Actions env | `0` | 제출 Issue 작성자의 GitHub numeric id |
+| 이름 | 위치 | 타입 | 설명 |
+|------|------|------|------|
+| `WEBHOOK_SECRET` | Cloudflare Pages 환경변수 (Encrypt) + GitHub Actions Secret | Secret | webhook Bearer 토큰 검증용 shared secret. 양쪽 동일한 값 필요 |
+| `SITE_URL` | GitHub Actions Variable | Variable | 배포된 사이트 URL (예: `https://honeycombo.pages.dev`). 워크플로우에서 webhook 호출 시 사용 |
+| `ISSUE_USER_ID` | GitHub Actions env (워크플로우 내부) | 자동 | 제출 Issue 작성자의 GitHub numeric id. 워크플로우가 자동 설정 |
 
 ## 제약 사항
 
@@ -51,6 +52,7 @@ GitHub Issue → scripts/process-submission.ts → submitted_by_id 저장
 - 미가입 사용자는 즉시 플레이리스트에 반영하지 않고 `submissions` 테이블에 deferred 상태로 저장한다.
 - catch-up 실패는 로그인 자체를 막지 않으며, `DuplicateItemError`를 제외한 오류만 로깅한다.
 
+- `public/_routes.json`의 `include`에 `/webhooks/*`가 포함되어야 Cloudflare Pages Functions로 라우팅된다.
 ---
 
 ## 관련 문서
@@ -64,3 +66,4 @@ GitHub Issue → scripts/process-submission.ts → submitted_by_id 저장
 |------|----------|
 | 2026-04-13 | 최초 작성 |
 | 2026-04-13 | Wave 4: OAuth callback catch-up과 `synced_to_playlist` 갱신 흐름 반영 |
+| 2026-04-13 | 환경변수 설정 가이드 보강 (WEBHOOK_SECRET, SITE_URL), _routes.json 제약 추가 |
