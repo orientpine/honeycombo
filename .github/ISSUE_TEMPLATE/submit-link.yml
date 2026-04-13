@@ -17,11 +17,11 @@ body:
       label: Type
       description: 콘텐츠 유형을 선택하세요
       options:
-        - 기사
+        - Article
         - YouTube
-        - X 스레드
+        - X Thread
         - Threads
-        - 기타
+        - Other
     validations:
       required: true
 

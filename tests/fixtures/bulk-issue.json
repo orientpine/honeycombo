@@ -1,7 +1,7 @@
 {
   "number": 100,
   "title": "📦 Bulk Submit",
-  "body": "### Link List\n\nhttps://example.com/bulk-article-1 | 기사 | AI, LLM | First article\nhttps://www.youtube.com/watch?v=test123 | YouTube | video, tutorial | Great tutorial\nhttps://example.com/bulk-article-2 | 기타 | startup | Startup article",
+  "body": "### Link List\n\nhttps://example.com/bulk-article-1 | Article | AI, LLM | First article\nhttps://www.youtube.com/watch?v=test123 | YouTube | video, tutorial | Great tutorial\nhttps://example.com/bulk-article-2 | Other | startup | Startup article",
   "labels": [{ "name": "submission" }, { "name": "bulk" }],
   "user": { "login": "bulkuser" }
 }
