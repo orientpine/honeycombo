@@ -312,7 +312,7 @@ export async function processSubmission(
     submitted_by: issue.user.login,
     submitted_by_id: String(issue.user.id),
     submitted_at: submittedAt,
-    status: 'pending',
+    status: 'approved',
   });
 
   if (options.dryRun) {
@@ -392,7 +392,7 @@ export async function processBulkSubmission(
         submitted_by: issue.user.login,
         submitted_by_id: String(issue.user.id),
         submitted_at: submittedAt,
-        status: 'pending',
+        status: 'approved',
       });
 
       const filePath = buildSubmissionFilePath(article.submitted_at.toISOString(), id);
