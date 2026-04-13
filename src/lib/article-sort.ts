@@ -6,13 +6,13 @@
  */
 
 export type SortableArticle = {
-  _type: 'curated' | 'feed';
+  _type: 'curated' | 'submitted' | 'feed';
   submitted_at?: Date | string;
   published_at?: Date | string;
 };
 
 function getArticleDate(a: SortableArticle): number {
-  const raw = a._type === 'curated' ? a.submitted_at : a.published_at;
+  const raw = (a._type === 'curated' || a._type === 'submitted') ? a.submitted_at : a.published_at;
   return new Date(raw ?? 0).getTime();
 }
 

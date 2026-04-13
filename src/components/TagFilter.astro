@@ -118,59 +118,86 @@ function renderCard(a: ClientArticle): string {
 </article>`;
 }
 
-function filterByTag(tag: string) {
+function getActiveOrigin(): string {
+  const active = document.querySelector<HTMLElement>('[data-testid="source-filter"] .source-filter-btn.active');
+  return active?.dataset.origin || 'all';
+}
+
+function getActiveTag(): string {
+  const active = document.querySelector<HTMLElement>('[data-testid="tag-filter"] .tag.active');
+  return active?.dataset.tag || 'all';
+}
+
+function applyFilters(tag: string, origin?: string) {
   const ssrCards = document.querySelectorAll('[data-testid="article-list"] [data-testid="article-card"]');
-  const buttons = document.querySelectorAll('[data-testid="tag-filter"] .tag');
+  const tagButtons = document.querySelectorAll('[data-testid="tag-filter"] .tag');
   const ssrList = document.querySelector('[data-testid="article-list"]') as HTMLElement | null;
   const pagination = document.querySelector('.pagination') as HTMLElement | null;
   const filteredContainer = document.getElementById('tag-filtered-results');
   const filteredGrid = document.getElementById('tag-filtered-grid');
   const filteredCount = document.getElementById('tag-filtered-count');
+  const emptyState = document.querySelector<HTMLElement>('[data-testid="source-filter-empty"]');
 
-  // Update active button state
-  buttons.forEach(btn => {
+  const activeOrigin = origin ?? getActiveOrigin();
+
+  // Update tag button active state
+  tagButtons.forEach(btn => {
     btn.classList.toggle('active', (btn as HTMLElement).dataset.tag === tag);
   });
 
-  if (tag === 'all') {
-    // Restore original SSR-rendered view
+  const needsJsonRendering = tag !== 'all' || activeOrigin !== 'all';
+
+  if (!needsJsonRendering) {
+    // Both filters at 'all' — restore original SSR-rendered view
     ssrCards.forEach(card => {
       (card as HTMLElement).style.display = '';
     });
     if (ssrList) ssrList.style.display = '';
     if (pagination) pagination.style.display = '';
     if (filteredContainer) filteredContainer.style.display = 'none';
-
-    // Re-apply source filter if active
-    const activeOrigin = document.querySelector<HTMLElement>('[data-testid="source-filter"] .source-filter-btn.active');
-    if (activeOrigin && activeOrigin.dataset.origin && activeOrigin.dataset.origin !== 'all') {
-      const origin = activeOrigin.dataset.origin;
-      ssrCards.forEach(card => {
-        const el = card as HTMLElement;
-        el.style.display = el.dataset.origin === origin ? '' : 'none';
-      });
-    }
+    if (emptyState) emptyState.style.display = 'none';
   } else {
-    // Load all articles from embedded JSON and filter by tag
-    const articles = getAllArticles();
-    const matched = articles.filter(a => a.tags.includes(tag));
+    // Load all articles from embedded JSON and apply both filters
+    let articles = getAllArticles();
+    if (tag !== 'all') {
+      articles = articles.filter(a => a.tags.includes(tag));
+    }
+    if (activeOrigin !== 'all') {
+      articles = articles.filter(a => a.articleOrigin === activeOrigin);
+    }
 
     // Hide SSR-rendered list and pagination
     if (ssrList) ssrList.style.display = 'none';
     if (pagination) pagination.style.display = 'none';
 
+    // Build label
+    const labels: string[] = [];
+    if (activeOrigin !== 'all') {
+      const originLabels: Record<string, string> = { curated: '에디터 추천', submitted: '제출 기사', feed: 'RSS 피드' };
+      labels.push(originLabels[activeOrigin] || activeOrigin);
+    }
+    if (tag !== 'all') {
+      labels.push(`"${escapeHtml(tag)}" 태그`);
+    }
+
     // Render filtered results
     if (filteredContainer && filteredGrid && filteredCount) {
       filteredContainer.style.display = '';
-      filteredCount.textContent = `"${escapeHtml(tag)}" 태그 기사 ${matched.length}건`;
-      filteredGrid.innerHTML = matched.map(renderCard).join('');
+      filteredCount.textContent = `${labels.join(' · ')} 기사 ${articles.length}건`;
+      filteredGrid.innerHTML = articles.map(renderCard).join('');
       // Initialize AddToPlaylist buttons for dynamically rendered cards
       if ((window as any).__initAddToPlaylistContainers) {
         (window as any).__initAddToPlaylistContainers(filteredGrid);
       }
     }
+
+    // Show/hide empty state
+    if (emptyState) {
+      emptyState.style.display = articles.length === 0 ? '' : 'none';
+    }
   }
-  // Update URL param
+
+  // Update URL params
   const url = new URL(window.location.href);
   if (tag === 'all') {
     url.searchParams.delete('tag');
@@ -178,6 +205,10 @@ function filterByTag(tag: string) {
     url.searchParams.set('tag', tag);
   }
   window.history.pushState({}, '', url.toString());
+}
+
+function filterByTag(tag: string) {
+  applyFilters(tag);
 }
 
 function initTagFilter() {
@@ -190,20 +221,24 @@ function initTagFilter() {
     });
   });
 
+  // Listen for source filter changes
+  document.addEventListener('source-filter-changed', ((e: CustomEvent<{ origin: string }>) => {
+    const currentTag = getActiveTag();
+    applyFilters(currentTag, e.detail.origin);
+  }) as EventListener);
+
+  // Apply initial filters from URL
   const tagParam = new URLSearchParams(window.location.search).get('tag');
-  if (tagParam && validTags.has(tagParam)) {
-    filterByTag(tagParam);
-  } else if (tagParam) {
-    // Unknown tag param — fall back to showing all
-    filterByTag('all');
+  const originParam = new URLSearchParams(window.location.search).get('origin');
+  const initialTag = tagParam && validTags.has(tagParam) ? tagParam : 'all';
+  const initialOrigin = originParam || 'all';
+
+  if (initialTag !== 'all' || initialOrigin !== 'all') {
+    applyFilters(initialTag, initialOrigin);
   }
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('astro:page-load', initTagFilter);
-} else {
-  initTagFilter();
-}
+document.addEventListener('astro:page-load', initTagFilter);
 </script>
 
 <style>

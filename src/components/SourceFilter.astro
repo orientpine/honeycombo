@@ -28,25 +28,13 @@ const { curatedCount, submittedCount, feedCount } = Astro.props;
 
 <script>
 function filterByOrigin(origin: string) {
-  const cards = document.querySelectorAll<HTMLElement>('[data-testid="article-card"]');
   const buttons = document.querySelectorAll<HTMLElement>('[data-testid="source-filter"] .source-filter-btn');
-  const emptyState = document.querySelector<HTMLElement>('[data-testid="source-filter-empty"]');
 
   buttons.forEach(btn => {
     btn.classList.toggle('active', btn.dataset.origin === origin);
   });
 
-  let visibleCount = 0;
-  cards.forEach(card => {
-    const show = origin === 'all' || card.dataset.origin === origin;
-    card.style.display = show ? '' : 'none';
-    if (show) visibleCount++;
-  });
-
-  if (emptyState) {
-    emptyState.style.display = visibleCount === 0 && origin !== 'all' ? '' : 'none';
-  }
-
+  // Update URL
   const url = new URL(window.location.href);
   if (origin === 'all') {
     url.searchParams.delete('origin');
@@ -54,6 +42,9 @@ function filterByOrigin(origin: string) {
     url.searchParams.set('origin', origin);
   }
   window.history.pushState({}, '', url.toString());
+
+  // Dispatch event so TagFilter handles cross-page rendering
+  document.dispatchEvent(new CustomEvent('source-filter-changed', { detail: { origin } }));
 }
 
 function initSourceFilter() {
@@ -75,11 +66,7 @@ function initSourceFilter() {
   }
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('astro:page-load', initSourceFilter);
-} else {
-  initSourceFilter();
-}
+document.addEventListener('astro:page-load', initSourceFilter);
 </script>
 
 <style>
