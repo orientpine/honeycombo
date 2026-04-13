@@ -114,11 +114,17 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 
     const script = `
       <script>
-        window.opener.postMessage(
-          'authorization:github:success:${JSON.stringify({ token: tokenData.access_token, provider: 'github' })}',
-          '${allowedOrigin}'
-        );
-        window.close();
+      (function() {
+        function receiveMessage(e) {
+          window.opener.postMessage(
+            'authorization:github:success:${JSON.stringify({ token: tokenData.access_token, provider: 'github' })}',
+            e.origin
+          );
+          window.removeEventListener("message", receiveMessage, false);
+        }
+        window.addEventListener("message", receiveMessage, false);
+        window.opener.postMessage("authorizing:github", "*");
+      })()
       </script>
     `;
 
