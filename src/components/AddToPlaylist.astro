@@ -198,7 +198,7 @@ if (document.readyState === 'loading') {
   margin-top: var(--space-xs);
   background: var(--color-bg);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
   min-width: 220px;
   z-index: 50;
@@ -219,7 +219,7 @@ if (document.readyState === 'loading') {
   max-height: 200px;
   overflow-y: auto;
   margin: 0;
-  padding: 0 var(--space-xs);
+  padding: var(--space-xs) 0;
 }
 
 /* Dropdown list items — dynamic content (innerHTML), needs :global() */
@@ -246,11 +246,10 @@ if (document.readyState === 'loading') {
 
 .playlist-list :global(.playlist-item-btn) {
   width: 100%;
-  padding: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
   text-align: left;
   background: none;
   border: none;
-  border-radius: var(--radius-sm);
   font-family: inherit;
   font-size: 0.85rem;
   color: var(--color-text);
