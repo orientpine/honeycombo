@@ -63,7 +63,7 @@ Usage: bun run scripts/submit-cli.ts [options]
 Single submission:
   --url <url>        URL to submit (required)
   --type <유형>      Content type: 기사, YouTube, X 스레드, Threads, 기타 (default: 기사)
-  --tags <태그>      Comma-separated tags (max 5)
+  --tags <태그>      Comma-separated tags, in English (max 5)
   --note <메모>      Short description (must be in English)
 
 Bulk submission:
