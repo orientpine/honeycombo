@@ -1,16 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import PlaylistCard from '../../components/PlaylistCard.astro';
-
-const playlists = await getCollection('playlists').catch((err: unknown) => {
-  console.error('Failed to load collection:', err);
-  return [];
-});
-// Sort by most recently updated
-const sorted = playlists.sort((a: any, b: any) =>
-  new Date(b.data.updated_at).getTime() - new Date(a.data.updated_at).getTime()
-);
 ---
 
 <BaseLayout title="플레이리스트 — HoneyCombo" description="에디터가 큐레이션한 기사 플레이리스트">
@@ -19,23 +8,11 @@ const sorted = playlists.sort((a: any, b: any) =>
     <p class="page-subtitle">에디터 큐레이션 & 커뮤니티 플레이리스트</p>
   </div>
 
-  {sorted.length === 0 ? (
-    <p class="empty-state">플레이리스트를 준비 중입니다.</p>
-  ) : (
-    <div class="playlist-grid grid grid-3" data-testid="playlist-list">
-      {sorted.map((playlist: any) => (
-        <PlaylistCard
-          id={playlist.data.id}
-          title={playlist.data.title}
-          description={playlist.data.description}
-          curator={playlist.data.curator}
-          tags={playlist.data.tags}
-          itemCount={playlist.data.items.length}
-          updatedAt={playlist.data.updated_at}
-        />
-      ))}
+  <section id="editor-playlists" class="editor-section">
+    <div id="editor-list" class="playlist-grid grid grid-3">
+      <p class="loading-state">불러오는 중...</p>
     </div>
-  )}
+  </section>
 
   <section id="community-playlists" class="community-section">
     <h2>🎯 커뮤니티 플레이리스트</h2>
@@ -51,16 +28,17 @@ const sorted = playlists.sort((a: any, b: any) =>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+  const editorListContainer = document.getElementById('editor-list');
   const listContainer = document.getElementById('community-list');
   const loadMoreBtn = document.getElementById('load-more');
-  if (!listContainer || !loadMoreBtn) return;
+  if (!listContainer || !loadMoreBtn || !editorListContainer) return;
 
   let currentPage = 1;
   const limit = 12;
 
-  const fetchPlaylists = async (page: number) => {
+  const fetchPlaylists = async (page: number, type: string = 'community') => {
     try {
-      const res = await fetch(`/api/playlists?page=${page}&limit=${limit}`);
+      const res = await fetch(`/api/playlists?page=${page}&limit=${limit}&type=${type}`);
       if (!res.ok) throw new Error('Failed to fetch');
       const data = await res.json();
       return data;
@@ -70,21 +48,51 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  const renderCard = (playlist: any) => {
+  const renderTags = (tagsData: any) => {
+    if (!tagsData) return '';
+    let tags: string[] = [];
+    if (typeof tagsData === 'string') {
+      try {
+        tags = JSON.parse(tagsData);
+      } catch (e) {
+        return '';
+      }
+    } else if (Array.isArray(tagsData)) {
+      tags = tagsData;
+    }
+    if (!tags || tags.length === 0) return '';
+    
+    return `<div class="playlist-tags">
+      ${tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}
+    </div>`;
+  };
+
+  const escapeHtml = (unsafe: string) => {
+    return unsafe
+         .replace(/&/g, "&amp;")
+         .replace(/</g, "&lt;")
+         .replace(/>/g, "&gt;")
+         .replace(/"/g, "&quot;")
+         .replace(/'/g, "&#039;");
+  };
+
+  const renderCard = (playlist: any, isEditor = false) => {
     const date = new Date(playlist.updated_at || playlist.created_at).toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' });
     const itemCount = playlist.item_count || 0;
     
     return `
       <a href="/p/${playlist.id}" class="card playlist-card">
         <div class="playlist-header">
-          <h3 class="playlist-title">${playlist.title}</h3>
+          <h3 class="playlist-title">${escapeHtml(playlist.title)}</h3>
           <span class="playlist-count">${itemCount}개</span>
         </div>
-        ${playlist.description ? `<p class="playlist-description">${playlist.description}</p>` : ''}
+        ${playlist.description ? `<p class="playlist-description">${escapeHtml(playlist.description)}</p>` : ''}
+        ${isEditor ? renderTags(playlist.tags) : ''}
         <div class="playlist-footer">
           <span class="playlist-curator">
-            ${playlist.user?.avatar_url ? `<img src="${playlist.user.avatar_url}" alt="" class="curator-avatar" />` : ''}
-            by @${playlist.user?.username || 'unknown'}
+            ${playlist.user?.avatar_url ? `<img src="${escapeHtml(playlist.user.avatar_url)}" alt="" class="curator-avatar" />` : ''}
+            by @${escapeHtml(playlist.user?.username || 'unknown')}
+            ${isEditor ? '<span class="badge badge-editor">에디터</span>' : ''}
           </span>
           <time class="playlist-date">${date}</time>
         </div>
@@ -140,6 +148,29 @@ document.addEventListener('DOMContentLoaded', () => {
     loadPlaylists();
   });
 
+  const loadEditorPlaylists = async () => {
+    editorListContainer.innerHTML = '<p class="loading-state">불러오는 중...</p>';
+    const data = await fetchPlaylists(1, 'editor');
+    
+    if (!data) {
+      editorListContainer.innerHTML = '<p class="error-state">데이터를 불러오는데 실패했습니다.</p>';
+      return;
+    }
+
+    const playlists = Array.isArray(data) ? data : (data.playlists || []);
+    
+    if (playlists.length === 0) {
+      editorListContainer.innerHTML = '<p class="empty-state">에디터 플레이리스트를 준비 중입니다.</p>';
+      return;
+    }
+
+    editorListContainer.innerHTML = '';
+    playlists.forEach((p: any) => {
+      editorListContainer.insertAdjacentHTML('beforeend', renderCard(p, true));
+    });
+  };
+
+  loadEditorPlaylists();
   loadPlaylists(true);
 });
 </script>
@@ -192,15 +223,18 @@ document.addEventListener('DOMContentLoaded', () => {
   cursor: not-allowed;
 }
 
-/* Re-use PlaylistCard styles for dynamic cards */
-.playlist-card { display: flex; flex-direction: column; gap: var(--space-sm); text-decoration: none; color: var(--color-text); }
-.playlist-card:hover { text-decoration: none; }
-.playlist-header { display: flex; justify-content: space-between; align-items: flex-start; }
-.playlist-title { font-size: 1.1rem; font-weight: 700; }
-.playlist-count { font-size: 0.8rem; color: var(--color-text-muted); background: var(--color-bg-secondary); padding: 2px var(--space-sm); border-radius: var(--radius-sm); }
-.playlist-description { font-size: 0.875rem; color: var(--color-text-muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.playlist-footer { display: flex; justify-content: space-between; align-items: center; }
-.playlist-curator { font-size: 0.8rem; color: var(--color-text-muted); display: flex; align-items: center; gap: 4px; }
-.curator-avatar { width: 16px; height: 16px; border-radius: 50%; object-fit: cover; }
-.playlist-date { font-size: 0.8rem; color: var(--color-text-muted); }
+/* Dynamic playlist cards — needs :global() for innerHTML content */
+.community-section :global(.playlist-card), .editor-section :global(.playlist-card) { display: flex; flex-direction: column; gap: var(--space-sm); text-decoration: none; color: var(--color-text); }
+.community-section :global(.playlist-card:hover), .editor-section :global(.playlist-card:hover) { text-decoration: none; }
+.community-section :global(.playlist-header), .editor-section :global(.playlist-header) { display: flex; justify-content: space-between; align-items: flex-start; }
+.community-section :global(.playlist-title), .editor-section :global(.playlist-title) { font-size: 1.1rem; font-weight: 700; }
+.community-section :global(.playlist-count), .editor-section :global(.playlist-count) { font-size: 0.8rem; color: var(--color-text-muted); background: var(--color-bg-secondary); padding: 2px var(--space-sm); border-radius: var(--radius-sm); }
+.community-section :global(.playlist-description), .editor-section :global(.playlist-description) { font-size: 0.875rem; color: var(--color-text-muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.community-section :global(.playlist-footer), .editor-section :global(.playlist-footer) { display: flex; justify-content: space-between; align-items: center; }
+.community-section :global(.playlist-curator), .editor-section :global(.playlist-curator) { font-size: 0.8rem; color: var(--color-text-muted); display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.community-section :global(.curator-avatar), .editor-section :global(.curator-avatar) { width: 16px; height: 16px; border-radius: 50%; object-fit: cover; }
+.community-section :global(.playlist-date), .editor-section :global(.playlist-date) { font-size: 0.8rem; color: var(--color-text-muted); }
+.community-section :global(.badge-editor), .editor-section :global(.badge-editor) { background: rgba(245, 158, 11, 0.1); color: #d97706; border-color: rgba(245, 158, 11, 0.2); font-size: 0.7rem; padding: 1px 4px; border-radius: 4px; }
+.community-section :global(.playlist-tags), .editor-section :global(.playlist-tags) { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.community-section :global(.tag), .editor-section :global(.tag) { font-size: 0.7rem; padding: 2px 6px; background: var(--color-bg-secondary); color: var(--color-text-muted); border-radius: 999px; border: 1px solid var(--color-border); }
 </style>

@@ -274,37 +274,37 @@ document.addEventListener('DOMContentLoaded', () => {
   color: white;
 }
 
-/* Pending card */
-.pending-card {
+/* Pending card — dynamic content (innerHTML), needs :global() */
+.admin-content :global(.pending-card) {
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
 }
 
-.pending-header {
+.admin-content :global(.pending-header) {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: var(--space-md);
 }
 
-.pending-title {
+.admin-content :global(.pending-title) {
   font-size: 1.2rem;
   font-weight: 700;
   line-height: 1.4;
   margin: 0;
 }
 
-.pending-title a {
+.admin-content :global(.pending-title a) {
   color: var(--color-text);
   text-decoration: none;
 }
 
-.pending-title a:hover {
+.admin-content :global(.pending-title a:hover) {
   color: var(--color-primary);
 }
 
-.pending-description {
+.admin-content :global(.pending-description) {
   font-size: 0.9rem;
   color: var(--color-text-muted);
   line-height: 1.5;
@@ -315,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
   overflow: hidden;
 }
 
-.pending-meta {
+.admin-content :global(.pending-meta) {
   display: flex;
   align-items: center;
   gap: var(--space-md);
@@ -323,21 +323,21 @@ document.addEventListener('DOMContentLoaded', () => {
   font-size: 0.85rem;
 }
 
-.pending-author {
+.admin-content :global(.pending-author) {
   display: flex;
   align-items: center;
   gap: var(--space-xs);
   font-weight: 500;
 }
 
-.avatar {
+.admin-content :global(.avatar) {
   width: 20px;
   height: 20px;
   border-radius: 50%;
   object-fit: cover;
 }
 
-.pending-actions {
+.admin-content :global(.pending-actions) {
   display: flex;
   gap: var(--space-sm);
   flex-wrap: wrap;
@@ -345,36 +345,36 @@ document.addEventListener('DOMContentLoaded', () => {
   border-top: 1px solid var(--color-border);
 }
 
-.btn-approve {
+.admin-content :global(.btn-approve) {
   background: rgba(16, 185, 129, 0.1);
   color: var(--color-success, #10b981);
   border-color: rgba(16, 185, 129, 0.3);
 }
 
-.btn-approve:hover {
+.admin-content :global(.btn-approve:hover) {
   background: rgba(16, 185, 129, 0.2);
 }
 
-.btn-reject {
+.admin-content :global(.btn-reject) {
   background: rgba(239, 68, 68, 0.1);
   color: var(--color-danger);
   border-color: rgba(239, 68, 68, 0.3);
 }
 
-.btn-reject:hover {
+.admin-content :global(.btn-reject:hover) {
   background: rgba(239, 68, 68, 0.2);
 }
 
-.btn-preview {
+.admin-content :global(.btn-preview) {
   margin-left: auto;
 }
 
-.card-processed {
+.admin-content :global(.card-processed) {
   opacity: 0.6;
   transition: opacity 0.3s;
 }
 
-.processed-message {
+.admin-content :global(.processed-message) {
   text-align: center;
   padding: var(--space-md);
   font-weight: 600;
@@ -382,13 +382,13 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 
 @media (max-width: 640px) {
-  .pending-actions {
+  .admin-content :global(.pending-actions) {
     flex-direction: column;
   }
-  .pending-actions .btn {
+  .admin-content :global(.pending-actions .btn) {
     width: 100%;
   }
-  .btn-preview {
+  .admin-content :global(.btn-preview) {
     margin-left: 0;
   }
 }
