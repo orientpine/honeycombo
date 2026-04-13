@@ -56,11 +56,11 @@ describe('parseIssueBody', () => {
 
   it('returns null for malformed bodies', () => {
     expect(parseIssueBody('')).toBeNull();
-    expect(parseIssueBody('### Type\n\n기사')).toBeNull();
+    expect(parseIssueBody('### Type\n\nArticle')).toBeNull();
   });
 
   it('limits tags to five entries', () => {
-    const body = '### URL\n\nhttps://example.com\n\n### Type\n\n기사\n\n### Tags (comma-separated, max 5)\n\na, b, c, d, e, f\n\n### Short Description\n\ntest';
+    const body = '### URL\n\nhttps://example.com\n\n### Type\n\nArticle\n\n### Tags (comma-separated, max 5)\n\na, b, c, d, e, f\n\n### Short Description\n\ntest';
     const result = parseIssueBody(body);
 
     expect(result?.tags).toEqual(['a', 'b', 'c', 'd', 'e']);
@@ -100,7 +100,7 @@ describe('parseBulkIssueBody', () => {
 
   it('limits items to 20', () => {
     const lines = Array.from({ length: 25 }, (_, i) =>
-      `https://example.com/item-${i} | 기사 | tag${i} | note ${i}`,
+      `https://example.com/item-${i} | Article | tag${i} | note ${i}`,
     ).join('\n');
     const body = `### Link List\n\n${lines}`;
     const result = parseBulkIssueBody(body);
@@ -109,7 +109,7 @@ describe('parseBulkIssueBody', () => {
   });
 
   it('handles lines with missing optional fields', () => {
-    const body = '### Link List\n\nhttps://example.com/minimal | 기사 | |';
+    const body = '### Link List\n\nhttps://example.com/minimal | Article | |';
     const result = parseBulkIssueBody(body);
 
     expect(result).toHaveLength(1);
@@ -235,7 +235,7 @@ describe('processSubmission', () => {
     const issue: IssueData = {
       number: 101,
       title: 'Submit: not-a-url',
-      body: '### URL\n\nnot-a-url\n\n### Type\n\n기사\n\n### Tags (comma-separated, max 5)\n\ntest\n\n### Short Description\n\ntest',
+      body: '### URL\n\nnot-a-url\n\n### Type\n\nArticle\n\n### Tags (comma-separated, max 5)\n\ntest\n\n### Short Description\n\ntest',
       labels: [{ name: 'submission' }],
       user: { login: 'testuser' },
     };
@@ -250,7 +250,7 @@ describe('processSubmission', () => {
     const issue: IssueData = {
       number: 102,
       title: 'Submit: broken',
-      body: '### Type\n\n기사',
+      body: '### Type\n\nArticle',
       labels: [{ name: 'submission' }],
       user: { login: 'testuser' },
     };

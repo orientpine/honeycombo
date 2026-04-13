@@ -42,11 +42,11 @@ export interface BulkResult {
 
 function normalizeType(value: string): ParsedSubmission['type'] {
   const typeMap: Record<string, ParsedSubmission['type']> = {
-    기사: 'article',
+    Article: 'article',
     YouTube: 'youtube',
-    'X 스레드': 'x_thread',
+    'X Thread': 'x_thread',
     Threads: 'threads',
-    기타: 'other',
+    Other: 'other',
   };
 
   return typeMap[value] ?? 'article';

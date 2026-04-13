@@ -12,10 +12,10 @@ export interface CliArgs {
 }
 
 const DEFAULT_REPO = 'orientpine/honeycombo';
-const DEFAULT_TYPE = '기사';
+const DEFAULT_TYPE = 'Article';
 const SINGLE_TITLE = '📎 Submit Link';
 const BULK_TITLE = '📦 Bulk Submit';
-const VALID_TYPES = new Set(['기사', 'YouTube', 'X 스레드', 'Threads', '기타']);
+const VALID_TYPES = new Set(['Article', 'YouTube', 'X Thread', 'Threads', 'Other']);
 const MAX_BULK_ITEMS = 20;
 const MAX_TAGS = 5;
 
@@ -62,7 +62,7 @@ Usage: bun run scripts/submit-cli.ts [options]
 
 Single submission:
   --url <url>        URL to submit (required)
-  --type <유형>      Content type: 기사, YouTube, X 스레드, Threads, 기타 (default: 기사)
+  --type <type>      Content type: Article, YouTube, X Thread, Threads, Other (default: Article)
   --tags <태그>      Comma-separated tags, in English (max 5)
   --note <메모>      Short description (must be in English)
 
