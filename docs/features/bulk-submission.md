@@ -12,7 +12,7 @@
 GitHub bulk Issue → scripts/process-submission.ts(parseBulkIssueBody/processBulkSubmission) → 항목별 검증/JSON 생성 → PR 생성
 ```
 
-- Issue 템플릿 `.github/ISSUE_TEMPLATE/submit-bulk.yml` 에서 `URL | 유형 | 태그 | 한줄소개` 형식의 줄 목록을 수집한다.
+- Issue 템플릿 `.github/ISSUE_TEMPLATE/submit-bulk.yml` 에서 `URL | 유형 | 태그 | 한줄소개` 형식의 줄 목록을 수집한다. **태그와 한줄소개는 영어로 작성해야 한다.**
 - 워크플로우 `.github/workflows/process-submission.yml` 가 `bulk` 라벨을 환경변수로 전달한다.
 - `scripts/process-submission.ts` 는 bulk 여부를 감지해 각 줄을 독립 처리한다.
 - URL 오류·중복·스팸이 일부 항목에서 발생해도 나머지 성공 항목은 `src/content/curated/` JSON으로 생성한다.
@@ -39,15 +39,18 @@ GitHub bulk Issue → scripts/process-submission.ts(parseBulkIssueBody/processBu
 - bulk 파싱은 최대 20개 항목까지만 처리한다.
 - 각 항목은 기존 단건과 동일한 스팸·중복·YouTube oEmbed 규칙을 따른다.
 - 부분 실패는 허용되지만, 전부 실패하면 스크립트는 종료 코드 1을 반환한다.
+- **태그와 한줄 소개는 반드시 영어로 작성해야 한다.** 유형(`기사`, `YouTube` 등)은 시스템 값이므로 한국어 그대로 사용한다.
 
 ---
 
 ## 관련 문서
 
 - [아키텍처 개요](../architecture/overview.md)
+- [AI 에이전트 제출 가이드](../guides/agent-submission.md)
 
 ## 변경 이력
 
 | 날짜 | 변경 내용 |
 |------|----------|
 | 2026-04-12 | 최초 작성 |
+| 2026-04-13 | 영어 작성 요구사항 추가 |

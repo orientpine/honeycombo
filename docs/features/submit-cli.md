@@ -35,6 +35,7 @@ CLI 인자 → scripts/submit-cli.ts 파싱/검증 → gh issue create → GitHu
 - `gh auth status`가 통과해야 실제 실행이 가능하다.
 - 대량 제출은 빈 줄/주석 줄(`#`)을 제외하고 최대 20개 항목만 포함한다.
 - 태그는 최대 5개까지만 본문에 포함한다.
+- **태그와 한줄 소개는 반드시 영어로 작성해야 한다.** 유형(`기사`, `YouTube` 등)은 시스템 값이므로 한국어 그대로 사용한다.
 
 ---
 
@@ -42,9 +43,11 @@ CLI 인자 → scripts/submit-cli.ts 파싱/검증 → gh issue create → GitHu
 
 - [아키텍처 개요](../architecture/overview.md)
 - [대량 제출 (bulk submission)](./bulk-submission.md)
+- [AI 에이전트 제출 가이드](../guides/agent-submission.md)
 
 ## 변경 이력
 
 | 날짜 | 변경 내용 |
 |------|----------|
 | 2026-04-12 | 최초 작성 |
+| 2026-04-13 | 영어 작성 요구사항 추가 |
