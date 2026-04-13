@@ -66,7 +66,16 @@ export function isSpam(title: string, description: string, keywords: string[]): 
 
 export function isAIRelated(title: string, description: string, tags: string[], keywords: string[]): boolean {
   const haystack = `${title} ${description} ${tags.join(' ')}`.toLowerCase();
-  return keywords.some((keyword) => haystack.includes(keyword.toLowerCase()));
+  return keywords.some((keyword) => {
+    const kw = keyword.toLowerCase();
+    // Short keywords (<=3 chars) use word-boundary matching to avoid
+    // false positives (e.g. "ai" matching "email", "rag" matching "storage").
+    if (kw.length <= 3) {
+      const escaped = kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      return new RegExp(`\\b${escaped}\\b`).test(haystack);
+    }
+    return haystack.includes(kw);
+  });
 }
 
 function toIsoDate(value: string | undefined, now: Date): string {

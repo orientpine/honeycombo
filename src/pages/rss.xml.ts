@@ -22,7 +22,7 @@ export async function GET(context: APIContext) {
     })),
   ]
     .sort((a, b) => b.pubDate.getTime() - a.pubDate.getTime())
-    .slice(0, 50);
+    ;
 
   return rss({
     title: 'HoneyCombo — 기술 뉴스 큐레이션',

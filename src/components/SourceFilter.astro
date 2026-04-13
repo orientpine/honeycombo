@@ -58,20 +58,10 @@ function filterByOrigin(origin: string) {
 
 function initSourceFilter() {
   const buttons = document.querySelectorAll<HTMLElement>('[data-testid="source-filter"] .source-filter-btn');
-  const cards = document.querySelectorAll<HTMLElement>('[data-testid="article-card"]');
   const validOrigins = new Set(Array.from(buttons).map(b => b.dataset.origin));
 
-  // Recalculate counts from rendered cards (page-local) to avoid global/page mismatch
-  const localCounts: Record<string, number> = { all: cards.length, curated: 0, submitted: 0, feed: 0 };
-  cards.forEach(card => {
-    const origin = card.dataset.origin;
-    if (origin && origin in localCounts) localCounts[origin]++;
-  });
-  buttons.forEach(btn => {
-    const origin = btn.dataset.origin || 'all';
-    const countEl = btn.querySelector('.source-count');
-    if (countEl && origin in localCounts) countEl.textContent = String(localCounts[origin]);
-  });
+  // Server-side counts (passed as props) reflect the total across all pages.
+  // Do NOT recalculate from rendered cards — that only counts the current page.
 
   buttons.forEach(btn => {
     btn.addEventListener('click', () => {

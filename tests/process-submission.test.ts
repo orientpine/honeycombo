@@ -157,7 +157,7 @@ describe('generateId', () => {
 
 describe('isDuplicateUrl', () => {
   it('detects existing url from sample article', async () => {
-    await expect(isDuplicateUrl('https://astro.build/blog/astro-5/')).resolves.toBe(true);
+    await expect(isDuplicateUrl('https://arstechnica.com/tech-policy/2026/04/californians-sue-over-ai-tool-that-records-doctor-visits/')).resolves.toBe(true);
   });
 
   it('returns false for new urls', async () => {

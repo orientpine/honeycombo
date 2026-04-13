@@ -172,6 +172,22 @@ describe('rss-collect', () => {
     expect(isAIRelated('Update', '', ['ai', 'tech'], keywords)).toBe(true);
   });
 
+  it('uses word-boundary matching for short keywords to avoid false positives', () => {
+    const keywords = ['ai', 'rag', 'agi'];
+
+    // True positives: standalone short keywords
+    expect(isAIRelated('AI is transforming healthcare', '', [], keywords)).toBe(true);
+    expect(isAIRelated('RAG pipeline overview', '', [], keywords)).toBe(true);
+    expect(isAIRelated('Toward AGI safety', '', [], keywords)).toBe(true);
+    expect(isAIRelated('Tech Update', '', ['ai'], keywords)).toBe(true);
+
+    // False positives prevented: short keywords as substrings
+    expect(isAIRelated('Check your email', 'maintain your domain', [], keywords)).toBe(false);
+    expect(isAIRelated('Storage solutions', 'drainage system', [], keywords)).toBe(false);
+    expect(isAIRelated('Staging environment', 'managing resources', [], keywords)).toBe(false);
+    expect(isAIRelated('Spain travel guide', '', [], keywords)).toBe(false);
+  });
+
   it('skips non-AI articles during collection', async () => {
     const parser = new Parser();
     const nonAiXml = `<?xml version="1.0" encoding="UTF-8"?>
