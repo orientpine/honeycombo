@@ -89,7 +89,7 @@ function renderCard(a: ClientArticle): string {
     <div class="article-meta">
       <span class="badge">${source}</span>
       ${typeBadge}
-      <time class="article-date" datetime="${a.date}">${formatted}</time>
+      <time class="article-date" datetime="${new Date(a.date).toISOString()}">${formatted}</time>
     </div>
     <h3 class="article-title">
       <a href="${escapeHtml(articleUrl)}"${target}>${title}</a>

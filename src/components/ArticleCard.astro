@@ -68,18 +68,18 @@ const formattedDate = new Date(date).toLocaleDateString('ko-KR', { year: 'numeri
 
 <style is:global>
 .article-card { display: flex; flex-direction: column; gap: var(--space-sm); position: relative; }
-.article-thumbnail img { width: 100%; height: 160px; object-fit: cover; border-radius: var(--radius-sm); }
-.article-body { display: flex; flex-direction: column; gap: var(--space-sm); flex: 1; }
-.article-meta { display: flex; align-items: center; gap: var(--space-sm); flex-wrap: wrap; }
-.article-date { font-size: 0.8rem; color: var(--color-text-muted); margin-left: auto; }
-.article-title { font-size: 1rem; font-weight: 600; line-height: 1.4; }
-.article-title a { color: var(--color-text); }
-.article-title a:hover { color: var(--color-primary); text-decoration: none; }
-.article-description { font-size: 0.875rem; color: var(--color-text-muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.article-tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
-.article-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: var(--space-xs); }
-.article-stats { display: flex; align-items: center; gap: var(--space-sm); }
-.comment-indicator {
+.article-card .article-thumbnail img { width: 100%; height: 160px; object-fit: cover; border-radius: var(--radius-sm); }
+.article-card .article-body { display: flex; flex-direction: column; gap: var(--space-sm); flex: 1; }
+.article-card .article-meta { display: flex; align-items: center; gap: var(--space-sm); flex-wrap: wrap; }
+.article-card .article-date { font-size: 0.8rem; color: var(--color-text-muted); margin-left: auto; }
+.article-card .article-title { font-size: 1rem; font-weight: 600; line-height: 1.4; }
+.article-card .article-title a { color: var(--color-text); }
+.article-card .article-title a:hover { color: var(--color-primary); text-decoration: none; }
+.article-card .article-description { font-size: 0.875rem; color: var(--color-text-muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.article-card .article-tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+.article-card .article-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: var(--space-xs); }
+.article-card .article-stats { display: flex; align-items: center; gap: var(--space-sm); }
+.article-card .comment-indicator {
   display: inline-flex;
   align-items: center;
   gap: 3px;
@@ -88,8 +88,8 @@ const formattedDate = new Date(date).toLocaleDateString('ko-KR', { year: 'numeri
   text-decoration: none;
   transition: color 0.15s;
 }
-.comment-indicator:hover { color: var(--color-primary); text-decoration: none; }
-.comment-count-value { font-variant-numeric: tabular-nums; min-width: 1ch; }
+.article-card .comment-indicator:hover { color: var(--color-primary); text-decoration: none; }
+.article-card .comment-count-value { font-variant-numeric: tabular-nums; min-width: 1ch; }
 </style>
 
 <script>
@@ -134,6 +134,9 @@ const formattedDate = new Date(date).toLocaleDateString('ko-KR', { year: 'numeri
 
     const container = root || document;
     container.querySelectorAll<HTMLElement>('[data-comment-path]').forEach(el => {
+      // Avoid duplicate observation by checking init flag
+      if (el.dataset.commentInit) return;
+      el.dataset.commentInit = 'true';
       observer!.observe(el);
     });
   }
