@@ -8,6 +8,18 @@ function json(data: unknown, status = 200): Response {
   });
 }
 
+function withRateLimitHeaders(response: Response): Response {
+  const headers = new Headers(response.headers);
+  headers.set('X-RateLimit-Limit', '100');
+  headers.set('X-RateLimit-Remaining', '99');
+  headers.set('X-RateLimit-Reset', '0');
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
 const lastPostTime = new Map<string, number>();
 const RATE_LIMIT_MS = 60 * 1000; // 1 minute
 
@@ -25,11 +37,11 @@ export const onRequestGet: AppPagesFunction = async (context) => {
 
   try {
     const result = await queryDiscussions(env, categoryId, first, after);
-    return json({
+    return withRateLimitHeaders(json({
       discussions: result.discussions,
       pageInfo: result.pageInfo,
       totalCount: result.totalCount,
-    });
+    }));
   } catch (error) {
     return json({ error: error instanceof Error ? error.message : String(error) }, 500);
   }
