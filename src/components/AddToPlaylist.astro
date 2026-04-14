@@ -25,6 +25,8 @@ interface Props {
 </div>
 
 <script>
+const escAttr = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
 function initAddToPlaylistContainer(container: Element) {
   if (container.hasAttribute('data-playlist-init')) return;
   container.setAttribute('data-playlist-init', 'true');
@@ -97,8 +99,9 @@ function initAddToPlaylistContainer(container: Element) {
       list.innerHTML = playlists.map((p: any) => `
         <li>
           <button class="playlist-item-btn${p.contains_item ? ' already-added' : ''}"
-                  data-id="${p.id}" ${p.contains_item ? 'disabled' : ''}>
-            <span class="playlist-item-title">${p.contains_item ? '✓ ' : '📋 '}${p.title}</span>
+                  data-id="${p.id}" ${p.contains_item ? 'disabled' : ''}
+                  title="${escAttr(p.title)}">
+            <span class="playlist-item-title">${p.contains_item ? '✓ ' : '📋 '}${escAttr(p.title)}</span>
             ${p.contains_item ? '<span class="badge-added">추가됨</span>' : ''}
           </button>
         </li>
@@ -273,7 +276,8 @@ document.addEventListener('astro:page-load', () => initAddToPlaylistContainers()
   gap: var(--space-xs);
 }
 
-.playlist-list .playlist-item-title {
+.playlist-list .playlist-item-btn.already-added .playlist-item-title {
+  flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
