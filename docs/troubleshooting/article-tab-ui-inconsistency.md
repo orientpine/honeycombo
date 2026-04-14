@@ -43,23 +43,24 @@
 
 `TagFilter.astro`의 `applyFilters()`에서 동적 렌더링 후 호출.
 
-### 4. 제목 색상 통일
+### 4. 제목 색상 (필터 영역만 오렌지)
 
-`.article-title a` 색상을 `var(--color-text)`에서 `var(--color-primary)`로 변경하여 모든 탭에서 동일한 오렌지 색상 사용.
+ArticleCard의 기본 제목 색상은 `var(--color-text)` (어두운 색) 유지. 필터 결과 영역(`#tag-filtered-grid`)에만 `var(--color-primary)` (오렌지) 오버라이드를 TagFilter.astro 스코프드 스타일로 적용. 이렇게 하면 홈페이지 등 다른 페이지의 ArticleCard 제목 색상에 영향을 주지 않음.
 
 ## 관련 파일
 
 | 파일 | 변경 내용 |
 |------|----------|
-| `src/components/ArticleCard.astro` | `<style is:global>`, 제목 색상 `var(--color-primary)`, 댓글 observer 글로벌 노출 |
+| `src/components/ArticleCard.astro` | `<style is:global>`, 제목 색상 `var(--color-text)` 유지, 댓글 observer 글로벌 노출 |
 | `src/components/BookmarkButton.astro` | `<style is:global>`, `initBookmarkButtons` 글로벌 노출 |
-| `src/components/TagFilter.astro` | `renderCard()`에 북마크·댓글·footer 추가, 동적 렌더링 후 init 호출 |
+| `src/components/TagFilter.astro` | `renderCard()`에 북마크·댓글·footer 추가, 동적 렌더링 후 init 호출, `#tag-filtered-grid` 제목 오렌지 오버라이드 |
 
 ## 예방 조치
 
 - 클라이언트 JS로 동적 렌더링하는 `renderCard()` 함수를 수정할 때는 반드시 SSR `ArticleCard.astro`와 구조를 동기화할 것.
 - Astro 컴포넌트 스타일이 동적 생성 요소에도 필요한 경우 `<style is:global>`을 사용할 것.
-- 새로운 UI 요소(버튼, 인디케이터 등)를 ArticleCard에 추가할 때 `renderCard()`도 함께 업데이트할 것.
+- Astro 컴포넌트 스타일이 동적 생성 요소에도 필요한 경우 `<style is:global>`을 사용할 것.
+- 글로벌 스타일 변경 시 홈페이지 등 다른 페이지에 의도치 않은 영향이 없는지 확인할 것.
 
 ---
 
