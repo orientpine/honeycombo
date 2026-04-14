@@ -66,20 +66,20 @@ const formattedDate = new Date(date).toLocaleDateString('ko-KR', { year: 'numeri
   </div>
 </article>
 
-<style>
+<style is:global>
 .article-card { display: flex; flex-direction: column; gap: var(--space-sm); position: relative; }
-.article-thumbnail img { width: 100%; height: 160px; object-fit: cover; border-radius: var(--radius-sm); }
-.article-body { display: flex; flex-direction: column; gap: var(--space-sm); flex: 1; }
-.article-meta { display: flex; align-items: center; gap: var(--space-sm); flex-wrap: wrap; }
-.article-date { font-size: 0.8rem; color: var(--color-text-muted); margin-left: auto; }
-.article-title { font-size: 1rem; font-weight: 600; line-height: 1.4; }
-.article-title a { color: var(--color-text); }
-.article-title a:hover { color: var(--color-primary); text-decoration: none; }
-.article-description { font-size: 0.875rem; color: var(--color-text-muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.article-tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
-.article-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: var(--space-xs); }
-.article-stats { display: flex; align-items: center; gap: var(--space-sm); }
-.comment-indicator {
+.article-card .article-thumbnail img { width: 100%; height: 160px; object-fit: cover; border-radius: var(--radius-sm); }
+.article-card .article-body { display: flex; flex-direction: column; gap: var(--space-sm); flex: 1; }
+.article-card .article-meta { display: flex; align-items: center; gap: var(--space-sm); flex-wrap: wrap; }
+.article-card .article-date { font-size: 0.8rem; color: var(--color-text-muted); margin-left: auto; }
+.article-card .article-title { font-size: 1rem; font-weight: 600; line-height: 1.4; }
+.article-card .article-title a { color: var(--color-text); }
+.article-card .article-title a:hover { color: var(--color-primary); text-decoration: none; }
+.article-card .article-description { font-size: 0.875rem; color: var(--color-text-muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.article-card .article-tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+.article-card .article-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: var(--space-xs); }
+.article-card .article-stats { display: flex; align-items: center; gap: var(--space-sm); }
+.article-card .comment-indicator {
   display: inline-flex;
   align-items: center;
   gap: 3px;
@@ -88,50 +88,59 @@ const formattedDate = new Date(date).toLocaleDateString('ko-KR', { year: 'numeri
   text-decoration: none;
   transition: color 0.15s;
 }
-.comment-indicator:hover { color: var(--color-primary); text-decoration: none; }
-.comment-count-value { font-variant-numeric: tabular-nums; min-width: 1ch; }
+.article-card .comment-indicator:hover { color: var(--color-primary); text-decoration: none; }
+.article-card .comment-count-value { font-variant-numeric: tabular-nums; min-width: 1ch; }
 </style>
 
 <script>
   // Comment count fetcher — Giscus API + IntersectionObserver + sessionStorage cache
   // Module script: runs once, persists across View Transitions
-  document.addEventListener('astro:page-load', () => {
-    const CACHE_KEY = 'honeycombo:comment-counts';
-    let cache: Record<string, number> = {};
+  const CACHE_KEY = 'honeycombo:comment-counts';
+  let cache: Record<string, number> = {};
+  let observer: IntersectionObserver | null = null;
+
+  function initCommentCounts(root?: HTMLElement) {
     try { cache = JSON.parse(sessionStorage.getItem(CACHE_KEY) || '{}'); } catch {}
 
-    const observer = new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        const el = entry.target as HTMLElement;
-        const path = el.dataset.commentPath;
-        if (!path) continue;
-        observer.unobserve(el);
+    if (!observer) {
+      observer = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          const el = entry.target as HTMLElement;
+          const path = el.dataset.commentPath;
+          if (!path) continue;
+          observer!.unobserve(el);
 
-        const countEl = el.querySelector('.comment-count-value');
-        if (!countEl) continue;
+          const countEl = el.querySelector('.comment-count-value');
+          if (!countEl) continue;
 
-        // Use cached value if available
-        if (path in cache) {
-          countEl.textContent = String(cache[path]);
-          return;
+          if (path in cache) {
+            countEl.textContent = String(cache[path]);
+            return;
+          }
+
+          fetch(`https://giscus.app/api/discussions?repo=orientpine%2Fhoneycombo&term=${encodeURIComponent(path)}&category=General&number=0&strict=false&first=1`)
+            .then(r => r.status === 404 ? null : r.json())
+            .then(data => {
+              const count = data?.discussion?.totalCommentCount ?? data?.discussion?.comments?.totalCount ?? 0;
+              cache[path] = count;
+              try { sessionStorage.setItem(CACHE_KEY, JSON.stringify(cache)); } catch {}
+              countEl.textContent = String(count);
+            })
+            .catch(() => { countEl.textContent = '0'; });
         }
+      }, { rootMargin: '200px' });
+    }
 
-        // Fetch from Giscus API
-        fetch(`https://giscus.app/api/discussions?repo=orientpine%2Fhoneycombo&term=${encodeURIComponent(path)}&category=General&number=0&strict=false&first=1`)
-          .then(r => r.status === 404 ? null : r.json())
-          .then(data => {
-            const count = data?.discussion?.totalCommentCount ?? data?.discussion?.comments?.totalCount ?? 0;
-            cache[path] = count;
-            try { sessionStorage.setItem(CACHE_KEY, JSON.stringify(cache)); } catch {}
-            countEl.textContent = String(count);
-          })
-          .catch(() => { countEl.textContent = '0'; });
-      }
-    }, { rootMargin: '200px' });
-
-    document.querySelectorAll<HTMLElement>('[data-comment-path]').forEach(el => {
-      observer.observe(el);
+    const container = root || document;
+    container.querySelectorAll<HTMLElement>('[data-comment-path]').forEach(el => {
+      // Avoid duplicate observation by checking init flag
+      if (el.dataset.commentInit) return;
+      el.dataset.commentInit = 'true';
+      observer!.observe(el);
     });
-  });
+  }
+
+  (window as any).__initCommentCounts = initCommentCounts;
+  document.addEventListener('astro:page-load', () => initCommentCounts());
 </script>

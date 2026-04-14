@@ -65,17 +65,17 @@ function renderCard(a: ClientArticle): string {
   const formatted = new Date(a.date).toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' });
   const title = escapeHtml(a.title);
   const source = escapeHtml(a.source);
+  const articleSlug = a.slug || a._id;
+  const articlePath = `/articles/${articleSlug}/`;
 
   const thumb = a.thumbnail_url
-    ? `<div class="article-thumbnail"><img src="${escapeHtml(a.thumbnail_url)}" alt="" loading="lazy" width="300" height="160" /></div>`
+    ? `<div class="article-thumbnail"><img src="${escapeHtml(a.thumbnail_url)}" alt="${title}" loading="lazy" width="300" height="160" /></div>`
     : '';
-
-  const originBadge = '';
 
   const typeBadge = a.type === 'youtube' ? '<span class="badge badge-primary">YouTube</span>' : '';
 
   const desc = a.description
-    ? `<p class="article-description">${escapeHtml(a.description.length > 200 ? a.description.slice(0, 200) + '...' : a.description)}</p>`
+    ? `<p class="article-description">${escapeHtml(a.description)}</p>`
     : '';
 
   const tagsHtml = a.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('');
@@ -83,32 +83,49 @@ function renderCard(a: ClientArticle): string {
 
   const sourceType = a.articleOrigin === 'feed' ? 'feed' : 'curated';
 
-  return `<article class="card article-card" data-testid="article-card" data-tags="${tagsAttr}" data-origin="${a.articleOrigin}">
+  return `<article class="card article-card" data-testid="article-card" data-tags="${tagsAttr}" data-origin="${a.articleOrigin}" data-article-path="${articlePath}">
   ${thumb}
   <div class="article-body">
     <div class="article-meta">
-      ${originBadge}
       <span class="badge">${source}</span>
       ${typeBadge}
-      <time class="article-date" datetime="${a.date}">${formatted}</time>
+      <time class="article-date" datetime="${new Date(a.date).toISOString()}">${formatted}</time>
     </div>
     <h3 class="article-title">
       <a href="${escapeHtml(articleUrl)}"${target}>${title}</a>
     </h3>
     ${desc}
     <div class="article-tags">${tagsHtml}</div>
-    <div class="add-to-playlist-container" data-article-id="${escapeHtml(a._id)}" data-title="${title}" data-url="${escapeHtml(a.url)}" data-description="${escapeHtml(a.description || '')}" data-source-type="${sourceType}">
-      <button class="add-to-playlist-btn tag">➕ 플레이리스트에 추가</button>
-      <div class="playlist-dropdown" style="display: none;">
-        <div class="playlist-dropdown-header">플레이리스트 선택</div>
-        <ul class="playlist-list">
-          <li class="playlist-loading">불러오는 중...</li>
-        </ul>
-        <div class="playlist-dropdown-footer">
-          <a href="/p/new" class="new-playlist-link">➕ 새 플레이리스트 만들기</a>
-        </div>
+    <div class="article-footer">
+      <div class="article-stats">
+        <button class="bookmark-btn bookmark-sm" data-bookmark-id="${escapeHtml(articleSlug)}" title="북마크" aria-label="북마크">
+          <svg class="bookmark-icon-outline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+          <svg class="bookmark-icon-filled" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+        </button>
+        <a href="/articles/${escapeHtml(articleSlug)}/#comments" class="comment-indicator" data-comment-path="${articlePath}">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <span class="comment-count-value">&ndash;</span>
+        </a>
       </div>
-      <div class="playlist-toast" style="display: none;"></div>
+      <div class="add-to-playlist-container" data-article-id="${escapeHtml(a._id)}" data-title="${title}" data-url="${escapeHtml(a.url)}" data-description="${escapeHtml(a.description || '')}" data-source-type="${sourceType}">
+        <button class="add-to-playlist-btn tag">➕ 플레이리스트에 추가</button>
+        <div class="playlist-dropdown" style="display: none;">
+          <div class="playlist-dropdown-header">플레이리스트 선택</div>
+          <ul class="playlist-list">
+            <li class="playlist-loading">불러오는 중...</li>
+          </ul>
+          <div class="playlist-dropdown-footer">
+            <a href="/p/new" class="new-playlist-link">➕ 새 플레이리스트 만들기</a>
+          </div>
+        </div>
+        <div class="playlist-toast" style="display: none;"></div>
+      </div>
     </div>
   </div>
 </article>`;
@@ -179,11 +196,20 @@ function applyFilters(tag: string, origin?: string) {
     // Render filtered results
     if (filteredContainer && filteredGrid && filteredCount) {
       filteredContainer.style.display = '';
+      filteredGrid.dataset.activeOrigin = activeOrigin;
       filteredCount.textContent = `${labels.join(' · ')} 기사 ${articles.length}건`;
       filteredGrid.innerHTML = articles.map(renderCard).join('');
       // Initialize AddToPlaylist buttons for dynamically rendered cards
       if ((window as any).__initAddToPlaylistContainers) {
         (window as any).__initAddToPlaylistContainers(filteredGrid);
+      }
+      // Initialize bookmark buttons for dynamically rendered cards
+      if ((window as any).__initBookmarkButtons) {
+        (window as any).__initBookmarkButtons();
+      }
+      // Initialize comment count observers for dynamically rendered cards
+      if ((window as any).__initCommentCounts) {
+        (window as any).__initCommentCounts(filteredGrid);
       }
     }
 
@@ -249,4 +275,11 @@ document.addEventListener('astro:page-load', initTagFilter);
   color: var(--color-text-muted);
   font-weight: 500;
 }
+
+/* Filtered tabs (제출 기사/RSS 피드) keep orange title color per user request */
+/* Only when origin is submitted or feed — tag-only filtering on 전체 keeps dark titles */
+#tag-filtered-grid:global([data-active-origin="submitted"]) :global(.article-title a),
+#tag-filtered-grid:global([data-active-origin="feed"]) :global(.article-title a) { color: var(--color-primary); }
+#tag-filtered-grid:global([data-active-origin="submitted"]) :global(.article-title a:hover),
+#tag-filtered-grid:global([data-active-origin="feed"]) :global(.article-title a:hover) { color: var(--color-primary-hover); text-decoration: none; }
 </style>
