@@ -274,4 +274,8 @@ document.addEventListener('astro:page-load', initTagFilter);
   color: var(--color-text-muted);
   font-weight: 500;
 }
+
+/* Filtered tabs (제출 기사/RSS 피드) keep orange title color per user request */
+#tag-filtered-grid :global(.article-title a) { color: var(--color-primary); }
+#tag-filtered-grid :global(.article-title a:hover) { color: var(--color-primary-hover); text-decoration: none; }
 </style>
