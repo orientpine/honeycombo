@@ -65,10 +65,11 @@ const iconSize = size === 'sm' ? 14 : 18;
     });
   }
 
+  (window as any).__initBookmarkButtons = initBookmarkButtons;
   document.addEventListener('astro:page-load', initBookmarkButtons);
 </script>
 
-<style>
+<style is:global>
   .bookmark-btn {
     display: inline-flex;
     align-items: center;
