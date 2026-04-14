@@ -196,6 +196,7 @@ function applyFilters(tag: string, origin?: string) {
     // Render filtered results
     if (filteredContainer && filteredGrid && filteredCount) {
       filteredContainer.style.display = '';
+      filteredGrid.dataset.activeOrigin = activeOrigin;
       filteredCount.textContent = `${labels.join(' · ')} 기사 ${articles.length}건`;
       filteredGrid.innerHTML = articles.map(renderCard).join('');
       // Initialize AddToPlaylist buttons for dynamically rendered cards
@@ -276,6 +277,9 @@ document.addEventListener('astro:page-load', initTagFilter);
 }
 
 /* Filtered tabs (제출 기사/RSS 피드) keep orange title color per user request */
-#tag-filtered-grid :global(.article-title a) { color: var(--color-primary); }
-#tag-filtered-grid :global(.article-title a:hover) { color: var(--color-primary-hover); text-decoration: none; }
+/* Only when origin is submitted or feed — tag-only filtering on 전체 keeps dark titles */
+#tag-filtered-grid:global([data-active-origin="submitted"]) :global(.article-title a),
+#tag-filtered-grid:global([data-active-origin="feed"]) :global(.article-title a) { color: var(--color-primary); }
+#tag-filtered-grid:global([data-active-origin="submitted"]) :global(.article-title a:hover),
+#tag-filtered-grid:global([data-active-origin="feed"]) :global(.article-title a:hover) { color: var(--color-primary-hover); text-decoration: none; }
 </style>
