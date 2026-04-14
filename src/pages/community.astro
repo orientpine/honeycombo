@@ -1,0 +1,320 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="커뮤니티 — HoneyCombo" description="기술 커뮤니티 자유 발제 공간">
+  <section class="page-shell community-page" data-community-page>
+    <header class="page-header">
+      <div class="page-eyebrow">💬 커뮤니티</div>
+      <h1 class="page-title">자유 발제</h1>
+      <p class="page-description">기술에 관한 생각을 자유롭게 나누세요</p>
+    </header>
+
+    <!-- Write form (shown/hidden by JS based on auth state) -->
+    <div id="community-write-area">
+      <!-- Skeleton: JS will replace with form or login prompt -->
+      <div class="write-area-skeleton"></div>
+    </div>
+
+    <!-- Discussion list -->
+    <section class="community-list-section">
+      <div id="community-summary" class="community-summary">
+        <p>불러오는 중...</p>
+      </div>
+      <div id="community-list" class="community-list" aria-live="polite">
+        <!-- Skeleton cards rendered here by JS -->
+        <article class="discussion-card skeleton-card">
+          <div class="discussion-card-header">
+            <span class="skeleton-line skeleton-title"></span>
+          </div>
+          <div class="discussion-card-meta">
+            <span class="skeleton-avatar"></span>
+            <span class="skeleton-line skeleton-author-line"></span>
+            <span class="skeleton-line skeleton-date-line"></span>
+          </div>
+        </article>
+        <article class="discussion-card skeleton-card">
+          <div class="discussion-card-header">
+            <span class="skeleton-line skeleton-title"></span>
+          </div>
+          <div class="discussion-card-meta">
+            <span class="skeleton-avatar"></span>
+            <span class="skeleton-line skeleton-author-line"></span>
+            <span class="skeleton-line skeleton-date-line"></span>
+          </div>
+        </article>
+      </div>
+      <div id="community-pagination" class="community-pagination"></div>
+    </section>
+
+    <!-- Detail view (hidden by default, shown when a discussion is clicked) -->
+    <div id="community-detail" class="community-detail" hidden></div>
+  </section>
+</BaseLayout>
+
+<script is:inline src="/scripts/community-page.js"></script>
+
+<style is:global>
+  /* Reuse existing page-shell, page-header, page-title, page-description, page-eyebrow styles from global.css */
+  /* Only add community-specific styles here */
+
+  .community-page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+  }
+
+  /* Write area */
+  .write-area-skeleton {
+    height: 3rem;
+    border-radius: var(--radius-md);
+    background: var(--color-bg-secondary);
+  }
+
+  .write-form {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+  }
+
+  .write-form h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: var(--space-md);
+    color: var(--color-text);
+  }
+
+  .write-form-field {
+    margin-bottom: var(--space-md);
+  }
+
+  .write-form-field label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-xs);
+  }
+
+  .write-form-field input,
+  .write-form-field textarea {
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: border-color 0.15s;
+    box-sizing: border-box;
+  }
+
+  .write-form-field input:focus,
+  .write-form-field textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+
+  .write-form-field textarea {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.6;
+  }
+
+  .write-form-hint {
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    margin-top: 4px;
+  }
+
+  .write-form-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: var(--space-md);
+  }
+
+  .write-form-error {
+    font-size: 0.875rem;
+    color: var(--color-danger, #e53e3e);
+    flex: 1;
+  }
+
+  .login-prompt {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    text-align: center;
+  }
+
+  .login-prompt p {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-md);
+  }
+
+  /* Discussion list */
+  .community-summary {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+  }
+
+  .community-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .discussion-card {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-md) var(--space-lg);
+    cursor: pointer;
+    transition: border-color 0.15s, transform 0.1s;
+    text-decoration: none;
+    display: block;
+  }
+
+  .discussion-card:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-1px);
+  }
+
+  .discussion-card-header {
+    margin-bottom: var(--space-xs);
+  }
+
+  .discussion-card-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--color-text);
+    line-height: 1.4;
+  }
+
+  .discussion-card-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    flex-wrap: wrap;
+  }
+
+  .discussion-avatar {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .discussion-comments {
+    margin-left: auto;
+  }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: var(--space-2xl);
+    background: var(--color-bg-secondary);
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-lg);
+    color: var(--color-text-muted);
+  }
+
+  .empty-state p {
+    margin-bottom: var(--space-md);
+    font-size: 1.05rem;
+  }
+
+  /* Load more */
+  .load-more-wrap {
+    text-align: center;
+    padding: var(--space-md) 0;
+  }
+
+  /* Detail view */
+  .community-detail {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+  }
+
+  .community-detail[hidden] {
+    display: none;
+  }
+
+  .detail-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    margin-bottom: var(--space-lg);
+    transition: color 0.15s;
+  }
+
+  .detail-back-btn:hover {
+    color: var(--color-text);
+  }
+
+  /* Skeleton */
+  .skeleton-card {
+    pointer-events: none;
+  }
+
+  .skeleton-line,
+  .skeleton-avatar,
+  .skeleton-date-line {
+    display: inline-block;
+    background: linear-gradient(90deg, var(--color-bg-secondary) 25%, rgba(255, 255, 255, 0.5) 50%, var(--color-bg-secondary) 75%);
+    background-size: 200% 100%;
+    animation: community-skeleton 1.4s ease-in-out infinite;
+    border-radius: var(--radius-sm);
+    color: transparent;
+  }
+
+  .skeleton-title {
+    display: block;
+    width: 70%;
+    height: 1.4rem;
+  }
+
+  .skeleton-avatar {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .skeleton-author-line {
+    width: 5rem;
+    height: 0.8rem;
+  }
+
+  .skeleton-date-line {
+    width: 4rem;
+    height: 0.8rem;
+  }
+
+  @keyframes community-skeleton {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  @media (max-width: 768px) {
+    .write-form {
+      padding: var(--space-md);
+    }
+
+    .discussion-card {
+      padding: var(--space-md);
+    }
+  }
+</style>
