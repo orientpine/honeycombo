@@ -220,8 +220,8 @@ document.addEventListener('astro:page-load', () => {
           giscusScript.src = 'https://giscus.app/client.js';
           giscusScript.setAttribute('data-repo', 'orientpine/honeycombo');
           giscusScript.setAttribute('data-repo-id', 'R_kgDOR_fpgQ');
-          giscusScript.setAttribute('data-category', '자유 발제');
-          giscusScript.setAttribute('data-category-id', 'PLACEHOLDER_UPDATE_AFTER_CATEGORY_CREATION');
+          giscusScript.setAttribute('data-category', 'Discussions');
+          giscusScript.setAttribute('data-category-id', 'DIC_kwDOR_fpgc4C651O');
           giscusScript.setAttribute('data-mapping', 'number');
           giscusScript.setAttribute('data-term', String(number));
           giscusScript.setAttribute('data-strict', '0');

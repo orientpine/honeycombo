@@ -8,10 +8,8 @@ const { discussionNumber } = Astro.props;
 
 // GitHub repo and Giscus config
 const REPO_ID = 'R_kgDOR_fpgQ';
-// TODO: Update COMMUNITY_CATEGORY_ID after creating "자유 발제" category in GitHub Discussions UI
-// Steps: GitHub repo → Discussions → Categories → New category: "자유 발제" (General format)
-// Then get the ID: gh api graphql -f query='{ repository(owner:"orientpine",name:"honeycombo") { discussionCategories(first:25) { nodes { id name } } } }'
-const COMMUNITY_CATEGORY_ID = 'PLACEHOLDER_UPDATE_AFTER_CATEGORY_CREATION';
+// Community category: "Discussions" (created in GitHub Discussions UI)
+const COMMUNITY_CATEGORY_ID = 'DIC_kwDOR_fpgc4C651O';
 // biome-ignore lint/correctness/noUnusedVariables: used in template conditional
 const isConfigured = Boolean(REPO_ID && COMMUNITY_CATEGORY_ID && COMMUNITY_CATEGORY_ID !== 'PLACEHOLDER_UPDATE_AFTER_CATEGORY_CREATION');
 ---
@@ -54,9 +52,8 @@ const isConfigured = Boolean(REPO_ID && COMMUNITY_CATEGORY_ID && COMMUNITY_CATEG
       script.src = 'https://giscus.app/client.js';
       script.setAttribute('data-repo', 'orientpine/honeycombo');
       script.setAttribute('data-repo-id', 'R_kgDOR_fpgQ');
-      script.setAttribute('data-category', '자유 발제');
-      // TODO: Update after creating "자유 발제" category
-      script.setAttribute('data-category-id', 'PLACEHOLDER_UPDATE_AFTER_CATEGORY_CREATION');
+      script.setAttribute('data-category', 'Discussions');
+      script.setAttribute('data-category-id', 'DIC_kwDOR_fpgc4C651O');
       script.setAttribute('data-mapping', 'number');
       script.setAttribute('data-term', discussionNumber);
       script.setAttribute('data-strict', '0');
