@@ -1,0 +1,17 @@
+{
+  "id": "c7462362d8f92597",
+  "title": "Straico Has Great Models But No Streaming, So I Built a Proxy",
+  "url": "https://dev.to/manningworks/straico-has-great-models-but-no-streaming-so-i-built-a-proxy-31b7",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "I use OpenCode as my main AI coding tool. I switched from Claude Code after Anthropic started going after open source projects and I kept hitting session limits on my subscription extremely fast. OpenCode works with any OpenAI-compatible API. Straico gives me access to Claude, GPT, Gemini, DeepSeek, and a bunch more through a single API key. Cheap too. Problem is, Straico's API is missing two things OpenCode needs: streaming responses and function calling. Without streaming, OpenCode just hangs. Never gets a response. But Straico keeps eating tokens on their end anyway. Without function calling, the AI can't use tools like reading files or running bash commands. Both are non-negotiable for an agentic coding tool. So I built a proxy. It sits between OpenCode and Straico, translating requests and responses to fill in the gaps. OpenCode → localhost:8000 (my proxy) → Straico API What started as \"just simulate streaming and inject tool definitions\" turned into a surprisingly full-feature...",
+  "tags": [
+    "dev",
+    "straico",
+    "openai",
+    "showdev",
+    "opencode"
+  ],
+  "published_at": "2026-04-15T15:08:54.000Z",
+  "feed_id": "devto"
+}
