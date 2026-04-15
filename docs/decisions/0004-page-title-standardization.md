@@ -14,7 +14,7 @@
 
 ## 결정
 
-1. **2단 구성으로 통일**: 모든 페이지(home 제외)의 제목을 `h1.page-title` + `p.page-description` 2단 구조로 표준화
+1. **2단 구성으로 통일**: 모든 섹션 페이지(home, 콘텐츠 상세 페이지 제외)의 제목을 `h1.page-title` + `p.page-description` 2단 구조로 표준화
 2. **page-eyebrow 제거**: trending, community, must-read에서 작은 글씨 부제목(eyebrow) 삭제
 3. **공통 스타일을 global.css로 통합**: `.page-shell`, `.page-header`, `.page-title`, `.page-description` 스타일을 `src/styles/global.css`에 정의하고, 각 페이지의 중복 인라인 스타일 제거
 4. **반응형 폰트**: `clamp(2rem, 4vw, 2.75rem)`로 모든 페이지의 제목 크기 통일
@@ -36,9 +36,10 @@
 
 ## 결과
 
-- **시각적 통일**: 모든 페이지가 동일한 2단 제목 구조 사용
+- **시각적 통일**: 모든 섹션 페이지가 동일한 2단 제목 구조 사용
 - **코드 간소화**: 13개 파일에서 총 130줄의 중복 인라인 스타일 제거, 64줄의 공통 스타일 추가 (순 66줄 감소)
 - **유지보수 개선**: 제목 스타일 변경 시 global.css 한 곳만 수정하면 됨
+- **적용 범위**: 섹션/목록 페이지에 적용. 콘텐츠 상세 페이지(`articles/[...slug].astro`)는 개별 기사 제목과 메타데이터를 표시하는 별도 구조(`article-detail-title` + `ArticleMeta`)를 유지
 
 ## 관련 파일
 
