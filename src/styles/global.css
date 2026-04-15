@@ -73,11 +73,15 @@ img { max-width: 100%; height: auto; }
 }
 
 .page-header {
+  max-width: 720px;
   margin-bottom: var(--space-xl);
 }
 
+.page-header.flex-between {
+  max-width: none;
+}
+
 .page-shell > .page-header {
-  max-width: 720px;
   margin-bottom: 0;
 }
 

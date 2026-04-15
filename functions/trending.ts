@@ -132,14 +132,6 @@ const PAGE_STYLES = `
         max-width: 720px;
       }
 
-      .page-eyebrow {
-        display: inline-flex;
-        align-items: center;
-        gap: var(--space-xs);
-        margin-bottom: var(--space-sm);
-        color: var(--color-primary);
-        font-weight: 700;
-      }
 
       .page-title {
         font-size: clamp(2rem, 4vw, 2.75rem);
@@ -316,7 +308,6 @@ export const onRequest: AppPagesFunction = async (context: { env: Env; request: 
     body: `
       <section class="page-shell">
         <header class="page-header">
-          <div class="page-eyebrow">🔥 트렌딩 플레이리스트</div>
           <h1 class="page-title">🔥 트렌딩 플레이리스트</h1>
           <p class="page-description">커뮤니티가 좋아하는 플레이리스트</p>
         </header>
