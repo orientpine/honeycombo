@@ -1,0 +1,17 @@
+{
+  "id": "073766190aec5752",
+  "title": "The $47,000 Agent Loop: Why Token Budget Alerts Aren't Budget Enforcement",
+  "url": "https://dev.to/waxell/the-47000-agent-loop-why-token-budget-alerts-arent-budget-enforcement-389i",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "Four agents entered an infinite loop in November 2025. They ran for 11 days. The bill was $47,000. Nobody noticed until it was over. The team was running a market research pipeline: four LangChain agents coordinating via the A2A protocol. The pipeline worked correctly in testing. In production, two of the agents — an Analyzer and a Verifier — began ping-ponging requests between themselves. The Analyzer would generate content, the Verifier would request further analysis, the Analyzer would oblige. Neither agent had a budget ceiling. Neither triggered an alert that anyone acted on. The loop ran for 264 hours before the billing dashboard surfaced a number large enough to stop it. The post-mortem identified two root causes: no per-agent budget caps, and no mechanism that could have terminated the session before the next API call completed. The team had observability. They did not have enforcement. This incident isn't unusual. What makes it useful is that it's precise. The State of FinOp...",
+  "tags": [
+    "dev",
+    "ai",
+    "agents",
+    "finops",
+    "langchain"
+  ],
+  "published_at": "2026-04-15T15:08:49.000Z",
+  "feed_id": "devto"
+}

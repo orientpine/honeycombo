@@ -1,0 +1,13 @@
+{
+  "id": "ae8213a065a7fab6",
+  "title": "Microsoft faces fresh Windows Recall security concerns",
+  "url": "https://www.theverge.com/report/912101/microsoft-windows-recall-new-security-concerns-response",
+  "source": "The Verge",
+  "type": "article",
+  "description": "When Microsoft tried to launch Recall, an AI-powered Windows feature that screenshots most of what you do on your PC, it was labeled a \"disaster\" for cybersecurity and a \"privacy nightmare.\" After the backlash and a year-long delay to redesign and secure Recall, it's once again facing security and privacy concerns. Cybersecurity expert Alexander Hagenah has created TotalRecall Reloaded, a tool that extracts and displays data from Recall. It's an update to the TotalRecall tool that demonstrated all the weaknesses in the original Recall feature before Microsoft redesigned it. Microsoft's redesign focused on creating a secure vault for Recall … Read the full story at The Verge.",
+  "tags": [
+    "tech"
+  ],
+  "published_at": "2026-04-15T11:30:00.000Z",
+  "feed_id": "theverge"
+}
