@@ -14,11 +14,12 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT }}
 
       - uses: actions/setup-node@v6
         with:
@@ -42,7 +43,9 @@ jobs:
           git config user.name "honeycombo-bot"
           git config user.email "bot@honeycombo.pages.dev"
 
-      - name: Commit and push new articles
+      - name: Create PR with new articles
+        env:
+          GH_TOKEN: ${{ secrets.PAT }}
         run: |
           git add src/data/feeds/
           if git diff --cached --quiet; then
@@ -50,19 +53,17 @@ jobs:
             exit 0
           fi
 
-          git commit -m "chore: update RSS feed articles [skip ci]"
+          BRANCH="auto/rss-feeds"
+          git checkout -B "$BRANCH"
+          git commit -m "chore: update RSS feed articles"
+          git push origin "$BRANCH" --force
 
-          MAX_RETRIES=3
-          RETRY=0
-          while [ $RETRY -lt $MAX_RETRIES ]; do
-            git pull --rebase origin master || true
-            if git push origin master; then
-              echo "Push succeeded"
-              exit 0
-            fi
-            RETRY=$((RETRY + 1))
-            sleep 5
-          done
-
-          echo "Push failed after $MAX_RETRIES retries"
-          exit 1
+          EXISTING_PR=$(gh pr list --head "$BRANCH" --state open --json number -q '.[0].number')
+          if [ -z "$EXISTING_PR" ]; then
+            gh pr create \
+              --title "chore: update RSS feed articles" \
+              --body "Automated RSS feed collection." \
+              --base master \
+              --head "$BRANCH"
+          fi
+          gh pr merge "$BRANCH" --auto --squash
