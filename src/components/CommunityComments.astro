@@ -1,0 +1,150 @@
+---
+interface Props {
+  discussionNumber: number;
+}
+
+// biome-ignore lint/correctness/noUnusedVariables: used in template and client script
+const { discussionNumber } = Astro.props;
+
+// GitHub repo and Giscus config
+const REPO_ID = 'R_kgDOR_fpgQ';
+// Community category: "Discussions" (created in GitHub Discussions UI)
+const COMMUNITY_CATEGORY_ID = 'DIC_kwDOR_fpgc4C651O';
+// biome-ignore lint/correctness/noUnusedVariables: used in template conditional
+const isConfigured = Boolean(REPO_ID && COMMUNITY_CATEGORY_ID && COMMUNITY_CATEGORY_ID !== 'PLACEHOLDER_UPDATE_AFTER_CATEGORY_CREATION');
+---
+
+{isConfigured ? (
+  <section class="comments-section" data-testid="community-comments">
+    <div class="comments-header">
+      <h2 class="comments-title">
+        <svg class="comments-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+        댓글
+      </h2>
+      <span class="comments-powered">GitHub Discussions</span>
+    </div>
+    <div class="giscus-community-container" data-discussion-number={discussionNumber}></div>
+  </section>
+) : (
+  <section class="comments-section" data-testid="community-comments">
+    <div class="comments-header">
+      <h2 class="comments-title">댓글</h2>
+    </div>
+    <div class="comments-setup-note">
+      <p>GitHub Discussions "자유 발제" 카테고리 설정 후 댓글 기능이 활성화됩니다.</p>
+    </div>
+  </section>
+)}
+
+<script>
+  function initCommunityGiscus() {
+    const containers = document.querySelectorAll<HTMLElement>('.giscus-community-container');
+    containers.forEach((container) => {
+      const discussionNumber = container.dataset.discussionNumber;
+      if (!discussionNumber) return;
+
+      // Clear previous Giscus instance (important for View Transitions navigation)
+      container.innerHTML = '';
+
+      const script = document.createElement('script');
+      script.src = 'https://giscus.app/client.js';
+      script.setAttribute('data-repo', 'orientpine/honeycombo');
+      script.setAttribute('data-repo-id', 'R_kgDOR_fpgQ');
+      script.setAttribute('data-category', 'Discussions');
+      script.setAttribute('data-category-id', 'DIC_kwDOR_fpgc4C651O');
+      script.setAttribute('data-mapping', 'number');
+      script.setAttribute('data-term', discussionNumber);
+      script.setAttribute('data-strict', '0');
+      script.setAttribute('data-reactions-enabled', '1');
+      script.setAttribute('data-emit-metadata', '0');
+      script.setAttribute('data-input-position', 'top');
+      script.setAttribute('data-theme', 'preferred_color_scheme');
+      script.setAttribute('data-lang', 'ko');
+      script.crossOrigin = 'anonymous';
+      script.async = true;
+      container.appendChild(script);
+    });
+  }
+
+  document.addEventListener('astro:page-load', initCommunityGiscus);
+</script>
+
+<style>
+  .comments-section {
+    margin-top: var(--space-2xl);
+    padding: var(--space-xl);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .comments-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .comments-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .comments-icon {
+    color: var(--color-primary);
+    flex-shrink: 0;
+  }
+
+  .comments-powered {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    background: var(--color-bg);
+    padding: 2px var(--space-sm);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+  }
+
+  .giscus-community-container :global(.giscus) {
+    width: 100%;
+  }
+
+  .giscus-community-container :global(.giscus-frame) {
+    width: 100% !important;
+    min-height: 280px;
+    border: none;
+  }
+
+  .comments-setup-note {
+    padding: var(--space-lg);
+    background: var(--color-bg);
+    border-radius: var(--radius-md);
+    border: 1px dashed var(--color-border);
+    text-align: center;
+  }
+
+  .comments-setup-note p {
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+  }
+
+  @media (max-width: 768px) {
+    .comments-section {
+      padding: var(--space-md);
+      border-radius: var(--radius-md);
+    }
+
+    .comments-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-xs);
+    }
+  }
+</style>

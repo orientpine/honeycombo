@@ -20,6 +20,9 @@ export interface Env {
   ADMIN_GITHUB_IDS: string; // comma-separated GitHub user IDs
   ALLOWED_ORIGIN?: string;
   WEBHOOK_SECRET?: string;
+  // Community Discussions (GitHub Discussions API via Bot Token)
+  GITHUB_BOT_TOKEN?: string;
+  DISCUSSIONS_CATEGORY_ID?: string; // "자유 발제" category DIC_kwDO... (set after manual GitHub UI creation)
 }
 
 // ---------------------------------------------------------------------------
@@ -197,4 +200,42 @@ export interface ContextData {
 }
 
 // Re-export PagesFunction with our Env
-export type AppPagesFunction = PagesFunction<Env, string, ContextData>;
+export type AppPagesFunction = PagesFunction<Env, string, ContextData & Record<string, unknown>>;
+
+// ---------------------------------------------------------------------------
+// GitHub Discussions types
+// ---------------------------------------------------------------------------
+export interface DiscussionAuthor {
+  login: string;
+  avatarUrl: string;
+}
+
+export interface PageInfo {
+  hasNextPage: boolean;
+  endCursor: string | null;
+}
+
+export interface DiscussionSummary {
+  number: number;
+  title: string;
+  createdAt: string;
+  author: DiscussionAuthor | null;
+  comments: { totalCount: number };
+  url: string;
+}
+
+export interface Discussion {
+  number: number;
+  title: string;
+  bodyHTML: string;
+  createdAt: string;
+  author: DiscussionAuthor | null;
+  comments: { totalCount: number };
+  url: string;
+}
+
+export interface DiscussionsListResponse {
+  discussions: DiscussionSummary[];
+  pageInfo: PageInfo;
+  totalCount: number;
+}

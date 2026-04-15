@@ -71,6 +71,9 @@
 | `api/playlists/[id]/visibility.ts` | PUT (공개 범위 변경) |
 `api/admin/playlists/[id]/reject.ts` | PUT (관리자: 반려) |
 `api/playlists/[id]/like.ts` | GET/POST 좋아요 API |
+`api/discussions/index.ts` | GET(목록)/POST(작성) Discussions API |
+`api/discussions/[number].ts` | GET 단건 Discussion API |
+`lib/github-graphql.ts` | GitHub GraphQL API 클라이언트 (queryDiscussions, getDiscussion, createDiscussion) |
 `api/trending.ts` | GET 트렌딩 API (JSON) |
 `trending.ts` | 트렌딩 페이지 SSR 렌더링 |
 | `must-read.ts` | Must-read 페이지 SSR 렌더링 (D1 에디터 관리) |
@@ -110,6 +113,7 @@
 | `/must-read` | `must-read.astro` | 필독 기사 (Astro SSG shell + client fetch, D1 에디터 관리) |
 | `/influencers` | `influencers.astro` | 추천 인플루언서 (X/Threads 섹션 분리) |
 | `/playlists` | `playlists/index.astro` | 에디터+커뮤니티 플레이리스트 목록 (D1 API 기반) |
+| `/community` | `community.astro` + `functions/api/discussions/*` | 커뮤니티 자유 발제 (SSG shell + client fetch, GitHub Discussions 기반) |
 | `/p/new` | `p/new.astro` | 유저 플레이리스트 생성 폼 |
 | `/p/{id}` | `functions/p/[id].ts` | 유저 플레이리스트 상세 (SSR, 기사 검색/관리) |
 | `/my/playlists` | `my/playlists.astro` | 내 플레이리스트 관리 |
@@ -215,3 +219,4 @@ src/ (pages + components + data + content) → astro build → dist/
 | 2026-04-13 | Must-read: 자동 계산 → 에디터 수동 관리 전환. D1/SSR 기반, 관리자 UI 추가, 레거시 파일 삭제 |
 | 2026-04-13 | `/trending`, `/must-read`를 Astro SSG shell + client fetch 구조로 전환해 View Transitions 깜빡임 제거 |
 | 2026-04-13 | merge=approval 전환, 에디터 자동 merge, editors.json 추가 |
+| 2026-04-14 | 커뮤니티 자유 발제 기능 추가 (GitHub Discussions 기반, /community 페이지, api/discussions/* API) |
