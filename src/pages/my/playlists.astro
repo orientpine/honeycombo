@@ -3,15 +3,15 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="내 플레이리스트 — HoneyCombo" description="내가 만든 플레이리스트를 관리하세요">
-  <div class="page-header flex-between">
+  <header class="page-header flex-between">
     <div>
-      <h1>📋 내 플레이리스트</h1>
-      <p class="page-subtitle">내가 만든 플레이리스트를 관리하세요</p>
+      <h1 class="page-title">📋 내 플레이리스트</h1>
+      <p class="page-description">내가 만든 플레이리스트를 관리하세요</p>
     </div>
     <div class="header-actions" id="header-actions">
       <a href="/p/new" class="btn btn-primary">새 플레이리스트 만들기</a>
     </div>
-  </div>
+  </header>
 
   <div class="my-playlists-content">
     <div id="auth-check-loading" class="state-message">
@@ -316,9 +316,6 @@ document.addEventListener('astro:page-load', () => {
 </script>
 
 <style>
-.page-header { margin-bottom: var(--space-xl); }
-.page-header h1 { font-size: 2rem; font-weight: 800; }
-.page-subtitle { color: var(--color-text-muted); margin-top: var(--space-xs); }
 
 .flex-between {
   display: flex;

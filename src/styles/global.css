@@ -65,6 +65,34 @@ img { max-width: 100%; height: auto; }
 .grid-3 { grid-template-columns: repeat(3, 1fr); }
 .flex { display: flex; gap: var(--space-sm); align-items: center; }
 
+/* Page Shell & Header */
+.page-shell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.page-header {
+  margin-bottom: var(--space-xl);
+}
+
+.page-shell > .page-header {
+  max-width: 720px;
+  margin-bottom: 0;
+}
+
+.page-title {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  line-height: 1.2;
+  font-weight: 800;
+  margin-bottom: var(--space-sm);
+}
+
+.page-description {
+  color: var(--color-text-muted);
+  font-size: 1.05rem;
+}
+
 /* Card */
 .card {
   background: var(--color-bg);
