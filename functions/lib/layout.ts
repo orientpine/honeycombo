@@ -15,6 +15,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: '/trending', label: 'Trending' },
   { href: '/must-read', label: 'Must-read' },
   { href: '/playlists', label: 'Playlists' },
+  { href: '/community', label: 'Community' },
   { href: '/influencers', label: 'Influencers' },
   { href: '/submit', label: 'Submit' },
 ];

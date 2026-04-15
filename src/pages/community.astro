@@ -154,6 +154,64 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     margin-bottom: var(--space-md);
   }
 
+  /* Button — modern styles */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--radius-md);
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 0.9rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+
+  .btn:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+    color: white;
+    box-shadow:
+      0 2px 8px rgba(245, 124, 34, 0.25),
+      0 1px 2px rgba(0, 0, 0, 0.06);
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(135deg, var(--color-primary-hover), #d96315);
+    color: white;
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow:
+      0 6px 20px rgba(245, 124, 34, 0.35),
+      0 2px 6px rgba(0, 0, 0, 0.08);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow:
+      0 1px 4px rgba(245, 124, 34, 0.2);
+    transition-duration: 0.1s;
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    pointer-events: none;
+  }
+
   /* Discussion list */
   .community-summary {
     color: var(--color-text-muted);

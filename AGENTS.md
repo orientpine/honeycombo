@@ -130,3 +130,38 @@ bun run validate && bun run validate:docs && bun run validate:docs -- --check-co
 | `troubleshooting/` | 증상, 원인, 해결 방법, 관련 파일 |
 
 **해결**: `docs/_templates/` 의 템플릿을 기반으로 작성하면 누락을 방지할 수 있다.
+
+## UI 디자인 원칙
+
+> 본 프로젝트의 모든 UI는 **최신 웹 디자인 트렌드**에 맞게 설계·개발한다.
+
+### 핵심 원칙
+
+- **Micro-interaction**: 버튼, 카드 등 인터랙티브 요소에 `transition`, `transform` 기반 피드백을 반드시 적용한다 (hover lift, press scale 등).
+- **Depth & Shadow**: 단순 `border`만으로 구분하지 않고, `box-shadow` 레이어를 활용해 시각적 깊이를 표현한다.
+- **Generous Spacing**: 충분한 `padding`과 `gap`을 확보하여 콘텐츠가 답답하지 않게 배치한다.
+- **Smooth Animation**: `cubic-bezier` easing을 사용해 자연스러운 전환 효과를 적용한다 (linear 금지).
+- **Accessibility First**: `focus-visible` 링, 충분한 색상 대비, 키보드 내비게이션을 반드시 지원한다.
+- **Dark Mode 호환**: 모든 색상은 CSS custom property (`var(--color-*)`)를 사용하고, 하드코딩하지 않는다.
+
+### 버튼 스타일 가이드
+
+- Primary 버튼: 그라데이션 + 그림자로 시각적 강조, hover 시 lift 효과 + 그림자 확대.
+- Secondary 버튼: 투명 배경 + 테두리, hover 시 primary 색상으로 전환.
+- 모든 버튼: `border: none`, `cursor: pointer`, `font-family: inherit`, `:disabled` 상태 처리 필수.
+
+### 참조할 디자인 토큰 (`src/styles/global.css`)
+
+```css
+--color-primary: #F57C22;      /* 주요 액션 */
+--color-primary-hover: #EE7320; /* 호버 상태 */
+--radius-md: 8px;              /* 기본 둥글기 */
+--shadow-sm / --shadow-md;     /* 그림자 레벨 */
+```
+
+### 금지 사항
+
+- 브라우저 기본 스타일 그대로 사용 금지 (버튼, 입력 필드 등).
+- `transition: none` 또는 `linear` easing 금지.
+- 색상 하드코딩 금지 (CSS custom property 사용).
+- 호버/포커스 상태 없는 인터랙티브 요소 금지.
