@@ -1,0 +1,18 @@
+{
+  "id": "submission-62-9da30518",
+  "title": "에이전트는 많을수록 좋을까? 멀티 에이전트의 최적 팀 규모(feat.Two-pizza rule)",
+  "url": "https://www.youtube.com/watch?v=old0xr3vw4E",
+  "source": "YouTube",
+  "type": "youtube",
+  "thumbnail_url": "https://i.ytimg.com/vi/old0xr3vw4E/hqdefault.jpg",
+  "description": "Optimal team size for multi-agent systems: Why more agents isn't always better (Two-pizza rule)",
+  "tags": [
+    "ai-agent",
+    "multi-agent",
+    "team-size"
+  ],
+  "submitted_by": "orientpine",
+  "submitted_by_id": "32758428",
+  "submitted_at": "2026-04-16T14:14:27.434Z",
+  "status": "approved"
+}
