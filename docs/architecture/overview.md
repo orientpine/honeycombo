@@ -95,7 +95,7 @@
 
 | 워크플로우 | 역할 |
 |-----------|------|
-| `ci.yml` | CI (validate, validate:docs, build, test) |
+| `ci.yml` | CI (validate, validate:docs, build, test) + master push 시 Cloudflare Pages 자동 배포 |
 | `content-update-base.yml` | 콘텐츠 업데이트 공통 베이스 |
 | `rss-collect.yml` | RSS 수집 스케줄 |
 | ~~`trending-calc.yml`~~ | 삭제됨 — Must-read가 D1 에디터 관리로 전환 |
@@ -178,7 +178,7 @@ src/ (pages + components + data + content) → astro build → dist/
 | 데이터베이스 | Cloudflare D1 (SQLite) | 사용자, 세션, 플레이리스트, 아이템 |
 | CMS | Decap CMS | git-native |
 | 댓글 | Giscus | GitHub Discussions 기반 |
-| CI/CD | GitHub Actions | 수집, 계산, 배포 자동화 |
+| CI/CD | GitHub Actions + wrangler CLI | 수집, 계산, CI, 배포 자동화 |
 | 테스트 | Vitest | 단위 테스트 |
 | 타입 체크 | TypeScript 6 | strict |
 
@@ -220,3 +220,4 @@ src/ (pages + components + data + content) → astro build → dist/
 | 2026-04-13 | `/trending`, `/must-read`를 Astro SSG shell + client fetch 구조로 전환해 View Transitions 깜빡임 제거 |
 | 2026-04-13 | merge=approval 전환, 에디터 자동 merge, editors.json 추가 |
 | 2026-04-14 | 커뮤니티 자유 발제 기능 추가 (GitHub Discussions 기반, /community 페이지, api/discussions/* API) |
+| 2026-04-16 | CI 파이프라인에 wrangler 직접 배포 추가 (Cloudflare GitHub App 이벤트 누락 근본 해결) |
