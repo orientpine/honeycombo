@@ -1,0 +1,17 @@
+{
+  "id": "b694afcc8f1b3078",
+  "title": "Claude Opus 4.7 Is Here: Everything That Changed",
+  "url": "https://dev.to/gabrielanhaia/claude-opus-47-is-here-everything-that-changed-n4h",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "My Books: The Complete Guide to Go Programming | Hexagonal Architecture in Go My Tool: Hermes IDE — free, open-source AI shell wrapper for zsh/bash/fish Me: xGabriel.com | GitHub READ MORE HERE -> https://dev.to/gabrielanhaia/claude-opus-47-just-dropped-i-tested-it-for-6-hours-straight-heres-what-changed-3k50 Anthropic dropped Claude Opus 4.7 today. Same price as Opus 4.6, but the numbers are hard to ignore: visual acuity jumped from 54.5% to 98.5%, image resolution tripled, coding benchmarks are up 13%, and it resolves tasks that neither Opus 4.6 nor Sonnet 4.6 could solve. Available right now across the API, Bedrock, Vertex AI, and Microsoft Foundry. Here's everything that actually changed. Metric Opus 4.6 Opus 4.7 Change Visual acuity 54.5% 98.5% +81% Max image resolution ~1.25 MP ~3.75 MP 3x Document reasoning errors baseline -21% Complex multi-step workflows baseline +14% Tool call accuracy baseline +10-15% Internal coding benchmark (93 tasks) baseline +13% Finance Agent eval —...",
+  "tags": [
+    "dev",
+    "ai",
+    "programming",
+    "news",
+    "productivity"
+  ],
+  "published_at": "2026-04-16T15:35:30.000Z",
+  "feed_id": "devto"
+}
