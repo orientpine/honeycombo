@@ -1,0 +1,17 @@
+{
+  "id": "c6d4dce42dc52762",
+  "title": "Structuring the Database: Building an AI Task System [Floxis #2]",
+  "url": "https://dev.to/rina-park/structuring-the-database-building-an-ai-task-system-floxis-2-3g56",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "1. Overview In this article, I document the development process of a personal project called Floxis (codename). Floxis is a system (PersonalOS) that uses AI to structure natural language input and manage tasks. It is planned to be extended in the future to support features such as workflows. In the previous phase of development, I adopted a minimal structure to get a rough understanding of how the system would behave. For more details, see the previous article. This time, I designed a data model with future extensions in mind—particularly productivity analysis—and reorganized the database structure. The design focuses on the following points: Separation of current state and history Avoiding strict workflow constraints Maintaining a minimal structure while ensuring extensibility In this article, I explain the design decisions behind this data model and the reasoning behind them. GitHub Repository The system is composed of the following five tables: tasks: current state and basic task...",
+  "tags": [
+    "dev",
+    "webdev",
+    "database",
+    "softwareengineering",
+    "postgres"
+  ],
+  "published_at": "2026-04-16T05:10:46.000Z",
+  "feed_id": "devto"
+}
