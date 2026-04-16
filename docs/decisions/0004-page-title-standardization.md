@@ -73,3 +73,4 @@
 |------|----------|
 | 2026-04-16 | 최초 작성 |
 | 2026-04-16 | 이모지 규칙 추가: Articles(📰), Community(💬), Must-read(📌) 이모지 통일 |
+| 2026-04-16 | 이모지 누락 보완: articles 페이지네이션, must-read SSR fallback 통일 |
