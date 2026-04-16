@@ -1,0 +1,17 @@
+{
+  "id": "5dfd8ba1ab5b39a3",
+  "title": "I Tested Claude, GPT-4, and Gemini on the Same Refactoring Task",
+  "url": "https://dev.to/alexrogovjs/i-tested-claude-gpt-4-and-gemini-on-the-same-refactoring-task-3l6l",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "I gave Claude, GPT-4, and Gemini the exact same refactoring task — extract a 400-line god service into Clean Architecture layers. Same codebase, same prompt, same TypeScript project. The results weren't even close. This isn't a synthetic benchmark. I took a real NestJS service from a production project, froze the state in a git branch, and ran each model through the same workflow I use every day. Here's what happened. The patient: PaymentService — a 400-line NestJS service that handled payment processing, invoice generation, webhook handling, and retry logic. Classic god service. The goal: refactor into Clean Architecture layers: domain/payment/ — entities, value objects, error types application/payment/ — use cases, port interfaces infrastructure/payment/ — Stripe adapter, repository implementation The rules I gave each model: Don't change public API signatures Keep all 23 existing tests passing Extract interfaces for every external dependency Follow the naming conventions already...",
+  "tags": [
+    "dev",
+    "ai",
+    "typescript",
+    "programming",
+    "webdev"
+  ],
+  "published_at": "2026-04-16T15:24:17.000Z",
+  "feed_id": "devto"
+}

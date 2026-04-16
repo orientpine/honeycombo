@@ -1,0 +1,17 @@
+{
+  "id": "b2d1982ea56f58c5",
+  "title": "Field Notes from a Solo Builder — Shipping the Beloved Claude Code Buddy Into the Wild - Part I",
+  "url": "https://dev.to/fiorastudio/field-notes-from-a-solo-builder-shipping-the-beloved-claude-code-buddy-into-the-wild-part-i-3lpa",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "Last Thursday afternoon, I watched my community grieve. Anthropic had deprecated /buddy — that witty, opinionated code-reviewing personality inside Claude Code — and developers were genuinely heartbroken. People were sad. They didn't want to close their terminals — some were leaving them open just to hold onto it for a little longer. Posts were going up in all caps. There was something raw about the reaction that struck a cord in my heart: this wasn't just frustration about a missing feature. This was grief. I thought to myself: If Anthropic wouldn't keep this alive, why couldn't I? For those who missed it: Buddy was Anthropic's built-in code review companion in Claude Code. It had personality traits — a spectrum from serious to snarky — and would deliver code feedback in character. It had a voice. That's rare in developer tooling, and people had built a connection with their terminal buddy. The hypothesis in the community was that Anthropic shut it down because it was too expensive...",
+  "tags": [
+    "dev",
+    "claudecode",
+    "ai",
+    "buildinpublic",
+    "opensource"
+  ],
+  "published_at": "2026-04-16T15:27:08.000Z",
+  "feed_id": "devto"
+}
