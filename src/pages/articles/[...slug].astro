@@ -26,14 +26,25 @@ export async function getStaticPaths() {
     return [];
   });
   return [
-    ...curatedEntries.map((entry: any) => ({
-      params: { slug: entry.id },
-      props: { entry, collection: 'curated' as const },
-    })),
-    ...feedEntries.map((entry: any) => ({
-      params: { slug: entry.id },
-      props: { entry, collection: 'feeds' as const },
-    })),
+    ...curatedEntries.flatMap((entry: any) => {
+      const paths = [{ params: { slug: entry.id }, props: { entry, collection: 'curated' as const } }];
+      // Backward compatibility: also generate filename-only path for source_ids stored without year/month prefix
+      const parts = entry.id.split('/');
+      if (parts.length > 1) {
+        const filename = parts[parts.length - 1];
+        paths.push({ params: { slug: filename }, props: { entry, collection: 'curated' as const } });
+      }
+      return paths;
+    }),
+    ...feedEntries.flatMap((entry: any) => {
+      const paths = [{ params: { slug: entry.id }, props: { entry, collection: 'feeds' as const } }];
+      const parts = entry.id.split('/');
+      if (parts.length > 1) {
+        const filename = parts[parts.length - 1];
+        paths.push({ params: { slug: filename }, props: { entry, collection: 'feeds' as const } });
+      }
+      return paths;
+    }),
   ];
 }
 
