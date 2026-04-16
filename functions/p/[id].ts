@@ -60,14 +60,21 @@ function getItemHref(item: PlaylistItemRow): string {
 }
 
 function extractYouTubeVideoId(url: string): string | null {
-  const patterns = [
-    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
-    /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/,
-  ];
-  for (const pattern of patterns) {
-    const match = url.match(pattern);
-    if (match) return match[1];
-  }
+  try {
+    const parsed = new URL(url);
+    const hostname = parsed.hostname.replace(/^www\./, '').replace(/^m\./, '');
+    if (hostname === 'youtu.be') {
+      const id = parsed.pathname.slice(1).split('/')[0];
+      return id && /^[a-zA-Z0-9_-]{11}$/.test(id) ? id : null;
+    }
+    if (hostname === 'youtube.com' || hostname === 'youtube-nocookie.com') {
+      // /watch?v=ID, /embed/ID, /shorts/ID, /live/ID, /v/ID
+      const vParam = parsed.searchParams.get('v');
+      if (vParam && /^[a-zA-Z0-9_-]{11}$/.test(vParam)) return vParam;
+      const pathMatch = parsed.pathname.match(/^\/(?:embed|shorts|live|v)\/([a-zA-Z0-9_-]{11})/);
+      if (pathMatch) return pathMatch[1];
+    }
+  } catch {}
   return null;
 }
 
@@ -355,7 +362,7 @@ const PAGE_STYLES = `
 
       .items {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: var(--space-md);
         margin-top: var(--space-lg);
       }
@@ -645,6 +652,12 @@ const PAGE_STYLES = `
       .message-card p {
         color: var(--color-text-muted);
         margin-bottom: var(--space-lg);
+      }
+
+      @media (max-width: 1024px) {
+        .items {
+          grid-template-columns: repeat(2, 1fr);
+        }
       }
 
       @media (max-width: 768px) {

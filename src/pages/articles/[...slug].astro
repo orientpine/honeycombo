@@ -52,7 +52,9 @@ const { entry, collection } = Astro.props as { entry: any; collection: 'curated'
 const article = entry.data;
 const articleDate = 'submitted_at' in article ? article.submitted_at : article.published_at;
 const sourceType = collection === 'feeds' ? 'feed' : 'curated';
-const pageUrl = new URL(Astro.url.pathname, 'https://honeycombo.pages.dev').href;
+// Always use entry.id for canonical path (handles alias pages with filename-only slugs)
+const canonicalPath = `/articles/${entry.id}/`;
+const pageUrl = new URL(canonicalPath, 'https://honeycombo.pages.dev').href;
 ---
 
 <BaseLayout
@@ -60,6 +62,7 @@ const pageUrl = new URL(Astro.url.pathname, 'https://honeycombo.pages.dev').href
   description={article.description || `${article.title} - ${article.source}에서 큐레이션된 기사`}
   ogImage={article.thumbnail_url}
   ogType="article"
+  canonicalPath={canonicalPath}
 >
   <article class="article-detail" data-testid="article-detail">
     <header class="article-header">
@@ -96,7 +99,7 @@ const pageUrl = new URL(Astro.url.pathname, 'https://honeycombo.pages.dev').href
     <ContentTabs description={article.description} url={article.url} />
 
     <section id="comments">
-      <Comments />
+      <Comments term={canonicalPath} />
     </section>
 
     <RelatedArticles currentId={entry.id} tags={article.tags} />
