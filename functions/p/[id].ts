@@ -681,6 +681,8 @@ const PAGE_STYLES = `
           width: 100%;
         }
       }
+`;
+
 
 function renderStatusPage(status: number, title: string, message: string, canonicalUrl: string): Response {
   const html = renderDocument({
