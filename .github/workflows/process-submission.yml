@@ -21,6 +21,7 @@ jobs:
       contains(github.event.issue.labels.*.name, 'submission')
       || (github.event.action == 'opened'
           && (contains(github.event.issue.body, '### URL')
+              || contains(github.event.issue.body, '### Link List')
               || contains(github.event.issue.body, '### 링크 목록')))
       || github.event_name == 'workflow_dispatch'
     permissions:
@@ -34,7 +35,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
           ISSUE_NUM: ${{ github.event.issue.number }}
-          IS_BULK: ${{ contains(github.event.issue.body, '### 링크 목록') }}
+          IS_BULK: ${{ contains(github.event.issue.body, '### Link List') || contains(github.event.issue.body, '### 링크 목록') }}
         run: |
           if [ "$IS_BULK" = "true" ]; then
             gh issue edit "$ISSUE_NUM" --add-label "submission,bulk" --repo "$REPO"
