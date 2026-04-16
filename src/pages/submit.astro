@@ -3,14 +3,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="자료등록 — HoneyCombo" description="기술 기사나 YouTube 영상을 제출하세요">
-  <div class="page-header">
-    <h1>📝 자료등록</h1>
-    <p class="page-subtitle">좋은 기술 콘텐츠를 공유해주세요</p>
+  <header class="page-header">
+    <h1 class="page-title">📝 자료등록</h1>
+    <p class="page-description">좋은 기술 콘텐츠를 공유해주세요</p>
     <div class="notice-box">
       <strong>📌 Language Requirement</strong>
       <p>All submissions must be written in <strong>English</strong>.<br/>제출 내용은 모두 <strong>영어</strong>로 작성해주세요.</p>
     </div>
-  </div>
+  </header>
 
   <div class="submit-content">
     <section class="submit-section">
@@ -87,9 +87,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </BaseLayout>
 
 <style>
-.page-header { margin-bottom: var(--space-2xl); }
-.page-header h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; }
-.page-subtitle { color: var(--color-text-muted); margin-top: var(--space-xs); font-size: 1.05rem; }
 
 .notice-box {
   background: color-mix(in srgb, var(--color-accent) 15%, transparent);

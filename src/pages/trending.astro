@@ -6,7 +6,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 <BaseLayout title="트렌딩 플레이리스트 — HoneyCombo" description="커뮤니티가 가장 좋아하는 기술 기사 플레이리스트">
   <section class="page-shell trending-page" data-trending-page>
     <header class="page-header">
-      <div class="page-eyebrow">🔥 트렌딩 플레이리스트</div>
       <h1 class="page-title">🔥 트렌딩 플레이리스트</h1>
       <p class="page-description">커뮤니티가 좋아하는 플레이리스트</p>
     </header>
@@ -83,37 +82,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 <script is:inline src="/scripts/trending-page.js"></script>
 
 <style is:global>
-  .page-shell {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-xl);
-  }
-
-  .page-header {
-    max-width: 720px;
-  }
-
-  .page-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-xs);
-    margin-bottom: var(--space-sm);
-    color: var(--color-primary);
-    font-weight: 700;
-  }
-
-  .page-title {
-    font-size: clamp(2rem, 4vw, 2.75rem);
-    line-height: 1.2;
-    font-weight: 800;
-    margin-bottom: var(--space-sm);
-  }
-
-  .page-description {
-    color: var(--color-text-muted);
-    font-size: 1.05rem;
-  }
-
   .trending-summary {
     display: flex;
     align-items: center;

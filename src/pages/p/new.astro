@@ -3,10 +3,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="새 플레이리스트 만들기 — HoneyCombo" description="새로운 플레이리스트를 만들어보세요">
-  <div class="page-header">
-    <h1>📝 새 플레이리스트 만들기</h1>
-    <p class="page-subtitle">나만의 기술 콘텐츠 모음을 만들어보세요</p>
-  </div>
+  <header class="page-header">
+    <h1 class="page-title">📝 새 플레이리스트 만들기</h1>
+    <p class="page-description">나만의 기술 콘텐츠 모음을 만들어보세요</p>
+  </header>
 
   <div class="submit-content">
     <div id="auth-check-loading" class="auth-message">
@@ -305,9 +305,6 @@ document.addEventListener('astro:page-load', async () => {
 </script>
 
 <style>
-.page-header { margin-bottom: var(--space-xl); }
-.page-header h1 { font-size: 2rem; font-weight: 800; }
-.page-subtitle { color: var(--color-text-muted); margin-top: var(--space-xs); }
 .submit-content { max-width: 600px; }
 
 .auth-message {

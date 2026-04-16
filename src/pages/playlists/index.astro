@@ -3,10 +3,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="플레이리스트 — HoneyCombo" description="에디터가 큐레이션한 기사 플레이리스트">
-  <div class="page-header">
-    <h1>🎵 플레이리스트</h1>
-    <p class="page-subtitle">에디터 큐레이션 & 커뮤니티 플레이리스트</p>
-  </div>
+  <header class="page-header">
+    <h1 class="page-title">🎵 플레이리스트</h1>
+    <p class="page-description">에디터 큐레이션 & 커뮤니티 플레이리스트</p>
+  </header>
 
   <section id="editor-playlists" class="editor-section">
     <div id="editor-list" class="playlist-grid grid grid-3">
@@ -176,9 +176,6 @@ document.addEventListener('astro:page-load', () => {
 </script>
 
 <style>
-.page-header { margin-bottom: var(--space-xl); }
-.page-header h1 { font-size: 2rem; font-weight: 800; }
-.page-subtitle { color: var(--color-text-muted); margin-top: var(--space-xs); }
 .empty-state,
 .community-section :global(.empty-state),
 .editor-section :global(.empty-state) { text-align: center; padding: var(--space-2xl); color: var(--color-text-muted); }

@@ -18,10 +18,10 @@ const threadsInfluencers = influencers
 ---
 
 <BaseLayout title="추천 인플루언서 — HoneyCombo" description="기술 분야 주요 인플루언서 모음">
-  <div class="page-header">
-    <h1>⭐ 추천 인플루언서</h1>
-    <p class="page-subtitle">기술 분야 주요 인물들을 팔로우해 보세요</p>
-  </div>
+  <header class="page-header">
+    <h1 class="page-title">⭐ 추천 인플루언서</h1>
+    <p class="page-description">기술 분야 주요 인물들을 팔로우해 보세요</p>
+  </header>
 
   {xInfluencers.length > 0 && (
     <section class="platform-section">
@@ -63,9 +63,6 @@ const threadsInfluencers = influencers
 </BaseLayout>
 
 <style>
-.page-header { margin-bottom: var(--space-xl); }
-.page-header h1 { font-size: 2rem; font-weight: 800; }
-.page-subtitle { color: var(--color-text-muted); margin-top: var(--space-xs); }
 .platform-section { margin-bottom: var(--space-xl); }
 .platform-title { font-size: 1.4rem; font-weight: 700; margin-bottom: var(--space-md); }
 .empty-state { text-align: center; padding: var(--space-2xl); color: var(--color-text-muted); }

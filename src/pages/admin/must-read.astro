@@ -4,10 +4,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="Must-read 관리 — HoneyCombo">
-  <div class="page-header">
-    <h1>⭐ Must-read 관리</h1>
-    <p class="page-subtitle">필독 기사를 직접 선정하고 관리합니다</p>
-  </div>
+  <header class="page-header">
+    <h1 class="page-title">⭐ Must-read 관리</h1>
+    <p class="page-description">필독 기사를 직접 선정하고 관리합니다</p>
+  </header>
 
   <div class="admin-content">
     <div id="loading" class="state-message">
@@ -457,9 +457,6 @@ document.addEventListener('astro:page-load', () => {
 </script>
 
 <style>
-.page-header { margin-bottom: var(--space-xl); }
-.page-header h1 { font-size: 2rem; font-weight: 800; }
-.page-subtitle { color: var(--color-text-muted); margin-top: var(--space-xs); }
 
 .admin-content {
   display: flex;
