@@ -158,15 +158,15 @@ function renderItems(items: PlaylistItemRow[], isOwner: boolean, playlistId: str
 
       return `
         <article class="item-card card" data-item-id="${escapeAttr(item.id)}" data-position="${item.position}">
-          ${thumbnail ? `<div class="item-thumbnail"><img src="${escapeAttr(thumbnail)}" alt="" loading="lazy" width="320" height="180" /></div>` : ''}
+          ${thumbnail ? `<div class="item-thumbnail"><img src="${escapeAttr(thumbnail)}" alt="" loading="lazy" width="160" height="90" /></div>` : ''}
           <div class="item-body">
-            <div class="item-card-header">
-              <span class="badge">${escapeHtml(sourceLabel)}</span>
-              ${isExternal ? `<span class="item-domain">${escapeHtml(domain)}</span>` : '<span class="item-domain">HoneyCombo 기사</span>'}
-            </div>
             <h2 class="item-title">
               <a href="${escapeAttr(href)}" ${isExternal ? 'target="_blank" rel="noopener noreferrer"' : ''}>${escapeHtml(title)}</a>
             </h2>
+            <div class="item-card-footer">
+              <span class="badge badge-sm">${escapeHtml(sourceLabel)}</span>
+              ${isExternal ? `<span class="item-domain">${escapeHtml(domain)}</span>` : ''}
+            </div>
             ${note ? `<p class="item-note">💬 ${escapeHtml(note)}</p>` : ''}
             ${ownerControls}
           </div>
@@ -362,33 +362,35 @@ const PAGE_STYLES = `
 
       .items {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: var(--space-md);
         margin-top: var(--space-lg);
       }
 
       .item-card {
         display: flex;
-        flex-direction: column;
-        gap: 0;
+        flex-direction: row;
+        gap: var(--space-md);
         overflow: hidden;
       }
 
       .item-thumbnail {
-        margin: calc(-1 * var(--space-md)) calc(-1 * var(--space-md)) 0;
+        flex-shrink: 0;
+        width: 140px;
+        margin: calc(-1 * var(--space-md)) 0 calc(-1 * var(--space-md)) calc(-1 * var(--space-md));
         overflow: hidden;
       }
 
       .item-thumbnail img {
         width: 100%;
-        height: 140px;
+        height: 100%;
         object-fit: cover;
         display: block;
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
       .item-card:hover .item-thumbnail img {
-        transform: scale(1.03);
+        transform: scale(1.05);
       }
 
       .item-body {
@@ -396,14 +398,20 @@ const PAGE_STYLES = `
         flex-direction: column;
         gap: var(--space-xs);
         flex: 1;
-        padding-top: var(--space-sm);
+        min-width: 0;
       }
 
-      .item-card-header {
+      .item-card-footer {
         display: flex;
-        justify-content: space-between;
         align-items: center;
         gap: var(--space-sm);
+        flex-wrap: wrap;
+      }
+
+      .badge-sm {
+        font-size: 0.7rem;
+        padding: 1px 6px;
+        white-space: nowrap;
       }
 
       .item-title {
@@ -427,7 +435,7 @@ const PAGE_STYLES = `
 
       .item-domain, .meta-text, .updated-at {
         color: var(--color-text-muted);
-        font-size: 0.8rem;
+        font-size: 0.75rem;
       }
 
       .item-note {
@@ -654,21 +662,18 @@ const PAGE_STYLES = `
         margin-bottom: var(--space-lg);
       }
 
-      @media (max-width: 1024px) {
-        .items {
-          grid-template-columns: repeat(2, 1fr);
-        }
-      }
-
       @media (max-width: 768px) {
         .items {
           grid-template-columns: 1fr;
         }
 
+        .item-thumbnail {
+          width: 100px;
+        }
+
         .playlist-meta,
         .owner-controls,
-        .visibility-section,
-        .item-card-header {
+        .visibility-section {
           flex-direction: column;
           align-items: flex-start;
         }
