@@ -36,7 +36,7 @@ document.addEventListener('astro:page-load', () => {
 
   function renderMustReadItems(items) {
     if (!Array.isArray(items) || items.length === 0) {
-      return '<div class="empty-state">⭐ Must-read 목록을 준비 중입니다.</div>';
+      return '<div class="empty-state">📌 Must-read 목록을 준비 중입니다.</div>';
     }
 
     return items.map((item, index) => {
