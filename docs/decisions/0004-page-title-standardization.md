@@ -75,3 +75,4 @@
 | 2026-04-16 | 이모지 규칙 추가: Articles(📰), Community(💬), Must-read(📌) 이모지 통일 |
 | 2026-04-16 | 이모지 누락 보완: articles 페이지네이션, must-read SSR fallback 통일 |
 | 2026-04-16 | Must-read 페이지 제목 한국어화: `📌 Must-read` → `📌 꼭 읽어야 할 기사` (메뉴는 영문 유지) |
+| 2026-04-16 | Must-read 문서 제목(브라우저 탭) 한국어화: `Must-read — HoneyCombo` → `꼭 읽어야 할 기사 — HoneyCombo` |
