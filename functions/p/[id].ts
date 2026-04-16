@@ -53,8 +53,27 @@ function getVisibilityLabel(playlist: PlaylistDetail): string {
 
 function getItemHref(item: PlaylistItemRow): string {
   if (item.item_type === 'external') return item.url_snapshot;
-  if (item.item_type === 'feed') return item.url_snapshot;
-  return `/articles/${item.source_id ?? ''}`;
+  // Both curated and feed items with source_id link to internal article pages
+  if (item.source_id) return `/articles/${item.source_id}`;
+  // Fallback to external URL when no source_id
+  return item.url_snapshot;
+}
+
+function extractYouTubeVideoId(url: string): string | null {
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/,
+  ];
+  for (const pattern of patterns) {
+    const match = url.match(pattern);
+    if (match) return match[1];
+  }
+  return null;
+}
+
+function getYouTubeThumbnailUrl(url: string): string | null {
+  const videoId = extractYouTubeVideoId(url);
+  return videoId ? `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` : null;
 }
 
 function getItemDomain(url: string): string {
@@ -112,7 +131,8 @@ function renderItems(items: PlaylistItemRow[], isOwner: boolean, playlistId: str
       const note = item.note?.trim();
       const sourceLabel = getItemMetaLabel(item);
       const domain = getItemDomain(item.url_snapshot);
-      const isExternal = item.item_type === 'external' || item.item_type === 'feed';
+      const isExternal = item.item_type === 'external' || !item.source_id;
+      const thumbnail = getYouTubeThumbnailUrl(item.url_snapshot);
       const ownerControls = isOwner
         ? `
           <div class="item-controls">
@@ -131,16 +151,18 @@ function renderItems(items: PlaylistItemRow[], isOwner: boolean, playlistId: str
 
       return `
         <article class="item-card card" data-item-id="${escapeAttr(item.id)}" data-position="${item.position}">
-          <div class="item-card-header">
-            <span class="badge">${escapeHtml(sourceLabel)}</span>
-            ${isExternal ? `<span class="item-domain">${escapeHtml(domain)}</span>` : '<span class="item-domain">HoneyCombo 기사</span>'}
+          ${thumbnail ? `<div class="item-thumbnail"><img src="${escapeAttr(thumbnail)}" alt="" loading="lazy" width="320" height="180" /></div>` : ''}
+          <div class="item-body">
+            <div class="item-card-header">
+              <span class="badge">${escapeHtml(sourceLabel)}</span>
+              ${isExternal ? `<span class="item-domain">${escapeHtml(domain)}</span>` : '<span class="item-domain">HoneyCombo 기사</span>'}
+            </div>
+            <h2 class="item-title">
+              <a href="${escapeAttr(href)}" ${isExternal ? 'target="_blank" rel="noopener noreferrer"' : ''}>${escapeHtml(title)}</a>
+            </h2>
+            ${note ? `<p class="item-note">💬 ${escapeHtml(note)}</p>` : ''}
+            ${ownerControls}
           </div>
-          <h2 class="item-title">
-            <a href="${escapeAttr(href)}" ${isExternal ? 'target="_blank" rel="noopener noreferrer"' : ''}>${escapeHtml(title)}</a>
-          </h2>
-          <p class="item-url">${escapeHtml(item.url_snapshot)}</p>
-          ${note ? `<p class="item-note">💬 ${escapeHtml(note)}</p>` : ''}
-          ${ownerControls}
         </article>`;
     })
     .join('');
@@ -333,8 +355,41 @@ const PAGE_STYLES = `
 
       .items {
         display: grid;
+        grid-template-columns: repeat(2, 1fr);
         gap: var(--space-md);
         margin-top: var(--space-lg);
+      }
+
+      .item-card {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        overflow: hidden;
+      }
+
+      .item-thumbnail {
+        margin: calc(-1 * var(--space-md)) calc(-1 * var(--space-md)) 0;
+        overflow: hidden;
+      }
+
+      .item-thumbnail img {
+        width: 100%;
+        height: 140px;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .item-card:hover .item-thumbnail img {
+        transform: scale(1.03);
+      }
+
+      .item-body {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xs);
+        flex: 1;
+        padding-top: var(--space-sm);
       }
 
       .item-card-header {
@@ -342,13 +397,16 @@ const PAGE_STYLES = `
         justify-content: space-between;
         align-items: center;
         gap: var(--space-sm);
-        margin-bottom: var(--space-sm);
       }
 
       .item-title {
-        font-size: 1.125rem;
+        font-size: 0.95rem;
+        font-weight: 600;
         line-height: 1.4;
-        margin-bottom: var(--space-xs);
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
       }
 
       .item-title a {
@@ -357,23 +415,20 @@ const PAGE_STYLES = `
 
       .item-title a:hover {
         color: var(--color-primary);
+        text-decoration: none;
       }
 
-      .item-domain, .item-url, .meta-text, .updated-at {
+      .item-domain, .meta-text, .updated-at {
         color: var(--color-text-muted);
-        font-size: 0.9rem;
-      }
-
-      .item-url {
-        word-break: break-all;
+        font-size: 0.8rem;
       }
 
       .item-note {
-        margin-top: var(--space-sm);
-        padding: var(--space-sm);
+        padding: var(--space-xs) var(--space-sm);
         background: var(--color-bg-secondary);
         border-radius: var(--radius-sm);
         color: var(--color-text-muted);
+        font-size: 0.85rem;
       }
 
       .item-controls {
@@ -593,6 +648,10 @@ const PAGE_STYLES = `
       }
 
       @media (max-width: 768px) {
+        .items {
+          grid-template-columns: 1fr;
+        }
+
         .playlist-meta,
         .owner-controls,
         .visibility-section,
@@ -608,7 +667,7 @@ const PAGE_STYLES = `
         .owner-actions .btn {
           width: 100%;
         }
-      }`;
+      }
 
 function renderStatusPage(status: number, title: string, message: string, canonicalUrl: string): Response {
   const html = renderDocument({
