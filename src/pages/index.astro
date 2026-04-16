@@ -29,14 +29,31 @@ const recentArticles = allArticles.slice(0, MAX_RECENT);
   <section class="hero">
     <div class="hero-image-wrapper">
       <picture>
+        <source
+          srcset="/main_image_black_bg-400.webp 400w, /main_image_black_bg-800.webp 800w, /main_image_black_bg.webp 1200w"
+          sizes="(max-width: 600px) 100vw, 900px"
+          media="(prefers-color-scheme: dark)"
+          type="image/webp"
+        />
         <source srcset="/main_image_black_bg.jpg" media="(prefers-color-scheme: dark)" />
-        <img src="/main_image_white_bg.jpg" alt="HoneyCombo - 기술 뉴스 큐레이션" class="hero-logo" loading="eager" />
+        <source
+          srcset="/main_image_white_bg-400.webp 400w, /main_image_white_bg-800.webp 800w, /main_image_white_bg.webp 1200w"
+          sizes="(max-width: 600px) 100vw, 900px"
+          type="image/webp"
+        />
+        <img
+          src="/main_image_white_bg.jpg"
+          alt="HoneyCombo - 연구자를 위한 AI 기술 뉴스 큐레이션"
+          class="hero-logo"
+          width="1200"
+          height="663"
+          fetchpriority="high"
+          loading="eager"
+          decoding="async"
+        />
       </picture>
     </div>
-    <div class="hero-subtitle">
-      <span class="hero-brand">HONEYCOMBO</span>
-      <span class="hero-desc">연구자를 위한 AI 기술 커뮤니티</span>
-    </div>
+    <h1 class="hero-heading">연구자를 위한 AI 기술 커뮤니티</h1>
     <div class="hero-actions">
       <a href="/articles" class="btn btn-primary">기사 보기</a>
       <a href="/trending" class="btn btn-secondary">트렌드 랭킹</a>
@@ -93,29 +110,14 @@ const recentArticles = allArticles.slice(0, MAX_RECENT);
   width: 150%;
   max-width: 1200px;
   height: 150%;
-  background: radial-gradient(circle, rgba(252, 185, 36, 0.15) 0%, rgba(245, 124, 34, 0.05) 35%, transparent 70%);
+  background: radial-gradient(circle, rgba(252, 185, 36, 0.08) 0%, rgba(245, 124, 34, 0.03) 35%, transparent 70%);
   z-index: -2;
   pointer-events: none;
-}
-.hero::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: url("data:image/svg+xml,%3Csvg width='42' height='74' viewBox='0 0 28 49' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23F57C22' fill-opacity='0.25'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  background-size: 42px 74px;
-  background-position: center;
-  z-index: -1;
-  pointer-events: none;
-  mask-image: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.4) 50%, black 70%, transparent 90%);
-  -webkit-mask-image: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.4) 50%, black 70%, transparent 90%);
 }
 .hero-image-wrapper {
   position: relative;
   width: 100%;
-  max-width: 600px;
+  max-width: 900px;
   margin-bottom: var(--space-md);
   z-index: 1;
   display: flex;
@@ -123,77 +125,29 @@ const recentArticles = allArticles.slice(0, MAX_RECENT);
 }
 .hero-logo {
   width: 100%;
-  max-height: 280px;
+  max-height: 380px;
   object-fit: contain;
-  border-radius: 24px;
-  background-color: #ffffff;
-  box-shadow: 
-    0 0 30px 15px #ffffff,
-    0 0 60px 30px rgba(252, 185, 36, 0.15),
-    0 10px 30px rgba(245, 124, 34, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   position: relative;
   z-index: 2;
 }
-.hero-subtitle {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-  margin-bottom: var(--space-xl);
-  margin-top: 0.5rem;
-  padding: var(--space-md) var(--space-xl);
-  border-radius: var(--radius-lg);
-  background: radial-gradient(ellipse at center, rgba(247, 246, 243, 0.85) 0%, rgba(247, 246, 243, 0.4) 60%, transparent 100%);
-}
-.hero-brand {
-  font-size: clamp(2rem, 6vw, 3.5rem);
-  font-weight: 900;
-  letter-spacing: 0.08em;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
-  filter: drop-shadow(0 4px 12px rgba(245, 124, 34, 0.3));
-  line-height: 1.1;
-}
-.hero-desc {
-  font-size: clamp(1.1rem, 3vw, 1.4rem);
+.hero-heading {
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
   font-weight: 600;
-  color: var(--color-text);
-  letter-spacing: -0.02em;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-.hero-desc::before,
-.hero-desc::after {
-  content: '';
-  display: block;
-  width: 2.5rem;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--color-primary));
-  opacity: 0.6;
-}
-.hero-desc::after {
-  background: linear-gradient(270deg, transparent, var(--color-primary));
+  color: var(--color-text-muted);
+  margin-top: var(--space-sm);
+  margin-bottom: var(--space-lg);
+  letter-spacing: -0.01em;
 }
 @media (max-width: 600px) {
-  .hero-desc::before,
-  .hero-desc::after {
-    width: 1.5rem;
+  .hero {
+    padding: var(--space-lg) 0;
   }
 }
 @media (prefers-color-scheme: dark) {
   .hero-logo {
-    background-color: #1A1517;
-    box-shadow: 
-      0 0 30px 15px #1A1517,
-      0 0 60px 30px rgba(252, 185, 36, 0.15),
-      0 10px 30px rgba(245, 124, 34, 0.08);
-  }
-  .hero-subtitle {
-    background: radial-gradient(ellipse at center, rgba(26, 21, 23, 0.85) 0%, rgba(26, 21, 23, 0.4) 60%, transparent 100%);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   }
 }
 .hero-actions { display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap; }
