@@ -61,7 +61,7 @@ document.addEventListener('astro:page-load', () => {
       const items = Array.isArray(data && data.items) ? data.items : [];
       listNode.innerHTML = renderMustReadItems(items);
     } catch {
-      listNode.innerHTML = '<div class="empty-state">Must-read 목록을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</div>';
+      listNode.innerHTML = '<div class="empty-state">📌 꼭 읽어야 할 기사 목록을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</div>';
     }
   }
 
