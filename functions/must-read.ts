@@ -90,8 +90,8 @@ export const onRequest: AppPagesFunction = async (context: { env: Env; request: 
   const canonicalUrl = getCanonicalUrl(request.url);
 
   const html = renderDocument({
-    pageTitle: 'Must-read — HoneyCombo',
-    metaTitle: 'Must-read — HoneyCombo',
+    pageTitle: '꼭 읽어야 할 기사 — HoneyCombo',
+    metaTitle: '꼭 읽어야 할 기사 — HoneyCombo',
     description: '오늘 꼭 읽어야 할 기술 기사',
     canonicalUrl,
     currentPath: '/must-read',
