@@ -35,8 +35,8 @@
 
 #### 상세 페이지 UI
 
-- **레이아웃**: 기사 아이템을 3열 반응형 그리드(`repeat(3, 1fr)`)로 표시한다. `@1024px` 이하에서 2열, `@768px` 이하에서 1열로 전환된다. `/articles/` 페이지의 `grid-3` 레이아웃을 참조한 디자인이다.
-- **YouTube 썸네일**: `url_snapshot`이 YouTube URL인 경우 `img.youtube.com/vi/{videoId}/mqdefault.jpg` 썸네일을 카드 상단에 자동 표시한다. `extractYouTubeVideoId()`가 `youtube.com`, `youtu.be`, `m.youtube.com`, `youtube-nocookie.com`, `/shorts/`, `/live/`, `/embed/`, `/v/` 패턴을 URL 파싱으로 처리한다.
+- **레이아웃**: 기사 아이템을 2열 반응형 그리드(`repeat(2, 1fr)`)로 표시한다. `@768px` 이하에서 1열로 전환된다. 각 카드는 가로형(`flex-direction: row`)이며, YouTube 썸네일이 있는 경우 좌측에 140px 고정폭 썸네일을 표시하고 우측에 제목/배지/컨트롤을 배치한다.
+- **YouTube 썸네일**: `url_snapshot`이 YouTube URL인 경우 `img.youtube.com/vi/{videoId}/mqdefault.jpg` 썸네일을 카드 좌측에 자동 표시한다. `extractYouTubeVideoId()`가 `youtube.com`, `youtu.be`, `m.youtube.com`, `youtube-nocookie.com`, `/shorts/`, `/live/`, `/embed/`, `/v/` 패턴을 URL 파싱으로 처리한다.
 - **내부 링크**: `source_id`가 있는 curated/feed 아이템은 `/articles/${source_id}`로 내부 페이지에 링크한다. `source_id`가 없는 external 아이템만 외부 URL(`url_snapshot`)로 링크하며 `target="_blank"`를 적용한다.
 - **하위 호환**: DB에 year/month 경로 접두사 없이 저장된 레거시 `source_id`(예: `submission-62-xxx`)를 위해 `[...slug].astro`가 filename-only slug도 추가 생성한다. 이 alias 페이지는 정규 canonical URL과 Giscus term을 `entry.id` 기반으로 설정하여 SEO와 댓글 분리를 방지한다.
 
@@ -255,4 +255,4 @@
 | 2026-04-13 | 검색 결과 HTML `\n` 이스케이프 수정, 기사 수 동적 갱신(`updateItemCount`), 순서 변경 실패 시 reload 동기화 반영 |
 | 2026-04-13 | 승인 기사 auto-playlist webhook, auto-created playlist 생성 규칙, deferred submissions 흐름 문서화 |
 | 2026-04-13 | GitHub Actions 승인 감지와 OAuth catch-up 기반 auto-playlist 동기화 반영 |
-| 2026-04-17 | YouTube 썸네일 표시, 3열 그리드 레이아웃, 기사 내부 링크 수정(source_id 기반), alias 페이지 canonical/Giscus 정규화 |
+| 2026-04-17 | YouTube 썸네일 표시, 2열 가로형 카드 레이아웃(좌측 썸네일), 기사 내부 링크 수정(source_id 기반), alias 페이지 canonical/Giscus 정규화, BaseLayout canonicalPath 프롭 추가, Comments 컨포넌트 data-giscus-term 지원 |

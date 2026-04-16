@@ -57,8 +57,10 @@
 
 | 파일 | 변경 내용 |
 |------|----------|
-| `src/pages/articles/[...slug].astro` | `getStaticPaths`에서 filename-only slug 추가 생성 |
+| `src/pages/articles/[...slug].astro` | `getStaticPaths`에서 filename-only slug 추가 생성, `canonicalPath`를 `entry.id` 기반으로 계산하여 BaseLayout/Comments에 전달 |
 | `functions/p/[id].ts` | `getItemHref()` 수정: feed 아이템도 내부 링크 지원 |
+| `src/layouts/BaseLayout.astro` | `canonicalPath` 프롭 추가: alias 페이지에서 정규 canonical URL 및 `og:url` 사용 |
+| `src/components/Comments.astro` | `term` 프롭 + `data-giscus-term` 속성 추가: alias 페이지에서 Giscus가 정규 경로로 댓글 스레드 통합 |
 
 ## 예방 조치
 
@@ -77,3 +79,4 @@
 | 날짜 | 변경 내용 |
 |------|----------|
 | 2026-04-16 | 최초 작성 |
+| 2026-04-17 | canonical URL/Giscus 통합 파일(`BaseLayout.astro`, `Comments.astro`) 추가 |
