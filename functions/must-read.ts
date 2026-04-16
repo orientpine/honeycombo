@@ -10,7 +10,7 @@ function getCanonicalUrl(requestUrl: string): string {
 
 function renderMustReadItems(items: MustReadItemRow[]): string {
   if (items.length === 0) {
-    return '<div class="empty-state">📌 Must-read 목록을 준비 중입니다.</div>';
+    return '<div class="empty-state">📌 꼭 읽어야 할 기사 목록을 준비 중입니다.</div>';
   }
 
   return items
@@ -98,7 +98,7 @@ export const onRequest: AppPagesFunction = async (context: { env: Env; request: 
     body: `
       <section class="page-shell">
         <header class="page-header">
-          <h1 class="page-title">📌 Must-read</h1>
+          <h1 class="page-title">📌 꼭 읽어야 할 기사</h1>
           <p class="page-description">오늘 꼭 읽어야 할 기술 기사</p>
         </header>
 
