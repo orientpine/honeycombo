@@ -3,13 +3,17 @@
 // Requires GitHub Discussions to be enabled on the repo
 // Configure at: https://giscus.app
 // Set REPO_ID and CATEGORY_ID below after running giscus.app setup
+interface Props {
+  term?: string;
+}
+const { term } = Astro.props;
 const REPO_ID = 'R_kgDOR_fpgQ';
 const CATEGORY_ID = 'DIC_kwDOR_fpgc4C6lgR';
 const isConfigured = Boolean(REPO_ID && CATEGORY_ID);
 ---
 
 {isConfigured ? (
-  <section class="comments-section" data-testid="comments">
+  <section class="comments-section" data-testid="comments" data-giscus-term={term || ''}>
     <div class="comments-header">
       <h2 class="comments-title">
         <svg class="comments-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true">
@@ -42,12 +46,18 @@ const isConfigured = Boolean(REPO_ID && CATEGORY_ID);
     container.innerHTML = '';
 
     const script = document.createElement('script');
+    const term = container.closest('[data-giscus-term]')?.getAttribute('data-giscus-term') || '';
     script.src = 'https://giscus.app/client.js';
     script.setAttribute('data-repo', 'orientpine/honeycombo');
     script.setAttribute('data-repo-id', 'R_kgDOR_fpgQ');
     script.setAttribute('data-category', 'General');
     script.setAttribute('data-category-id', 'DIC_kwDOR_fpgc4C6lgR');
-    script.setAttribute('data-mapping', 'pathname');
+    if (term) {
+      script.setAttribute('data-mapping', 'specific');
+      script.setAttribute('data-term', term);
+    } else {
+      script.setAttribute('data-mapping', 'pathname');
+    }
     script.setAttribute('data-strict', '0');
     script.setAttribute('data-reactions-enabled', '1');
     script.setAttribute('data-emit-metadata', '0');
