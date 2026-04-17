@@ -1,0 +1,19 @@
+{
+  "id": "submission-86-6bc8c26d",
+  "title": "HWP/HWPX document viewer extension for VS Code with Canvas 2D rendering engine",
+  "url": "https://marketplace.visualstudio.com/items?itemName=edwardkim.rhwp-vscode",
+  "source": "User Submission",
+  "type": "other",
+  "description": "HWP/HWPX document viewer extension for VS Code with Canvas 2D rendering engine",
+  "tags": [
+    "rust",
+    "webassembly",
+    "hwp",
+    "vscode",
+    "developer-tools"
+  ],
+  "submitted_by": "Byeongjin-K",
+  "submitted_by_id": "107831527",
+  "submitted_at": "2026-04-17T08:03:03.641Z",
+  "status": "approved"
+}
