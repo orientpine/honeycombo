@@ -1,156 +1,68 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ArticleCard from '../components/ArticleCard.astro';
-import { compareArticles } from '../lib/article-sort';
-import PersonalizationBar from '../components/PersonalizationBar.astro';
-
-const MAX_RECENT = 6;
-
-const curatedEntries = await getCollection('curated', (entry: any) => entry.data.status === 'approved').catch((err: unknown) => {
-  console.error('Failed to load collection:', err);
-  return [];
-});
-const feedEntries = await getCollection('feeds').catch((err: unknown) => {
-  console.error('Failed to load collection:', err);
-  return [];
-});
-
-const allArticles = [
-  ...curatedEntries.map((e: any) => ({ ...e.data, _type: 'curated' as const, _id: e.id })),
-  ...feedEntries.map((e: any) => ({ ...e.data, _type: 'feed' as const, _id: e.id })),
-].sort(compareArticles);
-
-const allTags = [...new Set(allArticles.flatMap(a => a.tags))].sort();
-const recentArticles = allArticles.slice(0, MAX_RECENT);
 ---
 
 <BaseLayout title="HoneyCombo — 기술 뉴스 큐레이션">
   <section class="hero">
-    <div class="hero-image-wrapper">
-      <picture>
-        <source
-          srcset="/main_image_black_bg-400.webp 400w, /main_image_black_bg-800.webp 800w, /main_image_black_bg.webp 1200w"
-          sizes="(max-width: 600px) 100vw, 900px"
-          media="(prefers-color-scheme: dark)"
-          type="image/webp"
-        />
-        <source srcset="/main_image_black_bg.jpg" media="(prefers-color-scheme: dark)" />
-        <source
-          srcset="/main_image_white_bg-400.webp 400w, /main_image_white_bg-800.webp 800w, /main_image_white_bg.webp 1200w"
-          sizes="(max-width: 600px) 100vw, 900px"
-          type="image/webp"
-        />
-        <img
-          src="/main_image_white_bg.jpg"
-          alt="HoneyCombo - 연구자를 위한 AI 기술 뉴스 큐레이션"
-          class="hero-logo"
-          width="1200"
-          height="663"
-          fetchpriority="high"
-          loading="eager"
-          decoding="async"
-        />
-      </picture>
-    </div>
-    <h1 class="hero-heading">연구자를 위한 AI 기술 커뮤니티</h1>
+    <div class="honey-combo-logo" id="honeyComboLogo"></div>
     <div class="hero-actions">
       <a href="/articles" class="btn btn-primary">기사 보기</a>
       <a href="/trending" class="btn btn-secondary">트렌드 랭킹</a>
     </div>
-  </section>
-
-  <section class="section">
-    <h2 class="section-title">최근 기사</h2>
-    {allTags.length > 0 && <PersonalizationBar availableTags={allTags} />}
-    {recentArticles.length === 0 ? (
-      <p class="empty-state" data-testid="article-list-empty">
-        기사를 수집 중입니다. 잠시 후 다시 확인해주세요.
-      </p>
-    ) : (
-      <div class="article-grid grid grid-3" data-testid="article-list">
-        {recentArticles.map(article => (
-          <ArticleCard
-            id={article._id}
-            title={article.title}
-            url={article.url}
-            source={article.source}
-            type={article.type}
-            description={article.description}
-            tags={article.tags}
-            date={'submitted_at' in article ? article.submitted_at : article.published_at}
-            thumbnail_url={article.thumbnail_url}
-            articleOrigin={article._type}
-            isExternal={false}
-            slug={article._id}
-          />
-        ))}
-      </div>
-    )}
   </section>
 </BaseLayout>
 
 <style>
 .hero {
   text-align: center;
-  padding: var(--space-2xl) 0;
+  padding: var(--space-xl) 0 var(--space-2xl);
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
 }
-.hero::before {
-  content: '';
+
+/* Honey Combo Logo Animation */
+.honey-combo-logo {
+  --hc-duration: 0.7s;
+  position: relative;
+  width: 100%;
+  max-width: 860px;
+  aspect-ratio: 4000 / 2209;
+  margin: 0 auto var(--space-xl);
+}
+
+.honey-combo-logo :global(.hc-piece) {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 150%;
-  max-width: 1200px;
-  height: 150%;
-  background: radial-gradient(circle, rgba(252, 185, 36, 0.08) 0%, rgba(245, 124, 34, 0.03) 35%, transparent 70%);
-  z-index: -2;
-  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.8);
+  will-change: opacity, transform;
 }
-.hero-image-wrapper {
-  position: relative;
-  width: 100%;
-  max-width: 900px;
-  margin-bottom: var(--space-md);
-  z-index: 1;
+
+.honey-combo-logo :global(.hc-piece.show) {
+  animation: hcPieceIn var(--hc-duration) cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.honey-combo-logo :global(.hc-piece.hc-text.show) {
+  animation: hcTextIn 0.6s ease-out forwards !important;
+}
+
+@keyframes hcPieceIn {
+  0%   { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes hcTextIn {
+  0%   { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* CTA Buttons */
+.hero-actions {
   display: flex;
+  gap: var(--space-md);
   justify-content: center;
+  flex-wrap: wrap;
 }
-.hero-logo {
-  width: 100%;
-  max-height: 560px;
-  object-fit: contain;
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  position: relative;
-  z-index: 2;
-}
-.hero-heading {
-  font-size: clamp(1rem, 2.5vw, 1.25rem);
-  font-weight: 600;
-  color: var(--color-text-muted);
-  margin-top: var(--space-sm);
-  margin-bottom: var(--space-lg);
-  letter-spacing: -0.01em;
-}
-@media (max-width: 600px) {
-  .hero {
-    padding: var(--space-lg) 0;
-  }
-}
-@media (prefers-color-scheme: dark) {
-  .hero-logo {
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  }
-}
-.hero-actions { display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap; }
 .btn {
   display: inline-flex;
   align-items: center;
@@ -158,14 +70,90 @@ const recentArticles = allArticles.slice(0, MAX_RECENT);
   border-radius: var(--radius-md);
   font-weight: 600;
   font-size: 0.95rem;
-  transition: all 0.15s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  color: white;
+  box-shadow: 0 4px 14px rgba(245, 124, 34, 0.3);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 124, 34, 0.4);
+  color: white;
   text-decoration: none;
 }
-.btn-primary { background: var(--color-primary); color: white; }
-.btn-primary:hover { background: var(--color-primary-hover); color: white; text-decoration: none; }
-.btn-secondary { background: var(--color-bg-secondary); color: var(--color-text); border: 1px solid var(--color-border); }
-.btn-secondary:hover { border-color: var(--color-primary); color: var(--color-primary); text-decoration: none; }
-.section { margin-top: var(--space-2xl); }
-.section-title { font-size: 1.5rem; font-weight: 700; margin-bottom: var(--space-lg); }
-.empty-state { color: var(--color-text-muted); text-align: center; padding: var(--space-2xl); }
+.btn-secondary {
+  background: white;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+.btn-secondary:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  text-decoration: none;
+}
+
+@media (max-width: 600px) {
+  .hero {
+    padding: var(--space-md) 0 var(--space-xl);
+  }
+  .honey-combo-logo {
+    max-width: 100%;
+  }
+}
 </style>
+
+<script>
+function initHoneyComboLogo(options: Record<string, any> = {}) {
+  const {
+    containerId = 'honeyComboLogo',
+    basePath = '/images/logo',
+    maxDelay = 900,
+    textDelay = 1200,
+    startDelay = 300
+  } = options;
+
+  const W = 4000, H = 2209;
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = '';
+
+  const pieces = [
+    { src: 'group_1.png', bbox: [196,656,740,1153],   delay: 0 },
+    { src: 'group_2.png', bbox: [638,394,1181,889],   delay: maxDelay * 0.22 },
+    { src: 'group_3.png', bbox: [638,917,1180,1411],  delay: maxDelay * 0.44 },
+    { src: 'group_4.png', bbox: [1079,131,1621,1669], delay: maxDelay * 0.33 },
+    { src: 'group_5.png', bbox: [1519,393,2062,1412], delay: maxDelay * 0.55 },
+    { src: 'group_6.png', bbox: [1957,654,2502,1670], delay: maxDelay * 0.77 },
+    { src: 'group_7.png', bbox: [2394,394,3798,2133], delay: maxDelay * 0.66 },
+    { src: 'group_8.png', bbox: [3274,925,3797,1403], delay: maxDelay * 1.0 },
+    { src: 'text_honey_combo.png', bbox: [1100,1700,2700,2100], delay: textDelay, isText: true },
+  ];
+
+  pieces.forEach(p => {
+    const [l, t, r, b] = p.bbox;
+    const img = document.createElement('img');
+    img.src = (basePath ? basePath + '/' : '') + p.src;
+    img.className = 'hc-piece' + (p.isText ? ' hc-text' : '');
+    img.draggable = false;
+    img.alt = '';
+    img.style.left   = (l / W * 100) + '%';
+    img.style.top    = (t / H * 100) + '%';
+    img.style.width  = ((r - l) / W * 100) + '%';
+    img.style.height = ((b - t) / H * 100) + '%';
+
+    const delay = Math.round(p.delay);
+    setTimeout(() => img.classList.add('show'), startDelay + delay);
+    container.appendChild(img);
+  });
+}
+
+// Play on page load and on Astro client-side navigation
+document.addEventListener('astro:page-load', () => initHoneyComboLogo());
+</script>

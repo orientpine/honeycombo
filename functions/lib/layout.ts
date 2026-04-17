@@ -54,7 +54,7 @@ function renderNavigation(currentPath: string): string {
 
 const BASE_STYLES = `
       :root {
-        --color-bg: #F7F6F3;
+        --color-bg: #FFFFFF;
         --color-bg-secondary: #FFF8F0;
         --color-text: #2F2B31;
         --color-text-muted: #6B6168;
@@ -79,18 +79,6 @@ const BASE_STYLES = `
         --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
         --max-width: 1200px;
         --nav-height: 60px;
-      }
-
-      @media (prefers-color-scheme: dark) {
-        :root {
-          --color-bg: #1A1517;
-          --color-bg-secondary: #2A2226;
-          --color-text: #F7F6F3;
-          --color-text-muted: #A89B96;
-          --color-primary: #F58B3F;
-          --color-primary-hover: #FCB924;
-          --color-border: #3D3235;
-        }
       }
 
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
