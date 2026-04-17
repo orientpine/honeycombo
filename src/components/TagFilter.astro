@@ -73,6 +73,7 @@ function renderCard(a: ClientArticle): string {
     : '';
 
   const typeBadge = a.type === 'youtube' ? '<span class="badge badge-primary">YouTube</span>' : '';
+  const sourceLabel = a.articleOrigin === 'submitted' ? 'User Submission' : source;
 
   const desc = a.description
     ? `<p class="article-description">${escapeHtml(a.description)}</p>`
@@ -87,7 +88,7 @@ function renderCard(a: ClientArticle): string {
   ${thumb}
   <div class="article-body">
     <div class="article-meta">
-      <span class="badge">${source}</span>
+      <span class="badge">${sourceLabel}</span>
       ${typeBadge}
       <time class="article-date" datetime="${new Date(a.date).toISOString()}">${formatted}</time>
     </div>
