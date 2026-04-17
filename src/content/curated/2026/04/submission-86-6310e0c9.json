@@ -1,0 +1,19 @@
+{
+  "id": "submission-86-6310e0c9",
+  "title": "Open-source HWP/HWPX viewer and editor built with Rust and WebAssembly with 1.2k stars",
+  "url": "https://github.com/edwardkim/rhwp",
+  "source": "User Submission",
+  "type": "other",
+  "description": "Open-source HWP/HWPX viewer and editor built with Rust and WebAssembly with 1.2k stars",
+  "tags": [
+    "rust",
+    "webassembly",
+    "hwp",
+    "open-source",
+    "editor"
+  ],
+  "submitted_by": "Byeongjin-K",
+  "submitted_by_id": "107831527",
+  "submitted_at": "2026-04-17T08:03:03.654Z",
+  "status": "approved"
+}

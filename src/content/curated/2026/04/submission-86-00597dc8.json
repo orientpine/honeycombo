@@ -1,0 +1,18 @@
+{
+  "id": "submission-86-00597dc8",
+  "title": "Open-source HWP/HWPX document viewer Chrome extension powered by Rust and WebAssembly",
+  "url": "https://chromewebstore.google.com/detail/pgakpjflombjmehnebnbpnalhegaanag",
+  "source": "User Submission",
+  "type": "other",
+  "description": "Open-source HWP/HWPX document viewer Chrome extension powered by Rust and WebAssembly",
+  "tags": [
+    "rust",
+    "webassembly",
+    "hwp",
+    "browser-extension"
+  ],
+  "submitted_by": "Byeongjin-K",
+  "submitted_by_id": "107831527",
+  "submitted_at": "2026-04-17T08:03:03.627Z",
+  "status": "approved"
+}
