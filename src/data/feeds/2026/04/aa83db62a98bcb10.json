@@ -1,0 +1,17 @@
+{
+  "id": "aa83db62a98bcb10",
+  "title": "Why Is Everyone Rushing for VMware to AWS Migration? Top 7 Reasons Explained",
+  "url": "https://dev.to/jay_m/why-is-everyone-rushing-for-vmware-to-aws-migration-top-7-reasons-explained-2lp9",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "Introduction The VMware to AWS migration trend has reached a tipping point in 2026. Following the Broadcom acquisition, enterprise CTOs are no longer just exploring the cloud; they are executing aggressive exit strategies to avoid a 300% to 1,500% increase in renewal quotes. Every quarter, I watch more teams walk away from VMware. The pace picked up in 2024 and has only accelerated in 2026. As someone who has led four major migrations in the last eighteen months across manufacturing, healthcare, and retail, I’ve seen firsthand why AWS remains the primary destination for those fleeing the \"Broadcom tax.\" While Azure and Google Cloud often make the shortlist, AWS consistently wins on tooling maturity, Graviton-based cost savings, and the new agentic AI capabilities of AWS Transform. Below are the seven primary reasons driving the rush for VMware to AWS migration in 2026. Here’s a quick overview of the seven key reasons why enterprises are rushing to migrate from VMware to AWS. Before...",
+  "tags": [
+    "dev",
+    "csharp",
+    "fsharp",
+    "dotnet",
+    "comparison"
+  ],
+  "published_at": "2026-04-17T15:03:52.000Z",
+  "feed_id": "devto"
+}

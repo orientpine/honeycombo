@@ -1,0 +1,17 @@
+{
+  "id": "189ebe4bd4da6268",
+  "title": "How to Run LLMs Locally with Ollama — A Developer's Guide",
+  "url": "https://dev.to/pavelespitia/how-to-run-llms-locally-with-ollama-a-developers-guide-25nh",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "You don't need an API key or a cloud subscription to use LLMs. Ollama lets you run models locally on your machine — completely free, completely private. Here's how to set it up and start building with it. Ollama is a tool that downloads, manages, and serves LLMs locally. It exposes an OpenAI-compatible API at localhost:11434, so any code that works with the OpenAI API works with Ollama — zero changes. # Linux / WSL curl -fsSL https://ollama.com/install.sh | sh # macOS brew install ollama # Windows # Download from https://ollama.com/download Start the server: ollama serve # Code-focused (best for dev tools) ollama pull qwen2.5-coder:7b # 4.7GB, good balance ollama pull qwen2.5-coder:1.5b # 1.0GB, fast, good enough for many tasks ollama pull deepseek-coder-v2 # 8.9GB, top quality # General purpose ollama pull llama3.1:8b # 4.7GB, Meta's latest ollama pull mistral:7b # 4.1GB, fast and capable My recommendation: start with qwen2.5-coder:1.5b for speed, upgrade to 7b when you need qualit...",
+  "tags": [
+    "dev",
+    "ai",
+    "tutorial",
+    "beginners",
+    "typescript"
+  ],
+  "published_at": "2026-04-17T15:10:50.000Z",
+  "feed_id": "devto"
+}

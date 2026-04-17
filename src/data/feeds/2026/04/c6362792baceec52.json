@@ -1,0 +1,17 @@
+{
+  "id": "c6362792baceec52",
+  "title": "OAuth vs. API Keys for Agentic AI",
+  "url": "https://dev.to/descope/oauth-vs-api-keys-for-agentic-ai-4njg",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "This blog was originally published on Descope. If you're a senior developer or architect, you've likely weighed the OAuth vs. API keys tradeoff many times to balance simplicity against security and convenience against control. But those API security concerns always assumed traditional API clients: web apps, mobile apps, and predictable server-to-server integrations. Agentic AI systems challenge those assumptions. Unlike traditional API clients, agentic AI systems are autonomous, tool-using, and inherently non-deterministic. They make real-time decisions, chain multiple API calls together, and sometimes take actions their creators never explicitly programmed. When an AI agent can decide to delete your production database or book a flight on your behalf, the stakes of API authentication are high, and accidents happen. In this article, you'll reexamine the outstanding debate between OAuth and API keys through the lens of agentic AI. If you've used paid APIs from services like Claude, O...",
+  "tags": [
+    "dev",
+    "agents",
+    "ai",
+    "api",
+    "security"
+  ],
+  "published_at": "2026-04-17T15:00:00.000Z",
+  "feed_id": "devto"
+}
