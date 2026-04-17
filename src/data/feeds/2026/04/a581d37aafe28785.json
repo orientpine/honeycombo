@@ -1,0 +1,17 @@
+{
+  "id": "a581d37aafe28785",
+  "title": "What Is an MCP Agent? How AI Models Drive MCP Tools in Real Time",
+  "url": "https://dev.to/rupa_tiwari_dd308948d710f/what-is-an-mcp-agent-how-ai-models-drive-mcp-tools-in-real-time-1god",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "TL;DR An MCP agent is an AI model that calls your MCP server's tools in a loop to answer a question or complete a task Instead of you picking which tool to call, the AI decides based on a natural language prompt Each \"step\" = model picks a tool → executes it → reads the result → decides what to do next A single user message can trigger 5–10+ tool calls behind the scenes You can try it in the browser at MCP Agent Studio — paste any server URL and start chatting If you've read anything about the Model Context Protocol, you already know the basics: MCP servers expose tools, resources, and prompts in a standard format so AI clients can use them. But there's a piece people gloss over: what actually happens when an AI uses those tools? That's where the idea of an MCP agent comes in. Understanding what an agent does — and how it differs from a one-shot API call — is the key to building, testing, and getting real value out of MCP servers. An MCP agent is an AI model that's been given access...",
+  "tags": [
+    "dev",
+    "mcp",
+    "ai",
+    "llm",
+    "webdev"
+  ],
+  "published_at": "2026-04-17T05:07:27.000Z",
+  "feed_id": "devto"
+}

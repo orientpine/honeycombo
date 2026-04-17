@@ -1,0 +1,17 @@
+{
+  "id": "338a9fd9f2a369ca",
+  "title": "Platform Engineering for DevSecOps",
+  "url": "https://dev.to/17j/platform-engineering-for-devsecops-5gbf",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "Let’s be real for a moment. Everyone in DevSecOps loves talking about tools — scanners, pipelines, Kubernetes, zero-trust, AI security… the whole package. But very few talk about the thing that actually makes all of this usable at scale: Let's ground this with real numbers: 💰 $4.1 billion+ is the global platform engineering market size in 2025 (growing at ~22% CAGR) 📉 84% of large enterprises already have a platform engineering initiative underway (Gartner, 2025) 🧾 56% of mid-market companies have adopted platform engineering — and the number is climbing fast ⚙️ Teams using IDPs report 60% reduction in developer onboarding time 📦 Orgs with mature platform engineering ship features 2x faster than those without (DORA, 2024) 📊 Elite teams deploy 973x more frequently than low performers — platform engineering is a key differentiator 🔐 Companies using IDP-enforced pipelines report 40% fewer critical security vulnerabilities 💤 Standardized infrastructure through platform engineerin...",
+  "tags": [
+    "dev",
+    "devops",
+    "cloud",
+    "software",
+    "webdev"
+  ],
+  "published_at": "2026-04-17T05:02:14.000Z",
+  "feed_id": "devto"
+}
