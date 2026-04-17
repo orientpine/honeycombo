@@ -24,9 +24,11 @@
          → compareArticles 로 날짜 내림차순 정렬 → 상위 6개 슬라이싱
          → ArticleCard × 6 (grid-3)
   ↓
-[트렌딩 플레이리스트] 빌드 타임: 스켈레톤 3개 렌더링
+[트렌딩 플레이리스트] 빌드 타임: "불러오는 중..." 로딩 상태 렌더링
          런타임: loadHomeTrending() → fetch('/api/trending?page=1&limit=3')
-         → 응답의 data.playlists.slice(0, 3) 을 인라인 카드 HTML 로 치환
+         → 응답의 data.playlists.slice(0, 3) 을 `<a class="card playlist-card">`
+           (header: 타이틀 2줄 클램프 + 기사 수 pill, footer: 큐레이터 + 랭크 뱃지
+           + 좋아요 수) 구조로 치환
   ↓
 [추천 인플루언서] 빌드 타임: getCollection('influencers').slice(0, 4)
          → InfluencerCard × 4 (grid-2, 모바일 1열)
@@ -67,7 +69,7 @@
 ## 제약 사항
 
 - OS 다크모드 설정과 무관하게 항상 라이트 테마로 표시된다. 배경 흰색 로고 이미지와 페이지 배경의 경계 문제를 차단하기 위함이다.
-- 홈에 새 컴포넌트를 만들지 않는다. 기존 `ArticleCard`, `InfluencerCard`와 인라인 트렌딩 카드 마크업만 사용한다. 트렌딩 카드는 `.trending-page` 스코프로 묶인 `trending.astro`의 `is:global` 스타일과 선택자가 충돌하지 않도록 `home-playlist-*` 접두어를 사용해 독립적으로 스타일링한다.
+- 홈에 새 컴포넌트를 만들지 않는다. 기존 `ArticleCard`, `InfluencerCard`와 `/playlists` 페이지의 카드 마크업(`<a class="card playlist-card">` + `playlist-header`/`-title`/`-count`/`-description`/`-footer`/`-curator`)을 그대로 재사용한다. 트렌딩 전용 랭크 뱃지·좋아요 수(`playlist-stats`·`rank-badge`·`like-count`)는 홈에서만 푸터 우측에 추가한다. 스타일은 `.home-trending-section :global(.playlist-card)` 로 스코프해 `/playlists` 의 `.community-section :global(...)`·`.editor-section :global(...)` 선택자, `/trending` 의 `.trending-page :global(...)` 선택자와 충돌하지 않게 분리한다. 홈 카드는 `/trending` 페이지 대비 타이포를 축소(`0.95rem/600`)하고 랭크 뱃지는 primary→accent 그라데이션 pill 로 정돈해 투박함을 줄였다.
 - 기사 날짜 정렬은 `src/lib/article-sort.ts`의 `compareArticles`에 전적으로 위임한다. 홈은 `/articles` 페이지와 정렬 순서가 동일해야 한다.
 - 트렌딩 섹션은 클라이언트 fetch 기반이다. API가 다운되면 섹션은 안내 메시지로 그레이스풀하게 전환되며, 나머지 섹션은 영향을 받지 않는다.
 - `recentArticles`가 0건이거나 `featuredInfluencers`가 0명일 때도 페이지는 정상 렌더링되며 각 섹션이 빈 상태 안내로 대체된다.
@@ -88,3 +90,4 @@
 |------|----------|
 | 2026-04-17 | 최초 작성 — 메인 페이지 리디자인 및 다크모드 제거 |
 | 2026-04-17 | 메인 페이지 콘텐츠 허브화 — 소개 섹션·최근 기사 6·트렌딩 3·추천 인플루언서 4 섹션 추가, `color-scheme: light` CSS/Meta로 라이트 모드 명시 고정 |
+| 2026-04-17 | 홈 트렌딩 카드 UI를 `/playlists` 구조(`<a class="card playlist-card">`)로 정렬하면서 랭크·좋아요 스탯은 유지. 타이포 축소(0.95rem/600), 랭크 뱃지 primary→accent 그라데이션 pill, 기사 수 tabular-nums pill, 아바타 18px, hover translateY(-2px) 등으로 정돈 |
