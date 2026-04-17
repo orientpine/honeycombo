@@ -36,22 +36,38 @@ const featuredInfluencers = influencerEntries.slice(0, 4);
 <BaseLayout title="HoneyCombo — 기술 뉴스 큐레이션">
   <section class="hero">
     <div class="honey-combo-logo" id="honeyComboLogo"></div>
-    <div class="hero-actions">
-      <a href="/articles" class="btn btn-primary">기사 보기</a>
-      <a href="/trending" class="btn btn-secondary">트렌드 랭킹</a>
-    </div>
-  </section>
 
-  <section class="home-intro">
-    <h2 class="home-intro-title">저비용 기술 뉴스 큐레이션</h2>
-    <p class="home-intro-description">
-      RSS 자동 수집 · 에디터 큐레이션 · 커뮤니티 제출 —
-      세 가지 소스를 한곳에서 모아 최신 기술 뉴스와 인사이트를 빠르게 탐색하세요.
-    </p>
-    <div class="home-intro-pillars">
-      <span class="badge home-pillar-badge">📡 RSS 피드</span>
-      <span class="badge home-pillar-badge">✍️ 에디터 큐레이션</span>
-      <span class="badge home-pillar-badge">🙋 커뮤니티 제출</span>
+    <div class="hero-copy">
+      <h1 class="hero-headline">
+        저비용 기술 뉴스 <span class="hero-headline-accent">큐레이션</span>
+      </h1>
+      <p class="hero-tagline">
+        RSS 자동 수집, 에디터 큐레이션, 커뮤니티 제출 — 세 가지 소스를 한곳에서 모아 최신 기술 인사이트를 빠르게 탐색하세요.
+      </p>
+    </div>
+
+    <ul class="hero-pillars" role="list">
+      <li class="pillar-chip">
+        <span class="pillar-chip-icon" aria-hidden="true">📡</span>
+        <span class="pillar-chip-label">RSS 피드</span>
+      </li>
+      <li class="pillar-chip">
+        <span class="pillar-chip-icon" aria-hidden="true">✍️</span>
+        <span class="pillar-chip-label">에디터 큐레이션</span>
+      </li>
+      <li class="pillar-chip">
+        <span class="pillar-chip-icon" aria-hidden="true">🙋</span>
+        <span class="pillar-chip-label">커뮤니티 제출</span>
+      </li>
+    </ul>
+
+    <div class="hero-actions">
+      <a href="/articles" class="btn btn-primary">
+        <span aria-hidden="true">📰</span> 기사 보기
+      </a>
+      <a href="/trending" class="btn btn-secondary">
+        <span aria-hidden="true">🔥</span> 트렌드 랭킹
+      </a>
     </div>
   </section>
 
@@ -90,7 +106,42 @@ const featuredInfluencers = influencerEntries.slice(0, 4);
       <a href="/trending" class="home-section-link">전체 랭킹 보기 →</a>
     </div>
     <div class="playlist-grid grid grid-3" id="home-trending-grid" aria-live="polite" data-testid="home-trending-grid">
-      <p class="loading-state">불러오는 중...</p>
+      <article class="card playlist-card playlist-card-skeleton" aria-hidden="true">
+        <div class="playlist-header">
+          <span class="skel skel-title"></span>
+          <span class="skel skel-count"></span>
+        </div>
+        <span class="skel skel-text"></span>
+        <span class="skel skel-text skel-text-short"></span>
+        <div class="playlist-footer">
+          <span class="skel skel-author"></span>
+          <span class="skel skel-rank"></span>
+        </div>
+      </article>
+      <article class="card playlist-card playlist-card-skeleton" aria-hidden="true">
+        <div class="playlist-header">
+          <span class="skel skel-title"></span>
+          <span class="skel skel-count"></span>
+        </div>
+        <span class="skel skel-text"></span>
+        <span class="skel skel-text skel-text-short"></span>
+        <div class="playlist-footer">
+          <span class="skel skel-author"></span>
+          <span class="skel skel-rank"></span>
+        </div>
+      </article>
+      <article class="card playlist-card playlist-card-skeleton" aria-hidden="true">
+        <div class="playlist-header">
+          <span class="skel skel-title"></span>
+          <span class="skel skel-count"></span>
+        </div>
+        <span class="skel skel-text"></span>
+        <span class="skel skel-text skel-text-short"></span>
+        <div class="playlist-footer">
+          <span class="skel skel-author"></span>
+          <span class="skel skel-rank"></span>
+        </div>
+      </article>
     </div>
   </section>
 
@@ -120,19 +171,101 @@ const featuredInfluencers = influencerEntries.slice(0, 4);
 <style>
 .hero {
   text-align: center;
-  padding: var(--space-xl) 0 var(--space-xl);
+  padding: var(--space-lg) 0 var(--space-2xl);
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: var(--space-lg);
 }
 
 .honey-combo-logo {
   --hc-duration: 0.7s;
   position: relative;
   width: 100%;
-  max-width: 860px;
+  max-width: 720px;
   aspect-ratio: 4000 / 2209;
-  margin: 0 auto var(--space-lg);
+  margin: 0 auto;
+}
+
+.hero-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  max-width: 640px;
+  width: 100%;
+}
+
+.hero-headline {
+  font-size: clamp(1.65rem, 4vw, 2.4rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+  margin: 0;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+
+.hero-headline-accent {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-tagline {
+  font-size: clamp(0.95rem, 1.4vw, 1.05rem);
+  line-height: 1.65;
+  color: var(--color-text-muted);
+  max-width: 560px;
+  margin: 0;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  text-wrap: pretty;
+}
+
+.hero-pillars {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: center;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pillar-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 8px 14px;
+  background: rgba(245, 124, 34, 0.06);
+  border: 1px solid rgba(245, 124, 34, 0.2);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text);
+  word-break: keep-all;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background 0.2s,
+              border-color 0.2s,
+              box-shadow 0.2s;
+}
+.pillar-chip:hover {
+  background: rgba(245, 124, 34, 0.12);
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(245, 124, 34, 0.18);
+}
+.pillar-chip-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+.pillar-chip-label {
+  line-height: 1.3;
 }
 
 .honey-combo-logo :global(.hc-piece) {
@@ -169,76 +302,48 @@ const featuredInfluencers = influencerEntries.slice(0, 4);
 .btn {
   display: inline-flex;
   align-items: center;
-  padding: var(--space-sm) var(--space-lg);
+  gap: 6px;
+  padding: 12px 22px;
   border-radius: var(--radius-md);
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.95rem;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: -0.005em;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.2s,
+              background 0.2s,
+              border-color 0.2s,
+              color 0.2s;
   text-decoration: none;
   cursor: pointer;
   border: none;
+  font-family: inherit;
 }
 .btn-primary {
   background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
   color: white;
   box-shadow: 0 4px 14px rgba(245, 124, 34, 0.3);
 }
-.btn-primary:hover {
+.btn-primary:hover,
+.btn-primary:focus-visible {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(245, 124, 34, 0.4);
+  box-shadow: 0 8px 24px rgba(245, 124, 34, 0.4);
   color: white;
   text-decoration: none;
+  outline: none;
 }
 .btn-secondary {
   background: white;
   color: var(--color-text);
   border: 1px solid var(--color-border);
 }
-.btn-secondary:hover {
+.btn-secondary:hover,
+.btn-secondary:focus-visible {
   border-color: var(--color-primary);
   color: var(--color-primary);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   text-decoration: none;
-}
-
-.home-intro {
-  text-align: center;
-  padding: var(--space-lg) var(--space-md);
-  background: var(--color-bg-secondary);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  margin-bottom: var(--space-xl);
-}
-.home-intro-title {
-  font-size: clamp(1.4rem, 3vw, 1.85rem);
-  font-weight: 800;
-  line-height: 1.3;
-  margin-bottom: var(--space-sm);
-  color: var(--color-text);
-}
-.home-intro-description {
-  color: var(--color-text-muted);
-  font-size: 1rem;
-  line-height: 1.6;
-  max-width: 640px;
-  margin: 0 auto var(--space-md);
-}
-.home-intro-pillars {
-  display: flex;
-  gap: var(--space-sm);
-  justify-content: center;
-  flex-wrap: wrap;
-}
-.home-pillar-badge {
-  background: var(--color-bg);
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
-  text-transform: none;
-  letter-spacing: 0;
-  font-weight: 600;
-  padding: var(--space-xs) var(--space-md);
-  font-size: 0.8rem;
+  outline: none;
 }
 
 .home-section {
@@ -300,8 +405,8 @@ const featuredInfluencers = influencerEntries.slice(0, 4);
   gap: var(--space-sm);
 }
 .home-trending-section :global(.playlist-title) {
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: 700;
   line-height: 1.4;
   letter-spacing: -0.005em;
   color: var(--color-text);
@@ -309,6 +414,8 @@ const featuredInfluencers = influencerEntries.slice(0, 4);
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
   min-width: 0;
   flex: 1;
 }
@@ -322,11 +429,6 @@ const featuredInfluencers = influencerEntries.slice(0, 4);
   white-space: nowrap;
   flex-shrink: 0;
   line-height: 1.5;
-}
-.home-trending-section :global(.playlist-count)::after {
-  content: '개';
-  margin-left: 1px;
-  opacity: 0.7;
 }
 .home-trending-section :global(.playlist-description) {
   font-size: 0.8rem;
@@ -405,6 +507,28 @@ const featuredInfluencers = influencerEntries.slice(0, 4);
   color: var(--color-text-muted);
 }
 
+.home-trending-section :global(.playlist-card-skeleton) {
+  pointer-events: none;
+}
+.home-trending-section :global(.skel) {
+  display: block;
+  background: linear-gradient(90deg, var(--color-bg-secondary) 25%, rgba(255, 255, 255, 0.6) 50%, var(--color-bg-secondary) 75%);
+  background-size: 200% 100%;
+  animation: home-skel-shimmer 1.4s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+.home-trending-section :global(.skel-title) { width: 70%; height: 1.1rem; }
+.home-trending-section :global(.skel-count) { width: 2.5rem; height: 1.05rem; border-radius: 999px; }
+.home-trending-section :global(.skel-text) { width: 100%; height: 0.85rem; }
+.home-trending-section :global(.skel-text-short) { width: 70%; }
+.home-trending-section :global(.skel-author) { width: 6rem; height: 0.8rem; }
+.home-trending-section :global(.skel-rank) { width: 3.5rem; height: 1.1rem; border-radius: 999px; }
+
+@keyframes home-skel-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 @media (max-width: 600px) {
   .home-trending-section :global(.playlist-footer) {
     flex-wrap: wrap;
@@ -417,16 +541,27 @@ const featuredInfluencers = influencerEntries.slice(0, 4);
 
 @media (max-width: 600px) {
   .hero {
-    padding: var(--space-md) 0 var(--space-lg);
+    padding: var(--space-md) 0 var(--space-xl);
+    gap: var(--space-md);
   }
   .honey-combo-logo {
     max-width: 100%;
   }
-  .home-intro {
-    padding: var(--space-md);
+  .hero-pillars {
+    gap: var(--space-xs);
   }
-  .home-intro-title {
-    font-size: 1.25rem;
+  .pillar-chip {
+    padding: 6px 12px;
+    font-size: 0.8125rem;
+  }
+  .hero-actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0 var(--space-md);
+  }
+  .btn {
+    justify-content: center;
   }
   .home-section-header {
     flex-direction: column;
@@ -510,9 +645,9 @@ async function loadHomeTrending() {
       const itemCount = Number(p.item_count || 0);
       const likeCount = Number(p.like_count || 0);
       const username = escapeHtml((p.user && p.user.username) || 'unknown');
-      const descriptionHtml = (p.description && String(p.description).trim())
-        ? `<p class="playlist-description">${escapeHtml(p.description)}</p>`
-        : '';
+      const descriptionText = (p.description && String(p.description).trim())
+        ? escapeHtml(p.description)
+        : `@${username}의 플레이리스트 · ${itemCount}개 기사`;
       const avatarHtml = p.user && p.user.avatar_url
         ? `<img src="${escapeHtml(p.user.avatar_url)}" alt="" class="curator-avatar" />`
         : '';
@@ -521,16 +656,16 @@ async function loadHomeTrending() {
       return `<a href="/p/${playlistId}" class="card playlist-card">
         <div class="playlist-header">
           <h3 class="playlist-title">${title}</h3>
-          <span class="playlist-count">${itemCount}</span>
+          <span class="playlist-count">${itemCount}개</span>
         </div>
-        ${descriptionHtml}
+        <p class="playlist-description">${descriptionText}</p>
         <div class="playlist-footer">
           <span class="playlist-curator">
             ${avatarHtml}
             <span class="playlist-curator-name">@${username}</span>
           </span>
           <span class="playlist-stats">
-            <span class="rank-badge">#${rank}</span>
+            <span class="rank-badge" aria-label="랭킹 ${rank}위">#${rank}</span>
             <span class="like-count" aria-label="좋아요 ${likeCount}"><span aria-hidden="true">♥</span> ${likeCount}</span>
           </span>
         </div>
