@@ -1,0 +1,17 @@
+{
+  "id": "749a7a4e9254621e",
+  "title": "AI Agents in Industrial Automation: Unlocking the Next Era of American Manufacturing",
+  "url": "https://dev.to/nodeblue/ai-agents-in-industrial-automation-unlocking-the-next-era-of-american-manufacturing-12od",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "For decades, industrial automation has been one of the most technically advanced yet structurally stagnant industries in the world. Factories run on systems that are extraordinarily reliable, highly deterministic, and often decades old. PLCs, SCADA platforms, industrial networks, and safety systems form the backbone of modern manufacturing, logistics, energy, and critical infrastructure. Yet despite how advanced these systems are in function, the software ecosystem around them remains deeply fragmented, vendor-locked, and resistant to innovation. This is exactly where AI agents have the potential to create one of the largest industrial revolutions of the next decade. Most industrial environments operate as layered systems: PLC Logic — ladder logic, structured text, AOIs, routines, tags Network Layer — EtherNet/IP, CIP, OPC UA, fieldbus communication SCADA / HMI Layer — alarms, visualization, operator controls MES / Historian Layer — reporting, production data, analytics Each layer w...",
+  "tags": [
+    "dev",
+    "ai",
+    "automation",
+    "software",
+    "techtalks"
+  ],
+  "published_at": "2026-04-17T05:04:25.000Z",
+  "feed_id": "devto"
+}

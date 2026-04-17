@@ -1,0 +1,17 @@
+{
+  "id": "7f29bcfba1d2a1fc",
+  "title": "Draw a Digit and Watch the Neural Network Think in Real Time",
+  "url": "https://dev.to/tomoiura/draw-a-digit-and-watch-the-neural-network-think-in-real-time-3oe8",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "Introduction \"A neural network can recognize digits\" — but what's actually happening inside? I built a tool where you draw a digit with your finger or mouse, and watch the CNN (Convolutional Neural Network) recognize it in real time, with the internal signal flow visualized as it happens. Try the Demo (runs in your browser — no install needed) GitHub Repository A tool that lets you see how a neural network makes its decisions as you draw handwritten digits. Dial-style Heatmap — Digits 0–9 arranged like a phone dial, with color intensity showing confidence in real time. As you draw, you can see the network thinking: \"looks like an 8... wait, now it's a 3.\" Network Diagram — Input → Conv1 → Conv2 → FC → Output nodes and links light up orange based on signal strength. You can trace exactly which pathways the signal took to reach the answer. CNN Input Preview — Shows how your drawing gets downscaled to 28×28 pixels. This is what the network actually \"sees.\" Not an Emulation — The Real T...",
+  "tags": [
+    "dev",
+    "machinelearning",
+    "neuralnetwork",
+    "visualization",
+    "ai"
+  ],
+  "published_at": "2026-04-17T04:56:35.000Z",
+  "feed_id": "devto"
+}
