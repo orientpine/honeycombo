@@ -228,7 +228,7 @@ document.addEventListener('astro:page-load', () => {
           giscusScript.setAttribute('data-reactions-enabled', '1');
           giscusScript.setAttribute('data-emit-metadata', '0');
           giscusScript.setAttribute('data-input-position', 'top');
-          giscusScript.setAttribute('data-theme', 'preferred_color_scheme');
+          giscusScript.setAttribute('data-theme', 'light');
           giscusScript.setAttribute('data-lang', 'ko');
           giscusScript.crossOrigin = 'anonymous';
           giscusScript.async = true;

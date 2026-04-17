@@ -106,7 +106,7 @@
 
 | URL | 페이지 | 설명 |
 |-----|--------|------|
-| `/` | `index.astro` | 메인 (최신 기사) |
+| `/` | `index.astro` | 메인 (CSS 애니메이션 로고 + CTA) |
 | `/articles` | `articles/index.astro` | 기사 목록 (SourceFilter: 전체/에디터추천/제출기사/RSS) |
 | `/articles/[slug]` | `articles/[...slug].astro` | 개별 기사 (curated만) |
 | `/trending` | `trending.astro` | 트렌딩 플레이리스트 (Astro SSG shell + client fetch, 좋아요 수 순위) |

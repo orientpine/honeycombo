@@ -42,9 +42,8 @@ const canonicalUrl = new URL(canonicalPath || Astro.url.pathname, siteUrl).href;
     <link rel="alternate" type="application/rss+xml" title="HoneyCombo RSS" href="/rss.xml" />
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <!-- Hero image preload (theme-specific) -->
-    <link rel="preload" as="image" href="/main_image_white_bg.webp" media="(prefers-color-scheme: light)" fetchpriority="high" />
-    <link rel="preload" as="image" href="/main_image_black_bg.webp" media="(prefers-color-scheme: dark)" fetchpriority="high" />
+    <!-- Logo image preload -->
+    <link rel="preload" as="image" href="/images/logo/group_4.png" fetchpriority="high" />
     <ClientRouter />
   </head>
   <body>
