@@ -32,7 +32,7 @@ const formattedDate = new Date(date).toLocaleDateString('ko-KR', { year: 'numeri
   )}
   <div class="article-body">
     <div class="article-meta">
-      <span class="badge">{source}</span>
+      <span class="badge">{articleOrigin === 'submitted' ? 'User Submission' : source}</span>
       {type === 'youtube' && <span class="badge badge-primary">YouTube</span>}
       <time class="article-date" datetime={new Date(date).toISOString()}>{formattedDate}</time>
     </div>
