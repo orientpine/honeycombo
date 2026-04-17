@@ -67,7 +67,10 @@ jobs:
       - name: Enable auto-merge (squash)
         if: steps.check_editor.outputs.is_editor == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # GITHUB_TOKEN은 enablePullRequestAutoMerge GraphQL mutation에 대해
+          # "Resource not accessible by integration" 오류를 반환한다.
+          # process-submission.yml도 동일한 이유로 secrets.PAT를 사용한다.
+          GH_TOKEN: ${{ secrets.PAT }}
           REPO: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
