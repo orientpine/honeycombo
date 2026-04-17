@@ -1,0 +1,13 @@
+{
+  "id": "3293dfc10b667add",
+  "title": "Building an Information Firewall for AI Agents",
+  "url": "https://dev.to/trustboostai/building-an-information-firewall-for-ai-agents-2gca",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "Published: true Description:TrustBoost is an open source middleware that redacts PII and verifies payments on Solana for autonomous AI agents. I've been building AI agents (local and cloud-based) and noticed a recurring problem: agents leak sensitive data. Emails, passwords, private keys, internal hostnames — all sent directly to LLMs without any control. So I built TrustBoost. TrustBoost sits between your agent and the LLM. It acts as an information firewall with three layers: Layer Function Payment verification Checks Solana Network transactions (149 USDC for 10,000 sanitizations) — no human approval PII redaction Uses GPT-4o-mini to detect and redact emails, passwords, private keys Audit logging Saves every operation to Google Sheets for traceability Agents transact with each other without humans. Solana is fast, cheap, and Helius API makes verification simple. bash curl -X POST \"https://hook.us2.make.com/h4xqu3de1qlzn9mbrf7npe8rkelpft36\" \\ -H \"Content-Type: application/json\" \\ -...",
+  "tags": [
+    "dev"
+  ],
+  "published_at": "2026-04-17T15:07:56.000Z",
+  "feed_id": "devto"
+}

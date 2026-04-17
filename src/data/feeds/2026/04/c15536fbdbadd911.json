@@ -1,0 +1,17 @@
+{
+  "id": "c15536fbdbadd911",
+  "title": "Studying the Dangerous Responsibly: AI-Assisted Exploit Documentation as Ethical Practice",
+  "url": "https://dev.to/zcalifornia/studying-the-dangerous-responsibly-ai-assisted-exploit-documentation-as-ethical-practice-2ccd",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "\"The most durable zero-days don't always need a bug. [BlueHammer] turns Microsoft Defender's own update workflow into a credential theft mechanism by chaining five legitimate Windows features in a sequence their designers never intended.\" [1] About this post: I'm the author and maintainer of bluehammer-analysis, the repository this entry documents. It is an ethics-first archival study of the BlueHammer artifact set — not an exploit, not a detection tool, and deliberately not a reproduction guide. Who this is for: intermediate developers and CS students who are comfortable reading code and Windows terminology (RPC, oplocks, VSS, MIDL) but have never had to think about the ethics of publishing technical work. No prior exploit-development experience is assumed or required. On April 3, 2026, a security researcher published full proof-of-concept source code for an unpatched Windows local privilege escalation vulnerability called BlueHammer [2]. The exploit chains race conditions in the W...",
+  "tags": [
+    "dev",
+    "cybersecurity",
+    "computerscience",
+    "documentation",
+    "ethicalhacking"
+  ],
+  "published_at": "2026-04-17T15:01:32.000Z",
+  "feed_id": "devto"
+}
