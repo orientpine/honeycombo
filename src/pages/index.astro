@@ -1,5 +1,36 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import InfluencerCard from '../components/InfluencerCard.astro';
+import { compareArticles } from '../lib/article-sort';
+
+const curatedEntries = await getCollection('curated', (entry: any) => entry.data.status === 'approved').catch((err: unknown) => {
+  console.error('Failed to load curated collection:', err);
+  return [];
+});
+
+const feedEntries = await getCollection('feeds').catch((err: unknown) => {
+  console.error('Failed to load feeds collection:', err);
+  return [];
+});
+
+const allArticles = [
+  ...curatedEntries.map((e: any) => ({
+    ...e.data,
+    _type: (e.data.source === 'User Submission' || e.data.source === 'YouTube') && e.data.submitted_by ? 'submitted' as const : 'curated' as const,
+    _id: e.id,
+  })),
+  ...feedEntries.map((e: any) => ({ ...e.data, _type: 'feed' as const, _id: e.id })),
+].sort(compareArticles);
+
+const recentArticles = allArticles.slice(0, 6);
+
+const influencerEntries = await getCollection('influencers').catch((err: unknown) => {
+  console.error('Failed to load influencers collection:', err);
+  return [];
+});
+const featuredInfluencers = influencerEntries.slice(0, 4);
 ---
 
 <BaseLayout title="HoneyCombo — 기술 뉴스 큐레이션">
@@ -10,25 +41,133 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <a href="/trending" class="btn btn-secondary">트렌드 랭킹</a>
     </div>
   </section>
+
+  <section class="home-intro">
+    <h2 class="home-intro-title">저비용 기술 뉴스 큐레이션</h2>
+    <p class="home-intro-description">
+      RSS 자동 수집 · 에디터 큐레이션 · 커뮤니티 제출 —
+      세 가지 소스를 한곳에서 모아 최신 기술 뉴스와 인사이트를 빠르게 탐색하세요.
+    </p>
+    <div class="home-intro-pillars">
+      <span class="badge home-pillar-badge">📡 RSS 피드</span>
+      <span class="badge home-pillar-badge">✍️ 에디터 큐레이션</span>
+      <span class="badge home-pillar-badge">🙋 커뮤니티 제출</span>
+    </div>
+  </section>
+
+  <section class="home-section">
+    <div class="home-section-header">
+      <h2 class="home-section-title">📰 최근 기사</h2>
+      <a href="/articles" class="home-section-link">모든 기사 보기 →</a>
+    </div>
+    {recentArticles.length > 0 ? (
+      <div class="grid grid-3" data-testid="home-recent-articles">
+        {recentArticles.map((article: any) => (
+          <ArticleCard
+            id={article._id}
+            title={article.title}
+            url={article.url}
+            source={article.source}
+            type={article.type}
+            description={article.description}
+            tags={article.tags}
+            date={'submitted_at' in article && article.submitted_at ? article.submitted_at : article.published_at}
+            thumbnail_url={article.thumbnail_url}
+            isExternal={false}
+            slug={article._id}
+            articleOrigin={article._type}
+          />
+        ))}
+      </div>
+    ) : (
+      <p class="home-empty-state">기사를 수집 중입니다. 잠시 후 다시 확인해주세요.</p>
+    )}
+  </section>
+
+  <section class="home-section home-trending-section">
+    <div class="home-section-header">
+      <h2 class="home-section-title">🔥 트렌딩 플레이리스트</h2>
+      <a href="/trending" class="home-section-link">전체 랭킹 보기 →</a>
+    </div>
+    <div class="grid grid-3" id="home-trending-grid" aria-live="polite" data-testid="home-trending-grid">
+      <article class="card home-playlist-card home-playlist-skeleton">
+        <div class="home-playlist-header">
+          <span class="home-skel home-skel-title"></span>
+          <span class="home-skel home-skel-count"></span>
+        </div>
+        <span class="home-skel home-skel-text"></span>
+        <span class="home-skel home-skel-text home-skel-text-short"></span>
+        <div class="home-playlist-footer">
+          <span class="home-skel home-skel-author"></span>
+          <span class="home-skel home-skel-rank"></span>
+        </div>
+      </article>
+      <article class="card home-playlist-card home-playlist-skeleton">
+        <div class="home-playlist-header">
+          <span class="home-skel home-skel-title"></span>
+          <span class="home-skel home-skel-count"></span>
+        </div>
+        <span class="home-skel home-skel-text"></span>
+        <span class="home-skel home-skel-text home-skel-text-short"></span>
+        <div class="home-playlist-footer">
+          <span class="home-skel home-skel-author"></span>
+          <span class="home-skel home-skel-rank"></span>
+        </div>
+      </article>
+      <article class="card home-playlist-card home-playlist-skeleton">
+        <div class="home-playlist-header">
+          <span class="home-skel home-skel-title"></span>
+          <span class="home-skel home-skel-count"></span>
+        </div>
+        <span class="home-skel home-skel-text"></span>
+        <span class="home-skel home-skel-text home-skel-text-short"></span>
+        <div class="home-playlist-footer">
+          <span class="home-skel home-skel-author"></span>
+          <span class="home-skel home-skel-rank"></span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="home-section">
+    <div class="home-section-header">
+      <h2 class="home-section-title">⭐ 추천 인플루언서</h2>
+      <a href="/influencers" class="home-section-link">전체 보기 →</a>
+    </div>
+    {featuredInfluencers.length > 0 ? (
+      <div class="grid grid-2" data-testid="home-featured-influencers">
+        {featuredInfluencers.map((inf: any) => (
+          <InfluencerCard
+            id={inf.data.id}
+            name={inf.data.name}
+            platform={inf.data.platform}
+            handle={inf.data.handle}
+            bio={inf.data.bio}
+          />
+        ))}
+      </div>
+    ) : (
+      <p class="home-empty-state">인플루언서를 준비 중입니다.</p>
+    )}
+  </section>
 </BaseLayout>
 
 <style>
 .hero {
   text-align: center;
-  padding: var(--space-xl) 0 var(--space-2xl);
+  padding: var(--space-xl) 0 var(--space-xl);
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/* Honey Combo Logo Animation */
 .honey-combo-logo {
   --hc-duration: 0.7s;
   position: relative;
   width: 100%;
   max-width: 860px;
   aspect-ratio: 4000 / 2209;
-  margin: 0 auto var(--space-xl);
+  margin: 0 auto var(--space-lg);
 }
 
 .honey-combo-logo :global(.hc-piece) {
@@ -56,7 +195,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   100% { opacity: 1; transform: translateY(0); }
 }
 
-/* CTA Buttons */
 .hero-actions {
   display: flex;
   gap: var(--space-md);
@@ -99,12 +237,227 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   text-decoration: none;
 }
 
+.home-intro {
+  text-align: center;
+  padding: var(--space-lg) var(--space-md);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-xl);
+}
+.home-intro-title {
+  font-size: clamp(1.4rem, 3vw, 1.85rem);
+  font-weight: 800;
+  line-height: 1.3;
+  margin-bottom: var(--space-sm);
+  color: var(--color-text);
+}
+.home-intro-description {
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 640px;
+  margin: 0 auto var(--space-md);
+}
+.home-intro-pillars {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.home-pillar-badge {
+  background: var(--color-bg);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 600;
+  padding: var(--space-xs) var(--space-md);
+  font-size: 0.8rem;
+}
+
+.home-section {
+  padding: var(--space-lg) 0;
+}
+.home-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+.home-section-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+.home-section-link {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.home-section-link:hover,
+.home-section-link:focus-visible {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+  outline: none;
+}
+.home-empty-state {
+  text-align: center;
+  padding: var(--space-2xl) var(--space-md);
+  color: var(--color-text-muted);
+  background: var(--color-bg-secondary);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.home-playlist-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  color: var(--color-text);
+  text-decoration: none;
+  min-height: 160px;
+}
+.home-playlist-card:hover {
+  text-decoration: none;
+}
+.home-playlist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-sm);
+}
+.home-playlist-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+.home-playlist-title a {
+  color: var(--color-text);
+  text-decoration: none;
+}
+.home-playlist-title a:hover,
+.home-playlist-title a:focus-visible {
+  color: var(--color-primary);
+  outline: none;
+}
+.home-playlist-count {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  background: var(--color-bg-secondary);
+  padding: 2px var(--space-sm);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.home-playlist-description {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.home-playlist-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  gap: var(--space-sm);
+}
+.home-playlist-curator {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.home-curator-avatar {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.home-playlist-stats {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+}
+.home-rank-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.2rem;
+  padding: 0.18rem 0.45rem;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: var(--color-text);
+  font-weight: 800;
+  font-size: 0.75rem;
+}
+.home-like-count {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.home-skel {
+  display: block;
+  background: linear-gradient(90deg, var(--color-bg-secondary) 25%, rgba(255, 255, 255, 0.6) 50%, var(--color-bg-secondary) 75%);
+  background-size: 200% 100%;
+  animation: home-skel-shimmer 1.4s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+.home-skel-title { width: 70%; height: 1.1rem; }
+.home-skel-count { width: 2.2rem; height: 1rem; }
+.home-skel-text { width: 100%; height: 0.85rem; }
+.home-skel-text-short { width: 80%; }
+.home-skel-author { width: 6rem; height: 0.8rem; }
+.home-skel-rank { width: 3rem; height: 0.9rem; }
+
+@keyframes home-skel-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@media (max-width: 768px) {
+  .home-playlist-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xs);
+  }
+  .home-playlist-stats {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
 @media (max-width: 600px) {
   .hero {
-    padding: var(--space-md) 0 var(--space-xl);
+    padding: var(--space-md) 0 var(--space-lg);
   }
   .honey-combo-logo {
     max-width: 100%;
+  }
+  .home-intro {
+    padding: var(--space-md);
+  }
+  .home-intro-title {
+    font-size: 1.25rem;
+  }
+  .home-section-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 </style>
@@ -154,6 +507,66 @@ function initHoneyComboLogo(options: Record<string, any> = {}) {
   });
 }
 
-// Play on page load and on Astro client-side navigation
-document.addEventListener('astro:page-load', () => initHoneyComboLogo());
+function escapeHtml(value: unknown): string {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+async function loadHomeTrending() {
+  const grid = document.getElementById('home-trending-grid');
+  if (!grid) return;
+
+  try {
+    const res = await fetch('/api/trending?page=1&limit=3', { credentials: 'same-origin' });
+    if (!res.ok) throw new Error('trending fetch failed');
+    const data = await res.json();
+    const playlists = Array.isArray(data?.playlists) ? data.playlists.slice(0, 3) : [];
+
+    if (playlists.length === 0) {
+      grid.innerHTML = '<p class="home-empty-state">아직 공개된 플레이리스트가 없습니다.</p>';
+      return;
+    }
+
+    grid.innerHTML = playlists.map((p: any, index: number) => {
+      const playlistId = escapeHtml(p.id ?? '');
+      const title = escapeHtml(p.title ?? '제목 없음');
+      const itemCount = Number(p.item_count || 0);
+      const likeCount = Number(p.like_count || 0);
+      const username = escapeHtml((p.user && p.user.username) || 'unknown');
+      const description = (p.description && String(p.description).trim())
+        ? escapeHtml(p.description)
+        : `@${username}의 플레이리스트 · ${itemCount}개 기사`;
+      const avatarHtml = p.user && p.user.avatar_url
+        ? `<img src="${escapeHtml(p.user.avatar_url)}" alt="" class="home-curator-avatar" />`
+        : '';
+      const rank = index + 1;
+
+      return `<article class="card home-playlist-card">
+        <div class="home-playlist-header">
+          <h3 class="home-playlist-title"><a href="/p/${playlistId}">${title}</a></h3>
+          <span class="home-playlist-count">${itemCount}개</span>
+        </div>
+        <p class="home-playlist-description">${description}</p>
+        <div class="home-playlist-footer">
+          <span class="home-playlist-curator">${avatarHtml}by @${username}</span>
+          <span class="home-playlist-stats">
+            <span class="home-rank-badge">#${rank}</span>
+            <span class="home-like-count">❤️ ${likeCount}</span>
+          </span>
+        </div>
+      </article>`;
+    }).join('');
+  } catch {
+    grid.innerHTML = '<p class="home-empty-state">트렌딩 플레이리스트를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</p>';
+  }
+}
+
+document.addEventListener('astro:page-load', () => {
+  initHoneyComboLogo();
+  loadHomeTrending();
+});
 </script>

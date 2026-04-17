@@ -106,7 +106,7 @@
 
 | URL | 페이지 | 설명 |
 |-----|--------|------|
-| `/` | `index.astro` | 메인 (CSS 애니메이션 로고 + CTA) |
+| `/` | `index.astro` | 메인 (히어로 + 소개 + 최근 기사 6 + 트렌딩 플레이리스트 3 + 추천 인플루언서 4) |
 | `/articles` | `articles/index.astro` | 기사 목록 (SourceFilter: 전체/에디터추천/제출기사/RSS) |
 | `/articles/[slug]` | `articles/[...slug].astro` | 개별 기사 (curated만) |
 | `/trending` | `trending.astro` | 트렌딩 플레이리스트 (Astro SSG shell + client fetch, 좋아요 수 순위) |
@@ -221,3 +221,4 @@ src/ (pages + components + data + content) → astro build → dist/
 | 2026-04-13 | merge=approval 전환, 에디터 자동 merge, editors.json 추가 |
 | 2026-04-14 | 커뮤니티 자유 발제 기능 추가 (GitHub Discussions 기반, /community 페이지, api/discussions/* API) |
 | 2026-04-16 | CI 파이프라인에 wrangler 직접 배포 추가 (Cloudflare GitHub App 이벤트 누락 근본 해결) |
+| 2026-04-17 | 메인 페이지 콘텐츠 허브화 — 소개 섹션·최근 기사·트렌딩·추천 인플루언서 추가, `color-scheme: light` 메타/CSS로 라이트 모드 고정 |
