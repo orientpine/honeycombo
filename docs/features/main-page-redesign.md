@@ -19,7 +19,7 @@
   ↓
 [Hero 통합 블록]
   - 애니메이션 로고: initHoneyComboLogo() → 9개 PNG 조각 scale/fade
-  - <h1> 헤드라인: "저비용 기술 뉴스 큐레이션" + 그라데이션 액센트 단어
+  - <h1> 헤드라인: "기술 뉴스 큐레이션" + 그라데이션 액센트 단어
   - 태그라인: 한 줄 가치 제안 (word-break: keep-all 적용)
   - 3-pillar 칩 (📡 RSS / ✍️ 에디터 / 🙋 커뮤니티) — hover lift
   - CTA: 기사 보기 (primary, gradient) + 트렌드 랭킹 (secondary)
@@ -99,3 +99,4 @@
 | 2026-04-17 | 메인 페이지 콘텐츠 허브화 — 소개 섹션·최근 기사 6·트렌딩 3·추천 인플루언서 4 섹션 추가, `color-scheme: light` CSS/Meta로 라이트 모드 명시 고정 |
 | 2026-04-17 | 홈 트렌딩 카드 UI를 `/playlists` 구조(`<a class="card playlist-card">`)로 정렬하면서 랭크·좋아요 스탯은 유지. 타이포 축소(0.95rem/600), 랭크 뱃지 primary→accent 그라데이션 pill, 기사 수 tabular-nums pill, 아바타 18px, hover translateY(-2px) 등으로 정돈 |
 | 2026-04-17 | Hero/Intro 통합 + 트렌딩 카드 마감. (1) Hero 블록을 로고 + h1 헤드라인(그라데이션 액센트) + 태그라인 + 3-pillar 칩 + CTA 단일 수직 스택으로 통합, 별도 `.home-intro` 카드 섹션 제거. (2) 한국어 어절 줄바꿈 문제(예: "최신기술 뉴" 분리) 해소를 위해 헤드라인·태그라인·트렌딩 타이틀에 `word-break: keep-all` + `overflow-wrap: break-word` 적용, 헤드라인은 `text-wrap: balance` 추가. (3) Pillar는 `<ul role=list>` 로 시맨틱화하고 칩은 orange-tinted bg + hover translateY(-2px) + bounce easing. (4) CTA는 이모지 + bounce easing(cubic-bezier(0.34, 1.56, 0.64, 1)) + 모바일 풀폭. (5) 트렌딩 카드 Oracle 검증 마감: 타이틀 1rem/700 복원, description fallback 복원, 3장 스켈레톤 복원, 랭크/좋아요 aria-label 추가, "개"는 마크업에 직접 포함 |
+| 2026-04-17 | Hero 헤드라인에서 "저비용" 수식어 제거 — "저비용 기술 뉴스 큐레이션" → "기술 뉴스 큐레이션" |
