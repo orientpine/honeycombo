@@ -6,6 +6,33 @@
 - 커밋 메시지는 conventional commits 형식을 따른다 (`feat:`, `fix:`, `chore:`, `docs:` 등).
 - 관련 없는 변경 사항은 별도 커밋으로 분리한다.
 
+### 관리자 PR 자동 머지 (필수)
+
+> **관리자(개발자)가 직접 생성하는 모든 PR은 생성 직후 auto-merge를 활성화한다.** master 브랜치는 Repository Ruleset(`ruleset_id: 15005022`)으로 보호되어 있어 `ci` status check 통과가 필수이므로, auto-merge를 미리 켜두면 CI 통과 즉시 자동으로 머지된다.
+
+**PR 생성 직후 반드시 실행**:
+
+```bash
+gh pr merge <PR_NUMBER> --auto --squash --delete-branch
+```
+
+- `--auto`: CI 통과 시 자동 머지
+- `--squash`: squash merge (커밋 히스토리 깔끔하게 유지)
+- `--delete-branch`: 머지 후 원격 브랜치 자동 삭제
+
+**적용 범위 — 이 규칙은 다음 모든 PR에 적용된다**:
+
+- 코드 수정 (`src/`, `functions/`, `scripts/`, `public/` 등)
+- 문서 수정 (`docs/`, `AGENTS.md`, `README.md` 등)
+- 설정 변경 (`.github/`, `astro.config.mjs`, `package.json` 등)
+- 기능 추가 / 리팩토링 / hotfix / chore — 타입 무관
+
+**유일한 예외**: `.github/workflows/process-submission.yml`이 bot 계정으로 생성하는 **issue 기반 submission PR**. 해당 워크플로우의 `Auto-merge if editor` 스텝(line 151-177)이 editor 계정 한정으로 이미 `gh pr merge --merge --auto`를 실행하므로 사람이 추가 조치할 필요 없음.
+
+**Draft PR**: Ready for Review로 전환한 뒤 위 명령을 실행한다. Draft 상태에서는 `--auto` 플래그가 거부된다.
+
+**왜 필요한가**: master는 보호되어 있어 CI 통과 후에도 **사람이 수동으로 머지 버튼을 눌러야** 한다. 관리자 본인이 만든 PR을 본인이 지켜보며 기다릴 이유가 없으므로, CI 통과 즉시 자동 반영되도록 PR 생성 직후 auto-merge를 반드시 켜둔다. 이 단계를 빠뜨리면 본인 PR이 CI 통과 후에도 방치되어 피드백 루프가 늘어진다.
+
 ## 배포 (Cloudflare Pages)
 
 - **즉시 배포 요청 시**: Cloudflare Pages GitHub App 연동은 짧은 시간 내 다수 push 시 이벤트를 놓치는 경우가 있다. 사용자가 "즉시 배포", "지금 반영" 등을 요청하면 wrangler CLI로 직접 배포한다.
