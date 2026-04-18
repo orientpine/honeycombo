@@ -1,0 +1,17 @@
+{
+  "id": "a42db73946ec3cf2",
+  "title": "Introducing Plumbed, self-healing integrations in days, not months",
+  "url": "https://dev.to/sven_mrz_dfc2d01f06d7f20/introducing-plumbed-self-healing-integrations-in-days-not-months-1mm5",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "If you’ve ever shipped a “finished” integration only to spend the next months babysitting it, you already know the real cost isn’t the build, it’s the uptime. At Plumbed.io, we’re building an AI-native integration platform that takes ownership of the full lifecycle: from prompt-driven setup to monitoring, self-healing, and continuous updates when APIs change. Build integrations in days, not months via a conversational, prompt-driven workflow Automated mapping and transformation for real-world data (ETL) Self-healing operations: monitoring, proactive error handling, and quick reruns/fixes Governed AI + human-in-the-loop for production control and visibility Flexible deployment: managed cloud or on-prem/custom infrastructure We work on practical integration challenges, like: launching new commerce/marketplace channels faster, connecting partner-operated stores to HQ systems (APIs, CSVs, scheduled exports), turning messy store data into stable analytics pipelines. If this sounds like y...",
+  "tags": [
+    "dev",
+    "integration",
+    "api",
+    "devops",
+    "saas"
+  ],
+  "published_at": "2026-04-18T14:38:49.000Z",
+  "feed_id": "devto"
+}
