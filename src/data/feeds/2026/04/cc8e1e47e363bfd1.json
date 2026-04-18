@@ -1,0 +1,17 @@
+{
+  "id": "cc8e1e47e363bfd1",
+  "title": "The AI bill that made me build TokenBar",
+  "url": "https://dev.to/johns23424234324234/the-ai-bill-that-made-me-build-tokenbar-3agg",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "Last month I opened an AI invoice and had that tiny stomach-drop moment every solo dev knows. I was using a handful of models across a bunch of tabs and tools, and the cost was not obvious until the bill showed up. Nothing was broken. It was just invisible. That bugged me enough that I started building TokenBar. TokenBar lives in the menu bar and shows token usage in real time so I can see what I am actually spending while I work. Not after the fact. Not buried in a dashboard I never check. Right there, while the context is still fresh. The lesson was not really about tokens. It was about visibility. When a cost is hidden, I ignore it. I think the same thing applies to attention, too. If my phone is buzzing, Slack is open, and a dozen browser tabs are stealing context, I do not feel distracted in some abstract way. I just feel slower. The damage shows up later in the work. That is the other reason I like building small tools. They turn vague pain into something concrete enough to fi...",
+  "tags": [
+    "dev",
+    "ai",
+    "llm",
+    "productivity",
+    "showdev"
+  ],
+  "published_at": "2026-04-18T04:05:44.000Z",
+  "feed_id": "devto"
+}

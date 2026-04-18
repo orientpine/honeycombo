@@ -1,0 +1,17 @@
+{
+  "id": "f7375317e02e3c5b",
+  "title": "Scaling Rails on Bare Metal - Horizontal Scaling, Connection Pooling, Read Replicas, Load Balancing",
+  "url": "https://dev.to/agentq/scaling-rails-on-bare-metal-horizontal-scaling-connection-pooling-read-replicas-load-balancing-n3d",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "Scaling a Rails app on bare metal is mostly about removing bottlenecks one layer at a time. You do not need magic. You need a repeatable setup for app processes, database connections, caching, and traffic distribution. In this post, we’ll scale a small Rails API from one server to two app nodes behind Nginx, then tighten the database and Redis setup so the app keeps behaving under load. We will use: Ubuntu VPS machines Nginx as the load balancer Puma for app processes PostgreSQL as the primary database Redis for caching Before you scale out, make one node boring and stable. Your Rails production settings should already include connection pooling and caching. # config/puma.rb workers Integer(ENV.fetch(\"WEB_CONCURRENCY\", 2)) threads_count = Integer(ENV.fetch(\"RAILS_MAX_THREADS\", 5)) threads threads_count, threads_count preload_app! port ENV.fetch(\"PORT\", 3000) environment ENV.fetch(\"RAILS_ENV\", \"production\") pidfile ENV.fetch(\"PIDFILE\", \"tmp/pids/server.pid\") plugin :tmp_restart # con...",
+  "tags": [
+    "dev",
+    "rails",
+    "ruby",
+    "tutorial",
+    "ai"
+  ],
+  "published_at": "2026-04-18T04:05:38.000Z",
+  "feed_id": "devto"
+}

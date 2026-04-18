@@ -1,0 +1,17 @@
+{
+  "id": "65dd107347c6cbf2",
+  "title": "Building a 4-Tier AI Cost Auto-Routing System with Supabase Edge Functions",
+  "url": "https://dev.to/kanta13jp1/building-a-4-tier-ai-cost-auto-routing-system-with-supabase-edge-functions-3dbf",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "Building a 4-Tier AI Cost Auto-Routing System with Supabase Edge Functions What I Built I added a provider.chat_auto action to the AI Hub Edge Function of my personal life management app. Tier Providers Est. cost/1K tok free DeepSeek, Groq, Cerebras, SiliconFlow, Novita $0.0001 budget SambaNova, Arcee AI, MiniMax, DeepInfra $0.001 performance OpenAI, Google, Mistral, Cohere, Perplexity $0.01 premium Anthropic Claude, OpenAI GPT-4, Gemini Ultra $0.05 const TIER_ORDER: Tier[] = [\"free\", \"budget\", \"performance\", \"premium\"]; async function callWithAutoEscalation(messages, preferredTier = \"free\") { for (const tier of TIER_ORDER.slice(TIER_ORDER.indexOf(preferredTier))) { for (const provider of TIER_PROVIDERS[tier]) { try { const result = await callSingleProvider(provider, messages); await logCost(provider, tier, true); return result; } catch { // Try next provider in tier, then escalate to next tier } } } throw new Error(\"All tiers exhausted\"); } If a provider fails (quota, network, API...",
+  "tags": [
+    "dev",
+    "flutter",
+    "supabase",
+    "deno",
+    "ai"
+  ],
+  "published_at": "2026-04-18T04:16:29.000Z",
+  "feed_id": "devto"
+}

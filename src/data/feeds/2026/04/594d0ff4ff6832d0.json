@@ -1,0 +1,17 @@
+{
+  "id": "594d0ff4ff6832d0",
+  "title": "Why \"Hello\" and 42 Are Completely Different Things",
+  "url": "https://dev.to/yakhilesh/why-hello-and-42-are-completely-different-things-1g9l",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "You finished the last post. You stored your name in a variable. You stored your age. Both worked. But here's something that probably confused you. When you stored your name, you used quotes. When you stored your age, you didn't. And when you tried to combine them in a print statement, Python complained unless you added that str() thing. Why? Your name and your age are both just information. Why does Python care about the difference? Because to Python, they are not the same kind of thing at all. And understanding this, really understanding it, will save you from dozens of confusing errors in the future. By the end, you'll know: What data types are and why they exist The four main types you'll use constantly: strings, integers, floats, and booleans How to check what type something is How to convert between types Why type errors happen and how to read them Think about a calculator. You can add two numbers. You get a number back. Now try to add a name and a number. What's \"Alex\" plus 25...",
+  "tags": [
+    "dev",
+    "ai",
+    "programming",
+    "productivity",
+    "beginners"
+  ],
+  "published_at": "2026-04-18T04:07:07.000Z",
+  "feed_id": "devto"
+}
