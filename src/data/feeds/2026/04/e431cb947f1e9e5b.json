@@ -1,0 +1,14 @@
+{
+  "id": "e431cb947f1e9e5b",
+  "title": "Deploying Under the Moonlight",
+  "url": "https://dev.to/tuandoquoc/from-idea-to-production-while-walking-3pig",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "There's something magical about a calm night walk that clears your mind. I was out, just enjoying the evening breeze and the peaceful streets. Suddenly, I realized a small but frustrating bug was bothering my personal project. Users were being forced to re-login every time my server restarted. Instead of rushing home to my computer to fix it, I pulled out my phone. I didn't want to break the peaceful mood of my walk. I opened GitHub on my mobile browser to investigate. I quickly found the culprit: my user session storage was too temporary. Every server blip wiped it clean. Instead of manually rewriting complex storage logic right there on the sidewalk, I used a modern shortcut. I engaged an AI agent built right into the platform. I simply gave it a natural language instruction: “Maintain user login sessions for at least 1 day.” Within seconds, the AI understood the problem and generated the exact changes needed to switch to stable storage. I reviewed the AI’s work on my small screen...",
+  "tags": [
+    "dev",
+    "vibecoding"
+  ],
+  "published_at": "2026-04-18T14:25:37.000Z",
+  "feed_id": "devto"
+}

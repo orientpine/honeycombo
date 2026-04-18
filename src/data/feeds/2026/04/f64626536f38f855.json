@@ -1,0 +1,17 @@
+{
+  "id": "f64626536f38f855",
+  "title": "Shipping Global Keyboard Shortcuts on macOS Sandbox: The Part Apple Doesn't Document",
+  "url": "https://dev.to/quicopy/shipping-global-keyboard-shortcuts-on-macos-sandbox-the-part-apple-doesnt-document-57no",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "TL;DR I shipped a macOS menu bar app (QUICOPY) to the Mac App Store. Its core feature is global keyboard shortcuts that output text in any app. The obvious implementation — CGEvent.post() — is silently blocked by App Sandbox. Apple does not document this clearly. Here's what actually works, and why. If you're building anything that simulates keyboard input on macOS and targeting the App Store, this will save you a week. I wanted a menu bar app where pressing ⌘⇧1 in any application types a piece of pre-set text at the cursor. TextExpander-style. Simple, right? Two subproblems: Capture a global keyboard shortcut (even when my app is not focused) Output text into whatever app is focused Both sound like 10-line solutions. Neither is, if you want to be on the Mac App Store. This part is mostly fine. Use CGEvent.tapCreate with .cgSessionEventTap and listen for .keyDown events. let eventMask = (1 com.apple.security.automation.apple-events Required Info.plist entry (macOS 10.14+): NSAppleEv...",
+  "tags": [
+    "dev",
+    "swift",
+    "appstore",
+    "sandbox",
+    "ai"
+  ],
+  "published_at": "2026-04-18T14:49:56.000Z",
+  "feed_id": "devto"
+}
