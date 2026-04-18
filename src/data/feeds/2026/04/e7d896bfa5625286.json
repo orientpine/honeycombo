@@ -1,0 +1,17 @@
+{
+  "id": "e7d896bfa5625286",
+  "title": "How Your Code Makes Decisions (And Gets Them Wrong)",
+  "url": "https://dev.to/yakhilesh/how-your-code-makes-decisions-and-gets-them-wrong-3l0g",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "Picture this You're building a simple app. It checks if someone is old enough to sign up. Sounds easy. You have their age. You know the minimum age. You just need the program to say yes or no. But you don't know how to make the program choose. Right now your code just runs top to bottom, every line, every time. It doesn't skip anything. It doesn't branch. It has no judgment. That changes today. The ability to make decisions is what separates a real program from a list of instructions. Without it, every program would do the exact same thing every single time, no matter what. No reactions. No logic. No intelligence. If/else is how you give your code judgment. An if statement says: check this condition. If it's true, run this code. If it's not true, skip it. That's really all it is. age = 20 if age >= 18: print(\"You can sign up\") Output: You can sign up Now change age to 15 and run it again. age = 15 if age >= 18: print(\"You can sign up\") Output: Nothing. The condition was false so Pyt...",
+  "tags": [
+    "dev",
+    "programming",
+    "python",
+    "ai",
+    "productivity"
+  ],
+  "published_at": "2026-04-18T04:09:23.000Z",
+  "feed_id": "devto"
+}

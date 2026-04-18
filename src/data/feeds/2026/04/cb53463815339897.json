@@ -1,0 +1,16 @@
+{
+  "id": "cb53463815339897",
+  "title": "Building an emoji list generator with the GitHub Copilot CLI",
+  "url": "https://github.blog/ai-and-ml/github-copilot/building-an-emoji-list-generator-with-the-github-copilot-cli/",
+  "source": "GitHub Blog",
+  "type": "article",
+  "description": "See how we created an emoji list generator during the Rubber Duck Thursday stream. The post Building an emoji list generator with the GitHub Copilot CLI appeared first on The GitHub Blog.",
+  "tags": [
+    "dev",
+    "ai & ml",
+    "github copilot",
+    "github copilot cli"
+  ],
+  "published_at": "2026-04-17T18:00:00.000Z",
+  "feed_id": "githublog"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "dec25475d7afa6a5",
+  "title": "The Complete AI Rails Stack - Full Architecture on Your Own Infrastructure",
+  "url": "https://dev.to/agentq/the-complete-ai-rails-stack-full-architecture-on-your-own-infrastructure-6cc",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "If you are building an AI product in Rails, the hard part is usually not calling the model API. The hard part is fitting model calls into a real application that has users, permissions, jobs, caching, search, and failure handling. In this post, we’ll put the pieces together into a complete Rails architecture you can run on your own VPS stack. The goal is simple: Rails handles HTTP, auth, admin screens, and business logic PostgreSQL stores app data and vectors Redis handles cache and job coordination background jobs run slow AI tasks model providers stay behind service objects A practical Rails AI stack looks like this: Browser ↓ Nginx ↓ Rails app (controllers, models, views, APIs) ├─ PostgreSQL (app data + pgvector) ├─ Redis (cache + job coordination) ├─ Active Job / Sidekiq workers └─ AI providers (OpenAI, Anthropic, local models, etc.) Do not let controllers talk directly to model APIs. Keep AI work behind service classes and jobs so the app stays testable. Create the app the usua...",
+  "tags": [
+    "dev",
+    "rails",
+    "ruby",
+    "ai",
+    "tutorial"
+  ],
+  "published_at": "2026-04-18T04:05:48.000Z",
+  "feed_id": "devto"
+}

@@ -1,0 +1,14 @@
+{
+  "id": "eaa84fa964ae9427",
+  "title": "Why Your Claude-Assisted Code Becomes a Mess (It's Not Your Prompts)",
+  "url": "https://dev.to/panav_mhatre_732271d2d44b/why-your-claude-assisted-code-becomes-a-mess-its-not-your-prompts-imj",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "Three weeks into building with Claude, things feel great. The code ships fast. Features appear almost magically. Then one morning you open the project and something is broken in a way that takes hours to unravel — and when you trace it back, the root cause is something Claude generated two weeks ago that looked totally fine at the time. If that's happened to you, you're not bad at prompting. Most advice about working with AI coding tools focuses on prompts: be more specific, use examples, break tasks into smaller chunks. And yes, that stuff helps at the margins. But the pattern I see most often in AI-assisted codebases isn't prompt quality — it's architectural drift. The developer and Claude are technically collaborating, but they're not working from the same picture of the system. Claude knows what you asked for this session. It doesn't know your module boundaries, your implicit naming conventions, which files are load-bearing, or where you've deliberately cut corners and noted the...",
+  "tags": [
+    "dev",
+    "aiproductivitywebdevbeginners"
+  ],
+  "published_at": "2026-04-18T04:07:50.000Z",
+  "feed_id": "devto"
+}
