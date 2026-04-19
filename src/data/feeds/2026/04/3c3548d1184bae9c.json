@@ -1,0 +1,17 @@
+{
+  "id": "3c3548d1184bae9c",
+  "title": "Tired of Claude Code Ignoring Your CLAUDE.md? I Built claudemd-guard",
+  "url": "https://dev.to/hirochiba/tired-of-claude-code-ignoring-your-claudemd-i-built-claudemd-guard-34k5",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "Have you ever experienced a situation with Claude Code where the rules you defined in CLAUDE.md are followed initially, but start to be ignored toward the end of a long session? I was particularly struggling with projects that had many strict rules in CLAUDE.md. With 10 to 20 clauses like \"do not touch this directory\" or \"use only these specific APIs,\" having to roll back and review every time Claude violated a rule was truly exhausting. The cause is context compression. As the conversation grows longer, CLAUDE.md gets pushed out of the context window, leaving the rules simply invisible to the model. I wanted to stop Claude the moment it attempts a violation, rather than noticing it later and rolling back. For my use case, it is better to have enforcement, even if it is a bit strict. With that in mind, I created claudemd-guard and published it to npm. It operates as a PreToolUse hook for Claude Code and performs the following before executing tools like Edit, Write, or Bash: Collect...",
+  "tags": [
+    "dev",
+    "claude",
+    "ai",
+    "showdev",
+    "opensource"
+  ],
+  "published_at": "2026-04-19T04:55:13.000Z",
+  "feed_id": "devto"
+}
