@@ -1,0 +1,17 @@
+{
+  "id": "1a394d2b407d398c",
+  "title": "I built 10 Claude skills that live-query 27 government company registries",
+  "url": "https://dev.to/sophymarine/i-built-10-claude-skills-that-live-query-27-government-company-registries-59l3",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "I built 10 Claude skills that live-query 27 government company registries A few months ago I was researching a counterparty across 4 jurisdictions. Three hours of clicking through UK Companies House ΓåÆ Luxembourg RCS ΓåÆ Jersey Companies Registry ΓåÆ Cayman CIMA, copy-pasting ownership percentages into a spreadsheet. By the time I'd pieced the structure together, I wasn't sure whether the first-hop data was still current. So I built OpenRegistry ΓÇö a free remote MCP server that gives AI agents live access to 27 national company registries ΓÇö and a skillpack of 10 Claude Agent Skills on top of it. The key design decision, and the thing that makes it different from every commercial company-data provider I could find: every query is a direct call to the government's own system at the moment you ask, and the response is returned byte-identical. Every major company-data provider (Bureau van Dijk, Dun & Bradstreet, Refinitiv, OpenCorporates) operates the same basic pattern: Crawl the g...",
+  "tags": [
+    "dev",
+    "automation",
+    "claude",
+    "mcp",
+    "showdev"
+  ],
+  "published_at": "2026-04-19T14:17:20.000Z",
+  "feed_id": "devto"
+}

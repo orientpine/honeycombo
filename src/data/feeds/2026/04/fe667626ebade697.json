@@ -1,0 +1,17 @@
+{
+  "id": "fe667626ebade697",
+  "title": "How to Debug AI-Generated Code: A Systematic Approach",
+  "url": "https://dev.to/jakay/how-to-debug-ai-generated-code-a-systematic-approach-407d",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "The Debugging Trap With AI Code You built something cool with Cursor or Bolt. It worked on the demo. Then a user tried it with a slightly different input — and it blew up. You paste the error into the AI, it confidently rewrites the function, and now a different thing is broken. Welcome to the debugging trap. Research from GitClear and others suggests around 43% of AI-generated projects need real debugging work before they're production-ready. AI coding tools are good at the happy path — the flow you described in the prompt. They are bad at the unspoken edges: empty arrays, zero values, null users, timezone boundaries, race conditions. And here's the trap: when something breaks, the natural move is to paste the error into the AI and say \"fix this.\" The AI does what you asked. It patches the symptom. The bug moves somewhere else. You paste that error. Repeat. Pretty soon you have a codebase held together with duct tape and nobody — not you, not the AI — understands what's actually ha...",
+  "tags": [
+    "dev",
+    "ai",
+    "debugging",
+    "webdev",
+    "productivity"
+  ],
+  "published_at": "2026-04-19T14:23:57.000Z",
+  "feed_id": "devto"
+}

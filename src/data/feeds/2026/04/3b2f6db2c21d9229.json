@@ -1,0 +1,17 @@
+{
+  "id": "3b2f6db2c21d9229",
+  "title": "aIR-Jumper: exfiltran datos de redes air-gap vía cámaras IR",
+  "url": "https://dev.to/lu1tr0n/air-jumper-exfiltran-datos-de-redes-air-gap-via-camaras-ir-2ap0",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "Durante décadas, las redes air-gap fueron consideradas el estándar de oro en seguridad informática. La idea es intuitiva: si una computadora no está conectada a ninguna red, nadie puede atacarla desde afuera. Gobiernos, plantas nucleares, centros de investigación militar y bancos han confiado en este aislamiento físico para proteger información crítica. Pero un paper presentado en el USENIX WOOT 2017 por el equipo de Mordechai Guri en la Universidad Ben-Gurion del Néguev mostró algo inquietante: una cámara de seguridad CCTV puede convertirse en un canal encubierto capaz de filtrar datos fuera de una red air-gap usando luz infrarroja invisible al ojo humano. Lo llamaron aIR-Jumper, y redefinió lo que entendemos por aislamiento. En agosto de 2017, el Workshop on Offensive Technologies (WOOT) de USENIX publicó un paper titulado «aIR-Jumper: Covert Air-Gap Exfiltration/Infiltration via Security Cameras & Infrared (IR)». Los autores —Mordechai Guri, Dima Bykhovsky y Yuval Elovici— descri...",
+  "tags": [
+    "dev",
+    "technology",
+    "science",
+    "programming",
+    "discuss"
+  ],
+  "published_at": "2026-04-19T14:19:51.000Z",
+  "feed_id": "devto"
+}
