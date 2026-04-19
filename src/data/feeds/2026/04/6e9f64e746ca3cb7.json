@@ -1,0 +1,17 @@
+{
+  "id": "6e9f64e746ca3cb7",
+  "title": "Five Formal Closures + Findings + AI-Generated Open Questions (Rei-AIOS Paper 118)",
+  "url": "https://dev.to/fc0web/five-formal-closures-findings-ai-generated-open-questions-rei-aios-paper-118-18c5",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "This article is a re-publication of Rei-AIOS Paper 118 for the dev.to community. Zenodo (DOI, canonical): https://doi.org/10.5281/zenodo.19652449 Internet Archive: https://archive.org/details/rei-aios-paper-118-1776608110166 Harvard Dataverse: https://doi.org/10.7910/DVN/KC56RY GitHub source (private): https://github.com/fc0web/rei-aios Author: Nobuki Fujimoto (@fc0web) · ORCID 0009-0004-6019-9258 · License CC-BY-4.0 --- Authors: Nobuki Fujimoto (ORCID 0009-0004-6019-9258), Claude Code (Lean 4 formalization) Date: 2026-04-19 License: CC-BY-4.0 Repository: fc0web/rei-aios Companion repository: fc0web/rei-unsolved-problems Related papers: Paper 110, 111, 112, 116, 117. We report five structurally independent zero-sorry Lean 4 formalizations from the Rei-AIOS unsolved-problems corpus, together with observed findings, AI-generated new open questions, and a unified D-FUMT₈ solution-status summary. This is the first Rei-AIOS paper to adopt the four-element structure (proof + finding + AI-...",
+  "tags": [
+    "dev",
+    "math",
+    "research",
+    "lean",
+    "collatz"
+  ],
+  "published_at": "2026-04-19T14:17:15.000Z",
+  "feed_id": "devto"
+}

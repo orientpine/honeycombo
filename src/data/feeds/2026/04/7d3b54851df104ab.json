@@ -1,0 +1,17 @@
+{
+  "id": "7d3b54851df104ab",
+  "title": "GenAIOps on AWS: Production Hardening & Advanced Patterns - Part 4",
+  "url": "https://dev.to/shoaibalimir/genaiops-on-aws-production-hardening-advanced-patterns-part-4-477i",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "Reading time: ~25-30 minutes Level: Advanced Series: Part 4 of 4 - Production Hardening (Series Finale!) What you'll learn: Guardrails, HITL workflows, incident response, A/B testing, canary deployments, and cost optimization for production GenAI systems The Problem: Demo Day vs Day 100 in Production Demo Day (100 requests): Day 100 in Production (1M requests): The gap between working demo and production system is where most GenAI projects fail. This isn't about making it work—it's about making it work safely, reliably, and economically at scale. This final part of the series covers everything needed to bridge that gap. The Production Readiness Framework Production GenAI systems need six layers of protection: Let's implement each layer. Layer 1: Production Guardrails Guardrails prevent unsafe, inappropriate, or policy-violating content from entering or leaving your system. Amazon Bedrock Guardrails Bedrock Guardrails provide four types of protection: Content Filters: Sexual content,...",
+  "tags": [
+    "dev",
+    "aws",
+    "genai",
+    "production",
+    "mlops"
+  ],
+  "published_at": "2026-04-19T14:47:29.000Z",
+  "feed_id": "devto"
+}

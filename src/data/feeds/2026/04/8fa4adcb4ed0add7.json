@@ -1,0 +1,15 @@
+{
+  "id": "8fa4adcb4ed0add7",
+  "title": "Building something simple",
+  "url": "https://dev.to/serpbase/building-something-simple-2bdb",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "At some point, I decided to just build a minimal version for my own use. The goal wasn’t to compete with existing tools — just to have something that: works reliably After using it for a bit, I realized it might actually be useful for other developers dealing with the same issue. So I cleaned it up and turned it into a small project called SerpBase.",
+  "tags": [
+    "dev",
+    "ai",
+    "webdev"
+  ],
+  "published_at": "2026-04-19T14:19:46.000Z",
+  "feed_id": "devto"
+}

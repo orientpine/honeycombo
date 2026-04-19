@@ -1,0 +1,17 @@
+{
+  "id": "a9705034af5c2616",
+  "title": "Claude Code on the Web: Why Your .env Vars Don't Reach the Setup Script (and How SessionStart Hook Fixes It)",
+  "url": "https://dev.to/cc_quickconv_ff5b94a1d015/claude-code-on-the-web-why-your-env-vars-dont-reach-the-setup-script-and-how-sessionstart-hook-4n6",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "TL;DR Environment variables you put in the .env panel of Claude Code on the web (Cloud Sandbox) do not reach the setup script. They only reach the shell inside the running Claude Code session. So git clone \"https://x-access-token:${GH_TOKEN}@...\" inside the setup script fails — GH_TOKEN is empty at that point. Move the clone into a SessionStart hook and it just works, because by then $GH_TOKEN is populated. This is a write-up of how I narrowed down a behavior that the official docs don't spell out clearly. I've been collecting custom slash commands, skills, and a personal CLAUDE.md under ~/.claude/ locally. I wanted the same setup available inside Claude Code on the web. Everything is stored in a private repo called miyashita337/agent-base. According to the docs, cloud sessions do not carry over user-level settings like ~/.claude/CLAUDE.md — only what's committed to the repo is available. So my plan was: on session start, clone agent-base and symlink its contents into ~/.claude/. I...",
+  "tags": [
+    "dev",
+    "anthropic",
+    "claude",
+    "devops",
+    "bash"
+  ],
+  "published_at": "2026-04-19T14:41:09.000Z",
+  "feed_id": "devto"
+}
