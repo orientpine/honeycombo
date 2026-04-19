@@ -1,0 +1,17 @@
+{
+  "id": "55933dae3d13e423",
+  "title": "Week in AI Recap: 7 Shifts That Actually Matter for Indian Developers (April 2026)",
+  "url": "https://dev.to/automate-archit/week-in-ai-recap-7-shifts-that-actually-matter-for-indian-developers-april-2026-41j2",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "I spend my weeks watching AI news for one reason: I automate workflows for Indian businesses, and the ground shifts under my feet every Monday. Most of what trends on X this week isn't useful. A few things are. Here's the signal, filtered for developers in India who ship real work. The \"which agent framework\" debate is finally cooling. Three winners keep showing up in production code reviews: the Claude Agent SDK for operator-style tasks, LangGraph for stateful pipelines, and plain function calling on top of OpenAI / Anthropic / Gemini APIs for the 80% of jobs that don't need a framework at all. My take: if you're building internal ops tooling — GST reconciliation, vendor onboarding, invoice triage — skip the framework. A 60-line Python script with tool definitions outperforms most \"agent platforms\" by six months. Here's the shape I use: import anthropic client = anthropic.Anthropic() TOOLS = [ { \"name\": \"fetch_gst_status\", \"description\": \"Fetch GST filing status for a GSTIN\", \"inpu...",
+  "tags": [
+    "dev",
+    "agents",
+    "ai",
+    "automation",
+    "news"
+  ],
+  "published_at": "2026-04-19T04:43:45.000Z",
+  "feed_id": "devto"
+}

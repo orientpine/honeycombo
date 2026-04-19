@@ -1,0 +1,17 @@
+{
+  "id": "d3d5c426b1af0bd7",
+  "title": "Multi-Language Code Evaluation Pipeline for LeetCode-Style Problems",
+  "url": "https://dev.to/jschilling12/multi-language-code-evaluation-pipeline-for-leetcode-style-problems-5f6e",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "Multi-Language Code Evaluation Pipeline for LeetCode Style Problems Most evaluator writeups optimize for speed first. Our biggest quality issue was not latency, it was false negatives. We repeatedly saw “correct-looking” solutions fail across languages due to starter drift, I/O contract mismatch, and comparator inconsistency. So we redesigned the pipeline around one goal: deterministic, explainable verdicts, no AI validation. The constraint was that trust mattered most. This work came out of building CodeNexus, a mobile LeetCode-style coding app to help form habit loops. That constraint forced us to treat evaluation correctness as a first-class system problem, not just an execution detail. Starter quality gate (pre-execution) Validates starter templates before users run anything. Catches missing/empty templates, TODO-only scaffolds, missing callable signatures, and structural syntax defects. Prevents template defects from polluting runtime pass/fail metrics. Starter smoke validation...",
+  "tags": [
+    "dev",
+    "programming",
+    "architecture",
+    "testing",
+    "ai"
+  ],
+  "published_at": "2026-04-19T04:49:04.000Z",
+  "feed_id": "devto"
+}

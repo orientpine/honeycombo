@@ -1,0 +1,17 @@
+{
+  "id": "faba01c388cd9461",
+  "title": "Working with AI on Long Software Projects",
+  "url": "https://dev.to/cnersmith/working-with-ai-on-long-software-projects-34e4",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "Working with AI on Long Software Projects A practical guide for developers building real software with Claude (or similar AI coding tools) over months or years rather than single sessions. The advice here is not theoretical. It comes from a year of joint work on a single codebase with thousands of tests, hundreds of design decisions, and a working pattern that has had to evolve as the project grew. Most of the lessons were learned by hitting the failure modes — over-engineering, scope creep, mounting tech debt, design drift — then figuring out what structural changes actually prevented recurrence, not just patching the symptom. This is for any dev planning to spend serious time pairing with an AI on a single project, especially one that will outlive any individual conversation. AI coding tools are extraordinarily good at generating code. Given a clear request, modern models produce working implementations faster than most humans, often with reasonable structure and decent style. Thi...",
+  "tags": [
+    "dev",
+    "ai",
+    "architecture",
+    "productivity",
+    "softwareengineering"
+  ],
+  "published_at": "2026-04-19T05:01:33.000Z",
+  "feed_id": "devto"
+}

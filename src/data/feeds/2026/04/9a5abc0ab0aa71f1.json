@@ -1,0 +1,17 @@
+{
+  "id": "9a5abc0ab0aa71f1",
+  "title": "Building Cinemind-AI 🎬 | My First AI Movie Chatbot with Flask, Gemini & MongoDB",
+  "url": "https://dev.to/narasimhamurthy4616/building-cinemind-ai-my-first-ai-movie-chatbot-with-flask-gemini-mongodb-12ik",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "🎬 Cinemind-AI I recently built my own AI chatbot called Cinemind-AI — a movie-focused assistant that answers questions about films, actors, and directors. This project helped me understand how real AI applications work behind the scenes. Cinemind-AI is a movie-only chatbot that: Answers questions about movies 🎥 Stores chat history 📂 Works like ChatGPT 💬 Uses AI for intelligent responses 🧠 🏗️ Architecture Here’s how the system works: Frontend (HTML + JavaScript) ↓ Backend (Flask API) ↓ AI Model (Google Gemini) ↓ Database (MongoDB) Python 🐍 Flask 🌐 Google Gemini API 🤖 MongoDB 🗄️ HTML, CSS, JavaScript 💻 🔥 Key Features 💬 ChatGPT-like Interface Users can chat naturally like they do with AI assistants. The chatbot only answers movie-related questions. If a user asks something else: ⚠ Please ask only movie related questions. All chats are stored in MongoDB and can be reopened later. Using Gemini API, the chatbot generates smart answers. polisodu telugu movie data = request.get...",
+  "tags": [
+    "dev",
+    "python",
+    "ai",
+    "webdev",
+    "mongodb"
+  ],
+  "published_at": "2026-04-19T05:05:32.000Z",
+  "feed_id": "devto"
+}
