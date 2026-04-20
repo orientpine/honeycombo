@@ -59,13 +59,14 @@ plain-text surface(카드, RSS, meta tag)에서 마커만 제거하여 평문화
 ### 3. 적용 위치
 
 ```
-src/lib/render-summary.ts        → renderInlineMarkdown 적용 (renderSummaryHtml 안의 <p>, <li>)
-                                  → stripInlineMarkdown 적용 (stripMarkdownForPreview 끝)
-functions/lib/escape.ts          → stripMd()에 inline 마커 제거 4줄 추가
-public/scripts/must-read-page.js → stripMd()에 동일 적용 (브라우저 vanilla JS)
+src/lib/render-summary.ts        → renderInlineMarkdown / stripInlineMarkdown / stripMarkdownForPreview
+functions/lib/escape.ts          → stripMd() (Cloudflare Functions)
+public/scripts/must-read-page.js → stripMd() (브라우저 must-read 페이지)
+src/components/TagFilter.astro   → stripMd() (브라우저 태그 필터 클라이언트 렌더)
+src/pages/admin/must-read.astro  → stripMd() (브라우저 admin 페이지)
 ```
 
-세 곳에서 동일한 regex를 사용해 SSG/CF Functions/브라우저 어디서든 일관된 결과를 보장한다.
+다섯 구현은 동일한 regex를 공유하여 SSG / CF Functions / 3종 브라우저 코드 어디서든 일관된 결과를 보장한다. drift 방지는 `tests/strip-md-parity.test.ts`에서 공유 코퍼스로 자동 검증된다.
 
 ### 4. XSS 방어
 
@@ -81,13 +82,17 @@ public/scripts/must-read-page.js → stripMd()에 동일 적용 (브라우저 va
 | `functions/lib/escape.ts` | `stripMd()`에 inline 마커 제거 4줄 추가 |
 | `public/scripts/must-read-page.js` | 동일한 inline 마커 제거 추가 (브라우저용) |
 | `tests/render-summary.test.ts` | inline markdown 시나리오 22개 추가 (XSS protection, 한국어 bold, snake_case 보호 포함) |
+| `src/components/TagFilter.astro` | drift되어 있던 stripMd를 neighbour 구현과 동기화 |
+| `src/pages/admin/must-read.astro` | drift되어 있던 stripMd를 neighbour 구현과 동기화 |
+| `tests/strip-md-parity.test.ts` (신규) | 다섯 구현 parity 검증 — drift 발생 시 CI 차단 |
 
 ## 예방 조치
 
-- **Three-source consistency**: `src/lib/render-summary.ts`, `functions/lib/escape.ts`, `public/scripts/must-read-page.js` 세 곳의 inline regex는 항상 동일해야 한다. 한 곳을 바꾸면 나머지 두 곳도 같이 갱신할 것.
+- **Five-source consistency**: 다섯 구현의 inline regex는 항상 동일해야 한다. 한 곳을 바꾸면 나머지 네 곳도 같이 갱신해야 한다. parity 테스트가 자동으로 잡아준다.
 - **escape-first 강제**: `renderInlineMarkdown`은 절대 raw 사용자 입력에 직접 호출하지 말 것. 항상 `escapeHtml()` 결과에 대해서만 사용한다. JSDoc에 명시되어 있음.
 - **link protocol whitelist 유지**: `isSafeUrl()`이 `http(s):`, `/`, `#`만 허용. 새 protocol 추가는 보안 검토 필수.
 - **회귀 테스트**: 신규 inline 마커 추가 시 XSS 시나리오와 한국어/식별자 충돌 시나리오 테스트 필수.
+- **Anti-drift safeguard**: `tests/strip-md-parity.test.ts`가 다섯 구현의 stripMd 함수를 공유 코퍼스로 검증한다. 한 곳이 drift하면 CI 차단.
 
 ---
 
@@ -103,3 +108,4 @@ public/scripts/must-read-page.js → stripMd()에 동일 적용 (브라우저 va
 | 날짜 | 변경 내용 |
 |------|----------|
 | 2026-04-20 | 최초 작성 — inline markdown(`**bold**`, `` `code` ``, italic, link)을 모든 description 표면에서 정확히 렌더/평문화하도록 수정 |
+| 2026-04-20 | drift 방지 — TagFilter.astro/admin/must-read.astro의 누락된 stripMd 동기화, nested `**outer *inner* outer**` 처리 개선, 다섯 구현 parity 테스트 추가 |
