@@ -1,0 +1,213 @@
+---
+// Article title search component.
+// - Reads from embedded `#all-articles-data` JSON (same source as InterestTagPanel).
+// - Debounces input, dispatches `article-search-changed` with { query, results }.
+// - Reads/writes `?q=` URL param.
+// - Listens to `source-filter-changed` to re-scope by origin.
+---
+
+<div class="article-search" data-testid="article-search">
+  <div class="article-search-input-wrap">
+    <svg class="article-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="11" cy="11" r="8"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+    <input
+      type="search"
+      class="article-search-input"
+      id="article-search-input"
+      placeholder="기사 제목 검색..."
+      autocomplete="off"
+      spellcheck="false"
+      aria-label="기사 제목 검색"
+    />
+    <button
+      type="button"
+      class="article-search-clear"
+      id="article-search-clear"
+      aria-label="검색어 지우기"
+      hidden
+    >
+      ×
+    </button>
+  </div>
+</div>
+
+<script>
+  interface ClientArticle {
+    _id: string;
+    title: string;
+    url: string;
+    source: string;
+    type: string;
+    description?: string;
+    tags: string[];
+    date: string;
+    thumbnail_url?: string;
+    articleOrigin: 'curated' | 'submitted' | 'feed';
+    slug?: string;
+    isExternal: boolean;
+  }
+
+  let allArticlesCache: ClientArticle[] | null = null;
+  let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+  let lastQuery = '';
+
+  function getAllArticles(): ClientArticle[] {
+    if (allArticlesCache) return allArticlesCache;
+    const el = document.getElementById('all-articles-data');
+    if (!el?.textContent) return [];
+    try {
+      allArticlesCache = JSON.parse(el.textContent) as ClientArticle[];
+    } catch {
+      allArticlesCache = [];
+    }
+    return allArticlesCache;
+  }
+
+  function getActiveOrigin(): string {
+    const active = document.querySelector<HTMLElement>(
+      '[data-testid="source-filter"] .source-filter-btn.active'
+    );
+    return active?.dataset.origin || 'all';
+  }
+
+  function searchArticles(query: string, origin: string): ClientArticle[] {
+    const trimmed = query.trim().toLowerCase();
+    if (!trimmed) return [];
+    let articles = getAllArticles();
+    if (origin !== 'all') {
+      articles = articles.filter((a) => a.articleOrigin === origin);
+    }
+    return articles.filter((a) => a.title.toLowerCase().includes(trimmed));
+  }
+
+  function dispatchSearchChange(query: string, origin?: string) {
+    const activeOrigin = origin ?? getActiveOrigin();
+    const trimmed = query.trim();
+    const results = trimmed ? searchArticles(trimmed, activeOrigin) : [];
+
+    document.dispatchEvent(
+      new CustomEvent('article-search-changed', {
+        detail: { query: trimmed, origin: activeOrigin, results },
+      })
+    );
+
+    // Update URL
+    const url = new URL(window.location.href);
+    if (trimmed) {
+      url.searchParams.set('q', trimmed);
+    } else {
+      url.searchParams.delete('q');
+    }
+    window.history.replaceState({}, '', url.toString());
+  }
+
+  function applySearch(query: string, origin?: string) {
+    lastQuery = query;
+    const clearBtn = document.getElementById('article-search-clear');
+    if (clearBtn) clearBtn.hidden = !query.trim();
+    dispatchSearchChange(query, origin);
+  }
+
+  function initArticleSearch() {
+    const input = document.getElementById('article-search-input') as HTMLInputElement | null;
+    const clearBtn = document.getElementById('article-search-clear');
+    if (!input) return;
+
+    // Apply initial query from URL
+    const initialQuery = new URLSearchParams(window.location.search).get('q') || '';
+    if (initialQuery) {
+      input.value = initialQuery;
+      if (clearBtn) clearBtn.hidden = false;
+      // Defer to next tick so InterestTagPanel/SourceFilter listeners are attached
+      setTimeout(() => applySearch(initialQuery), 0);
+    }
+
+    input.addEventListener('input', () => {
+      const value = input.value;
+      if (debounceTimer) clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => applySearch(value), 150);
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      input.value = '';
+      applySearch('');
+      input.focus();
+    });
+
+    // Re-scope when source filter changes
+    document.addEventListener('source-filter-changed', ((e: CustomEvent<{ origin: string }>) => {
+      // Only re-dispatch if there's an active query
+      if (lastQuery.trim()) {
+        dispatchSearchChange(lastQuery, e.detail.origin);
+      }
+    }) as EventListener);
+  }
+
+  document.addEventListener('astro:page-load', initArticleSearch);
+</script>
+
+<style>
+  .article-search {
+    margin-bottom: var(--space-md);
+  }
+  .article-search-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .article-search-icon {
+    position: absolute;
+    left: var(--space-md);
+    color: var(--color-text-muted);
+    pointer-events: none;
+  }
+  .article-search-input {
+    width: 100%;
+    padding: var(--space-sm) var(--space-2xl) var(--space-sm) calc(var(--space-md) + var(--space-md) + 4px);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: inherit;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .article-search-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(245, 124, 34, 0.15);
+  }
+  .article-search-input::-webkit-search-cancel-button {
+    display: none;
+  }
+  .article-search-clear {
+    position: absolute;
+    right: var(--space-sm);
+    width: 24px;
+    height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: var(--color-border);
+    color: var(--color-text);
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s;
+  }
+  .article-search-clear:hover {
+    background: var(--color-primary);
+    color: white;
+  }
+  .article-search-clear:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+</style>

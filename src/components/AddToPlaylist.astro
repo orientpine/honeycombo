@@ -166,7 +166,7 @@ function initAddToPlaylistContainers(root?: Element | Document) {
   containers.forEach(initAddToPlaylistContainer);
 }
 
-// Expose globally for dynamic content (e.g., TagFilter cross-page rendering)
+// Expose globally for dynamic content (e.g., InterestTagPanel cross-page rendering)
 (window as any).__initAddToPlaylistContainers = initAddToPlaylistContainers;
 
 document.addEventListener('astro:page-load', () => initAddToPlaylistContainers());

@@ -27,7 +27,7 @@ articles 페이지 로드
 
 ### 필터 탭 순서
 
-`전체` → `에디터 추천` → `제출 기사` → `RSS 피드`
+`전체` → `제출 기사` → `RSS 피드`  (`에디터 추천` 탭은 [InterestTagPanel](./interest-tag-panel.md) 통합 과정에서 제거되었다 — 에디터 추천은 제출·피드 탭 안에 통합 표시)
 
 ## 관련 파일
 
@@ -47,8 +47,8 @@ articles 페이지 로드
 
 ## 제약 사항
 
-- 필터링은 클라이언트 사이드(DOM display toggle)로 동작. 페이지네이션은 서버 사이드(SSG)이므로, 필터를 걸면 한 페이지에 표시되는 기사 수가 줄어들 수 있다.
-- 카운트는 서버 사이드(SSG)에서 전체 기사 수를 계산하여 표시한다. 클라이언트에서 재계산하지 않는다.
+- 필터링은 클라이언트 사이드(DOM display toggle)로 동작하며, [InterestTagPanel](./interest-tag-panel.md)과 연동되면 cross-page 필터로 확장된다 (`source-filter-changed` 이벤트 발행).
+- 카운트는 서버 사이드(SSG)에서 전체 기사 수를 계산하여 표시하는 것이 기본이지만, **`source-counts-update` 이벤트를 수신하면 동적으로 갱신된다** ([ArticleSearch](./article-search.md)가 검색 결과 총 카운트를 전파할 때 사용). `{ reset: true }`를 동일 이벤트로 발행하면 SSR 원본 카운트(`data-original-count`)로 복원된다.
 - 제출 기사는 PR merge를 통해 승인된 커뮤니티 기사이며, 에디터의 검토를 거쳐 게시된다.
 
 ---
@@ -56,6 +56,8 @@ articles 페이지 로드
 ## 관련 문서
 
 - [아키텍처 개요](../architecture/overview.md)
+- [관심사 & 태그 패널 (InterestTagPanel)](./interest-tag-panel.md)
+- [기사 제목 검색 (ArticleSearch)](./article-search.md)
 
 ## 변경 이력
 
@@ -66,3 +68,4 @@ articles 페이지 로드
 | 2026-04-13 | merge=approval 전환: status 기반 → source 기반 구분, 뱃지 텍스트 변경 |
 | 2026-04-14 | 에디터 추천 뱃지 완전 제거 — ArticleCard/TagFilter 렌더링 + global.css 스타일 삭제 |
 | 2026-04-14 | GeekNews Weekly #353 중복 기사 정리 — 긴 제목(submission-9) 삭제, 짧은 제목(submission-22) 유지 |
+| 2026-04-20 | `source-counts-update` 이벤트 API 추가 (ArticleSearch와 연동). 에디터 추천 탭 제거 (3탭 구조) — InterestTagPanel 통합 과정. |

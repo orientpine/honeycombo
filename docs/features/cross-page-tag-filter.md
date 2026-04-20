@@ -1,4 +1,6 @@
-# 크로스 페이지 태그 필터
+# 크로스 페이지 태그 필터 [폐기됨]
+
+> **⚠️ 이 기능은 [관심사 & 태그 패널 (InterestTagPanel)](./interest-tag-panel.md)로 통합되었다 (2026-04-20).** 관심사 기능과 합쳐져 하나의 UI에서 칩 본문 클릭 = hard 태그 필터, 별표 클릭 = 관심사 저장으로 의미를 분리했고, 인기 태그 6개만 상시 노출하는 접힘/펼침 구조로 변경되었다. 해당 문서는 이력 참고용으로 유지한다.
 
 > 태그 필터 클릭 시 현재 페이지뿐 아니라 전체 기사에서 매칭되는 결과를 보여주는 기능
 
@@ -63,3 +65,4 @@ allArticles → serializeArticles() → JSON 문자열
 |------|----------|
 | 2026-04-13 | 최초 작성 |
 | 2026-04-13 | AddToPlaylist 미포함 제약 해소 — renderCard()에 HTML 삽입 + JS 재초기화 |
+| 2026-04-20 | 폐기 — [InterestTagPanel](./interest-tag-panel.md)로 통합. `src/components/TagFilter.astro` 삭제됨 |

@@ -1,0 +1,960 @@
+---
+// Unified Interests + Tag Filter panel.
+//
+// Replaces the previous PersonalizationBar (interests / soft / localStorage)
+// and TagFilter (cross-page hard filter) into one component.
+//
+// Behavior model:
+//   - Click chip body  -> hard tag filter (cross-page, hides SSR list, shows filtered grid).
+//   - Click chip star  -> toggle as personal interest (saved to localStorage).
+//                         Articles matching saved interests get a visible "interest" highlight
+//                         (background tint + corner star) and are pinned to the top of the list.
+//   - "전체" chip       -> clears the active tag filter.
+//   - Top 5-6 chips    -> always visible. Saved interests come first, then most-used tags.
+//   - Toggle button    -> expands the full tag list (all tags), grouped into
+//                         "내 관심사" (saved) and "전체 태그".
+//
+// State sources:
+//   - localStorage[honeycombo_interests] : string[] (persistent, soft pin)
+//   - URL ?tag=                          : string   (ephemeral, hard filter)
+//
+// Events consumed:
+//   - source-filter-changed   ({ origin })          - re-applies active filter under new origin
+//   - article-search-changed  ({ query, origin, results }) - search results take precedence
+//
+// Events emitted:
+//   - interests-changed       ({ interests })       - so other components can react
+//   - source-counts-update    ({ all, submitted, feed } | { reset: true })
+
+interface Props {
+  availableTags: string[];
+  tagCounts: Record<string, number>;
+}
+const { availableTags, tagCounts } = Astro.props;
+
+// Sort tags by article count desc, then alphabetically — used for both the
+// "top tags" row and the full tag list.
+const sortedTags = [...availableTags].sort((a, b) => {
+  const diff = (tagCounts[b] || 0) - (tagCounts[a] || 0);
+  if (diff !== 0) return diff;
+  return a.localeCompare(b);
+});
+const TOP_N = 6;
+---
+
+<div class="interest-tag-panel" data-testid="interest-tag-panel">
+  <div class="itp-header">
+    <div class="itp-header-left">
+      <span class="itp-label" id="itp-label">⭐ 관심사 &amp; 태그</span>
+      <span class="itp-match-badge" id="itp-match-badge" hidden></span>
+    </div>
+    <button
+      type="button"
+      class="itp-toggle"
+      id="itp-toggle"
+      aria-expanded="false"
+      aria-controls="itp-expanded"
+    >
+      모든 태그 보기 ▼
+    </button>
+  </div>
+
+  <!-- Always-visible top row -->
+  <div class="itp-chips-row" id="itp-chips-row" data-testid="itp-chips-row">
+    <button class="itp-chip itp-chip-all active" data-tag="all" type="button">
+      <span class="itp-chip-label">전체</span>
+    </button>
+    {sortedTags.slice(0, TOP_N).map((tag) => (
+      <button class="itp-chip" data-tag={tag} type="button">
+        <span class="itp-chip-star" data-star data-tag={tag} role="button" aria-label={`${tag} 관심사로 저장`} title="관심사로 저장">☆</span>
+        <span class="itp-chip-label">{tag}</span>
+        <span class="itp-chip-count">{tagCounts[tag] ?? 0}</span>
+      </button>
+    ))}
+  </div>
+
+  <!-- Expanded panel -->
+  <div class="itp-expanded" id="itp-expanded" hidden>
+    <section class="itp-section" id="itp-section-interests">
+      <div class="itp-section-header">
+        <h4 class="itp-section-title">⭐ 내 관심사 <span class="itp-section-count" id="itp-interests-count">(0)</span></h4>
+        <button type="button" class="itp-clear" id="itp-clear" hidden>초기화</button>
+      </div>
+      <p class="itp-section-hint" id="itp-interests-hint">
+        ☆ 별표를 눌러 관심사로 저장하면 일치하는 기사가 상단에 강조 표시됩니다.
+      </p>
+      <div class="itp-interests-row" id="itp-interests-row" hidden></div>
+    </section>
+
+    <section class="itp-section">
+      <div class="itp-section-header">
+        <h4 class="itp-section-title">전체 태그 <span class="itp-section-count">({availableTags.length})</span></h4>
+      </div>
+      <div class="itp-all-tags" id="itp-all-tags">
+        {sortedTags.map((tag) => (
+          <button class="itp-chip" data-tag={tag} type="button">
+            <span class="itp-chip-star" data-star data-tag={tag} role="button" aria-label={`${tag} 관심사로 저장`} title="관심사로 저장">☆</span>
+            <span class="itp-chip-label">{tag}</span>
+            <span class="itp-chip-count">{tagCounts[tag] ?? 0}</span>
+          </button>
+        ))}
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- Container for dynamically-rendered cross-page filtered/searched results -->
+<div class="itp-filtered-results" id="itp-filtered-results" style="display:none;">
+  <div class="itp-filtered-header">
+    <span id="itp-filtered-count"></span>
+  </div>
+  <div class="article-grid grid grid-3" id="itp-filtered-grid"></div>
+  <p class="itp-filtered-empty" id="itp-filtered-empty" hidden>
+    조건에 해당하는 기사가 없습니다.
+  </p>
+</div>
+
+<script>
+  interface ClientArticle {
+    _id: string;
+    title: string;
+    url: string;
+    source: string;
+    type: string;
+    description?: string;
+    tags: string[];
+    date: string;
+    thumbnail_url?: string;
+    articleOrigin: 'curated' | 'submitted' | 'feed';
+    slug?: string;
+    isExternal: boolean;
+  }
+
+  const STORAGE_KEY = 'honeycombo_interests';
+  let allArticlesCache: ClientArticle[] | null = null;
+
+  // Active state
+  let activeTag = 'all';
+  let activeSearchQuery = '';
+  let activeSearchResults: ClientArticle[] | null = null; // null = no active search
+
+  // ---------- localStorage interests ----------
+  function getInterests(): string[] {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return [];
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed.filter((t) => typeof t === 'string') : [];
+    } catch {
+      return [];
+    }
+  }
+  function saveInterests(interests: string[]): void {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(interests));
+    } catch {
+      /* noop */
+    }
+  }
+  function toggleInterest(tag: string): void {
+    const interests = getInterests();
+    const idx = interests.indexOf(tag);
+    if (idx === -1) interests.push(tag);
+    else interests.splice(idx, 1);
+    saveInterests(interests);
+    document.dispatchEvent(
+      new CustomEvent('interests-changed', { detail: { interests } })
+    );
+    refreshInterestsUI();
+    applyInterestHighlights();
+    // If the filtered grid is currently shown, re-render it (matched cards pin to top).
+    if (isFilteredViewActive()) {
+      renderFilteredView();
+    }
+  }
+  function clearInterests(): void {
+    saveInterests([]);
+    document.dispatchEvent(
+      new CustomEvent('interests-changed', { detail: { interests: [] } })
+    );
+    refreshInterestsUI();
+    applyInterestHighlights();
+    if (isFilteredViewActive()) renderFilteredView();
+  }
+
+  // ---------- Articles JSON ----------
+  function getAllArticles(): ClientArticle[] {
+    if (allArticlesCache) return allArticlesCache;
+    const el = document.getElementById('all-articles-data');
+    if (!el?.textContent) return [];
+    try {
+      allArticlesCache = JSON.parse(el.textContent) as ClientArticle[];
+    } catch {
+      allArticlesCache = [];
+    }
+    return allArticlesCache;
+  }
+
+  function getActiveOrigin(): string {
+    const active = document.querySelector<HTMLElement>(
+      '[data-testid="source-filter"] .source-filter-btn.active'
+    );
+    return active?.dataset.origin || 'all';
+  }
+
+  // ---------- Card rendering (mirrors ArticleCard.astro) ----------
+  function escapeHtml(str: string): string {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+  function stripMd(text: string): string {
+    return text
+      .replace(/^#{1,6}\s+/gm, '')
+      .replace(/^[-*]\s+/gm, '• ')
+      .replace(/\n{2,}/g, ' ')
+      .replace(/\n/g, ' ')
+      .replace(/`([^`\n]+)`/g, '$1')
+      .replace(/\*\*([^*\n]+?)\*\*/g, '$1')
+      .replace(/(^|[^*A-Za-z0-9_])\*(?!\s)([^*\n]+?)(?<!\s)\*(?![A-Za-z0-9_])/g, '$1$2')
+      .replace(/(^|[^A-Za-z0-9_])_([^_\n]+?)_(?![A-Za-z0-9_])/g, '$1$2')
+      .replace(/\[([^\]\n]+)\]\([^)\s]+\)/g, '$1')
+      .trim();
+  }
+
+  function renderCard(a: ClientArticle, interests: Set<string>): string {
+    const articleUrl = a.isExternal ? a.url : `/articles/${a.slug || a._id}`;
+    const target = a.isExternal ? ' target="_blank" rel="noopener noreferrer"' : '';
+    const formatted = new Date(a.date).toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+    const title = escapeHtml(a.title);
+    const source = escapeHtml(a.source);
+    const articleSlug = a.slug || a._id;
+    const articlePath = `/articles/${articleSlug}/`;
+
+    const thumb = a.thumbnail_url
+      ? `<div class="article-thumbnail"><img src="${escapeHtml(a.thumbnail_url)}" alt="${title}" loading="lazy" width="300" height="160" /></div>`
+      : '';
+
+    const typeBadge = a.type === 'youtube' ? '<span class="badge badge-primary">YouTube</span>' : '';
+    const sourceLabel = a.articleOrigin === 'submitted' ? 'User Submission' : source;
+
+    const desc = a.description
+      ? `<p class="article-description">${escapeHtml(stripMd(a.description))}</p>`
+      : '';
+
+    const tagsHtml = a.tags.map((t) => `<span class="tag">${escapeHtml(t)}</span>`).join('');
+    const tagsAttr = a.tags.map((t) => escapeHtml(t)).join(',');
+
+    const sourceType = a.articleOrigin === 'feed' ? 'feed' : 'curated';
+    const isMatch = interests.size > 0 && a.tags.some((t) => interests.has(t));
+    const matchClass = isMatch ? ' interest-match' : '';
+
+    return `<article class="card article-card${matchClass}" data-testid="article-card" data-tags="${tagsAttr}" data-origin="${a.articleOrigin}" data-article-path="${articlePath}">
+  ${thumb}
+  <div class="article-body">
+    <div class="article-meta">
+      <span class="badge">${sourceLabel}</span>
+      ${typeBadge}
+      <time class="article-date" datetime="${new Date(a.date).toISOString()}">${formatted}</time>
+    </div>
+    <h3 class="article-title">
+      <a href="${escapeHtml(articleUrl)}"${target}>${title}</a>
+    </h3>
+    ${desc}
+    <div class="article-tags">${tagsHtml}</div>
+    <div class="article-footer">
+      <div class="article-stats">
+        <button class="bookmark-btn bookmark-sm" data-bookmark-id="${escapeHtml(articleSlug)}" title="북마크" aria-label="북마크">
+          <svg class="bookmark-icon-outline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+          <svg class="bookmark-icon-filled" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+        </button>
+        <a href="/articles/${escapeHtml(articleSlug)}/#comments" class="comment-indicator" data-comment-path="${articlePath}">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <span class="comment-count-value">&ndash;</span>
+        </a>
+      </div>
+      <div class="add-to-playlist-container" data-article-id="${escapeHtml(a._id)}" data-title="${title}" data-url="${escapeHtml(a.url)}" data-description="${escapeHtml(a.description || '')}" data-source-type="${sourceType}">
+        <button class="add-to-playlist-btn tag">➕ 플레이리스트에 추가</button>
+        <div class="playlist-dropdown" style="display: none;">
+          <div class="playlist-dropdown-header">플레이리스트 선택</div>
+          <ul class="playlist-list">
+            <li class="playlist-loading">불러오는 중...</li>
+          </ul>
+          <div class="playlist-dropdown-footer">
+            <a href="/p/new" class="new-playlist-link">➕ 새 플레이리스트 만들기</a>
+          </div>
+        </div>
+        <div class="playlist-toast" style="display: none;"></div>
+      </div>
+    </div>
+  </div>
+</article>`;
+  }
+
+  // ---------- Filter pipeline ----------
+  function isFilteredViewActive(): boolean {
+    return activeTag !== 'all' || getActiveOrigin() !== 'all' || activeSearchResults !== null;
+  }
+
+  function getFilteredArticles(): ClientArticle[] {
+    const origin = getActiveOrigin();
+
+    // Search takes precedence as the article pool
+    let articles: ClientArticle[];
+    if (activeSearchResults !== null) {
+      articles = activeSearchResults;
+    } else {
+      articles = getAllArticles();
+      if (origin !== 'all') {
+        articles = articles.filter((a) => a.articleOrigin === origin);
+      }
+    }
+
+    if (activeTag !== 'all') {
+      articles = articles.filter((a) => a.tags.includes(activeTag));
+    }
+    return articles;
+  }
+
+  function buildFilterLabel(count: number): string {
+    const labels: string[] = [];
+    const origin = getActiveOrigin();
+    if (origin !== 'all') {
+      const m: Record<string, string> = { curated: '에디터 추천', submitted: '제출 기사', feed: 'RSS 피드' };
+      labels.push(m[origin] || origin);
+    }
+    if (activeTag !== 'all') {
+      labels.push(`"${activeTag}" 태그`);
+    }
+    if (activeSearchQuery) {
+      labels.push(`"${activeSearchQuery}" 검색`);
+    }
+    const prefix = labels.length > 0 ? `${labels.join(' · ')} · ` : '';
+    return `${prefix}기사 ${count}건`;
+  }
+
+  function renderFilteredView() {
+    const ssrList = document.querySelector('[data-testid="article-list"]') as HTMLElement | null;
+    const pagination = document.querySelector('.pagination') as HTMLElement | null;
+    const container = document.getElementById('itp-filtered-results') as HTMLElement | null;
+    const grid = document.getElementById('itp-filtered-grid') as HTMLElement | null;
+    const countEl = document.getElementById('itp-filtered-count');
+    const emptyEl = document.getElementById('itp-filtered-empty');
+    const ssrEmpty = document.querySelector<HTMLElement>('[data-testid="source-filter-empty"]');
+
+    if (!container || !grid || !countEl) return;
+
+    if (!isFilteredViewActive()) {
+      // Restore SSR view
+      if (ssrList) ssrList.style.display = '';
+      if (pagination) pagination.style.display = '';
+      container.style.display = 'none';
+      if (ssrEmpty) ssrEmpty.style.display = 'none';
+      // Reset source counts
+      document.dispatchEvent(
+        new CustomEvent('source-counts-update', { detail: { reset: true } })
+      );
+      // Re-apply highlights to SSR cards (interests may still be active)
+      applyInterestHighlights();
+      pinInterestMatchesInList();
+      return;
+    }
+
+    // Hide SSR list & pagination, show filtered grid
+    if (ssrList) ssrList.style.display = 'none';
+    if (pagination) pagination.style.display = 'none';
+    container.style.display = '';
+
+    const interests = new Set(getInterests());
+    let articles = getFilteredArticles();
+
+    // Pin interest-matched articles to top
+    if (interests.size > 0) {
+      const matched: ClientArticle[] = [];
+      const unmatched: ClientArticle[] = [];
+      for (const a of articles) {
+        if (a.tags.some((t) => interests.has(t))) matched.push(a);
+        else unmatched.push(a);
+      }
+      articles = [...matched, ...unmatched];
+    }
+
+    countEl.textContent = buildFilterLabel(articles.length);
+    grid.dataset.activeTag = activeTag;
+    grid.innerHTML = articles.map((a) => renderCard(a, interests)).join('');
+    if (emptyEl) emptyEl.hidden = articles.length > 0;
+    if (ssrEmpty) ssrEmpty.style.display = 'none';
+
+    // Re-init dynamically rendered card components
+    if ((window as any).__initAddToPlaylistContainers) {
+      (window as any).__initAddToPlaylistContainers(grid);
+    }
+    if ((window as any).__initBookmarkButtons) {
+      (window as any).__initBookmarkButtons();
+    }
+    if ((window as any).__initCommentCounts) {
+      (window as any).__initCommentCounts(grid);
+    }
+
+    // Update SourceFilter counts to reflect the active filter pool (search-aware)
+    updateSourceCounts();
+    refreshMatchBadge(articles, interests);
+  }
+
+  function updateSourceCounts() {
+    // When search is active, source counts reflect search results across origins.
+    // Otherwise, source counts reflect all-articles (we let SSR counts stand) — only update if search active.
+    if (activeSearchResults === null) {
+      // No search: restore original SSR counts (they reflect totals).
+      document.dispatchEvent(
+        new CustomEvent('source-counts-update', { detail: { reset: true } })
+      );
+      return;
+    }
+    const pool = activeSearchResults; // already title-filtered, origin-scoped to current selection
+    // We need per-origin breakdown, but search is done against the full pool with current origin pre-applied.
+    // So recompute against ALL articles filtered by query, regardless of origin, to give true per-origin counts.
+    const all = getAllArticles();
+    const q = activeSearchQuery.trim().toLowerCase();
+    const matched = q ? all.filter((a) => a.title.toLowerCase().includes(q)) : all;
+    const submitted = matched.filter((a) => a.articleOrigin === 'submitted').length;
+    const feed = matched.filter((a) => a.articleOrigin === 'feed').length;
+    const curated = matched.filter((a) => a.articleOrigin === 'curated').length;
+    document.dispatchEvent(
+      new CustomEvent('source-counts-update', {
+        detail: { all: submitted + feed + curated, submitted, feed },
+      })
+    );
+    // pool referenced to silence unused warning in some bundlers
+    void pool;
+  }
+
+  function refreshMatchBadge(articles: ClientArticle[], interests: Set<string>) {
+    const badge = document.getElementById('itp-match-badge');
+    if (!badge) return;
+    if (interests.size === 0) {
+      badge.hidden = true;
+      badge.textContent = '';
+      return;
+    }
+    const count = articles.filter((a) => a.tags.some((t) => interests.has(t))).length;
+    if (count === 0) {
+      badge.hidden = true;
+      badge.textContent = '';
+      return;
+    }
+    badge.hidden = false;
+    badge.textContent = `관심사 일치 ${count}건`;
+  }
+
+  // ---------- SSR card highlight + pinning ----------
+  function applyInterestHighlights() {
+    const list = document.querySelector('[data-testid="article-list"]');
+    if (!list) return;
+    const interests = new Set(getInterests());
+    const cards = list.querySelectorAll<HTMLElement>('[data-testid="article-card"]');
+    let matchCount = 0;
+    cards.forEach((card) => {
+      const tags = (card.dataset.tags || '').split(',').filter(Boolean);
+      const isMatch = interests.size > 0 && tags.some((t) => interests.has(t));
+      card.classList.toggle('interest-match', isMatch);
+      if (isMatch) matchCount += 1;
+    });
+
+    // Update header badge for the SSR view
+    const badge = document.getElementById('itp-match-badge');
+    if (badge) {
+      if (interests.size === 0 || matchCount === 0) {
+        badge.hidden = true;
+        badge.textContent = '';
+      } else {
+        badge.hidden = false;
+        badge.textContent = `관심사 일치 ${matchCount}건`;
+      }
+    }
+  }
+
+  function pinInterestMatchesInList() {
+    const list = document.querySelector('[data-testid="article-list"]');
+    if (!list) return;
+    const interests = getInterests();
+    const cards = Array.from(list.querySelectorAll<HTMLElement>('[data-testid="article-card"]'));
+
+    // Initialize originalIndex once
+    cards.forEach((card, i) => {
+      if (!card.dataset.originalIndex) card.dataset.originalIndex = String(i);
+    });
+
+    if (interests.length === 0) {
+      // Restore original order
+      const sorted = [...cards].sort(
+        (a, b) => Number(a.dataset.originalIndex ?? 0) - Number(b.dataset.originalIndex ?? 0)
+      );
+      sorted.forEach((card) => list.appendChild(card));
+      return;
+    }
+
+    const matched: HTMLElement[] = [];
+    const unmatched: HTMLElement[] = [];
+    cards.forEach((card) => {
+      const tags = (card.dataset.tags || '').split(',').filter(Boolean);
+      const isMatch = interests.some((i) => tags.includes(i));
+      (isMatch ? matched : unmatched).push(card);
+    });
+    [...matched, ...unmatched].forEach((card) => list.appendChild(card));
+  }
+
+  // ---------- UI: chip rendering / interest pills ----------
+  function refreshInterestsUI() {
+    const interests = getInterests();
+    const interestsSet = new Set(interests);
+
+    // Star state on every chip (top row + expanded list)
+    document.querySelectorAll<HTMLElement>('[data-star]').forEach((star) => {
+      const tag = star.dataset.tag || '';
+      const on = interestsSet.has(tag);
+      star.textContent = on ? '★' : '☆';
+      star.classList.toggle('on', on);
+      star.setAttribute('aria-pressed', String(on));
+      star.setAttribute('title', on ? '관심사에서 제거' : '관심사로 저장');
+    });
+
+    // Header label
+    const label = document.getElementById('itp-label');
+    if (label) {
+      label.textContent =
+        interests.length > 0
+          ? `⭐ 관심사 & 태그 (${interests.length}개 저장)`
+          : '⭐ 관심사 & 태그';
+    }
+
+    // Interests count + clear button
+    const countEl = document.getElementById('itp-interests-count');
+    if (countEl) countEl.textContent = `(${interests.length})`;
+    const clearBtn = document.getElementById('itp-clear');
+    if (clearBtn) (clearBtn as HTMLElement).hidden = interests.length === 0;
+    const hint = document.getElementById('itp-interests-hint');
+    if (hint) (hint as HTMLElement).hidden = interests.length > 0;
+
+    // Render saved interests as removable pills
+    const row = document.getElementById('itp-interests-row');
+    if (row) {
+      if (interests.length === 0) {
+        row.hidden = true;
+        row.innerHTML = '';
+      } else {
+        row.hidden = false;
+        row.innerHTML = interests
+          .map(
+            (t) => `
+            <button type="button" class="itp-interest-pill" data-remove-interest data-tag="${escapeHtmlAttr(t)}">
+              <span>★ ${escapeHtmlText(t)}</span>
+              <span class="itp-interest-pill-x" aria-hidden="true">×</span>
+            </button>`
+          )
+          .join('');
+      }
+    }
+  }
+
+  function escapeHtmlAttr(s: string): string {
+    return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function escapeHtmlText(s: string): string {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  // ---------- Active tag chip styling ----------
+  function setActiveTagChip(tag: string) {
+    activeTag = tag;
+    document.querySelectorAll<HTMLElement>('.itp-chip').forEach((chip) => {
+      chip.classList.toggle('active', chip.dataset.tag === tag);
+    });
+
+    // Update URL ?tag=
+    const url = new URL(window.location.href);
+    if (tag === 'all') {
+      url.searchParams.delete('tag');
+    } else {
+      url.searchParams.set('tag', tag);
+    }
+    window.history.replaceState({}, '', url.toString());
+  }
+
+  function applyTagFilter(tag: string) {
+    setActiveTagChip(tag);
+    renderFilteredView();
+  }
+
+  // ---------- Initialization ----------
+  function initInterestTagPanel() {
+    refreshInterestsUI();
+
+    // Chip click delegation for both top row and full list
+    document.querySelectorAll<HTMLElement>('.itp-chip').forEach((chip) => {
+      chip.addEventListener('click', (ev) => {
+        const target = ev.target as HTMLElement;
+        // Star click is handled separately
+        if (target.closest('[data-star]')) return;
+        const tag = chip.dataset.tag || 'all';
+        applyTagFilter(tag);
+      });
+    });
+
+    // Star click for interest toggle
+    document.querySelectorAll<HTMLElement>('[data-star]').forEach((star) => {
+      star.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        ev.preventDefault();
+        const tag = star.dataset.tag || '';
+        if (tag) toggleInterest(tag);
+      });
+    });
+
+    // Clear all interests
+    document.getElementById('itp-clear')?.addEventListener('click', clearInterests);
+
+    // Remove individual interest from pills row
+    const row = document.getElementById('itp-interests-row');
+    row?.addEventListener('click', (ev) => {
+      const target = (ev.target as HTMLElement).closest('[data-remove-interest]') as HTMLElement | null;
+      if (!target) return;
+      const tag = target.dataset.tag || '';
+      if (tag) toggleInterest(tag);
+    });
+
+    // Toggle expanded panel
+    const toggle = document.getElementById('itp-toggle');
+    const expanded = document.getElementById('itp-expanded');
+    toggle?.addEventListener('click', () => {
+      if (!expanded || !toggle) return;
+      const wasHidden = expanded.hidden;
+      expanded.hidden = !wasHidden;
+      toggle.setAttribute('aria-expanded', String(wasHidden));
+      toggle.textContent = wasHidden ? '접기 ▲' : '모든 태그 보기 ▼';
+    });
+
+    // Listen for source filter changes
+    document.addEventListener('source-filter-changed', (() => {
+      // Source change can affect the filtered view (cross-page) AND search counts.
+      renderFilteredView();
+    }) as EventListener);
+
+    // Listen for search changes
+    document.addEventListener('article-search-changed', ((e: CustomEvent<{ query: string; origin: string; results: ClientArticle[] }>) => {
+      const { query, results } = e.detail;
+      activeSearchQuery = query;
+      activeSearchResults = query ? results : null;
+      renderFilteredView();
+    }) as EventListener);
+
+    // Apply initial state from URL (?tag=)
+    const tagParam = new URLSearchParams(window.location.search).get('tag');
+    const validTags = new Set<string>();
+    document.querySelectorAll<HTMLElement>('.itp-chip').forEach((c) => {
+      if (c.dataset.tag) validTags.add(c.dataset.tag);
+    });
+    const initialTag = tagParam && validTags.has(tagParam) ? tagParam : 'all';
+    setActiveTagChip(initialTag);
+
+    // Apply highlights to SSR cards on initial load
+    applyInterestHighlights();
+    pinInterestMatchesInList();
+
+    // If URL had a tag or origin, render the filtered view
+    if (initialTag !== 'all' || getActiveOrigin() !== 'all') {
+      renderFilteredView();
+    }
+  }
+
+  document.addEventListener('astro:page-load', initInterestTagPanel);
+</script>
+
+<style>
+  .interest-tag-panel {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    margin-bottom: var(--space-lg);
+  }
+
+  .itp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+  }
+  .itp-header-left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+  .itp-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+  .itp-match-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px var(--space-sm);
+    border-radius: 999px;
+    background: var(--color-accent);
+    color: var(--color-text);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .itp-toggle {
+    font-size: 0.8rem;
+    color: var(--color-primary);
+    background: none;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-family: inherit;
+    padding: var(--space-xs) var(--space-sm);
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .itp-toggle:hover {
+    background: var(--color-bg);
+    border-color: var(--color-border);
+  }
+  .itp-toggle:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  /* Chips ----------------------------------------------------- */
+  .itp-chips-row,
+  .itp-all-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+
+  .itp-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px var(--space-sm) 3px 4px;
+    border-radius: 999px;
+    background: var(--color-bg);
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.78rem;
+    line-height: 1.2;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .itp-chip:hover {
+    border-color: var(--color-primary);
+    color: var(--color-text);
+  }
+  .itp-chip.active {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+  }
+  .itp-chip.active .itp-chip-count {
+    color: rgba(255, 255, 255, 0.85);
+  }
+  .itp-chip-all {
+    padding-left: var(--space-sm);
+  }
+  .itp-chip-label {
+    font-weight: 500;
+  }
+  .itp-chip-count {
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .itp-chip-star {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s, color 0.15s, transform 0.15s;
+    font-size: 0.85rem;
+  }
+  .itp-chip-star:hover {
+    background: rgba(252, 185, 36, 0.2);
+    color: var(--color-accent);
+    transform: scale(1.15);
+  }
+  .itp-chip-star.on {
+    color: var(--color-accent);
+  }
+  .itp-chip.active .itp-chip-star {
+    color: white;
+  }
+  .itp-chip.active .itp-chip-star.on {
+    color: var(--color-accent);
+  }
+
+  /* Expanded sections ---------------------------------------- */
+  .itp-expanded {
+    margin-top: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+  .itp-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+  .itp-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+  }
+  .itp-section-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0;
+  }
+  .itp-section-count {
+    color: var(--color-text-muted);
+    font-weight: 400;
+    font-size: 0.78rem;
+  }
+  .itp-section-hint {
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+  .itp-clear {
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    text-decoration: underline;
+    padding: 0;
+  }
+  .itp-clear:hover {
+    color: var(--color-primary);
+  }
+
+  /* Interest pills ------------------------------------------- */
+  .itp-interests-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+  .itp-interest-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 6px 3px var(--space-sm);
+    border-radius: 999px;
+    background: var(--color-accent);
+    color: var(--color-text);
+    border: 1px solid var(--color-accent);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 500;
+    transition: filter 0.15s;
+  }
+  .itp-interest-pill:hover {
+    filter: brightness(0.95);
+  }
+  .itp-interest-pill-x {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.12);
+    font-size: 0.75rem;
+    line-height: 1;
+  }
+
+  /* Filtered results container ------------------------------- */
+  .itp-filtered-results {
+    margin-top: var(--space-md);
+  }
+  .itp-filtered-header {
+    margin-bottom: var(--space-md);
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    font-weight: 500;
+  }
+  .itp-filtered-empty {
+    text-align: center;
+    padding: var(--space-xl);
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+  }
+
+  /* Mobile --------------------------------------------------- */
+  @media (max-width: 768px) {
+    .itp-header {
+      flex-wrap: wrap;
+    }
+  }
+</style>
+
+<!-- Visible interest-match highlight for ArticleCard.
+     Global because ArticleCard already declares its scoped styles separately. -->
+<style is:global>
+  .article-card.interest-match {
+    border-color: var(--color-accent) !important;
+    background: linear-gradient(
+      135deg,
+      var(--color-bg) 0%,
+      rgba(252, 185, 36, 0.08) 100%
+    );
+    box-shadow: 0 0 0 1px var(--color-accent), 0 2px 8px rgba(252, 185, 36, 0.15);
+    position: relative;
+  }
+  .article-card.interest-match::before {
+    content: '⭐ 관심';
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 2;
+    padding: 2px 8px;
+    background: var(--color-accent);
+    color: var(--color-text);
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+    pointer-events: none;
+  }
+  /* Avoid the badge overlapping the thumbnail area in cards with images */
+  .article-card.interest-match .article-thumbnail {
+    position: relative;
+  }
+</style>
