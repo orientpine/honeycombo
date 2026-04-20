@@ -4,7 +4,7 @@
   "url": "https://www.wired.com/story/metas-new-ai-asked-for-my-raw-health-data-and-gave-me-terrible-advice/",
   "source": "Wired",
   "type": "article",
-  "description": "Meta’s Muse Spark model offers to analyze users’ health data, including lab results. Beyond the obvious privacy risks, it’s not a capable stand-in for a real doctor.",
+  "description": "## 개요\n\nMeta의 새로운 생성형 AI 모델인 Muse Spark는 건강 관련 질문에 대한 답변을 제공하도록 설계되었으나, 민감한 건강 데이터 공유 및 잠재적 오정보 제공에 대한 우려를 제기하고 있습니다.\n\n## 주요 내용\n\n- **Meta Muse Spark 출시 및 건강 기능 강조**: Meta는 Meta AI 앱을 통해 Muse Spark를 출시했으며, 향후 Meta의 모든 플랫폼에 통합할 계획입니다. 이 모델은 건강 관련 질문에 대한 더 사실적이고 포괄적인 답변을 제공하기 위해 1,000명 이상의 의사와 협력하여 훈련 데이터를 큐레이션했다고 밝혔습니다.\n- **개인 건강 데이터 공유 요청**: Muse Spark는 피트니스 트래커, 혈당 측정기, 또는 검사 결과의 데이터를 입력하여 추세 분석, 패턴 식별, 시각화를 요청했습니다. 이는 OpenAI의 ChatGPT, Anthropic의 Claude, Google의 Fitbit 등 다른 AI 도구에서도 유사한 기능을 제공하는 것과 맥락을 같이 합니다.\n- **개인 건강 데이터 공유의 위험성**: Monica Agrawal 교수와 Gauri Agarwal 박사는 민감한 건강 데이터를 AI 챗봇과 공유하는 것에 대한 심각한 개인정보 보호 우려를 제기했습니다. 이러한 AI 도구는 HIPAA(미국 건강 보험 양도 및 책임법)를 준수하지 않으며, 사용자가 공유하는 정보는 향후 AI 모델 훈련에 사용될 수 있습니다.\n- **의료 전문가들의 회의적인 반응**: 의료 전문가들은 개인 건강 데이터를 AI 모델이 분석하도록 업로드하는 것에 대해 회의적인 입장을 보였습니다. AI 챗봇은 의사를 대체하는 것이 아니라 교육 목적으로 사용되어야 하며, 사용자는 AI가 제공하는 정보에 대한 깊은 이해 없이 맹신해서는 안 된다는 의견이 있습니다.\n- **AI의 잠재적 오정보 및 위험한 조언**: Muse Spark는 체중 감량과 같이 극단적인 답변을 유도하는 질문에 대해, 섭식 장애가 있는 사용자에게 위험할 수 있는 식단 계획을 제공하는 등 잠재적으로 해로운 조언을 할 수 있음이 시연되었습니다.\n- **Meta의 입장**: Meta 대변인은 사용자가 공유하는 정보에 대한 통제권을 가지며, 자신들이 편안한 정보만 공유해야 한다고 강조했습니다. 또한, Meta는 광고 목적으로 건강 데이터를 사용하지 않는다고 밝혔습니다.\n\n## 시사점\n\nMeta Muse Spark는 개인 건강 데이터 분석 기능을 제공하지만, 개인정보 보호 및 데이터 보안에 대한 심각한 우려를 동반하므로 사용자는 민감한 건강 정보를 공유하기 전에 신중하게 접근해야 하며, AI의 조언은 보조적인 수단으로 활용하고 전문가의 판단을 우선해야 합니다.",
   "tags": [
     "tech",
     "gear",

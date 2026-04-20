@@ -4,7 +4,7 @@
   "url": "https://news.ycombinator.com/item?id=47792122",
   "source": "Hacker News",
   "type": "article",
-  "description": "Comments",
+  "description": "## 개요\n\nShow HN: Agent-cache는 Valkey 및 Redis를 사용하여 LLM 요청, 도구 및 세션에 대한 다단계 캐싱 솔루션을 제공합니다.\n\n## 주요 내용\n\n- **정확한 매칭 기반 캐싱**: Agent-cache는 LLM 요청의 모든 요소를 (모델, 대화 기록, 샘플링 파라미터, 도구 정의) 포함하여 SHA-256 해시를 생성하고, 이 해시를 Valkey의 캐시 키로 사용합니다. 입력이 정확히 일치할 경우 캐시 히트를 발생시킵니다.\n- **시맨틱 캐싱과의 차별점**: \"거의 같은 질문\"에 대한 캐싱을 위해서는 별도의 패키지인 `@betterdb/semantic-cache`를 사용하며, 이는 프롬프트를 벡터로 임베딩하여 유사성 검색을 수행합니다. Agent-cache는 Valkey의 기본 기능만으로 동작하지만, 시맨틱 캐싱은 valkey-search 모듈이 필요합니다.\n- **정확성 vs. 유연성**: Agent-cache는 시맨틱 캐싱보다 캐시 히트율이 낮을 수 있지만, 캐시 히트 시에는 항상 정확한 결과를 보장합니다. 반면 시맨틱 캐싱은 유사한 질문에도 응답할 수 있어 유연성이 높습니다.\n\n## 시사점\n\nAgent-cache는 LLM 응답의 정확성이 무엇보다 중요할 때, 반복적인 요청에 대한 비용 및 지연 시간을 절감할 수 있는 강력한 솔루션을 제공하며, 이를 통해 Valkey 또는 Redis 환경에서 LLM 애플리케이션의 효율성을 높일 수 있습니다.",
   "tags": [
     "tech"
   ],

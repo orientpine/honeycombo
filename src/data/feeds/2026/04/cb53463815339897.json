@@ -4,7 +4,7 @@
   "url": "https://github.blog/ai-and-ml/github-copilot/building-an-emoji-list-generator-with-the-github-copilot-cli/",
   "source": "GitHub Blog",
   "type": "article",
-  "description": "See how we created an emoji list generator during the Rubber Duck Thursday stream. The post Building an emoji list generator with the GitHub Copilot CLI appeared first on The GitHub Blog.",
+  "description": "## 개요\n\n이 콘텐츠는 GitHub Copilot CLI를 사용하여 이모지 목록 생성기를 구축하는 과정을 소개하고, 개발자들이 이모지 선택에 드는 시간을 단축하도록 돕는 방법을 설명합니다.\n\n## 주요 내용\n\n- **프로젝트 목표**: 소셜 미디어 등에서 자주 사용되는 이모지 목록을 자동으로 생성하는 CLI(Command Line Interface) 기반 애플리케이션을 개발합니다. 이 애플리케이션은 사용자 입력(불렛 포인트)을 기반으로 관련성 높은 이모지를 생성하고 결과를 클립보드에 복사합니다.\n- **사용된 기술 스택**:\n    - `@opentui/core`: 터미널 UI 구축\n    - `@github/copilot-sdk`: AI 기능 구현\n    - `clipboardy`: 클립보드 접근\n- **개발 과정**:\n    - GitHub Copilot CLI의 'Plan mode'를 사용하여 \"AI 기반 마크다운 이모지 목록 생성기\" 구축 아이디어를 입력합니다.\n    - Copilot은 Claude Sonnet 4.6을 활용하여 기술 스택 및 라이브러리 추천(OpenTUI 등)과 같은 명확화 질문을 통해 구체적인 `plan.md` 파일을 생성하도록 돕습니다.\n    - Claude Opus 4.7을 사용하여 계획을 구현하고, 몇 분 안에 간단한 터미널 UI를 완성합니다.\n- **GitHub Copilot CLI 기능 활용**:\n    - 'Plan mode': 프로젝트 계획 수립\n    - 'Autopilot mode': 코드 자동 생성\n    - 'Multi-model workflow': 여러 AI 모델 활용\n    - `allow-all` tools flag: 모든 도구 사용 허용\n    - GitHub MCP server: 서버 기능\n\n## 시사점\n\nGitHub Copilot CLI는 AI를 활용하여 개발 생산성을 향상시키는 강력한 도구이며, 이모지 목록 생성기 프로젝트는 이를 통해 개발자가 창의적인 작업에 더 집중할 수 있도록 돕는 실용적인 예시를 보여줍니다.",
   "tags": [
     "dev",
     "ai & ml",

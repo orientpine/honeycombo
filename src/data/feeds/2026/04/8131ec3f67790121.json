@@ -4,7 +4,7 @@
   "url": "https://blog.vidocsecurity.com/blog/we-reproduced-anthropics-mythos-findings-with-public-models",
   "source": "Hacker News",
   "type": "article",
-  "description": "Comments",
+  "description": "## 개요\n\n이 콘텐츠는 Anthropic의 Mythos 연구 결과에 대해 공개적으로 접근 가능한 AI 모델들을 사용하여 재현성을 테스트하고, 이를 통해 AI 기반 취약점 연구의 현재 상황과 미래 전망을 분석합니다.\n\n## 주요 내용\n\n- **Anthropic Mythos 연구의 주장**: Anthropic은 Mythos와 Project Glasswing을 통해 첨단 AI의 취약점 연구 능력이 향상되었으며, 이는 보안 연구의 제한이 필요함을 시사한다고 주장했습니다.\n- **공개 모델을 이용한 재현성 테스트**: 연구팀은 GPT-5.4와 Claude Opus 4.6과 같은 공개 모델을 사용하여 FreeBSD, OpenBSD, FFmpeg, Botan, wolfSSL 등 다양한 소프트웨어의 취약점 재현을 시도했습니다.\n- **재현 결과**:\n    - FreeBSD와 Botan의 경우, 두 공개 모델 모두에서 성공적으로 취약점을 재현했습니다.\n    - OpenBSD의 경우, Claude Opus 4.6만 성공적으로 재현했으며 GPT-5.4는 실패했습니다.\n    - FFmpeg와 wolfSSL의 경우, 두 모델 모두 부분적인 결과를 얻었으나 완전한 재현에는 이르지 못했습니다.\n- **핵심 요점**: Anthropic이 주장하는 첨단 AI의 취약점 탐지 능력은 이미 GPT-5.4 및 Claude Opus 4.6과 같은 공개 모델에서도 상당 부분 달성 가능하며, 이는 AI 기반 취약점 연구가 더 이상 특정 연구실에 국한되지 않음을 의미합니다.\n- **새로운 도전 과제**: 모델 자체의 성능보다 재현된 결과의 검증, 중요도 우선순위 결정, 그리고 실제 적용(operationalization)이 핵심 과제로 부상했습니다.\n- **Anthropic의 방법론 분석**: Mythos의 연구 방법론은 단발적인 기적의 프롬프트가 아니라, 코드베이스 검토, 디버깅, 가설 검증, 병렬 실행, 2차 검토 등 체계적인 에이전트 기반 검색 프로세스임을 지적합니다.\n\n## 시사점\n\nAnthropic의 Mythos 연구 결과는 이미 공개 모델에서도 상당 부분 재현 가능하며, AI 기반 취약점 연구의 진입 장벽이 낮아졌음을 시사합니다. 이에 따라 AI 모델 접근 자체보다는 결과의 검증, 우선순위 결정, 실제 시스템 통합 및 적용 역량이 보안 팀에게 더 중요해졌습니다.",
   "tags": [
     "tech"
   ],

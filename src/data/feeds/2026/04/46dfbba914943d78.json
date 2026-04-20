@@ -4,7 +4,7 @@
   "url": "https://techcrunch.com/2026/04/15/openai-updates-its-agents-sdk-to-help-enterprises-build-safer-more-capable-agents/",
   "source": "TechCrunch",
   "type": "article",
-  "description": "OpenAI has expanded the capabilities of its agent-building toolkit, as agentic AI continues to grow in popularity.",
+  "description": "## 개요\n\nOpenAI가 기업들이 더 안전하고 강력한 에이전트를 구축할 수 있도록 지원하기 위해 Agents SDK를 업데이트했습니다.\n\n## 주요 내용\n\n- **샌드박싱 기능 도입**: 에이전트가 제어된 컴퓨터 환경에서 작동하도록 하여, 예측 불가능한 에이전트의 잠재적 위험을 완화하고 시스템 무결성을 보호합니다. 에이전트는 특정 작업에 필요한 파일 및 코드에만 접근하며, 사일로화된 방식으로 작동합니다.\n- **프론티어 모델용 인-디스트리뷰션 하네스 제공**: 개발자들이 최신 범용 모델(프론티어 모델)을 활용하여 승인된 도구 및 워크스페이스 내 파일과 함께 에이전트를 구축하고 테스트할 수 있게 합니다.\n- **Python 우선 출시 및 향후 확장 계획**: 새로운 하네스 및 샌드박스 기능은 우선 Python으로 출시되며, TypeScript 지원은 추후 제공될 예정입니다. 코드 모드 및 서브에이전트와 같은 추가 에이전트 기능도 Python과 TypeScript 모두에 적용될 예정입니다.\n- **API를 통한 제공 및 표준 가격 정책**: 새로운 Agents SDK 기능은 API를 통해 모든 고객에게 제공되며, 기존의 표준 가격 정책이 적용됩니다.\n- **장기 과제(Long-horizon tasks) 지원 강화**: 복잡하고 다단계 작업인 장기 과제를 수행할 수 있는 에이전트 구축을 지원합니다.\n\n## 시사점\n\n이번 OpenAI Agents SDK 업데이트는 기업들이 에이전트의 안전성을 확보하고, 최신 LLM과 연동하여 복잡한 작업을 자동화하는 데 필요한 핵심 기능을 제공함으로써, 엔터프라이즈 AI 에이전트 개발 생태계를 더욱 발전시킬 것으로 기대됩니다.",
   "tags": [
     "tech",
     "ai",
