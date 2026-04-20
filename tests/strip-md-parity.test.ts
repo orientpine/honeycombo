@@ -31,9 +31,11 @@ const CORPUS: Array<{ name: string; input: string; expected: string }> = [
     expected: 'A simple description without any markdown.',
   },
   {
-    name: 'block heading stripped',
+    name: 'block heading body extracted (heading label dropped)',
+    // Structured Korean summaries always start with "## 개요"; the heading label
+    // is visual noise on cards. We surface only the first section's body.
     input: '## 개요\n본문',
-    expected: '개요 본문',
+    expected: '본문',
   },
   {
     name: 'bullet markers normalized',
@@ -67,8 +69,9 @@ const CORPUS: Array<{ name: string; input: string; expected: string }> = [
   },
   {
     name: 'mixed structured Korean summary collapsed to clean preview',
+    // "주요 내용" heading label is dropped; only first section body remains.
     input: '## 주요 내용\n- **핵심 포인트**: 중요한 내용',
-    expected: '주요 내용 \u2022 핵심 포인트: 중요한 내용',
+    expected: '• 핵심 포인트: 중요한 내용',
   },
 ];
 
@@ -78,22 +81,66 @@ const CORPUS: Array<{ name: string; input: string; expected: string }> = [
  * stripMd function source from each file with a regex and `eval` it inside a
  * sandbox to compare behaviour. This is test-only code; never used at runtime.
  */
-async function loadStripMdFromFile(relativePath: string, options: { wrappedInAstroScript?: boolean } = {}): Promise<(text: string) => string> {
+function extractFunctionSource(source: string, name: string): string | null {
+  // Locate `function NAME(...) {` then walk forward, counting braces, until balanced.
+  // Robust against nested braces inside the function body (regex literals, if blocks, etc.).
+  const headerRegex = new RegExp(`function\\s+${name}\\s*\\([^)]*\\)(?:\\s*:\\s*string)?\\s*\\{`);
+  const headerMatch = source.match(headerRegex);
+  if (!headerMatch || headerMatch.index === undefined) return null;
+  let depth = 1;
+  let i = headerMatch.index + headerMatch[0].length;
+  let inString: string | null = null;
+  let inRegex = false;
+  let inLineComment = false;
+  while (i < source.length && depth > 0) {
+    const ch = source[i];
+    const prev = source[i - 1];
+    if (inLineComment) {
+      if (ch === '\n') inLineComment = false;
+    } else if (inString) {
+      if (ch === inString && prev !== '\\') inString = null;
+    } else if (inRegex) {
+      if (ch === '/' && prev !== '\\') inRegex = false;
+    } else {
+      if (ch === '/' && source[i + 1] === '/') {
+        inLineComment = true;
+      } else if (ch === '\'' || ch === '"' || ch === '`') {
+        inString = ch;
+      } else if (ch === '/' && (prev === '(' || prev === ',' || prev === '=' || prev === ' ')) {
+        inRegex = true;
+      } else if (ch === '{') {
+        depth++;
+      } else if (ch === '}') {
+        depth--;
+        if (depth === 0) {
+          return source.slice(headerMatch.index, i + 1);
+        }
+      }
+    }
+    i++;
+  }
+  return null;
+}
+
+async function loadStripMdFromFile(relativePath: string): Promise<(text: string) => string> {
   const source = await readFile(join(ROOT, relativePath), 'utf-8');
-  // Match `function stripMd(text: string): string { ... }` or `function stripMd(text) { ... }`
-  // Each file uses 2 or 4 space indentation, so be permissive.
-  const match = source.match(/function\s+stripMd\s*\([^)]*\)(?:\s*:\s*string)?\s*\{[\s\S]*?\n\s*\}/);
-  if (!match) {
+  const stripSrc = extractFunctionSource(source, 'stripMd');
+  if (!stripSrc) {
     throw new Error(`Could not extract stripMd from ${relativePath}`);
+  }
+  // stripMd delegates to a flattenMd helper for the regex pipeline. Pull it in too,
+  // otherwise the eval sandbox sees an undefined reference.
+  const flattenSrc = extractFunctionSource(source, 'flattenMd');
+  if (!flattenSrc) {
+    throw new Error(`Could not extract flattenMd from ${relativePath}`);
   }
   // Strip the optional ': string' return type annotation and ': string' parameter type
   // so eval() in plain JS context succeeds.
-  const stripped = match[0]
-    .replace(/:\s*string/g, '')
-    .replace(/\bString\(text\)/g, 'text');
+  const sanitize = (s: string) => s.replace(/:\s*string/g, '').replace(/\bString\(text\)/g, 'text');
+  const combined = `${sanitize(stripSrc)}\n${sanitize(flattenSrc)}`;
   // Wrap as expression returning the function.
   // eslint-disable-next-line no-new-func
-  const factory = new Function(`${stripped}; return stripMd;`);
+  const factory = new Function(`${combined}; return stripMd;`);
   return factory() as (text: string) => string;
 }
 

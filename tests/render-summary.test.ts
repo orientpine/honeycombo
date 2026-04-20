@@ -59,14 +59,17 @@ describe('renderSummaryHtml', () => {
 });
 
 describe('stripMarkdownForPreview', () => {
-  it('strips heading markers from structured summary', () => {
+  it('extracts only the body of the first ## section, omitting heading labels', () => {
     const md = '## 개요\nAI 에이전트를 프로덕션 환경에서 활용\n\n## 주요 내용\n- 설계 패턴';
     const result = stripMarkdownForPreview(md);
 
+    // Heading markers AND heading labels (개요, 주요 내용) must NOT leak into preview.
+    // Every article starts with "## 개요" so showing the label is awkward visual noise.
     expect(result).not.toContain('##');
-    expect(result).toContain('개요');
-    expect(result).toContain('AI 에이전트를 프로덕션 환경에서 활용');
-    expect(result).toContain('주요 내용');
+    expect(result).not.toContain('개요');
+    expect(result).not.toContain('주요 내용');
+    // The body of the first section IS the canonical summary.
+    expect(result).toBe('AI 에이전트를 프로덕션 환경에서 활용');
   });
 
   it('converts bullet markers to bullet symbols', () => {
@@ -86,6 +89,28 @@ describe('stripMarkdownForPreview', () => {
   it('collapses multiline into single line', () => {
     const result = stripMarkdownForPreview('Line 1\n\nLine 2\nLine 3');
     expect(result).not.toContain('\n');
+  });
+
+  it('falls through to the next section when the first section body is empty', () => {
+    // Defensive: if a malformed summary has an empty first section,
+    // we should still surface SOMETHING useful rather than an empty string.
+    const result = stripMarkdownForPreview('## 개요\n\n## 주요 내용\n실제 내용');
+    expect(result.length).toBeGreaterThan(0);
+    expect(result).toContain('실제 내용');
+  });
+
+  it('handles structured summary with bullet body', () => {
+    const md = '## 개요\n- 첫번째 포인트\n- 두번째 포인트\n\n## 시사점\n결론';
+    const result = stripMarkdownForPreview(md);
+    expect(result).not.toContain('개요');
+    expect(result).not.toContain('시사점');
+    expect(result).toContain('• 첫번째 포인트');
+    expect(result).toContain('• 두번째 포인트');
+  });
+
+  it('preserves single-section structured summary body', () => {
+    const result = stripMarkdownForPreview('## 개요\n첫번째 섹션 내용입니다.');
+    expect(result).toBe('첫번째 섹션 내용입니다.');
   });
 });
 
@@ -239,7 +264,8 @@ describe('stripMarkdownForPreview integration with inline markers', () => {
     const result = stripMarkdownForPreview(md);
     expect(result).not.toContain('##');
     expect(result).not.toContain('**');
-    expect(result).toContain('주요 내용');
+    // Heading labels are stripped from previews — only first-section body content remains.
+    expect(result).not.toContain('주요 내용');
     expect(result).toContain('• 핵심 포인트: 중요한 내용');
     expect(result).toContain('• 두 번째 포인트: 추가 설명');
   });

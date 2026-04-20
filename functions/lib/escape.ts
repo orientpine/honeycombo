@@ -16,8 +16,26 @@ export function escapeAttr(s: string): string {
   return escapeHtml(s);
 }
 
-/** Strip markdown markers for plain-text contexts (search previews, must-read cards). */
+/**
+ * Strip markdown markers for plain-text contexts (search previews, must-read cards).
+ *
+ * For structured Korean summaries (## 개요 / ## 주요 내용 / ## 시사점), returns the
+ * body of the FIRST section only — every article shares the same overview heading,
+ * so the label "개요" is visual noise on cards. Mirrors
+ * src/lib/render-summary.ts stripMarkdownForPreview().
+ */
 export function stripMd(text: string): string {
+  const trimmed = text.trim();
+  if (/^##\s+/m.test(trimmed)) {
+    const match = trimmed.match(/^##\s+[^\n]*\n+([\s\S]*?)(?=\n##\s+|$)/);
+    if (match && match[1].trim()) {
+      return flattenMd(match[1]);
+    }
+  }
+  return flattenMd(trimmed);
+}
+
+function flattenMd(text: string): string {
   return text
     .replace(/^#{1,6}\s+/gm, '')
     .replace(/^[-*]\s+/gm, '• ')
