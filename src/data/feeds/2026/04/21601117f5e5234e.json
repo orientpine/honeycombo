@@ -4,7 +4,7 @@
   "url": "https://www.wired.com/story/ai-slop-is-changing-the-internet-just-not-how-you-might-think/",
   "source": "Wired",
   "type": "article",
-  "description": "A new study examines the impact of the rise of AI-generated websites on the internet—and found some surprising results.",
+  "description": "## 개요\n\n본 콘텐츠는 AI 생성 또는 AI 보조 웹사이트의 증가로 인해 인터넷 콘텐츠가 점점 더 인위적으로 긍정적이고 획일화되는 현상(\"AI slop\")에 대한 연구 결과를 다룹니다.\n\n## 주요 내용\n\n- Imperial College of London, Stanford University, Internet Archive 연구진의 새로운 사전 인쇄(preprint) 연구에 따르면, 2022년부터 2025년 사이에 생성된 신규 웹사이트의 약 35%가 AI 생성 또는 AI 보조로 나타났습니다.\n- AI 생성 또는 AI 보조 콘텐츠는 기존 웹사이트보다 평균적으로 107% 더 높은 긍정적 감성 점수를 보여, 온라인 글쓰기가 \"갈수록 정제되고 인위적으로 쾌활해지는\" 것으로 나타났습니다. 이는 LLM의 과도하게 낙관적인 특성 때문으로 분석됩니다.\n- AI는 또한 온라인 콘텐츠의 이념적 다양성을 감소시켜, AI 웹사이트가 비(非) AI 웹사이트보다 \"의미론적 유사성\" 테스트에서 약 33% 더 높은 점수를 기록했습니다.\n- 연구진은 AI가 허위 정보 증가, 외부 출처 링크 감소, 문체적 획일화로 이어질 것이라는 가설을 세웠으나, 이들 가설은 데이터 분석 결과 입증되지 않았습니다. 특히 AI 글쓰기가 예상보다 덜 획일적인 문체를 가진다는 점이 연구팀에게 놀라움을 안겨주었습니다.\n- AI에 대한 대중의 인식 조사 결과, 연구진의 예상과 마찬가지로 대중 역시 AI가 허위 정보 증가, 외부 링크 감소, 획일적인 목소리로 이어질 것이라고 예상했지만, 연구 결과는 이러한 통념과 일부 다른 양상을 보였습니다.\n\n## 시사점\n\n이 연구는 AI가 인터넷 콘텐츠의 긍정적인 톤과 아이디어의 획일성을 증가시키는 경향이 있음을 보여주며, AI의 영향에 대한 우리의 직관적인 예측이 항상 맞지는 않음을 시사합니다.",
   "tags": [
     "tech",
     "business",

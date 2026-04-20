@@ -4,7 +4,7 @@
   "url": "https://www.technologyreview.com/2026/04/13/1135720/why-opinion-on-ai-is-so-divided/",
   "source": "MIT Technology Review",
   "type": "article",
-  "description": "This story originally appeared in The Algorithm, our weekly newsletter on AI. To get stories like this in your inbox first, sign up here. In an industry that doesn’t stand still, Stanford’s AI Index, an annual roundup of key results and trends, is a chance to take a breath. (It’s a marathon, not a sprint, after…",
+  "description": "## 개요\n\n본 콘텐츠는 AI Index 보고서의 핵심 통계와 함께 AI 기술에 대한 전문가와 대중 간의 인식 격차가 발생하는 이유를 분석합니다.\n\n## 주요 내용\n\n- **AI 인프라 및 공급망:** 미국은 5,427개 이상의 데이터센터를 운영하며 AI 분야를 주도하고 있으나, AI 칩 제조는 TSMC라는 단일 파운드리에 크게 의존하고 있어 공급망의 취약점을 드러냅니다.\n- **AI 전문가와 대중의 인식 격차:** AI Index 보고서에 따르면, AI가 일자리, 경제, 의료에 미치는 영향에 대해 미국 전문가의 73%가 긍정적인 반면, 대중은 23%만이 긍정적으로 평가하여 50%p의 큰 격차를 보입니다.\n- **인식 격차의 원인: 경험의 차이:** 이러한 격차는 전문가와 대중이 AI를 경험하는 방식의 차이에서 비롯됩니다. 코딩과 같이 명확한 결과값이 있는 기술적 작업에서 AI 모델은 뛰어난 성능을 보이며, 이러한 도구를 사용하는 사용자들은 AI의 발전을 체감합니다.\n- **\"들쭉날쭉한 최전선(Jagged Frontier)\":** AI 모델은 특정 작업에서는 매우 뛰어나지만, 다른 작업에서는 여전히 오류를 범하는 등 성능의 편차가 존재합니다. 이는 AI 모델이 아직 모든 영역에서 완벽하지 않음을 시사합니다.\n- **고도화된 AI 사용자 경험:** 특히 코딩, 수학, 연구 등에서 LLM을 활용하는 파워 유저들은 최신 모델을 사용하기 위해 유료 서비스를 이용하며, 이러한 분야에서의 AI 발전은 매우 빠르고 경이로운 수준입니다. 이는 AI에 대한 경험이 사용자의 인식에 큰 영향을 미치고 있음을 보여줍니다.\n\n## 시사점\n\nAI 기술은 특정 영역에서 눈부신 발전을 이루고 있지만, 동시에 많은 사람들에게 중요한 문제들에 대해서는 여전히 부족한 부분이 존재하며, 이러한 경험의 차이가 AI에 대한 전문가와 대중 간의 큰 인식 격차를 만들어내고 있습니다.",
   "tags": [
     "tech",
     "artificial intelligence",

@@ -4,7 +4,7 @@
   "url": "https://techcrunch.com/2026/04/15/google-rolls-out-a-native-gemini-app-for-mac/",
   "source": "TechCrunch",
   "type": "article",
-  "description": "You can share anything on their screen with Gemini to get help with what they're looking at in the moment, including local files.",
+  "description": "## 개요\n\nGoogle이 Mac 사용자를 위한 네이티브 Gemini 앱을 출시하여, 사용자가 탭 전환 없이 빠르게 Gemini의 도움을 받을 수 있게 되었습니다.\n\n## 주요 내용\n\n*   **네이티브 Mac 앱 출시:** Google은 경쟁사(OpenAI, Anthropic)와 마찬가지로 Mac을 위한 네이티브 Gemini 앱을 공개했습니다.\n*   **빠른 접근성:** Option + Space 단축키를 통해 Mac의 어디서든 Gemini 앱을 불러와 즉각적인 도움을 받을 수 있습니다.\n*   **화면 공유 및 즉각적인 도움:** 앱 사용 시 화면의 내용을 Gemini와 공유하여 현재 보고 있는 것에 대한 도움을 받을 수 있습니다. 예를 들어, 복잡한 차트를 보고 요약을 요청할 수 있습니다.\n*   **로컬 파일 지원:** 로컬 파일에 대한 정보도 Gemini를 통해 분석하고 도움을 받을 수 있습니다.\n*   **이미지 및 동영상 생성 기능:** Nano Banana를 이용한 이미지 생성과 Veo를 이용한 동영상 생성 기능을 지원합니다.\n*   **지원 범위:** macOS 15 이상 버전을 사용하는 모든 Gemini 사용자에게 전 세계적으로 제공되며, gemini.google/mac에서 다운로드할 수 있습니다.\n\n## 시사점\n\n이번 네이티브 Mac 앱 출시는 Gemini의 접근성을 크게 향상시키고, 사용자가 작업 흐름을 방해받지 않고 AI의 도움을 받을 수 있도록 함으로써 생산성 향상에 기여할 것으로 기대됩니다.",
   "tags": [
     "tech",
     "ai",

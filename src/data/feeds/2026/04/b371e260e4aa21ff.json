@@ -4,7 +4,7 @@
   "url": "https://techcrunch.com/2026/04/17/loop-raises-95m-to-build-supply-chain-ai-that-predicts-disruptions/",
   "source": "TechCrunch",
   "type": "article",
-  "description": "The San Francisco startup closed a Series C funding round led by Antonio Gracias' firm Valor, which is a major backer of xAI.",
+  "description": "## 개요\n\nLoop는 AI를 활용하여 공급망의 혼란을 예측하고 해결책을 제시하는 스타트업으로, 9500만 달러의 시리즈 C 펀딩을 유치했습니다.\n\n## 주요 내용\n\n- Loop는 PDF, 종이 문서, 디지털 메시지 등 비정형 데이터를 구조화하여 공급망 내 자동화를 지원합니다.\n- 여러 AI 모델(자체 개발 및 최신 모델)을 통합하는 허니스를 개발하여 데이터 처리 및 분석을 가능하게 합니다.\n- 고객은 Loop 시스템을 통해 비용 손실 지점, 초과/과소 공급 위험 등을 파악할 수 있으며, 초기부터 상당한 비용 절감 효과를 얻을 수 있습니다.\n- Loop는 고객사의 ERP(Enterprise Resource Planning) 소프트웨어, TMS(Transportation Management Systems)와 통합하고 공급업체, 창고 등에서 더 많은 데이터를 수집하여 진단적 접근을 넘어 예측적, 처방적 솔루션을 제공하는 것을 목표로 합니다.\n- Loop의 공동 창업자들은 AI 기술 발전 속도가 예상보다 빨라, 2030년경으로 예상했던 기술적 한계점을 일찍 극복하여 고객에게 더 높은 가치를 제공할 수 있게 되었다고 언급합니다.\n- Valor Equity Partners와 Valor Atreides AI Fund가 이번 펀딩 라운드를 주도했으며, 8VC, Founders Fund, Index Ventures, J.P. Morgan Growth Equity Partners 등이 참여했습니다.\n\n## 시사점\n\nLoop는 AI를 통해 공급망의 복잡한 데이터를 지능화하고, 예측 및 처방적 솔루션을 제공함으로써 기업의 비용 절감, 프로세스 개선, 운영 효율성 증대에 기여할 잠재력을 가지고 있습니다.",
   "tags": [
     "tech",
     "startups",

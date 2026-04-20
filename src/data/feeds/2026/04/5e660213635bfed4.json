@@ -4,7 +4,7 @@
   "url": "https://techcrunch.com/2026/04/16/google-now-lets-you-explore-the-web-side-by-side-with-ai-mode/",
   "source": "TechCrunch",
   "type": "article",
-  "description": "Now, when you're using AI Mode on Chrome desktop, clicking a link will open the web page side-by-side with AI Mode.",
+  "description": "## 개요\n\nGoogle은 Chrome 데스크톱에서 AI Mode를 사용하는 동안 웹 페이지를 AI Mode와 나란히 탐색할 수 있는 새로운 기능을 출시했습니다.\n\n## 주요 내용\n\n-   **AI Mode와 웹 페이지 나란히 보기:** Chrome 데스크톱에서 AI Mode 사용 중 링크를 클릭하면 해당 웹 페이지가 AI Mode와 함께 열립니다. 이를 통해 사용자는 탭 전환 없이 관련 웹사이트를 탐색하고, 세부 정보를 비교하며, 검색 맥락을 유지한 채 후속 질문을 할 수 있습니다.\n-   **AI Mode 활용 예시:** 커피 메이커 구매 시, AI Mode에서 원하는 사양을 설명하면 옵션이 제시되고, 특정 제품을 클릭하면 해당 판매처 웹사이트가 AI Mode와 함께 열립니다. 이후 \"이 제품은 청소가 얼마나 쉬운가요?\"와 같은 구체적인 질문을 AI Mode에 할 수 있으며, AI Mode는 해당 페이지 및 웹 전반의 맥락을 사용하여 답변합니다.\n-   **기존 Chrome 탭 검색:** Chrome 데스크톱 또는 모바일에서 '새 탭' 페이지 또는 AI Mode의 검색창 내 '더하기' 메뉴를 통해 현재 열려 있는 탭을 검색에 포함시킬 수 있습니다. 여러 탭, 이미지, 파일을 혼합하여 AI Mode 검색의 맥락으로 활용할 수 있습니다.\n-   **기존 탭 검색 활용 예시:** 등산로를 조사할 때 열려 있는 탭들을 검색에 추가하여 다른 지역의 유사한 등산로를 요청하거나, 통계 시험 공부 시 열려 있는 탭, 수업 노트, 강의 슬라이드 등의 맥락을 가져와 특정 개념을 설명하는 예시를 요청할 수 있습니다.\n\n## 시사점\n\n이번 업데이트는 사용자가 웹을 탐색하고 AI의 도움을 받는 방식을 통합하여 검색 효율성과 정보 활용 능력을 향상시킵니다.",
   "tags": [
     "tech",
     "ai",
