@@ -10,7 +10,9 @@
 //                         Articles matching saved interests get a visible "interest" highlight
 //                         (background tint + corner star) and are pinned to the top of the list.
 //   - "전체" chip       -> clears the active tag filter.
-//   - Top 5-6 chips    -> always visible. Saved interests come first, then most-used tags.
+//   - Top 6 chips      -> always visible. Saved interests come first (client-side rewrite),
+//                         then most-used tags. Built at runtime so per-user interests can
+//                         actually be promoted (SSG cannot know per-user localStorage).
 //   - Toggle button    -> expands the full tag list (all tags), grouped into
 //                         "내 관심사" (saved) and "전체 태그".
 //
@@ -32,14 +34,17 @@ interface Props {
 }
 const { availableTags, tagCounts } = Astro.props;
 
-// Sort tags by article count desc, then alphabetically — used for both the
-// "top tags" row and the full tag list.
+// Sort tags by article count desc, then alphabetically — used as the fallback popular order
+// when a user has no saved interests. The actual top row is rebuilt client-side because we
+// can't know the user's saved interests at build time.
 const sortedTags = [...availableTags].sort((a, b) => {
   const diff = (tagCounts[b] || 0) - (tagCounts[a] || 0);
   if (diff !== 0) return diff;
   return a.localeCompare(b);
 });
-const TOP_N = 6;
+
+// Embed tag counts as JSON so client code can call getTopTags() at runtime.
+const tagCountsJson = JSON.stringify(tagCounts);
 ---
 
 <div class="interest-tag-panel" data-testid="interest-tag-panel">
@@ -59,17 +64,32 @@ const TOP_N = 6;
     </button>
   </div>
 
-  <!-- Always-visible top row -->
+  <!--
+    Always-visible top row.
+    Rendered server-side with popular tags as a fallback so JS-disabled or pre-hydration users
+    still see something useful. Once the script runs, refreshTopRow() rewrites this row to put
+    saved interests first.
+  -->
   <div class="itp-chips-row" id="itp-chips-row" data-testid="itp-chips-row">
     <button class="itp-chip itp-chip-all active" data-tag="all" type="button">
       <span class="itp-chip-label">전체</span>
     </button>
-    {sortedTags.slice(0, TOP_N).map((tag) => (
-      <button class="itp-chip" data-tag={tag} type="button">
-        <span class="itp-chip-star" data-star data-tag={tag} role="button" aria-label={`${tag} 관심사로 저장`} title="관심사로 저장">☆</span>
-        <span class="itp-chip-label">{tag}</span>
-        <span class="itp-chip-count">{tagCounts[tag] ?? 0}</span>
-      </button>
+    {sortedTags.slice(0, 6).map((tag) => (
+      <span class="itp-chip-wrap">
+        <button class="itp-chip" data-tag={tag} type="button">
+          <span class="itp-chip-label">{tag}</span>
+          <span class="itp-chip-count">{tagCounts[tag] ?? 0}</span>
+        </button>
+        <button
+          class="itp-chip-star"
+          type="button"
+          data-star
+          data-tag={tag}
+          aria-label={`${tag} 관심사로 저장`}
+          aria-pressed="false"
+          title="관심사로 저장"
+        >☆</button>
+      </span>
     ))}
   </div>
 
@@ -92,16 +112,29 @@ const TOP_N = 6;
       </div>
       <div class="itp-all-tags" id="itp-all-tags">
         {sortedTags.map((tag) => (
-          <button class="itp-chip" data-tag={tag} type="button">
-            <span class="itp-chip-star" data-star data-tag={tag} role="button" aria-label={`${tag} 관심사로 저장`} title="관심사로 저장">☆</span>
-            <span class="itp-chip-label">{tag}</span>
-            <span class="itp-chip-count">{tagCounts[tag] ?? 0}</span>
-          </button>
+          <span class="itp-chip-wrap">
+            <button class="itp-chip" data-tag={tag} type="button">
+              <span class="itp-chip-label">{tag}</span>
+              <span class="itp-chip-count">{tagCounts[tag] ?? 0}</span>
+            </button>
+            <button
+              class="itp-chip-star"
+              type="button"
+              data-star
+              data-tag={tag}
+              aria-label={`${tag} 관심사로 저장`}
+              aria-pressed="false"
+              title="관심사로 저장"
+            >☆</button>
+          </span>
         ))}
       </div>
     </section>
   </div>
 </div>
+
+<!-- tagCounts payload for runtime getTopTags() -->
+<script type="application/json" id="itp-tag-counts" set:html={tagCountsJson} />
 
 <!-- Container for dynamically-rendered cross-page filtered/searched results -->
 <div class="itp-filtered-results" id="itp-filtered-results" style="display:none;">
@@ -131,12 +164,24 @@ const TOP_N = 6;
   }
 
   const STORAGE_KEY = 'honeycombo_interests';
-  let allArticlesCache: ClientArticle[] | null = null;
+  const TOP_N = 6;
 
-  // Active state
-  let activeTag = 'all';
-  let activeSearchQuery = '';
-  let activeSearchResults: ClientArticle[] | null = null; // null = no active search
+  // ---- Per-document state. Resets on full page load; survives view transitions ----
+  // We hang state off `window` so re-runs of this script (View Transitions, HMR) don't
+  // accidentally start with a stale module-scope cache.
+  const w = window as any;
+  if (!w.__itpState) {
+    w.__itpState = {
+      allArticles: null as ClientArticle[] | null,
+      tagCounts: null as Record<string, number> | null,
+      activeTag: 'all' as string,
+      activeSearchQuery: '' as string,
+      activeSearchResults: null as ClientArticle[] | null, // null = no active search
+      // Track delegated listeners so we never bind twice across astro:page-load.
+      listenersBound: false as boolean,
+    };
+  }
+  const state = w.__itpState;
 
   // ---------- localStorage interests ----------
   function getInterests(): string[] {
@@ -165,34 +210,46 @@ const TOP_N = 6;
     document.dispatchEvent(
       new CustomEvent('interests-changed', { detail: { interests } })
     );
+    refreshTopRow();
     refreshInterestsUI();
     applyInterestHighlights();
-    // If the filtered grid is currently shown, re-render it (matched cards pin to top).
-    if (isFilteredViewActive()) {
-      renderFilteredView();
-    }
+    refreshMatchBadgeFromFullDataset();
+    if (isFilteredViewActive()) renderFilteredView();
   }
   function clearInterests(): void {
     saveInterests([]);
     document.dispatchEvent(
       new CustomEvent('interests-changed', { detail: { interests: [] } })
     );
+    refreshTopRow();
     refreshInterestsUI();
     applyInterestHighlights();
+    refreshMatchBadgeFromFullDataset();
     if (isFilteredViewActive()) renderFilteredView();
   }
 
-  // ---------- Articles JSON ----------
+  // ---------- Articles + tag counts JSON ----------
   function getAllArticles(): ClientArticle[] {
-    if (allArticlesCache) return allArticlesCache;
+    if (state.allArticles) return state.allArticles;
     const el = document.getElementById('all-articles-data');
     if (!el?.textContent) return [];
     try {
-      allArticlesCache = JSON.parse(el.textContent) as ClientArticle[];
+      state.allArticles = JSON.parse(el.textContent) as ClientArticle[];
     } catch {
-      allArticlesCache = [];
+      state.allArticles = [];
     }
-    return allArticlesCache;
+    return state.allArticles;
+  }
+  function getTagCounts(): Record<string, number> {
+    if (state.tagCounts) return state.tagCounts;
+    const el = document.getElementById('itp-tag-counts');
+    if (!el?.textContent) return {};
+    try {
+      state.tagCounts = JSON.parse(el.textContent) as Record<string, number>;
+    } catch {
+      state.tagCounts = {};
+    }
+    return state.tagCounts;
   }
 
   function getActiveOrigin(): string {
@@ -200,6 +257,29 @@ const TOP_N = 6;
       '[data-testid="source-filter"] .source-filter-btn.active'
     );
     return active?.dataset.origin || 'all';
+  }
+
+  // ---------- Pure helper: getTopTags (mirrors src/lib/article-search.ts) ----------
+  function computeTopTags(interests: readonly string[], counts: Record<string, number>, limit = TOP_N): string[] {
+    const result: string[] = [];
+    const seen = new Set<string>();
+    for (const tag of interests) {
+      if (seen.has(tag) || result.length >= limit) continue;
+      seen.add(tag);
+      result.push(tag);
+    }
+    if (result.length >= limit) return result.slice(0, limit);
+    const sorted = Object.keys(counts).sort((a, b) => {
+      const diff = (counts[b] || 0) - (counts[a] || 0);
+      if (diff !== 0) return diff;
+      return a.localeCompare(b);
+    });
+    for (const tag of sorted) {
+      if (seen.has(tag) || result.length >= limit) continue;
+      seen.add(tag);
+      result.push(tag);
+    }
+    return result.slice(0, limit);
   }
 
   // ---------- Card rendering (mirrors ArticleCard.astro) ----------
@@ -305,27 +385,38 @@ const TOP_N = 6;
 
   // ---------- Filter pipeline ----------
   function isFilteredViewActive(): boolean {
-    return activeTag !== 'all' || getActiveOrigin() !== 'all' || activeSearchResults !== null;
+    return (
+      state.activeTag !== 'all' ||
+      getActiveOrigin() !== 'all' ||
+      state.activeSearchResults !== null
+    );
   }
 
-  function getFilteredArticles(): ClientArticle[] {
+  /**
+   * Build the active pool for the filtered view.
+   *
+   * Search/origin/tag are all applied. We re-derive search from the canonical
+   * `getAllArticles()` so changes to origin AFTER search dispatch don't see a
+   * stale origin-scoped search-result snapshot.
+   */
+  function getFilteredPool(): { all: ClientArticle[]; perOrigin: { submitted: number; feed: number; curated: number } } {
     const origin = getActiveOrigin();
+    const q = state.activeSearchQuery.trim().toLowerCase();
+    const tag = state.activeTag;
+    let pool = getAllArticles();
+    if (q) pool = pool.filter((a) => a.title.toLowerCase().includes(q));
+    if (tag !== 'all') pool = pool.filter((a) => a.tags.includes(tag));
 
-    // Search takes precedence as the article pool
-    let articles: ClientArticle[];
-    if (activeSearchResults !== null) {
-      articles = activeSearchResults;
-    } else {
-      articles = getAllArticles();
-      if (origin !== 'all') {
-        articles = articles.filter((a) => a.articleOrigin === origin);
-      }
-    }
+    // Per-origin breakdown is computed BEFORE applying origin filter,
+    // so SourceFilter can show "0 in Submitted / N in RSS" honestly.
+    const perOrigin = {
+      submitted: pool.filter((a) => a.articleOrigin === 'submitted').length,
+      feed: pool.filter((a) => a.articleOrigin === 'feed').length,
+      curated: pool.filter((a) => a.articleOrigin === 'curated').length,
+    };
 
-    if (activeTag !== 'all') {
-      articles = articles.filter((a) => a.tags.includes(activeTag));
-    }
-    return articles;
+    const all = origin === 'all' ? pool : pool.filter((a) => a.articleOrigin === origin);
+    return { all, perOrigin };
   }
 
   function buildFilterLabel(count: number): string {
@@ -335,11 +426,11 @@ const TOP_N = 6;
       const m: Record<string, string> = { curated: '에디터 추천', submitted: '제출 기사', feed: 'RSS 피드' };
       labels.push(m[origin] || origin);
     }
-    if (activeTag !== 'all') {
-      labels.push(`"${activeTag}" 태그`);
+    if (state.activeTag !== 'all') {
+      labels.push(`"${state.activeTag}" 태그`);
     }
-    if (activeSearchQuery) {
-      labels.push(`"${activeSearchQuery}" 검색`);
+    if (state.activeSearchQuery) {
+      labels.push(`"${state.activeSearchQuery}" 검색`);
     }
     const prefix = labels.length > 0 ? `${labels.join(' · ')} · ` : '';
     return `${prefix}기사 ${count}건`;
@@ -362,25 +453,27 @@ const TOP_N = 6;
       if (pagination) pagination.style.display = '';
       container.style.display = 'none';
       if (ssrEmpty) ssrEmpty.style.display = 'none';
-      // Reset source counts
+      // Reset source counts to SSR originals
       document.dispatchEvent(
         new CustomEvent('source-counts-update', { detail: { reset: true } })
       );
       // Re-apply highlights to SSR cards (interests may still be active)
       applyInterestHighlights();
       pinInterestMatchesInList();
+      refreshMatchBadgeFromFullDataset();
       return;
     }
 
-    // Hide SSR list & pagination, show filtered grid
+    // Filtered view
     if (ssrList) ssrList.style.display = 'none';
     if (pagination) pagination.style.display = 'none';
     container.style.display = '';
 
     const interests = new Set(getInterests());
-    let articles = getFilteredArticles();
+    const { all: filtered, perOrigin } = getFilteredPool();
 
     // Pin interest-matched articles to top
+    let articles = filtered;
     if (interests.size > 0) {
       const matched: ClientArticle[] = [];
       const unmatched: ClientArticle[] = [];
@@ -392,7 +485,7 @@ const TOP_N = 6;
     }
 
     countEl.textContent = buildFilterLabel(articles.length);
-    grid.dataset.activeTag = activeTag;
+    grid.dataset.activeTag = state.activeTag;
     grid.innerHTML = articles.map((a) => renderCard(a, interests)).join('');
     if (emptyEl) emptyEl.hidden = articles.length > 0;
     if (ssrEmpty) ssrEmpty.style.display = 'none';
@@ -408,40 +501,33 @@ const TOP_N = 6;
       (window as any).__initCommentCounts(grid);
     }
 
-    // Update SourceFilter counts to reflect the active filter pool (search-aware)
-    updateSourceCounts();
-    refreshMatchBadge(articles, interests);
-  }
-
-  function updateSourceCounts() {
-    // When search is active, source counts reflect search results across origins.
-    // Otherwise, source counts reflect all-articles (we let SSR counts stand) — only update if search active.
-    if (activeSearchResults === null) {
-      // No search: restore original SSR counts (they reflect totals).
-      document.dispatchEvent(
-        new CustomEvent('source-counts-update', { detail: { reset: true } })
-      );
-      return;
-    }
-    const pool = activeSearchResults; // already title-filtered, origin-scoped to current selection
-    // We need per-origin breakdown, but search is done against the full pool with current origin pre-applied.
-    // So recompute against ALL articles filtered by query, regardless of origin, to give true per-origin counts.
-    const all = getAllArticles();
-    const q = activeSearchQuery.trim().toLowerCase();
-    const matched = q ? all.filter((a) => a.title.toLowerCase().includes(q)) : all;
-    const submitted = matched.filter((a) => a.articleOrigin === 'submitted').length;
-    const feed = matched.filter((a) => a.articleOrigin === 'feed').length;
-    const curated = matched.filter((a) => a.articleOrigin === 'curated').length;
+    // Update SourceFilter counts based on the current filtered pool
     document.dispatchEvent(
       new CustomEvent('source-counts-update', {
-        detail: { all: submitted + feed + curated, submitted, feed },
+        detail: {
+          all: perOrigin.submitted + perOrigin.feed + perOrigin.curated,
+          submitted: perOrigin.submitted,
+          feed: perOrigin.feed,
+        },
       })
     );
-    // pool referenced to silence unused warning in some bundlers
-    void pool;
+
+    // Match badge counts against the FULL filtered pool (not just rendered cards)
+    refreshMatchBadgeFromArticles(filtered, interests);
   }
 
-  function refreshMatchBadge(articles: ClientArticle[], interests: Set<string>) {
+  /**
+   * Match badge for the SSR view. Counts against the FULL article dataset (not just
+   * current-page cards), so the user sees an honest total even when matches live on
+   * other pages — the user's complaint was that interests appeared to "do nothing"
+   * because the visible 20 cards don't always include matches.
+   */
+  function refreshMatchBadgeFromFullDataset() {
+    const interests = new Set(getInterests());
+    const all = getAllArticles();
+    refreshMatchBadgeFromArticles(all, interests);
+  }
+  function refreshMatchBadgeFromArticles(articles: ClientArticle[], interests: Set<string>) {
     const badge = document.getElementById('itp-match-badge');
     if (!badge) return;
     if (interests.size === 0) {
@@ -459,31 +545,17 @@ const TOP_N = 6;
     badge.textContent = `관심사 일치 ${count}건`;
   }
 
-  // ---------- SSR card highlight + pinning ----------
+  // ---------- SSR card highlight + pinning (current-page visual only) ----------
   function applyInterestHighlights() {
     const list = document.querySelector('[data-testid="article-list"]');
     if (!list) return;
     const interests = new Set(getInterests());
     const cards = list.querySelectorAll<HTMLElement>('[data-testid="article-card"]');
-    let matchCount = 0;
     cards.forEach((card) => {
       const tags = (card.dataset.tags || '').split(',').filter(Boolean);
       const isMatch = interests.size > 0 && tags.some((t) => interests.has(t));
       card.classList.toggle('interest-match', isMatch);
-      if (isMatch) matchCount += 1;
     });
-
-    // Update header badge for the SSR view
-    const badge = document.getElementById('itp-match-badge');
-    if (badge) {
-      if (interests.size === 0 || matchCount === 0) {
-        badge.hidden = true;
-        badge.textContent = '';
-      } else {
-        badge.hidden = false;
-        badge.textContent = `관심사 일치 ${matchCount}건`;
-      }
-    }
   }
 
   function pinInterestMatchesInList() {
@@ -492,13 +564,11 @@ const TOP_N = 6;
     const interests = getInterests();
     const cards = Array.from(list.querySelectorAll<HTMLElement>('[data-testid="article-card"]'));
 
-    // Initialize originalIndex once
     cards.forEach((card, i) => {
       if (!card.dataset.originalIndex) card.dataset.originalIndex = String(i);
     });
 
     if (interests.length === 0) {
-      // Restore original order
       const sorted = [...cards].sort(
         (a, b) => Number(a.dataset.originalIndex ?? 0) - Number(b.dataset.originalIndex ?? 0)
       );
@@ -516,12 +586,48 @@ const TOP_N = 6;
     [...matched, ...unmatched].forEach((card) => list.appendChild(card));
   }
 
-  // ---------- UI: chip rendering / interest pills ----------
+  // ---------- Top-row rebuild (BLOCKER 1 FIX) ----------
+  /**
+   * Rebuild the top-6 row putting saved interests first. This is the user-confirmed
+   * design that build-time SSR cannot satisfy (we don't know per-user interests).
+   * Preserves the active tag highlight.
+   */
+  function refreshTopRow() {
+    const row = document.getElementById('itp-chips-row');
+    if (!row) return;
+    const interests = getInterests();
+    const counts = getTagCounts();
+    const top = computeTopTags(interests, counts, TOP_N);
+    const interestsSet = new Set(interests);
+    const active = state.activeTag;
+
+    const allChip = `<button class="itp-chip itp-chip-all${active === 'all' ? ' active' : ''}" data-tag="all" type="button">
+      <span class="itp-chip-label">전체</span>
+    </button>`;
+
+    const chips = top.map((tag) => {
+      const isActive = active === tag;
+      const isSaved = interestsSet.has(tag);
+      const star = isSaved ? '★' : '☆';
+      const safeTag = escapeHtml(tag);
+      return `<span class="itp-chip-wrap">
+        <button class="itp-chip${isActive ? ' active' : ''}" data-tag="${safeTag}" type="button">
+          <span class="itp-chip-label">${safeTag}</span>
+          <span class="itp-chip-count">${counts[tag] ?? 0}</span>
+        </button>
+        <button class="itp-chip-star${isSaved ? ' on' : ''}" type="button" data-star data-tag="${safeTag}" aria-label="${safeTag} 관심사 토글" aria-pressed="${isSaved}" title="${isSaved ? '관심사에서 제거' : '관심사로 저장'}">${star}</button>
+      </span>`;
+    }).join('');
+
+    row.innerHTML = allChip + chips;
+  }
+
+  // ---------- UI: stars + interest pills (expanded panel) ----------
   function refreshInterestsUI() {
     const interests = getInterests();
     const interestsSet = new Set(interests);
 
-    // Star state on every chip (top row + expanded list)
+    // Star state on every chip across the panel (top row stars are also rebuilt by refreshTopRow).
     document.querySelectorAll<HTMLElement>('[data-star]').forEach((star) => {
       const tag = star.dataset.tag || '';
       const on = interestsSet.has(tag);
@@ -540,7 +646,6 @@ const TOP_N = 6;
           : '⭐ 관심사 & 태그';
     }
 
-    // Interests count + clear button
     const countEl = document.getElementById('itp-interests-count');
     if (countEl) countEl.textContent = `(${interests.length})`;
     const clearBtn = document.getElementById('itp-clear');
@@ -548,7 +653,6 @@ const TOP_N = 6;
     const hint = document.getElementById('itp-interests-hint');
     if (hint) (hint as HTMLElement).hidden = interests.length > 0;
 
-    // Render saved interests as removable pills
     const row = document.getElementById('itp-interests-row');
     if (row) {
       if (interests.length === 0) {
@@ -578,12 +682,11 @@ const TOP_N = 6;
 
   // ---------- Active tag chip styling ----------
   function setActiveTagChip(tag: string) {
-    activeTag = tag;
+    state.activeTag = tag;
     document.querySelectorAll<HTMLElement>('.itp-chip').forEach((chip) => {
       chip.classList.toggle('active', chip.dataset.tag === tag);
     });
 
-    // Update URL ?tag=
     const url = new URL(window.location.href);
     if (tag === 'all') {
       url.searchParams.delete('tag');
@@ -600,67 +703,15 @@ const TOP_N = 6;
 
   // ---------- Initialization ----------
   function initInterestTagPanel() {
+    // Always refresh the top row + UI on every page-load (View Transitions navigation
+    // re-runs astro:page-load even though listeners persist).
+    refreshTopRow();
     refreshInterestsUI();
+    applyInterestHighlights();
+    pinInterestMatchesInList();
+    refreshMatchBadgeFromFullDataset();
 
-    // Chip click delegation for both top row and full list
-    document.querySelectorAll<HTMLElement>('.itp-chip').forEach((chip) => {
-      chip.addEventListener('click', (ev) => {
-        const target = ev.target as HTMLElement;
-        // Star click is handled separately
-        if (target.closest('[data-star]')) return;
-        const tag = chip.dataset.tag || 'all';
-        applyTagFilter(tag);
-      });
-    });
-
-    // Star click for interest toggle
-    document.querySelectorAll<HTMLElement>('[data-star]').forEach((star) => {
-      star.addEventListener('click', (ev) => {
-        ev.stopPropagation();
-        ev.preventDefault();
-        const tag = star.dataset.tag || '';
-        if (tag) toggleInterest(tag);
-      });
-    });
-
-    // Clear all interests
-    document.getElementById('itp-clear')?.addEventListener('click', clearInterests);
-
-    // Remove individual interest from pills row
-    const row = document.getElementById('itp-interests-row');
-    row?.addEventListener('click', (ev) => {
-      const target = (ev.target as HTMLElement).closest('[data-remove-interest]') as HTMLElement | null;
-      if (!target) return;
-      const tag = target.dataset.tag || '';
-      if (tag) toggleInterest(tag);
-    });
-
-    // Toggle expanded panel
-    const toggle = document.getElementById('itp-toggle');
-    const expanded = document.getElementById('itp-expanded');
-    toggle?.addEventListener('click', () => {
-      if (!expanded || !toggle) return;
-      const wasHidden = expanded.hidden;
-      expanded.hidden = !wasHidden;
-      toggle.setAttribute('aria-expanded', String(wasHidden));
-      toggle.textContent = wasHidden ? '접기 ▲' : '모든 태그 보기 ▼';
-    });
-
-    // Listen for source filter changes
-    document.addEventListener('source-filter-changed', (() => {
-      // Source change can affect the filtered view (cross-page) AND search counts.
-      renderFilteredView();
-    }) as EventListener);
-
-    // Listen for search changes
-    document.addEventListener('article-search-changed', ((e: CustomEvent<{ query: string; origin: string; results: ClientArticle[] }>) => {
-      const { query, results } = e.detail;
-      activeSearchQuery = query;
-      activeSearchResults = query ? results : null;
-      renderFilteredView();
-    }) as EventListener);
-
-    // Apply initial state from URL (?tag=)
+    // Apply initial state from URL (?tag=) — must run after refreshTopRow so the chip exists.
     const tagParam = new URLSearchParams(window.location.search).get('tag');
     const validTags = new Set<string>();
     document.querySelectorAll<HTMLElement>('.itp-chip').forEach((c) => {
@@ -669,14 +720,79 @@ const TOP_N = 6;
     const initialTag = tagParam && validTags.has(tagParam) ? tagParam : 'all';
     setActiveTagChip(initialTag);
 
-    // Apply highlights to SSR cards on initial load
-    applyInterestHighlights();
-    pinInterestMatchesInList();
-
-    // If URL had a tag or origin, render the filtered view
-    if (initialTag !== 'all' || getActiveOrigin() !== 'all') {
+    // If URL had a tag or origin or active search, render the filtered view
+    if (initialTag !== 'all' || getActiveOrigin() !== 'all' || state.activeSearchResults !== null) {
       renderFilteredView();
     }
+
+    // Bind document/event delegation listeners ONCE, never re-bind on subsequent page loads.
+    if (state.listenersBound) return;
+    state.listenersBound = true;
+
+    // ----- Delegated click handler covers chips, stars, clear, remove-pill, toggle.
+    // Using event delegation means newly-rendered top-row chips and re-rendered pills
+    // automatically work without re-binding.
+    document.addEventListener('click', (ev) => {
+      const target = ev.target as HTMLElement;
+      if (!target) return;
+
+      // Star toggle (works for both top row and expanded panel; sibling button so no nesting issues)
+      const star = target.closest<HTMLElement>('[data-star]');
+      if (star) {
+        ev.preventDefault();
+        const tag = star.dataset.tag || '';
+        if (tag) toggleInterest(tag);
+        return;
+      }
+
+      // Remove-interest pill
+      const removePill = target.closest<HTMLElement>('[data-remove-interest]');
+      if (removePill) {
+        ev.preventDefault();
+        const tag = removePill.dataset.tag || '';
+        if (tag) toggleInterest(tag);
+        return;
+      }
+
+      // Clear all interests
+      if (target.closest('#itp-clear')) {
+        ev.preventDefault();
+        clearInterests();
+        return;
+      }
+
+      // Expand/collapse toggle
+      const toggle = target.closest<HTMLElement>('#itp-toggle');
+      if (toggle) {
+        const expanded = document.getElementById('itp-expanded');
+        if (!expanded) return;
+        const wasHidden = expanded.hidden;
+        expanded.hidden = !wasHidden;
+        toggle.setAttribute('aria-expanded', String(wasHidden));
+        toggle.textContent = wasHidden ? '접기 ▲' : '모든 태그 보기 ▼';
+        return;
+      }
+
+      // Tag chip body
+      const chip = target.closest<HTMLElement>('.itp-chip');
+      if (chip && chip.closest('.interest-tag-panel')) {
+        const tag = chip.dataset.tag || 'all';
+        applyTagFilter(tag);
+      }
+    });
+
+    // Source filter changes — re-render filtered view (origin is read live via getActiveOrigin()).
+    document.addEventListener('source-filter-changed', () => {
+      renderFilteredView();
+    });
+
+    // Article search — store result and re-render.
+    document.addEventListener('article-search-changed', ((e: CustomEvent<{ query: string; origin: string; results: ClientArticle[] }>) => {
+      const { query, results } = e.detail;
+      state.activeSearchQuery = query;
+      state.activeSearchResults = query ? results : null;
+      renderFilteredView();
+    }) as EventListener);
   }
 
   document.addEventListener('astro:page-load', initInterestTagPanel);
@@ -746,37 +862,64 @@ const TOP_N = 6;
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-xs);
+    align-items: center;
+  }
+
+  /* A chip-wrap groups the chip body button + the star button as siblings.
+     This keeps both buttons separately focusable (keyboard a11y) and avoids
+     the invalid "button inside button" markup that the previous version had. */
+  .itp-chip-wrap {
+    display: inline-flex;
+    align-items: stretch;
+    border-radius: 999px;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
+    transition: border-color 0.15s;
+  }
+  .itp-chip-wrap:hover {
+    border-color: var(--color-primary);
+  }
+  .itp-chip-wrap:focus-within {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
   }
 
   .itp-chip {
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    padding: 3px var(--space-sm) 3px 4px;
-    border-radius: 999px;
-    background: var(--color-bg);
+    padding: 3px var(--space-sm);
+    border-radius: 0;
+    background: transparent;
     color: var(--color-text-muted);
-    border: 1px solid var(--color-border);
+    border: none;
     cursor: pointer;
     font-family: inherit;
     font-size: 0.78rem;
     line-height: 1.2;
-    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    transition: background 0.15s, color 0.15s;
+  }
+  /* Standalone chips (the "전체" chip is not wrapped) keep their own border/radius. */
+  .itp-chip-all {
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 3px var(--space-sm);
+    background: var(--color-bg);
   }
   .itp-chip:hover {
-    border-color: var(--color-primary);
     color: var(--color-text);
   }
-  .itp-chip.active {
+  .itp-chip.active,
+  .itp-chip-all.active {
     background: var(--color-primary);
     color: white;
+  }
+  .itp-chip-wrap:has(.itp-chip.active) {
     border-color: var(--color-primary);
   }
   .itp-chip.active .itp-chip-count {
     color: rgba(255, 255, 255, 0.85);
-  }
-  .itp-chip-all {
-    padding-left: var(--space-sm);
   }
   .itp-chip-label {
     font-weight: 500;
@@ -786,32 +929,41 @@ const TOP_N = 6;
     color: var(--color-text-muted);
     font-variant-numeric: tabular-nums;
   }
+
+  /* Star button — sibling of chip body inside chip-wrap.
+     Real <button>, fully keyboard-accessible. */
   .itp-chip-star {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
+    min-width: 22px;
+    padding: 0 6px;
     background: transparent;
     color: var(--color-text-muted);
+    border: none;
+    border-left: 1px solid var(--color-border);
     cursor: pointer;
-    user-select: none;
-    transition: background 0.15s, color 0.15s, transform 0.15s;
+    font-family: inherit;
     font-size: 0.85rem;
+    user-select: none;
+    transition: background 0.15s, color 0.15s;
   }
   .itp-chip-star:hover {
     background: rgba(252, 185, 36, 0.2);
     color: var(--color-accent);
-    transform: scale(1.15);
+  }
+  .itp-chip-star:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
   }
   .itp-chip-star.on {
     color: var(--color-accent);
   }
-  .itp-chip.active .itp-chip-star {
+  .itp-chip-wrap:has(.itp-chip.active) .itp-chip-star {
     color: white;
+    border-left-color: rgba(255, 255, 255, 0.3);
   }
-  .itp-chip.active .itp-chip-star.on {
+  .itp-chip-wrap:has(.itp-chip.active) .itp-chip-star.on {
     color: var(--color-accent);
   }
 
@@ -953,7 +1105,6 @@ const TOP_N = 6;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
     pointer-events: none;
   }
-  /* Avoid the badge overlapping the thumbnail area in cards with images */
   .article-card.interest-match .article-thumbnail {
     position: relative;
   }

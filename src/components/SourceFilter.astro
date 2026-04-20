@@ -65,16 +65,24 @@ function initSourceFilter() {
   // Server-side counts (passed as props) reflect the total across all pages.
   // Do NOT recalculate from rendered cards — that only counts the current page.
 
+  // Per-button click listeners: bind exactly once per element.
+  // View Transitions persist DOM and may re-fire astro:page-load on the same buttons.
   buttons.forEach(btn => {
+    if (btn.dataset.sfBound === 'true') return;
+    btn.dataset.sfBound = 'true';
     btn.addEventListener('click', () => {
       filterByOrigin(btn.dataset.origin || 'all');
     });
   });
 
-  // Listen for dynamic count updates from ArticleSearch / InterestTagPanel.
-  document.addEventListener('source-counts-update', ((e: CustomEvent) => {
-    updateCounts(e.detail || {});
-  }) as EventListener);
+  // Document-level listener: bind exactly once per page.
+  const w = window as any;
+  if (!w.__sourceFilterDocBound) {
+    w.__sourceFilterDocBound = true;
+    document.addEventListener('source-counts-update', ((e: CustomEvent) => {
+      updateCounts(e.detail || {});
+    }) as EventListener);
+  }
 
   const originParam = new URLSearchParams(window.location.search).get('origin');
   if (originParam && validOrigins.has(originParam)) {

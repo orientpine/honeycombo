@@ -103,3 +103,36 @@ export function pinInterestMatches<T extends SearchableArticle>(
   }
   return [...matched, ...unmatched];
 }
+
+/**
+ * Compute the filtered article pool given the active search query, origin scope,
+ * and tag filter. The per-origin breakdown is computed BEFORE applying the origin
+ * filter so that SourceFilter can show truthful per-tab counts (e.g. "Submitted: 3,
+ * RSS: 12") that reflect the active search/tag, not the global SSR totals.
+ *
+ * This mirrors the in-component logic in InterestTagPanel.astro and is the single
+ * source of truth for the filter pipeline contract.
+ */
+export function getFilteredPool<T extends SearchableArticle>(
+  articles: readonly T[],
+  query: string,
+  origin: 'all' | 'curated' | 'submitted' | 'feed',
+  tag: string,
+): {
+  all: T[];
+  perOrigin: { submitted: number; feed: number; curated: number };
+} {
+  const trimmed = query.trim().toLowerCase();
+  let pool: T[] = articles.slice();
+  if (trimmed) pool = pool.filter((a) => a.title.toLowerCase().includes(trimmed));
+  if (tag !== 'all') pool = pool.filter((a) => a.tags.includes(tag));
+
+  const perOrigin = {
+    submitted: pool.filter((a) => a.articleOrigin === 'submitted').length,
+    feed: pool.filter((a) => a.articleOrigin === 'feed').length,
+    curated: pool.filter((a) => a.articleOrigin === 'curated').length,
+  };
+
+  const all = origin === 'all' ? pool : pool.filter((a) => a.articleOrigin === origin);
+  return { all, perOrigin };
+}
