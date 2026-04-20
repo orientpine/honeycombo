@@ -203,30 +203,36 @@ export function renderSummaryHtml(markdown: string): string {
  *
  * For structured summaries that follow the agent-submission spec
  * (## 개요 / ## 주요 내용 / ## 시사점), this returns the body of the FIRST
- * section only — the heading label itself (e.g., "개요") is omitted because
+ * NON-EMPTY section — the heading label itself (e.g., "개요") is omitted because
  * every article shares the same overview heading, making it visual noise on
  * cards. The first section's body is the canonical summary by design.
  *
- * Falls back to the legacy header-strip behavior for plain-text descriptions
- * or summaries whose first section has no body.
+ * Iterates through ## sections to handle malformed inputs where the first
+ * section has no body (e.g., `## 개요\n\n## 주요 내용\n…`); in that case
+ * the body of the first non-empty section is returned, never the heading label.
+ * If ALL sections are empty, returns empty string rather than leaking labels.
+ *
+ * Falls back to legacy header-strip behavior for plain-text descriptions.
  */
 export function stripMarkdownForPreview(markdown: string): string {
   if (!markdown) return '';
 
-  const trimmed = markdown.trim();
-
-  // Structured summary path: extract body of the first ## section.
-  // Match the first ## heading line, then capture lines until the next ##
-  // heading or end of string. The captured body is what readers actually want.
-  if (/^##\s+/m.test(trimmed)) {
-    const match = trimmed.match(/^##\s+[^\n]*\n+([\s\S]*?)(?=\n##\s+|$)/);
-    if (match && match[1].trim()) {
-      return flattenMarkdown(match[1]);
+  // Structured summary path: split on ## boundaries, return first non-empty body.
+  // Heading labels are dropped intentionally so cards don't all start with "개요".
+  if (/^##\s+/m.test(markdown)) {
+    const sections = markdown.split(/(?:^|\n)##\s+[^\n]*\n?/);
+    for (const section of sections) {
+      if (section.trim()) {
+        return flattenMarkdown(section);
+      }
     }
+    // All sections empty — nothing useful to surface; return empty rather
+    // than leaking heading labels.
+    return '';
   }
 
   // Legacy/fallback path: plain text or unstructured markdown.
-  return flattenMarkdown(trimmed);
+  return flattenMarkdown(markdown);
 }
 
 function flattenMarkdown(text: string): string {

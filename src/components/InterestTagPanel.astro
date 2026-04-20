@@ -294,14 +294,18 @@ const tagCountsJson = JSON.stringify(tagCounts);
   // For structured Korean summaries (## 개요 / ## 주요 내용 / ## 시사점), returns the body of the FIRST
   // section only — the heading label is visual noise on cards.
   function stripMd(text: string): string {
-    const trimmed = text.trim();
-    if (/^##\s+/m.test(trimmed)) {
-      const match = trimmed.match(/^##\s+[^\n]*\n+([\s\S]*?)(?=\n##\s+|$)/);
-      if (match && match[1].trim()) {
-        return flattenMd(match[1]);
+    if (!text) return '';
+    // Structured summary path: split on ## boundaries, return first non-empty body.
+    if (/^##\s+/m.test(text)) {
+      const sections = text.split(/(?:^|\n)##\s+[^\n]*\n?/);
+      for (const section of sections) {
+        if (section.trim()) {
+          return flattenMd(section);
+        }
       }
+      return '';
     }
-    return flattenMd(trimmed);
+    return flattenMd(text);
   }
 
   function flattenMd(text: string): string {
@@ -311,7 +315,8 @@ const tagCountsJson = JSON.stringify(tagCounts);
       .replace(/\n{2,}/g, ' ')
       .replace(/\n/g, ' ')
       .replace(/`([^`\n]+)`/g, '$1')
-      .replace(/\*\*([^*\n]+?)\*\*/g, '$1')
+      // Bold uses [^\n]+? (allows internal *) so nested **outer *inner* outer** strips fully.
+      .replace(/\*\*([^\n]+?)\*\*/g, '$1')
       .replace(/(^|[^*A-Za-z0-9_])\*(?!\s)([^*\n]+?)(?<!\s)\*(?![A-Za-z0-9_])/g, '$1$2')
       .replace(/(^|[^A-Za-z0-9_])_([^_\n]+?)_(?![A-Za-z0-9_])/g, '$1$2')
       .replace(/\[([^\]\n]+)\]\([^)\s]+\)/g, '$1')

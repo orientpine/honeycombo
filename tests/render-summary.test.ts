@@ -91,12 +91,23 @@ describe('stripMarkdownForPreview', () => {
     expect(result).not.toContain('\n');
   });
 
-  it('falls through to the next section when the first section body is empty', () => {
-    // Defensive: if a malformed summary has an empty first section,
-    // we should still surface SOMETHING useful rather than an empty string.
+  it('falls through to the next non-empty section when the first section body is empty', () => {
+    // Per Oracle review: must NOT leak heading labels (e.g., "주요 내용") into preview.
+    // Should return ONLY the body of the first non-empty section.
     const result = stripMarkdownForPreview('## 개요\n\n## 주요 내용\n실제 내용');
-    expect(result.length).toBeGreaterThan(0);
-    expect(result).toContain('실제 내용');
+    expect(result).toBe('실제 내용');
+    expect(result).not.toContain('개요');
+    expect(result).not.toContain('주요 내용');
+  });
+
+  it('iterates past multiple empty sections to find first non-empty body', () => {
+    const result = stripMarkdownForPreview('## 개요\n\n## 주요 내용\n\n## 시사점\n결론');
+    expect(result).toBe('결론');
+  });
+
+  it('returns empty string when ALL sections are empty (no heading-label leak)', () => {
+    const result = stripMarkdownForPreview('## 개요\n\n## 주요 내용\n\n');
+    expect(result).toBe('');
   });
 
   it('handles structured summary with bullet body', () => {
