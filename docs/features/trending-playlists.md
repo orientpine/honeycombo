@@ -23,6 +23,15 @@
      → D1 playlist_likes INSERT/DELETE (토글)
      → { liked: boolean, like_count: number }
 
+### 좋아요 버튼 UI
+- **Pill shape**(border-radius: 999px) 레이아웃으로 카드 하단 랚d킹 배지(`#1`)와 시각적 일관성을 맞춘다.
+- **하트 SVG 아이콘 + 카운트를 버튼 내부에 통합**해서 별도의 `like-count` 스팸을 사용하지 않는다. (이전: `❤️ 5  [좋아요]` 분리 → 현재: `[♡ 5]` 통합)
+- **3 states:**
+  - Default: 흰 배경 + 엇은 테두리 + muted 텍스트, 외곽선 하트(`icon-outline`)
+  - Hover (default): 연한 핏크 배경(`#fff5f7`) + 핏크 테두리(`#f4b6c4`) + `#e74c6f` 텍스트 + `translateY(-1px)` lift + `--shadow-sm`
+  - Liked: 핏크 그라데이션(`#ff5a7a` → `#e74c6f`) + 흰 텍스트 + 채워진 하트(`icon-filled`) + soft glow shadow + 0.32s pop 애니메이션
+- **접근성:** `aria-pressed`, `aria-label`(현재 카운트 포함), `:focus-visible` 링, `prefers-reduced-motion` 존중.
+
 ## 관련 파일
 
 ### 프론트엔드
@@ -77,4 +86,5 @@
 | 2026-04-13 | 최초 작성 — 트렌딩 플레이리스트 기능 문서화 |
 | 2026-04-13 | Astro View Transitions 호환을 위해 `/trending`을 정적 shell + client fetch 구조로 전환 |
 | 2026-04-14 | 카드 UI를 `/playlists` 페이지 패턴(`playlist-card`)으로 통일 — `trending-card` 구조 제거 |
-| 2026-04-20 | **좋아요 버튼 레이아웃 시프트 해결** — `♡`(빈 하트, ≈ 12.8px)과 `♥`(채워진 하트, ≈ 7.6px) 유니코드 글리프의 고유 너비 차이로 좋아요 토글 시 버튼 폭이 ~1.8px 줄어들며 "좋아요" 레이블이 좌우로 틀어지는 현상을 해결. `.like-button-icon`을 `display: inline-flex; width: 1em; flex: 0 0 1em; justify-content: center`로 고정해 아이콘 박스를 1em 구간에 고정. 추가로 hover lift(`translateY(-1px)`) + active press 피드백 + is-liked 상태의 아이콘에 `scale(1.15)` 스프링 easing을 적용해 모던 InterestTagPanel 테마와 일관성 확보. 실측: 이전 button width 45.14 → 43.38 (Δ −1.76px), 수정 후 68.125 → 68.125 (Δ 0px), 레이블 좌표 동일. 파일: `src/pages/trending.astro`. |
+| 2026-04-20 | **좋아요 버튼 레이아웃 시프트 해결** — `♡`(빈 하트, ≈ 12.8px)과 `♥`(채워진 하트, ≈ 7.6px) 유니코드 글리프의 고유 너비 차이로 좋아요 토글 시 버튼 폭이 ~1.8px 줄어드는 시프트를 `.like-button-icon`에 `width: 1em; flex: 0 0 1em` 고정을 적용해 해결. (후속 04-21 리디자인에서 SVG 아이콘으로 교체되면서 이 문제는 자연스럽게 해소). |
+| 2026-04-21 | 좋아요 버튼 UI 전면 개선 — 텍스트 글리프(♡♥) → SVG 하트 아이콘, pill shape, 카운트 버튼 내부 통합, 호버/liked 3-state 디자인, 접근성 강화(`aria-label`에 카운트 포함, `:focus-visible` 링, `prefers-reduced-motion` 존중). |

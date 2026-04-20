@@ -86,8 +86,10 @@ document.addEventListener('astro:page-load', () => {
       var rank = rankOffset + index + 1;
       var description = (playlistData.description && playlistData.description.trim()) || (getOwnerName(playlistData) + '의 플레이리스트 · ' + Number(playlistData.item_count || 0) + '개 기사');
       var userLiked = Boolean(playlistData.user_liked);
-      var likeButtonLabel = userLiked ? '좋아요 취소' : '좋아요';
-      var likeIcon = userLiked ? '♥' : '♡';
+      var likeCount = Number(playlistData.like_count || 0);
+      var likeButtonLabel = userLiked
+        ? '좋아요 취소 (현재 ' + likeCount + '개)'
+        : '좋아요 (현재 ' + likeCount + '개)';
       var itemCount = Number(playlistData.item_count || 0);
       var username = (playlistData.user && playlistData.user.username) || 'unknown';
       var avatarHtml = renderCuratorAvatar(playlistData);
@@ -105,18 +107,24 @@ document.addEventListener('astro:page-load', () => {
           '</span>' +
           '<span class="trending-stats">' +
             '<span class="rank-badge">#' + rank + '</span>' +
-            '<span class="like-count" data-like-count-for="' + escapeAttr(playlistData.id) + '">❤️ ' + Number(playlistData.like_count || 0) + '</span>' +
             '<button type="button"' +
-              ' class="btn like-button' + (userLiked ? ' is-liked' : '') + '"' +
+              ' class="like-button' + (userLiked ? ' is-liked' : '') + '"' +
               ' data-playlist-id="' + escapeAttr(playlistData.id) + '"' +
               ' data-liked="' + (userLiked ? 'true' : 'false') + '"' +
-              ' data-like-count="' + Number(playlistData.like_count || 0) + '"' +
+              ' data-like-count="' + likeCount + '"' +
               ' data-authenticated="' + (isAuthenticated ? 'true' : 'false') + '"' +
               ' aria-pressed="' + (userLiked ? 'true' : 'false') + '"' +
               ' aria-label="' + escapeAttr(likeButtonLabel) + '"' +
             '>' +
-              '<span class="like-button-icon" aria-hidden="true">' + likeIcon + '</span>' +
-              '<span class="like-button-label">좋아요</span>' +
+              '<span class="like-button-icon" aria-hidden="true">' +
+                '<svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+                  '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>' +
+                '</svg>' +
+                '<svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+                  '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>' +
+                '</svg>' +
+              '</span>' +
+              '<span class="like-button-count">' + likeCount + '</span>' +
             '</button>' +
           '</span>' +
         '</div>' +
@@ -144,8 +152,7 @@ document.addEventListener('astro:page-load', () => {
             '</span>' +
             '<span class="trending-stats">' +
               '<span class="rank-badge skeleton-box"></span>' +
-              '<span class="skeleton-line skeleton-like-count"></span>' +
-              '<span class="btn like-button skeleton-button"></span>' +
+              '<span class="like-button skeleton-button" aria-hidden="true"></span>' +
             '</span>' +
           '</div>' +
         '</article>'
@@ -160,18 +167,15 @@ document.addEventListener('astro:page-load', () => {
     button.setAttribute('data-like-count', String(likeCount));
     button.setAttribute('data-authenticated', isAuthenticated ? 'true' : 'false');
     button.setAttribute('aria-pressed', liked ? 'true' : 'false');
-    button.setAttribute('aria-label', liked ? '좋아요 취소' : '좋아요');
+    button.setAttribute(
+      'aria-label',
+      (liked ? '좋아요 취소 (현재 ' : '좋아요 (현재 ') + likeCount + '개)'
+    );
     button.classList.toggle('is-liked', liked);
 
-    const icon = button.querySelector('.like-button-icon');
-    if (icon) {
-      icon.textContent = liked ? '♥' : '♡';
-    }
-
-    const playlistId = button.getAttribute('data-playlist-id') || '';
-    const countEl = document.querySelector('[data-like-count-for="' + playlistId + '"]');
+    const countEl = button.querySelector('.like-button-count');
     if (countEl) {
-      countEl.textContent = '❤️ ' + likeCount;
+      countEl.textContent = String(likeCount);
     }
   }
 
