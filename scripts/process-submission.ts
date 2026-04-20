@@ -78,7 +78,7 @@ export function parseIssueBody(body: string): ParsedSubmission | null {
         continue;
       }
 
-      if (line === '### Short Description') {
+      if (line === '### Short Description' || line === '### Summary') {
         currentSection = 'note';
         continue;
       }
@@ -307,7 +307,7 @@ export async function processSubmission(
     source: type === 'youtube' ? 'YouTube' : 'User Submission',
     type,
     thumbnail_url: thumbnailUrl,
-    description: note.slice(0, 1000) || undefined,
+      description: note.slice(0, 5000) || undefined,
     tags,
     submitted_by: issue.user.login,
     submitted_by_id: String(issue.user.id),
@@ -387,7 +387,7 @@ export async function processBulkSubmission(
         source: type === 'youtube' ? 'YouTube' : 'User Submission',
         type,
         thumbnail_url: thumbnailUrl,
-        description: note.slice(0, 1000) || undefined,
+      description: note.slice(0, 5000) || undefined,
         tags,
         submitted_by: issue.user.login,
         submitted_by_id: String(issue.user.id),

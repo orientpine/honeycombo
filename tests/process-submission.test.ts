@@ -65,6 +65,27 @@ describe('parseIssueBody', () => {
 
     expect(result?.tags).toEqual(['a', 'b', 'c', 'd', 'e']);
   });
+
+  it('parses "### Summary" section identically to "### Short Description"', () => {
+    const body = '### URL\n\nhttps://example.com/summary-test\n\n### Type\n\nArticle\n\n### Tags (comma-separated, max 5)\n\nai, agents\n\n### Summary\n\n## 개요\nAI 에이전트 활용에 대한 실전 가이드';
+    const result = parseIssueBody(body);
+
+    expect(result).not.toBeNull();
+    expect(result).toEqual({
+      url: 'https://example.com/summary-test',
+      type: 'article',
+      tags: ['ai', 'agents'],
+      note: '## 개요',
+    });
+  });
+
+  it('still parses legacy "### Short Description" for backward compatibility', () => {
+    const body = '### URL\n\nhttps://example.com/legacy\n\n### Type\n\nArticle\n\n### Tags (comma-separated, max 5)\n\ntest\n\n### Short Description\n\nlegacy note';
+    const result = parseIssueBody(body);
+
+    expect(result).not.toBeNull();
+    expect(result?.note).toBe('legacy note');
+  });
 });
 
 describe('parseBulkIssueBody', () => {

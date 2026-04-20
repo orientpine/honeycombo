@@ -7,7 +7,7 @@ export const curatedArticleSchema = z.object({
   source: z.string(),
   type: z.enum(['article', 'youtube', 'x_thread', 'threads', 'other']),
   thumbnail_url: z.string().url().optional(),
-  description: z.string().max(1000).optional(),
+  description: z.string().max(5000).optional(),
   tags: z.array(z.string()).min(1).max(5),
   submitted_by: z.string().optional(),
   submitted_by_id: z.string().optional(),

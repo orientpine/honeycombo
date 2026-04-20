@@ -7,7 +7,7 @@ export const feedArticleSchema = z.object({
   source: z.string(),
   type: z.enum(['article', 'youtube', 'x_thread', 'threads', 'other']).default('article'),
   thumbnail_url: z.string().url().optional(),
-  description: z.string().max(1000).optional(),
+  description: z.string().max(5000).optional(),
   tags: z.array(z.string()).max(5),
   published_at: z.coerce.date(),
   feed_id: z.string(),

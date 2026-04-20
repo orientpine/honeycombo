@@ -35,7 +35,13 @@ body:
   - type: textarea
     id: note
     attributes:
-      label: Short Description
-      description: 이 자료를 추천하는 이유를 영어로 간단히 설명해주세요 (Write in English)
-      placeholder: "A practical guide to building AI agents for production use cases"
-      render: text
+      label: Summary
+      description: 이 자료의 핵심 내용을 한국어로 요약해주세요 (Summarize in Korean)
+      placeholder: |
+        ## 개요
+        AI 에이전트 활용에 대한 실전 가이드...
+        ## 주요 내용
+        - 핵심 포인트 1
+        - 핵심 포인트 2
+        ## 시사점
+        실무에서 바로 적용 가능한...

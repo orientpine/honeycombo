@@ -103,7 +103,7 @@ export function normalizeFeedItem(
     return null;
   }
 
-  const description = truncateText(item.contentSnippet || item.content || item.summary, 1000);
+  const description = truncateText(item.contentSnippet || item.content || item.summary, 5000);
   const baseTags = [feedConfig.category];
   const itemTags = (item.categories || []).map((category) => String(category).toLowerCase());
   const tags = [...new Set([...baseTags, ...itemTags])].slice(0, 5);
