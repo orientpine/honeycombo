@@ -1087,7 +1087,8 @@ function initInterestTagPanel() {
     flex-wrap: wrap;
     gap: var(--space-xs);
     padding: var(--space-sm) var(--space-md);
-    margin-bottom: var(--space-sm);
+    margin-top: var(--space-md);
+    margin-bottom: var(--space-xs);
     background: rgba(245, 124, 34, 0.06);
     border: 1px solid rgba(245, 124, 34, 0.2);
     border-radius: var(--radius-md);
@@ -1522,21 +1523,34 @@ function initInterestTagPanel() {
     box-shadow: 0 0 0 1px var(--color-accent), 0 2px 8px rgba(252, 185, 36, 0.15);
     position: relative;
   }
-  .article-card.interest-match::before {
-    content: '⭐ 관심';
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    z-index: 2;
-    padding: 2px 8px;
-    background: var(--color-accent);
-    color: var(--color-text);
+  /*
+   * Interest-match badge.
+   *
+   * Renders as the FIRST item inside `.article-meta` (the row that already holds
+   * the source badge + date) via `::before` content. Flex layout puts it inline,
+   * so it never overlaps the date (which uses `margin-left: auto` to sit on the right).
+   *
+   * Compact icon-only pill with accent gradient + soft shadow, matching the
+   * panel's modern Apple-style theme. Hover scale gives subtle feedback.
+   */
+  .article-card.interest-match .article-meta::before {
+    content: '⭐';
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background: linear-gradient(135deg, var(--color-accent) 0%, #FFA000 100%);
+    color: #FFFFFF;
     border-radius: 999px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
-    pointer-events: none;
+    font-size: 0.78rem;
+    line-height: 1;
+    box-shadow: 0 1px 4px rgba(252, 185, 36, 0.4);
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .article-card.interest-match:hover .article-meta::before {
+    transform: scale(1.1);
   }
   .article-card.interest-match .article-thumbnail {
     position: relative;

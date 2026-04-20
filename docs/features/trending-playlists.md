@@ -77,3 +77,4 @@
 | 2026-04-13 | 최초 작성 — 트렌딩 플레이리스트 기능 문서화 |
 | 2026-04-13 | Astro View Transitions 호환을 위해 `/trending`을 정적 shell + client fetch 구조로 전환 |
 | 2026-04-14 | 카드 UI를 `/playlists` 페이지 패턴(`playlist-card`)으로 통일 — `trending-card` 구조 제거 |
+| 2026-04-20 | **좋아요 버튼 레이아웃 시프트 해결** — `♡`(빈 하트, ≈ 12.8px)과 `♥`(채워진 하트, ≈ 7.6px) 유니코드 글리프의 고유 너비 차이로 좋아요 토글 시 버튼 폭이 ~1.8px 줄어들며 "좋아요" 레이블이 좌우로 틀어지는 현상을 해결. `.like-button-icon`을 `display: inline-flex; width: 1em; flex: 0 0 1em; justify-content: center`로 고정해 아이콘 박스를 1em 구간에 고정. 추가로 hover lift(`translateY(-1px)`) + active press 피드백 + is-liked 상태의 아이콘에 `scale(1.15)` 스프링 easing을 적용해 모던 InterestTagPanel 테마와 일관성 확보. 실측: 이전 button width 45.14 → 43.38 (Δ −1.76px), 수정 후 68.125 → 68.125 (Δ 0px), 레이블 좌표 동일. 파일: `src/pages/trending.astro`. |
