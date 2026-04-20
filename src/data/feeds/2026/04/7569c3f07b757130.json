@@ -4,7 +4,7 @@
   "url": "https://arstechnica.com/science/2026/04/openai-starts-offering-a-biology-tuned-llm/",
   "source": "Ars Technica",
   "type": "article",
-  "description": "GPT-Rosalind is an LLM trained on biology workflows, available in closed access.",
+  "description": "## 개요\n\nOpenAI는 기존 LLM의 과도한 긍정성 경향을 개선하고 생물학 분야에 특화된 새로운 LLM인 GPT-Rosalind를 출시했습니다.\n\n## 주요 내용\n\n- GPT-Rosalind는 잘못된 신약 표적에 대해 경고하는 등 비판적인 태도를 취하도록 튜닝되었습니다.\n- 이 모델은 복잡하고 다단계적인 과정을 처리하는 '추론' 능력과 특정 벤치마크에서의 성능으로 '전문가 수준'의 능력을 갖춘 것으로 평가됩니다.\n- LLM의 주요 문제점인 환각(hallucination) 문제를 해결했는지 여부는 명확하지 않으며, 회사가 도출한 결론에 대한 설명 요청 시에도 문제가 발생할 수 있습니다.\n- 현재는 악의적인 출력 가능성을 우려하여 접근이 제한적이며, 미국 기반의 특정 주체만 OpenAI의 신뢰할 수 있는 액세스 배포 구조에 신청할 수 있습니다.\n- 더욱 제한된 형태의 Life Sciences Research Plugin은 일반에 공개될 예정입니다.\n- GPT-Rosalind는 다른 과학 분야 LLM과 달리 생물학에 매우 특화되어 있습니다.\n\n## 시사점\n\nGPT-Rosalind의 생물학 특화가 기존 LLM 대비 실질적인 유용성 향상으로 이어질지는 향후 모델의 실제 효과에 대한 보고를 통해 평가될 것입니다.",
   "tags": [
     "tech",
     "ai",

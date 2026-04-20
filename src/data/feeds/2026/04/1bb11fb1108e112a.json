@@ -4,7 +4,7 @@
   "url": "https://techcrunch.com/2026/04/15/adobes-new-firefly-ai-assistant-can-use-creative-cloud-apps-to-complete-tasks/",
   "source": "TechCrunch",
   "type": "article",
-  "description": "Adobe says the assistant can work across apps like Firefly, Photoshop, Premiere, Lightroom, Express, Illustrator and its other apps to do tasks for you.",
+  "description": "## 개요\n\nAdobe가 출시하는 Firefly AI Assistant는 사용자의 텍스트 지시에 따라 Photoshop, Premiere, Lightroom 등 Adobe Creative Cloud의 다양한 앱을 연동하여 복잡한 작업을 자동화하는 AI 기반 도우미입니다.\n\n## 주요 내용\n\n*   **Firefly AI Assistant 출시:** Project Moonlight로 알려졌던 Adobe의 새로운 AI 도우미가 Firefly AI Assistant라는 이름으로 공개되었으며, 곧 공개 베타 버전 출시 예정입니다.\n*   **크로스 앱 작업 지원:** Firefly AI Assistant는 Firefly, Photoshop, Premiere, Lightroom, Express, Illustrator 등 Adobe의 다양한 앱을 연동하여 사용자의 요청을 처리할 수 있습니다.\n*   **사용자 제어 기능:** 텍스트 프롬프트 외에도 버튼과 슬라이더를 통해 AI의 결과물을 제어할 수 있으며, AI는 프로젝트에 따라 관련 컨트롤을 제안합니다.\n*   **지능적인 작업 수행:** AI는 작업 제안, 앱 간 조정, 워크플로우 실행 기능을 수행하며, 사용자는 언제든지 개입하여 작업을 수정할 수 있습니다.\n*   **맞춤형 학습 및 제안:** 사용자의 창작 선호도를 학습하여 맞춤형 작업을 제안하며, '소셜 미디어 에셋'과 같이 여러 단계를 포함하는 복잡한 작업을 위한 스킬도 제공됩니다.\n*   **타사 LLM 통합 탐색:** Adobe는 Firefly AI Assistant가 서드파티 대규모 언어 모델(LLM)과 더 잘 연동되도록 탐색 중입니다.\n*   **Firefly 도구 기능 강화:** AI 비디오 편집기에 잡음 제거, 리버브 및 음악 조절, 색상 조정 기능이 추가되었으며, Adobe 스톡 라이브러리와 통합되었습니다. 또한 Kling 3.0 및 Kling 3.0 Omni 모델도 Firefly 라이브러리에 추가됩니다.\n\n## 시사점\n\nFirefly AI Assistant는 Adobe의 방대한 도구 생태계 내에서 사용자의 학습 곡선을 줄이고 창작 워크플로우의 마찰을 제거하여, 복잡한 작업을 더 쉽고 효율적으로 완료할 수 있도록 지원하는 중요한 혁신입니다.",
   "tags": [
     "tech",
     "ai",
