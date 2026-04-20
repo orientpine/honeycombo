@@ -98,6 +98,46 @@ describe('parseIssueBody', () => {
     expect(result?.note).toContain('실무에서 바로 적용 가능한 에이전트 구축 가이드');
   });
 
+  it('captures Summary at EOF with no following ### section', () => {
+    const body = '### URL\n\nhttps://example.com/eof-test\n\n### Type\n\nArticle\n\n### Tags (comma-separated, max 5)\n\nai\n\n### Summary\n\n전체 요약 텍스트';
+    const result = parseIssueBody(body);
+
+    expect(result).not.toBeNull();
+    expect(result?.note).toBe('전체 요약 텍스트');
+  });
+
+  it('returns empty note when Summary section has only _No response_', () => {
+    const body = '### URL\n\nhttps://example.com/no-response\n\n### Type\n\nArticle\n\n### Tags (comma-separated, max 5)\n\nai\n\n### Summary\n\n_No response_';
+    const result = parseIssueBody(body);
+
+    expect(result).not.toBeNull();
+    expect(result?.note).toBe('');
+  });
+
+  it('returns empty note when Summary section is empty', () => {
+    const body = '### URL\n\nhttps://example.com/empty-summary\n\n### Type\n\nArticle\n\n### Tags (comma-separated, max 5)\n\nai\n\n### Summary\n\n### Some Other Section\n\nignored';
+    const result = parseIssueBody(body);
+
+    expect(result).not.toBeNull();
+    expect(result?.note).toBe('');
+  });
+
+  it('preserves internal blank lines in multiline Summary', () => {
+    const body = [
+      '### URL', '', 'https://example.com/blank-lines',
+      '### Type', '', 'Article',
+      '### Tags (comma-separated, max 5)', '', 'ai',
+      '### Summary', '',
+      '첫 번째 단락', '', '', '두 번째 단락',
+    ].join('\n');
+    const result = parseIssueBody(body);
+
+    expect(result).not.toBeNull();
+    expect(result?.note).toContain('첫 번째 단락');
+    expect(result?.note).toContain('두 번째 단락');
+    expect(result?.note).toBe('첫 번째 단락\n\n\n두 번째 단락');
+  });
+
   it('still parses legacy "### Short Description" for backward compatibility', () => {
     const body = '### URL\n\nhttps://example.com/legacy\n\n### Type\n\nArticle\n\n### Tags (comma-separated, max 5)\n\ntest\n\n### Short Description\n\nlegacy note';
     const result = parseIssueBody(body);
