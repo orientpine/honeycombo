@@ -157,3 +157,4 @@ per-article try/catch로 격리되어 있어 한 article의 API 실패가 전체
 |------|----------|
 | 2026-04-20 | 최초 작성 — RSS contentSnippet이 description으로 누수되어 요약기가 매번 0건 스킵하던 문제 진단 및 수정 |
 | 2026-04-20 | 회귀 방지 — curated/feeds 처리 분리 추가. 사용자가 직접 적은 curated description(영문/한 줄짜리 등)을 Gemini가 덮어쓰지 않도록 `allowResummarize` 플래그 도입 |
+| 2026-04-20 | Stale fallback policy — fetch 실패 또는 Gemini 실패 시 clearStaleDescription()으로 stale 영문 description을 즉시 제거. 다음 run에서 가드가 다시 픽업해 재시도 |

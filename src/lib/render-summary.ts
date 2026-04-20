@@ -105,13 +105,38 @@ export function renderInlineMarkdown(escapedText: string): string {
  */
 export function stripInlineMarkdown(text: string): string {
   if (!text) return '';
-  // Order parallels renderInlineMarkdown to keep behavior consistent.
-  return text
-    .replace(/`([^`\n]+)`/g, '$1')
-    .replace(/\*\*([^*\n]+?)\*\*/g, '$1')
+  // Mirror renderInlineMarkdown's two-pass placeholder strategy so nested
+  // patterns like `**outer *inner* outer**` lose BOTH outer and inner markers.
+  const codePlaceholders: string[] = [];
+  const boldPlaceholders: string[] = [];
+
+  let result = text.replace(/`([^`\n]+)`/g, (_match, code: string) => {
+    const idx = codePlaceholders.length;
+    codePlaceholders.push(code);
+    return `\u0000CODE${idx}\u0001`;
+  });
+
+  result = result.replace(/\*\*([^\n]+?)\*\*/g, (_match, content: string) => {
+    const innerStripped = content
+      .replace(/(^|[^*A-Za-z0-9_])\*(?!\s)([^*\n]+?)(?<!\s)\*(?![A-Za-z0-9_])/g, '$1$2')
+      .replace(/(^|[^A-Za-z0-9_])_([^_\n]+?)_(?![A-Za-z0-9_])/g, '$1$2');
+    const idx = boldPlaceholders.length;
+    boldPlaceholders.push(innerStripped);
+    return `\u0000BOLD${idx}\u0001`;
+  });
+
+  result = result
     .replace(/(^|[^*A-Za-z0-9_])\*(?!\s)([^*\n]+?)(?<!\s)\*(?![A-Za-z0-9_])/g, '$1$2')
     .replace(/(^|[^A-Za-z0-9_])_([^_\n]+?)_(?![A-Za-z0-9_])/g, '$1$2')
     .replace(/\[([^\]\n]+)\]\([^)\s]+\)/g, '$1');
+
+  result = result.replace(/\u0000BOLD(\d+)\u0001/g, (_match, idx: string) => {
+    return boldPlaceholders[Number(idx)];
+  });
+  result = result.replace(/\u0000CODE(\d+)\u0001/g, (_match, idx: string) => {
+    return codePlaceholders[Number(idx)];
+  });
+  return result;
 }
 
 /**

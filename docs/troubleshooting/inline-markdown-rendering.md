@@ -109,3 +109,4 @@ src/pages/admin/must-read.astro  → stripMd() (브라우저 admin 페이지)
 |------|----------|
 | 2026-04-20 | 최초 작성 — inline markdown(`**bold**`, `` `code` ``, italic, link)을 모든 description 표면에서 정확히 렌더/평문화하도록 수정 |
 | 2026-04-20 | drift 방지 — TagFilter.astro/admin/must-read.astro의 누락된 stripMd 동기화, nested `**outer *inner* outer**` 처리 개선, 다섯 구현 parity 테스트 추가 |
+| 2026-04-20 | Oracle gap closure — stripInlineMarkdown에 nested bold placeholder 전략 적용, summarize-articles에 clearStaleDescription() 추가 (요약 실패 시 stale 영문 description 자동 제거), parity test에 source-regex byte parity 검증 추가 |

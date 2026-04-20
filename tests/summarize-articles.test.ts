@@ -2,9 +2,11 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { mkdir, rm, writeFile } from 'fs/promises';
 import { join } from 'path';
 import {
+  clearStaleDescription,
   findArticlesNeedingSummary,
   looksLikeKoreanStructuredSummary,
 } from '../scripts/summarize-articles';
+import { readFile } from 'fs/promises';
 
 const ROOT = process.cwd();
 const TEST_DIR = join(ROOT, 'tests/tmp-summarize-test');
@@ -234,5 +236,53 @@ describe('findArticlesNeedingSummary', () => {
 
     expect(result).toHaveLength(1);
     expect(result[0].data.id).toBe('good');
+  });
+});
+
+describe('clearStaleDescription', () => {
+  beforeEach(async () => {
+    await rm(TEST_DIR, { recursive: true, force: true });
+    await mkdir(FEEDS_DIR, { recursive: true });
+  });
+
+  afterEach(async () => {
+    await rm(TEST_DIR, { recursive: true, force: true });
+  });
+
+  it('removes the description field when called on stale article', async () => {
+    const filePath = join(FEEDS_DIR, 'stale.json');
+    const data = {
+      id: 'stale',
+      title: 'Stale article',
+      url: 'https://example.com/stale',
+      description: 'Long raw English RSS contentSnippet that is not Korean structured summary.',
+    };
+    await writeFile(filePath, JSON.stringify(data, null, 2));
+
+    await clearStaleDescription(filePath, data);
+
+    const updated = JSON.parse(await readFile(filePath, 'utf-8'));
+    expect(updated.description).toBeUndefined();
+    // Other fields preserved
+    expect(updated.id).toBe('stale');
+    expect(updated.title).toBe('Stale article');
+    expect(updated.url).toBe('https://example.com/stale');
+  });
+
+  it('is a no-op when description is already missing', async () => {
+    const filePath = join(FEEDS_DIR, 'empty.json');
+    const data = {
+      id: 'empty',
+      title: 'No description article',
+      url: 'https://example.com/empty',
+    };
+    await writeFile(filePath, JSON.stringify(data, null, 2));
+
+    await clearStaleDescription(filePath, data);
+
+    const updated = JSON.parse(await readFile(filePath, 'utf-8'));
+    // File should be unchanged structurally
+    expect(updated.description).toBeUndefined();
+    expect(updated.id).toBe('empty');
   });
 });
