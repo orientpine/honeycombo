@@ -17,6 +17,86 @@ function escapeHtml(text: string): string {
 }
 
 /**
+ * Validate that a URL uses an allowed protocol.
+ * Prevents javascript:, data:, vbscript: XSS injection via [text](url) syntax.
+ *
+ * Allowed: http(s)://..., site-relative /path, fragment #anchor.
+ */
+function isSafeUrl(url: string): boolean {
+  return /^(https?:\/\/|\/|#)/i.test(url);
+}
+
+/**
+ * Apply inline markdown transformations to already-HTML-escaped text.
+ *
+ * Supported subset (CommonMark inline only):
+ *   `code`             -> <code>code</code>
+ *   **bold**           -> <strong>bold</strong>
+ *   *italic*  _italic_ -> <em>italic</em>
+ *   [text](url)        -> <a href="url" target="_blank" rel="noopener noreferrer">text</a>
+ *
+ * Order of operations matters:
+ * 1. Code first (its content must NOT be re-processed for emphasis).
+ * 2. Bold (**) before italic (*) to avoid greedy match conflicts.
+ * 3. Italic with word-boundary lookarounds to skip mid-word _ in identifiers.
+ * 4. Links last with protocol whitelist.
+ *
+ * INPUT MUST BE HTML-ESCAPED ALREADY. This function only injects safe tag
+ * pairs and never introduces new HTML-significant characters from user input.
+ */
+export function renderInlineMarkdown(escapedText: string): string {
+  if (!escapedText) return '';
+
+  // 1. Inline code: protect content from further markdown processing by
+  //    extracting matches into placeholders, then restoring after other passes.
+  const codePlaceholders: string[] = [];
+  let text = escapedText.replace(/`([^`\n]+)`/g, (_match, code: string) => {
+    const idx = codePlaceholders.length;
+    codePlaceholders.push(code);
+    return `\u0000CODE${idx}\u0001`;
+  });
+
+  // 2. Bold: **text** -> <strong>text</strong>
+  text = text.replace(/\*\*([^*\n]+?)\*\*/g, '<strong>$1</strong>');
+
+  // 3. Italic: *text* or _text_  -> <em>text</em>
+  //    *: any non-* surrounded by *. Excludes ** (already consumed).
+  text = text.replace(/(^|[^*])\*([^*\s][^*\n]*?)\*(?!\*)/g, '$1<em>$2</em>');
+  //    _: requires word boundary on outside to avoid mid-word matches
+  //    (e.g. snake_case_var must NOT become snake<em>case</em>var).
+  text = text.replace(/(^|[^A-Za-z0-9_])_([^_\n]+?)_(?![A-Za-z0-9_])/g, '$1<em>$2</em>');
+
+  // 4. Links: [text](url) with protocol whitelist
+  text = text.replace(/\[([^\]\n]+)\]\(([^)\s]+)\)/g, (match, label: string, url: string) => {
+    if (!isSafeUrl(url)) return match;
+    return `<a href="${url}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+  });
+
+  // 5. Restore code placeholders.
+  text = text.replace(/\u0000CODE(\d+)\u0001/g, (_match, idx: string) => {
+    return `<code>${codePlaceholders[Number(idx)]}</code>`;
+  });
+
+  return text;
+}
+
+/**
+ * Strip inline markdown markers for plain-text contexts.
+ *
+ * **bold** -> bold, *italic* -> italic, `code` -> code, [label](url) -> label.
+ * Used by stripMarkdownForPreview to keep RSS / meta tags / card previews clean.
+ */
+export function stripInlineMarkdown(text: string): string {
+  if (!text) return '';
+  return text
+    .replace(/`([^`\n]+)`/g, '$1')
+    .replace(/\*\*([^*\n]+?)\*\*/g, '$1')
+    .replace(/(^|[^*])\*([^*\s][^*\n]*?)\*(?!\*)/g, '$1$2')
+    .replace(/(^|[^A-Za-z0-9_])_([^_\n]+?)_(?![A-Za-z0-9_])/g, '$1$2')
+    .replace(/\[([^\]\n]+)\]\([^)\s]+\)/g, '$1');
+}
+
+/**
  * Convert structured summary markdown to HTML for the detail view.
  *
  * Input format (from agent-submission spec):
@@ -51,10 +131,10 @@ export function renderSummaryHtml(markdown: string): string {
       if (rest.length > 0) {
         if (rest.every((l) => l.trimStart().startsWith('- '))) {
           html.push(
-            `<ul class="summary-list">${rest.map((l) => `<li>${l.trimStart().slice(2)}</li>`).join('')}</ul>`,
+            `<ul class="summary-list">${rest.map((l) => `<li>${renderInlineMarkdown(l.trimStart().slice(2))}</li>`).join('')}</ul>`,
           );
         } else {
-          html.push(`<p>${rest.join('<br>')}</p>`);
+          html.push(`<p>${renderInlineMarkdown(rest.join('<br>'))}</p>`);
         }
       }
       continue;
@@ -63,13 +143,13 @@ export function renderSummaryHtml(markdown: string): string {
     // Standalone list block
     if (lines.every((l) => l.trimStart().startsWith('- '))) {
       html.push(
-        `<ul class="summary-list">${lines.map((l) => `<li>${l.trimStart().slice(2)}</li>`).join('')}</ul>`,
+        `<ul class="summary-list">${lines.map((l) => `<li>${renderInlineMarkdown(l.trimStart().slice(2))}</li>`).join('')}</ul>`,
       );
       continue;
     }
 
     // Plain paragraph (including single-line legacy descriptions)
-    html.push(`<p>${lines.join('<br>')}</p>`);
+    html.push(`<p>${renderInlineMarkdown(lines.join('<br>'))}</p>`);
   }
 
   return html.join('');
@@ -83,10 +163,11 @@ export function renderSummaryHtml(markdown: string): string {
  */
 export function stripMarkdownForPreview(markdown: string): string {
   if (!markdown) return '';
-  return markdown
+  const blockStripped = markdown
     .replace(/^#{1,6}\s+/gm, '')
     .replace(/^[-*]\s+/gm, '• ')
     .replace(/\n{2,}/g, ' ')
     .replace(/\n/g, ' ')
     .trim();
+  return stripInlineMarkdown(blockStripped);
 }

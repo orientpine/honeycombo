@@ -22,6 +22,12 @@ document.addEventListener('astro:page-load', () => {
       .replace(/^[-*]\s+/gm, '\u2022 ')
       .replace(/\n{2,}/g, ' ')
       .replace(/\n/g, ' ')
+      // Inline markdown markers — mirror src/lib/render-summary.ts and functions/lib/escape.ts.
+      .replace(/`([^`\n]+)`/g, '$1')
+      .replace(/\*\*([^*\n]+?)\*\*/g, '$1')
+      .replace(/(^|[^*])\*([^*\s][^*\n]*?)\*(?!\*)/g, '$1$2')
+      .replace(/(^|[^A-Za-z0-9_])_([^_\n]+?)_(?![A-Za-z0-9_])/g, '$1$2')
+      .replace(/\[([^\]\n]+)\]\([^)\s]+\)/g, '$1')
       .trim();
   }
 
