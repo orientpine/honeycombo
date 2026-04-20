@@ -47,32 +47,49 @@ function isSafeUrl(url: string): boolean {
 export function renderInlineMarkdown(escapedText: string): string {
   if (!escapedText) return '';
 
-  // 1. Inline code: protect content from further markdown processing by
-  //    extracting matches into placeholders, then restoring after other passes.
+  // Two-pass placeholder strategy keeps already-matched ranges (code, bold)
+  // from being re-interpreted by later passes (italic). Critical for cases
+  // like `**outer *inner* outer**` where the outer bold must win.
   const codePlaceholders: string[] = [];
+  const boldPlaceholders: string[] = [];
+
+  // 1. Inline code FIRST. Backticks dominate everything inside them.
   let text = escapedText.replace(/`([^`\n]+)`/g, (_match, code: string) => {
     const idx = codePlaceholders.length;
     codePlaceholders.push(code);
     return `\u0000CODE${idx}\u0001`;
   });
 
-  // 2. Bold: **text** -> <strong>text</strong>
-  text = text.replace(/\*\*([^*\n]+?)\*\*/g, '<strong>$1</strong>');
+  // 2. Bold (**...**) BEFORE italic, placeholder-protected so the outer bold
+  //    tag pair survives intact. Bold body may contain a single * (italic),
+  //    so we run the italic transform on the body BEFORE storing it.
+  text = text.replace(/\*\*([^\n]+?)\*\*/g, (_match, content: string) => {
+    const innerWithItalic = content
+      .replace(/(^|[^*A-Za-z0-9_])\*(?!\s)([^*\n]+?)(?<!\s)\*(?![A-Za-z0-9_])/g, '$1<em>$2</em>')
+      .replace(/(^|[^A-Za-z0-9_])_([^_\n]+?)_(?![A-Za-z0-9_])/g, '$1<em>$2</em>');
+    const idx = boldPlaceholders.length;
+    boldPlaceholders.push(innerWithItalic);
+    return `\u0000BOLD${idx}\u0001`;
+  });
 
-  // 3. Italic: *text* or _text_  -> <em>text</em>
-  //    *: any non-* surrounded by *. Excludes ** (already consumed).
-  text = text.replace(/(^|[^*])\*([^*\s][^*\n]*?)\*(?!\*)/g, '$1<em>$2</em>');
-  //    _: requires word boundary on outside to avoid mid-word matches
-  //    (e.g. snake_case_var must NOT become snake<em>case</em>var).
+  // 3. Italic (*...* or _..._). Stricter rules to avoid mid-word matches
+  //    and to skip * with leading/trailing whitespace.
+  text = text.replace(/(^|[^*A-Za-z0-9_])\*(?!\s)([^*\n]+?)(?<!\s)\*(?![A-Za-z0-9_])/g, '$1<em>$2</em>');
   text = text.replace(/(^|[^A-Za-z0-9_])_([^_\n]+?)_(?![A-Za-z0-9_])/g, '$1<em>$2</em>');
 
-  // 4. Links: [text](url) with protocol whitelist
+  // 4. Links: [text](url) with protocol whitelist + non-empty url.
   text = text.replace(/\[([^\]\n]+)\]\(([^)\s]+)\)/g, (match, label: string, url: string) => {
     if (!isSafeUrl(url)) return match;
     return `<a href="${url}" target="_blank" rel="noopener noreferrer">${label}</a>`;
   });
 
-  // 5. Restore code placeholders.
+  // 5. Restore bold placeholders. Their content may contain <em> from step 3,
+  //    which is intended (nested italic inside bold).
+  text = text.replace(/\u0000BOLD(\d+)\u0001/g, (_match, idx: string) => {
+    return `<strong>${boldPlaceholders[Number(idx)]}</strong>`;
+  });
+
+  // 6. Restore code placeholders last so their content stays untouched.
   text = text.replace(/\u0000CODE(\d+)\u0001/g, (_match, idx: string) => {
     return `<code>${codePlaceholders[Number(idx)]}</code>`;
   });
@@ -88,10 +105,11 @@ export function renderInlineMarkdown(escapedText: string): string {
  */
 export function stripInlineMarkdown(text: string): string {
   if (!text) return '';
+  // Order parallels renderInlineMarkdown to keep behavior consistent.
   return text
     .replace(/`([^`\n]+)`/g, '$1')
     .replace(/\*\*([^*\n]+?)\*\*/g, '$1')
-    .replace(/(^|[^*])\*([^*\s][^*\n]*?)\*(?!\*)/g, '$1$2')
+    .replace(/(^|[^*A-Za-z0-9_])\*(?!\s)([^*\n]+?)(?<!\s)\*(?![A-Za-z0-9_])/g, '$1$2')
     .replace(/(^|[^A-Za-z0-9_])_([^_\n]+?)_(?![A-Za-z0-9_])/g, '$1$2')
     .replace(/\[([^\]\n]+)\]\([^)\s]+\)/g, '$1');
 }

@@ -166,6 +166,34 @@ describe('renderInlineMarkdown', () => {
     expect(html).toContain('<h3 class="summary-heading">주요 내용</h3>');
     expect(html).toContain('<ul class="summary-list">');
   });
+
+  it('handles nested **outer *inner* outer** bold-with-italic', () => {
+    expect(renderInlineMarkdown('**outer *inner* outer**')).toBe(
+      '<strong>outer <em>inner</em> outer</strong>',
+    );
+  });
+
+  it('does NOT mangle unmatched ** markers', () => {
+    // Unmatched bold survives as raw text rather than producing broken HTML.
+    expect(renderInlineMarkdown('**foo')).toBe('**foo');
+  });
+
+  it('does NOT render [label]() with empty url', () => {
+    // Empty URL fails the protocol whitelist (isSafeUrl returns false).
+    expect(renderInlineMarkdown('[label]()')).toBe('[label]()');
+  });
+
+  it('handles bold containing _underscore italic_', () => {
+    expect(renderInlineMarkdown('**bold with _italic_ inside**')).toBe(
+      '<strong>bold with <em>italic</em> inside</strong>',
+    );
+  });
+
+  it('does not break **a** **b** **c** sequence (idempotent multi-bold)', () => {
+    expect(renderInlineMarkdown('**a** **b** **c**')).toBe(
+      '<strong>a</strong> <strong>b</strong> <strong>c</strong>',
+    );
+  });
 });
 
 describe('stripInlineMarkdown', () => {

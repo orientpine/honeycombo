@@ -25,7 +25,7 @@ document.addEventListener('astro:page-load', () => {
       // Inline markdown markers — mirror src/lib/render-summary.ts and functions/lib/escape.ts.
       .replace(/`([^`\n]+)`/g, '$1')
       .replace(/\*\*([^*\n]+?)\*\*/g, '$1')
-      .replace(/(^|[^*])\*([^*\s][^*\n]*?)\*(?!\*)/g, '$1$2')
+      .replace(/(^|[^*A-Za-z0-9_])\*(?!\s)([^*\n]+?)(?<!\s)\*(?![A-Za-z0-9_])/g, '$1$2')
       .replace(/(^|[^A-Za-z0-9_])_([^_\n]+?)_(?![A-Za-z0-9_])/g, '$1$2')
       .replace(/\[([^\]\n]+)\]\([^)\s]+\)/g, '$1')
       .trim();
