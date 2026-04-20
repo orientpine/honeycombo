@@ -49,7 +49,7 @@
 | `src/components/ArticleSearch.astro` | 검색 입력 UI + debounce + 이벤트 발행 + URL 동기화 |
 | `src/components/InterestTagPanel.astro` | `article-search-changed` 수신 → 결과 렌더링 + 카운트 갱신 |
 | `src/components/SourceFilter.astro` | `source-counts-update` 수신 → 카운트 동적 갱신 |
-| `src/lib/article-search.ts` | 순수 검색 로직 (`searchArticles`) — 단위 테스트의 단일 진실 공급원 |
+| `src/lib/article-search.ts` | 순수 검색 로직 (`searchArticles`, `getFilteredPool`) — 필터 파이프라인 계약의 단일 진실 공급원. 인라인 컴포넌트 스크립트는 동일 로직을 미러링하며, 계약 검증은 `tests/article-search.test.ts`의 `getFilteredPool` 서브를 통해 이뤄진다. |
 | `src/lib/serialize-articles.ts` | 빌드 시 모든 기사를 클라이언트 JSON으로 직렬화 |
 | `tests/article-search.test.ts` | 검색·관심사 헬퍼 단위 테스트 |
 | `src/pages/articles/index.astro` | ArticleSearch 컴포넌트 마운트 (1페이지) |
@@ -83,3 +83,4 @@
 | 날짜 | 변경 내용 |
 |------|----------|
 | 2026-04-20 | 최초 작성 — `/articles/` 페이지에 제목 검색 기능 추가 |
+| 2026-04-20 | Oracle 검증 대응 — ArticleSearch 입력 리스너와 `source-filter-changed` 도큐먼트 리스너에 누적 방지 가드(`__articleSearchState`) 추가. 페이지 네비게이션 시 검색 캐시 초기화. `getFilteredPool` 통합 테스트 10건 추가. |

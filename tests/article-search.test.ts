@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  getFilteredPool,
   getInterestMatches,
   getTopTags,
   pinInterestMatches,
@@ -139,5 +140,82 @@ describe('pinInterestMatches', () => {
     const snapshot = sample.slice();
     pinInterestMatches(sample, ['javascript']);
     expect(sample).toEqual(snapshot);
+  });
+});
+
+/**
+ * Integration-style tests for the full filter pipeline (search ∩ origin ∩ tag).
+ * Cover the combined contract that SourceFilter / ArticleSearch / InterestTagPanel
+ * all depend on so that future refactors can't silently change semantics.
+ */
+describe('getFilteredPool', () => {
+  const corpus: SearchableArticle[] = [
+    { _id: 'c1', title: 'Hello World', tags: ['javascript', 'web'], articleOrigin: 'curated' },
+    { _id: 'c2', title: 'Editor Pick', tags: ['ai'], articleOrigin: 'curated' },
+    { _id: 's1', title: 'Submitted Hello', tags: ['javascript'], articleOrigin: 'submitted' },
+    { _id: 's2', title: 'TypeScript Tips', tags: ['typescript', 'javascript'], articleOrigin: 'submitted' },
+    { _id: 's3', title: 'Rust Async Basics', tags: ['rust'], articleOrigin: 'submitted' },
+    { _id: 'f1', title: 'Hello Astro', tags: ['astro', 'javascript'], articleOrigin: 'feed' },
+    { _id: 'f2', title: 'AI Models', tags: ['ai'], articleOrigin: 'feed' },
+    { _id: 'f3', title: 'Hello Rust', tags: ['rust'], articleOrigin: 'feed' },
+  ];
+
+  it('no filters: returns the full corpus and full per-origin breakdown', () => {
+    const out = getFilteredPool(corpus, '', 'all', 'all');
+    expect(out.all).toHaveLength(8);
+    expect(out.perOrigin).toEqual({ curated: 2, submitted: 3, feed: 3 });
+  });
+
+  it('search only: per-origin reflects search results across ALL origins', () => {
+    const out = getFilteredPool(corpus, 'hello', 'all', 'all');
+    expect(out.all.map((a) => a._id).sort()).toEqual(['c1', 'f1', 'f3', 's1']);
+    expect(out.perOrigin).toEqual({ curated: 1, submitted: 1, feed: 2 });
+  });
+
+  it('search + tag: per-origin counts reflect intersection (not search alone)', () => {
+    const out = getFilteredPool(corpus, 'hello', 'all', 'javascript');
+    expect(out.all.map((a) => a._id).sort()).toEqual(['c1', 'f1', 's1']);
+    expect(out.perOrigin).toEqual({ curated: 1, submitted: 1, feed: 1 });
+  });
+
+  it('search + tag + origin: applies origin filter LAST', () => {
+    const out = getFilteredPool(corpus, 'hello', 'submitted', 'javascript');
+    expect(out.all.map((a) => a._id)).toEqual(['s1']);
+    expect(out.perOrigin).toEqual({ curated: 1, submitted: 1, feed: 1 });
+  });
+
+  it('tag only (no search): per-origin reflects tag pool', () => {
+    const out = getFilteredPool(corpus, '', 'all', 'rust');
+    expect(out.all.map((a) => a._id).sort()).toEqual(['f3', 's3']);
+    expect(out.perOrigin).toEqual({ curated: 0, submitted: 1, feed: 1 });
+  });
+
+  it('tag + origin only (no search): origin scoping works without search', () => {
+    const out = getFilteredPool(corpus, '', 'feed', 'rust');
+    expect(out.all.map((a) => a._id)).toEqual(['f3']);
+    expect(out.perOrigin).toEqual({ curated: 0, submitted: 1, feed: 1 });
+  });
+
+  it('origin only: per-origin still computed from full pool', () => {
+    const out = getFilteredPool(corpus, '', 'submitted', 'all');
+    expect(out.all.map((a) => a._id).sort()).toEqual(['s1', 's2', 's3']);
+    expect(out.perOrigin).toEqual({ curated: 2, submitted: 3, feed: 3 });
+  });
+
+  it('search is case-insensitive and trims whitespace', () => {
+    const out = getFilteredPool(corpus, '  HELLO  ', 'all', 'all');
+    expect(out.all.map((a) => a._id).sort()).toEqual(['c1', 'f1', 'f3', 's1']);
+  });
+
+  it('no matches: returns empty pool with zero per-origin counts', () => {
+    const out = getFilteredPool(corpus, 'xyzpdq-no-match', 'all', 'all');
+    expect(out.all).toEqual([]);
+    expect(out.perOrigin).toEqual({ curated: 0, submitted: 0, feed: 0 });
+  });
+
+  it('does not mutate the input array', () => {
+    const snapshot = corpus.slice();
+    getFilteredPool(corpus, 'hello', 'submitted', 'javascript');
+    expect(corpus).toEqual(snapshot);
   });
 });

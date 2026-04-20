@@ -49,20 +49,29 @@
     isExternal: boolean;
   }
 
-  let allArticlesCache: ClientArticle[] | null = null;
-  let debounceTimer: ReturnType<typeof setTimeout> | null = null;
-  let lastQuery = '';
+  // Per-document state (survives view transitions; resets on full page load).
+const w = window as any;
+if (!w.__articleSearchState) {
+  w.__articleSearchState = {
+    allArticlesCache: null as ClientArticle[] | null,
+    debounceTimer: null as ReturnType<typeof setTimeout> | null,
+    lastQuery: '' as string,
+    docListenersBound: false as boolean,
+    inputBoundOn: null as HTMLInputElement | null,
+  };
+}
+const sstate = w.__articleSearchState;
 
   function getAllArticles(): ClientArticle[] {
-    if (allArticlesCache) return allArticlesCache;
+    if (sstate.allArticlesCache) return sstate.allArticlesCache;
     const el = document.getElementById('all-articles-data');
     if (!el?.textContent) return [];
     try {
-      allArticlesCache = JSON.parse(el.textContent) as ClientArticle[];
+      sstate.allArticlesCache = JSON.parse(el.textContent) as ClientArticle[];
     } catch {
-      allArticlesCache = [];
+      sstate.allArticlesCache = [];
     }
-    return allArticlesCache;
+    return sstate.allArticlesCache;
   }
 
   function getActiveOrigin(): string {
@@ -104,43 +113,56 @@
   }
 
   function applySearch(query: string, origin?: string) {
-    lastQuery = query;
+    sstate.lastQuery = query;
     const clearBtn = document.getElementById('article-search-clear');
     if (clearBtn) clearBtn.hidden = !query.trim();
     dispatchSearchChange(query, origin);
   }
 
-  function initArticleSearch() {
+function initArticleSearch() {
     const input = document.getElementById('article-search-input') as HTMLInputElement | null;
     const clearBtn = document.getElementById('article-search-clear');
     if (!input) return;
 
-    // Apply initial query from URL
+    // Reset article cache on each page load — different page = different #all-articles-data.
+    sstate.allArticlesCache = null;
+
+    // Apply initial query from URL (do this on every page load so navigation respects ?q=).
     const initialQuery = new URLSearchParams(window.location.search).get('q') || '';
     if (initialQuery) {
       input.value = initialQuery;
       if (clearBtn) clearBtn.hidden = false;
-      // Defer to next tick so InterestTagPanel/SourceFilter listeners are attached
+      // Defer to next tick so InterestTagPanel/SourceFilter listeners are attached.
       setTimeout(() => applySearch(initialQuery), 0);
+    } else {
+      // No query in URL — ensure we reset state when navigating between pages.
+      input.value = '';
+      if (clearBtn) clearBtn.hidden = true;
+      sstate.lastQuery = '';
     }
 
-    input.addEventListener('input', () => {
-      const value = input.value;
-      if (debounceTimer) clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => applySearch(value), 150);
-    });
+    // Bind input listener once per <input> element. View Transitions reuse the same DOM,
+    // so the same input persists — don't rebind. On full reload the new input is different.
+    if (sstate.inputBoundOn !== input) {
+      sstate.inputBoundOn = input;
+      input.addEventListener('input', () => {
+        const value = input.value;
+        if (sstate.debounceTimer) clearTimeout(sstate.debounceTimer);
+        sstate.debounceTimer = setTimeout(() => applySearch(value), 150);
+      });
+      clearBtn?.addEventListener('click', () => {
+        input.value = '';
+        applySearch('');
+        input.focus();
+      });
+    }
 
-    clearBtn?.addEventListener('click', () => {
-      input.value = '';
-      applySearch('');
-      input.focus();
-    });
-
-    // Re-scope when source filter changes
+    // Document-level listeners bound exactly once per page load (full reload).
+    if (sstate.docListenersBound) return;
+    sstate.docListenersBound = true;
     document.addEventListener('source-filter-changed', ((e: CustomEvent<{ origin: string }>) => {
-      // Only re-dispatch if there's an active query
-      if (lastQuery.trim()) {
-        dispatchSearchChange(lastQuery, e.detail.origin);
+      if (sstate.lastQuery.trim()) {
+        dispatchSearchChange(sstate.lastQuery, e.detail.origin);
       }
     }) as EventListener);
   }
