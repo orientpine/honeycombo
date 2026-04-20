@@ -1,0 +1,17 @@
+{
+  "id": "89861532a8567b3f",
+  "title": "If AI Finally Writes 90% of Code, You Don't Need to Learn So Many Languages",
+  "url": "https://dev.to/canro91/if-ai-finally-writes-90-of-code-you-dont-need-to-learn-so-many-languages-29c8",
+  "source": "Dev.to",
+  "type": "article",
+  "description": "We no longer need to keep learning new programming languages. If AI writes 90% of our code, becoming a polyglot coder isn't valuable anymore. Here's what Gergely Orosz, from The Pragmatic Engineer, says in When AI Writes All Code, ...With AI writing most of the code, the advantage of knowing several languages will become less important when any engineer can jump into any codebase and ask the AI to implement a feature – which it will probably take a decent stab at. Even better, you can ask AI to explain parts of the codebase and quickly pick up a language much faster than without AI tools. Obsessing over learning languages didn't work for me. That was before AI. Trying to master many languages was my biggest mistake as a new coder. Something else always made people stand out. And something else got me into trouble. Maybe AI is making us: Master one general-purpose language, like C or Go. Understand core principles: problem decomposition, SOLID, and clean code. Develop strong code-reading skills. Or maybe we should learn one language that challenge our thinking: Haskell, LISP, or a language from a different paradigm. (Learning Java after C# doesn't teach much.) Not because you'll use it daily, AI can generate code in \"challenging\" languages, but it builds stronger problem-solving skills and rewires how you think. Helpful skills for prompting LLMs. To stand out when AI shines at coding, we need to step beyond the IDE. We need teamwork, communication, and the broader skills I cover in Street-Smart Coding. It's the roadmap I wish I had when starting out.",
+  "tags": [
+    "dev",
+    "coding",
+    "beginners",
+    "programming",
+    "ai"
+  ],
+  "published_at": "2026-04-20T05:00:00.000Z",
+  "feed_id": "devto"
+}
