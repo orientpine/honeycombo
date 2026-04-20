@@ -5,7 +5,7 @@
  *   - src/lib/render-summary.ts          stripMarkdownForPreview() (Astro SSG)
  *   - functions/lib/escape.ts            stripMd()                 (Cloudflare Functions)
  *   - public/scripts/must-read-page.js   stripMd()                 (Browser must-read)
- *   - src/components/TagFilter.astro     stripMd()                 (Browser tag filter)
+ *   - src/components/InterestTagPanel.astro stripMd()                 (Browser articles page)
  *   - src/pages/admin/must-read.astro    stripMd()                 (Browser admin)
  *
  * This test file does TWO things:
@@ -102,14 +102,14 @@ describe('stripMd parity across all 5 implementations', () => {
 
   it('loads all implementations successfully', async () => {
     const browserMustRead = await loadStripMdFromFile('public/scripts/must-read-page.js');
-    const tagFilter = await loadStripMdFromFile('src/components/TagFilter.astro');
+    const tagFilter = await loadStripMdFromFile('src/components/InterestTagPanel.astro');
     const adminMustRead = await loadStripMdFromFile('src/pages/admin/must-read.astro');
 
     implementations = [
       { name: 'src/lib/render-summary.ts (stripMarkdownForPreview)', fn: stripMarkdownForPreview },
       { name: 'functions/lib/escape.ts (stripMd)', fn: cfStripMd },
       { name: 'public/scripts/must-read-page.js (stripMd)', fn: browserMustRead },
-      { name: 'src/components/TagFilter.astro (stripMd)', fn: tagFilter },
+      { name: 'src/components/InterestTagPanel.astro (stripMd)', fn: tagFilter },
       { name: 'src/pages/admin/must-read.astro (stripMd)', fn: adminMustRead },
     ];
 
@@ -121,13 +121,13 @@ describe('stripMd parity across all 5 implementations', () => {
       // Lazy-load if first test in the suite hasn't populated `implementations` yet.
       if (!implementations) {
         const browserMustRead = await loadStripMdFromFile('public/scripts/must-read-page.js');
-        const tagFilter = await loadStripMdFromFile('src/components/TagFilter.astro');
+        const tagFilter = await loadStripMdFromFile('src/components/InterestTagPanel.astro');
         const adminMustRead = await loadStripMdFromFile('src/pages/admin/must-read.astro');
         implementations = [
           { name: 'src/lib/render-summary.ts', fn: stripMarkdownForPreview },
           { name: 'functions/lib/escape.ts', fn: cfStripMd },
           { name: 'public/scripts/must-read-page.js', fn: browserMustRead },
-          { name: 'src/components/TagFilter.astro', fn: tagFilter },
+          { name: 'src/components/InterestTagPanel.astro', fn: tagFilter },
           { name: 'src/pages/admin/must-read.astro', fn: adminMustRead },
         ];
       }
@@ -178,7 +178,7 @@ describe('stripMd source-regex byte parity (catches drift before runtime)', () =
     'src/lib/render-summary.ts',
     'functions/lib/escape.ts',
     'public/scripts/must-read-page.js',
-    'src/components/TagFilter.astro',
+    'src/components/InterestTagPanel.astro',
     'src/pages/admin/must-read.astro',
   ];
 

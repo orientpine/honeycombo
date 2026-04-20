@@ -3,9 +3,9 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import ArticleCard from '../../../components/ArticleCard.astro';
 import Pagination from '../../../components/Pagination.astro';
-import TagFilter from '../../../components/TagFilter.astro';
+import ArticleSearch from '../../../components/ArticleSearch.astro';
+import InterestTagPanel from '../../../components/InterestTagPanel.astro';
 import { compareArticles } from '../../../lib/article-sort';
-import PersonalizationBar from '../../../components/PersonalizationBar.astro';
 import SourceFilter from '../../../components/SourceFilter.astro';
 import { serializeArticles } from '../../../lib/serialize-articles';
 
@@ -40,6 +40,10 @@ export async function getStaticPaths() {
       currentPage: i + 2,
       totalPages,
       allTags: [...new Set(allArticles.flatMap(a => a.tags))].sort(),
+      tagCounts: allArticles.reduce<Record<string, number>>((acc, a) => {
+        a.tags.forEach((t: string) => { acc[t] = (acc[t] || 0) + 1; });
+        return acc;
+      }, {}),
       allArticlesJson: serializeArticles(allArticles),
       curatedCount: allArticles.filter(a => a._type === 'curated').length,
       submittedCount: allArticles.filter(a => a._type === 'submitted').length,
@@ -48,7 +52,7 @@ export async function getStaticPaths() {
   }));
 }
 
-const { articles, currentPage, totalPages, allTags, allArticlesJson, curatedCount, submittedCount, feedCount } = Astro.props;
+const { articles, currentPage, totalPages, allTags, tagCounts, allArticlesJson, curatedCount, submittedCount, feedCount } = Astro.props;
 ---
 
 <BaseLayout title={`기사 ${currentPage}페이지 — HoneyCombo`}>
@@ -57,10 +61,11 @@ const { articles, currentPage, totalPages, allTags, allArticlesJson, curatedCoun
     <p class="page-description">최신 기술 뉴스와 에디터 큐레이션</p>
   </header>
   
+  <ArticleSearch />
+
   <SourceFilter curatedCount={curatedCount} submittedCount={submittedCount} feedCount={feedCount} />
 
-  {allTags.length > 0 && <PersonalizationBar availableTags={allTags} />}
-  {allTags.length > 0 && <TagFilter tags={allTags} />}
+  {allTags.length > 0 && <InterestTagPanel availableTags={allTags} tagCounts={tagCounts} />}
   
   <div class="article-grid grid grid-3" data-testid="article-list">
     {articles.map(article => (
