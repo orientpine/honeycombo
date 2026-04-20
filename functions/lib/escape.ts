@@ -25,14 +25,18 @@ export function escapeAttr(s: string): string {
  * src/lib/render-summary.ts stripMarkdownForPreview().
  */
 export function stripMd(text: string): string {
-  const trimmed = text.trim();
-  if (/^##\s+/m.test(trimmed)) {
-    const match = trimmed.match(/^##\s+[^\n]*\n+([\s\S]*?)(?=\n##\s+|$)/);
-    if (match && match[1].trim()) {
-      return flattenMd(match[1]);
+  if (!text) return '';
+  // Structured summary path: split on ## boundaries, return first non-empty body.
+  if (/^##\s+/m.test(text)) {
+    const sections = text.split(/(?:^|\n)##\s+[^\n]*\n?/);
+    for (const section of sections) {
+      if (section.trim()) {
+        return flattenMd(section);
+      }
     }
+    return '';
   }
-  return flattenMd(trimmed);
+  return flattenMd(text);
 }
 
 function flattenMd(text: string): string {
@@ -44,7 +48,9 @@ function flattenMd(text: string): string {
     // Inline markdown markers — keep for plain-text consistency with src/lib/render-summary.ts.
     // Order: code first, then **bold**, then *italic* / _italic_, then [text](url).
     .replace(/`([^`\n]+)`/g, '$1')
-    .replace(/\*\*([^*\n]+?)\*\*/g, '$1')
+    // Bold uses [^\n]+? (allows internal *) so nested **outer *inner* outer** strips fully
+    // — all 5 implementations must use this form for parity.
+    .replace(/\*\*([^\n]+?)\*\*/g, '$1')
     .replace(/(^|[^*A-Za-z0-9_])\*(?!\s)([^*\n]+?)(?<!\s)\*(?![A-Za-z0-9_])/g, '$1$2')
     .replace(/(^|[^A-Za-z0-9_])_([^_\n]+?)_(?![A-Za-z0-9_])/g, '$1$2')
     .replace(/\[([^\]\n]+)\]\([^)\s]+\)/g, '$1')

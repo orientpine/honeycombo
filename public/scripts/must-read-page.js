@@ -20,14 +20,19 @@ document.addEventListener('astro:page-load', () => {
   // For structured Korean summaries (## 개요 / ## 주요 내용 / ## 시사점), returns the body of the FIRST
   // section only — the heading label is visual noise on cards.
   function stripMd(text) {
-    var trimmed = String(text).trim();
-    if (/^##\s+/m.test(trimmed)) {
-      var match = trimmed.match(/^##\s+[^\n]*\n+([\s\S]*?)(?=\n##\s+|$)/);
-      if (match && match[1].trim()) {
-        return flattenMd(match[1]);
+    if (!text) return '';
+    var s = String(text);
+    // Structured summary path: split on ## boundaries, return first non-empty body.
+    if (/^##\s+/m.test(s)) {
+      var sections = s.split(/(?:^|\n)##\s+[^\n]*\n?/);
+      for (var i = 0; i < sections.length; i++) {
+        if (sections[i].trim()) {
+          return flattenMd(sections[i]);
+        }
       }
+      return '';
     }
-    return flattenMd(trimmed);
+    return flattenMd(s);
   }
 
   function flattenMd(text) {
@@ -38,7 +43,8 @@ document.addEventListener('astro:page-load', () => {
       .replace(/\n/g, ' ')
       // Inline markdown markers — mirror src/lib/render-summary.ts and functions/lib/escape.ts.
       .replace(/`([^`\n]+)`/g, '$1')
-      .replace(/\*\*([^*\n]+?)\*\*/g, '$1')
+      // Bold uses [^\n]+? (allows internal *) so nested **outer *inner* outer** strips fully.
+      .replace(/\*\*([^\n]+?)\*\*/g, '$1')
       .replace(/(^|[^*A-Za-z0-9_])\*(?!\s)([^*\n]+?)(?<!\s)\*(?![A-Za-z0-9_])/g, '$1$2')
       .replace(/(^|[^A-Za-z0-9_])_([^_\n]+?)_(?![A-Za-z0-9_])/g, '$1$2')
       .replace(/\[([^\]\n]+)\]\([^)\s]+\)/g, '$1')

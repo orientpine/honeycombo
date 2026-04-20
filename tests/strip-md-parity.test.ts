@@ -73,6 +73,29 @@ const CORPUS: Array<{ name: string; input: string; expected: string }> = [
     input: '## 주요 내용\n- **핵심 포인트**: 중요한 내용',
     expected: '• 핵심 포인트: 중요한 내용',
   },
+  {
+    name: 'first section empty falls through to next non-empty section body',
+    // Defensive: malformed summaries with empty 개요 must still surface SOMETHING useful.
+    // The body of the next non-empty section is returned, never the heading label.
+    input: '## 개요\n\n## 주요 내용\n실제 내용',
+    expected: '실제 내용',
+  },
+  {
+    name: 'nested **outer *inner* outer** bold-with-italic strips fully',
+    // All 5 implementations must agree: both outer bold AND inner italic markers go away.
+    input: '**outer *inner* outer**',
+    expected: 'outer inner outer',
+  },
+  {
+    name: 'nested bold+italic inside structured summary first section',
+    input: '## 개요\n**핵심 *개념* 설명**: 본문',
+    expected: '핵심 개념 설명: 본문',
+  },
+  {
+    name: 'all sections empty returns empty string',
+    input: '## 개요\n\n## 주요 내용\n\n',
+    expected: '',
+  },
 ];
 
 /**
@@ -205,21 +228,18 @@ describe('stripMd source-regex byte parity (catches drift before runtime)', () =
     String.raw`/^[-*]\s+/gm`,
     String.raw`/\n{2,}/g`,
     '/`([^`\\n]+)`/g',
+    // Bold uses [^\n]+? (allows internal *) so nested **outer *inner* outer** strips fully.
+    // ALL 5 implementations now use this form — no divergence.
+    String.raw`/\*\*([^\n]+?)\*\*/g`,
     String.raw`/(^|[^*A-Za-z0-9_])\*(?!\s)([^*\n]+?)(?<!\s)\*(?![A-Za-z0-9_])/g`,
     String.raw`/(^|[^A-Za-z0-9_])_([^_\n]+?)_(?![A-Za-z0-9_])/g`,
     String.raw`/\[([^\]\n]+)\]\([^)\s]+\)/g`,
   ];
 
-  // Bold pattern intentionally diverges:
-  //   render-summary.ts uses /\*\*([^\n]+?)\*\*/g (allows internal *) for nested bold support
-  //     via two-pass placeholder strategy.
-  //   Other 4 files use /\*\*([^*\n]+?)\*\*/g (single-line strict) because they don't
-  //     run a placeholder pass; nested bold passes through to plain text via stripMarkdownForPreview.
-  // Both are accepted, but each file must use exactly one of these forms.
-  const BOLD_PATTERN_OPTIONS = [
-    String.raw`/\*\*([^\n]+?)\*\*/g`,         // render-summary.ts only
-    String.raw`/\*\*([^*\n]+?)\*\*/g`,        // simple form for the other 4 files
-  ];
+  // Section-split token — must appear in all 5 implementations to enforce the
+  // first-non-empty-section extraction logic. If a runtime forgets this, cards
+  // will start showing the "개요" heading label again.
+  const SECTION_SPLIT_TOKEN = String.raw`/(?:^|\n)##\s+[^\n]*\n?/`;
 
   const FILES = [
     'src/lib/render-summary.ts',
@@ -233,7 +253,7 @@ describe('stripMd source-regex byte parity (catches drift before runtime)', () =
     it(`${file} contains all required regex tokens (byte parity)`, async () => {
       const source = await readFile(join(ROOT, file), 'utf-8');
       const missing = REQUIRED_TOKENS_ALL.filter((token) => !source.includes(token));
-      const hasSomeBold = BOLD_PATTERN_OPTIONS.some((token) => source.includes(token));
+      const hasSectionSplit = source.includes(SECTION_SPLIT_TOKEN);
 
       const errors: string[] = [];
       if (missing.length > 0) {
@@ -242,10 +262,9 @@ describe('stripMd source-regex byte parity (catches drift before runtime)', () =
             missing.map((t) => `  - ${t}`).join('\n'),
         );
       }
-      if (!hasSomeBold) {
+      if (!hasSectionSplit) {
         errors.push(
-          `Missing a recognized bold-strip pattern. Must contain ONE of:\n` +
-            BOLD_PATTERN_OPTIONS.map((t) => `  - ${t}`).join('\n'),
+          `Missing the section-split token. Must contain:\n  - ${SECTION_SPLIT_TOKEN}`,
         );
       }
       if (errors.length > 0) {
@@ -256,7 +275,7 @@ describe('stripMd source-regex byte parity (catches drift before runtime)', () =
         );
       }
       expect(missing).toEqual([]);
-      expect(hasSomeBold).toBe(true);
+      expect(hasSectionSplit).toBe(true);
     });
   }
 });
