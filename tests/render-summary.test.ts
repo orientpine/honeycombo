@@ -220,6 +220,17 @@ describe('stripInlineMarkdown', () => {
   it('returns empty string for empty input', () => {
     expect(stripInlineMarkdown('')).toBe('');
   });
+
+  it('strips nested **outer *inner* outer** completely (no leftover markers)', () => {
+    // Two-pass placeholder strategy ensures BOTH outer bold and inner italic markers are removed.
+    expect(stripInlineMarkdown('**outer *inner* outer**')).toBe('outer inner outer');
+  });
+
+  it('strips multiple bold + inline code combo cleanly', () => {
+    expect(stripInlineMarkdown('**bold** and `code` and **more**')).toBe(
+      'bold and code and more',
+    );
+  });
 });
 
 describe('stripMarkdownForPreview integration with inline markers', () => {

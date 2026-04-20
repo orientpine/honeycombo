@@ -215,6 +215,24 @@ export async function updateArticleFile(filePath: string, data: Record<string, u
   await writeFile(filePath, `${JSON.stringify(updated, null, 2)}\n`, 'utf-8');
 }
 
+/**
+ * Remove a stale description so the article does not keep showing raw English /
+ * RSS contentSnippet to users while it waits for a future summarize run.
+ *
+ * Called when the article currently has a non-Korean-structured description AND
+ * we failed to produce a fresh Korean summary (fetch returned too little content,
+ * or Gemini returned an error).
+ *
+ * The article will be picked up again by `findArticlesNeedingSummary` on the next
+ * run because the description is now empty.
+ */
+export async function clearStaleDescription(filePath: string, data: Record<string, unknown>): Promise<void> {
+  if (!data.description) return; // already empty, nothing to do
+  const cleaned = { ...data };
+  delete cleaned.description;
+  await writeFile(filePath, `${JSON.stringify(cleaned, null, 2)}\n`, 'utf-8');
+}
+
 export async function summarizeArticles(options: SummarizeOptions = {}): Promise<SummarizeResult> {
   const {
     curatedDir = CURATED_DIR,
@@ -254,6 +272,11 @@ export async function summarizeArticles(options: SummarizeOptions = {}): Promise
 
       if (!content || content.length < 100) {
         console.warn('  Skipped: insufficient content extracted');
+        // Clear any stale RSS contentSnippet so users do not keep seeing the raw
+        // English/non-Korean text while we cannot produce a fresh summary.
+        if (!dryRun) {
+          await clearStaleDescription(filePath, data);
+        }
         skipped += 1;
         continue;
       }
@@ -266,6 +289,11 @@ export async function summarizeArticles(options: SummarizeOptions = {}): Promise
       if (!summary) {
         const message = `Failed to generate summary for: ${title}`;
         console.error(`  ${message}`);
+        // Same fallback as the fetch-failure branch: clear stale description so it
+        // does not linger in the UI between summarize runs.
+        if (!dryRun) {
+          await clearStaleDescription(filePath, data);
+        }
         errors.push(message);
         continue;
       }

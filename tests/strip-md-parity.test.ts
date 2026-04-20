@@ -148,3 +148,68 @@ describe('stripMd parity across all 5 implementations', () => {
     });
   }
 });
+
+describe('stripMd source-regex byte parity (catches drift before runtime)', () => {
+  // Tokens that MUST appear byte-equal in EVERY one of the 5 stripMd implementations.
+  // If you change any of these, you must change ALL FIVE files.
+  // Source of truth: src/lib/render-summary.ts (stripMarkdownForPreview / stripInlineMarkdown).
+  const REQUIRED_TOKENS_ALL = [
+    String.raw`/^#{1,6}\s+/gm`,
+    String.raw`/^[-*]\s+/gm`,
+    String.raw`/\n{2,}/g`,
+    '/`([^`\\n]+)`/g',
+    String.raw`/(^|[^*A-Za-z0-9_])\*(?!\s)([^*\n]+?)(?<!\s)\*(?![A-Za-z0-9_])/g`,
+    String.raw`/(^|[^A-Za-z0-9_])_([^_\n]+?)_(?![A-Za-z0-9_])/g`,
+    String.raw`/\[([^\]\n]+)\]\([^)\s]+\)/g`,
+  ];
+
+  // Bold pattern intentionally diverges:
+  //   render-summary.ts uses /\*\*([^\n]+?)\*\*/g (allows internal *) for nested bold support
+  //     via two-pass placeholder strategy.
+  //   Other 4 files use /\*\*([^*\n]+?)\*\*/g (single-line strict) because they don't
+  //     run a placeholder pass; nested bold passes through to plain text via stripMarkdownForPreview.
+  // Both are accepted, but each file must use exactly one of these forms.
+  const BOLD_PATTERN_OPTIONS = [
+    String.raw`/\*\*([^\n]+?)\*\*/g`,         // render-summary.ts only
+    String.raw`/\*\*([^*\n]+?)\*\*/g`,        // simple form for the other 4 files
+  ];
+
+  const FILES = [
+    'src/lib/render-summary.ts',
+    'functions/lib/escape.ts',
+    'public/scripts/must-read-page.js',
+    'src/components/TagFilter.astro',
+    'src/pages/admin/must-read.astro',
+  ];
+
+  for (const file of FILES) {
+    it(`${file} contains all required regex tokens (byte parity)`, async () => {
+      const source = await readFile(join(ROOT, file), 'utf-8');
+      const missing = REQUIRED_TOKENS_ALL.filter((token) => !source.includes(token));
+      const hasSomeBold = BOLD_PATTERN_OPTIONS.some((token) => source.includes(token));
+
+      const errors: string[] = [];
+      if (missing.length > 0) {
+        errors.push(
+          `Missing ${missing.length} required regex token(s):\n` +
+            missing.map((t) => `  - ${t}`).join('\n'),
+        );
+      }
+      if (!hasSomeBold) {
+        errors.push(
+          `Missing a recognized bold-strip pattern. Must contain ONE of:\n` +
+            BOLD_PATTERN_OPTIONS.map((t) => `  - ${t}`).join('\n'),
+        );
+      }
+      if (errors.length > 0) {
+        throw new Error(
+          `${file} drifted:\n${errors.join('\n')}\n\n` +
+            `Update this file to match the source of truth (src/lib/render-summary.ts).\n` +
+            `See docs/troubleshooting/inline-markdown-rendering.md`,
+        );
+      }
+      expect(missing).toEqual([]);
+      expect(hasSomeBold).toBe(true);
+    });
+  }
+});
