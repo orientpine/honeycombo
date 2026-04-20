@@ -30,8 +30,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </span>
           <span class="trending-stats">
             <span class="rank-badge skeleton-box"></span>
-            <span class="skeleton-line skeleton-like-count"></span>
-            <span class="btn like-button skeleton-button"></span>
+            <span class="like-button skeleton-button" aria-hidden="true"></span>
           </span>
         </div>
       </article>
@@ -49,8 +48,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </span>
           <span class="trending-stats">
             <span class="rank-badge skeleton-box"></span>
-            <span class="skeleton-line skeleton-like-count"></span>
-            <span class="btn like-button skeleton-button"></span>
+            <span class="like-button skeleton-button" aria-hidden="true"></span>
           </span>
         </div>
       </article>
@@ -68,8 +66,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </span>
           <span class="trending-stats">
             <span class="rank-badge skeleton-box"></span>
-            <span class="skeleton-line skeleton-like-count"></span>
-            <span class="btn like-button skeleton-button"></span>
+            <span class="like-button skeleton-button" aria-hidden="true"></span>
           </span>
         </div>
       </article>
@@ -184,33 +181,127 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     font-size: 0.8rem;
   }
 
+  /* Like count is no longer rendered as a separate sibling — */
+  /* the count is now embedded inside the like button itself. */
   .like-count {
-    color: var(--color-text-muted);
-    font-size: 0.8rem;
-    font-weight: 600;
+    display: none;
   }
 
+  /* Modern like button — pill-shaped, icon + count, hover lift, liked-state gradient */
   .like-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    min-height: 2rem;
+    padding: 0.375rem 0.875rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-bg);
+    color: var(--color-text-muted);
+    font-family: inherit;
     font-size: 0.8rem;
     font-weight: 700;
-    padding: var(--space-xs) var(--space-sm);
+    line-height: 1;
+    cursor: pointer;
+    transition: color 0.18s cubic-bezier(0.4, 0, 0.2, 1),
+                background 0.18s cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 0.18s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.18s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.18s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
+  .like-button:hover:not(:disabled) {
+    color: #e74c6f;
+    border-color: #f4b6c4;
+    background: #fff5f7;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .like-button:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+
+  .like-button:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .like-button-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    color: inherit;
+    transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .like-button-icon svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .like-button-icon .icon-filled {
+    display: none;
+  }
+
+  .like-button-count {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+
+  /* Liked state — vibrant gradient, white text, soft glow */
   .like-button.is-liked {
-    background: var(--color-primary);
-    border-color: var(--color-primary);
-    color: white;
+    background: linear-gradient(135deg, #ff5a7a 0%, #e74c6f 100%);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(231, 76, 111, 0.25);
   }
 
-  .like-button.is-liked:hover {
-    color: white;
-    background: var(--color-primary-hover);
-    border-color: var(--color-primary-hover);
+  .like-button.is-liked:hover:not(:disabled) {
+    color: #fff;
+    background: linear-gradient(135deg, #ff4870 0%, #d6395d 100%);
+    border-color: transparent;
+    box-shadow: 0 4px 14px rgba(231, 76, 111, 0.35);
+    transform: translateY(-1px);
+  }
+
+  .like-button.is-liked .icon-outline {
+    display: none;
+  }
+
+  .like-button.is-liked .icon-filled {
+    display: block;
+    animation: like-pop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   .like-button:disabled {
-    opacity: 0.7;
+    opacity: 0.6;
     cursor: wait;
+    transform: none;
+  }
+
+  @keyframes like-pop {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.35); }
+    100% { transform: scale(1); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .like-button,
+    .like-button-icon,
+    .like-button.is-liked .icon-filled {
+      transition: none;
+      animation: none;
+    }
+    .like-button:hover:not(:disabled) {
+      transform: none;
+    }
   }
 
   /* Skeleton loading */
@@ -279,8 +370,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .skeleton-button {
     display: inline-flex;
     width: 4.5rem;
-    height: 1.8rem;
-    border-radius: var(--radius-sm);
+    height: 2rem;
+    border-radius: 999px;
     border: none;
   }
 
