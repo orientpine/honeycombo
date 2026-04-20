@@ -11,7 +11,7 @@ const ROOT = process.cwd();
 const CURATED_DIR = join(ROOT, 'src/content/curated');
 const FEEDS_DIR = join(ROOT, 'src/data/feeds');
 const MODEL_NAME = 'gemini-2.5-flash-lite';
-const MAX_DESCRIPTION_LENGTH = 1000;
+const MAX_DESCRIPTION_LENGTH = 5000;
 const REQUEST_DELAY_MS = 1500;
 const FETCH_TIMEOUT_MS = 15_000;
 const MAX_CONTENT_CHARS = 30_000;
@@ -39,21 +39,36 @@ export interface SummarizeOptions {
   generateSummaryFn?: (content: string, title: string) => Promise<string | null>;
 }
 
-const SUMMARIZE_PROMPT = `당신은 기술 뉴스 요약 전문가입니다. 아래 기사의 핵심 내용을 한국어로 요약해주세요.
+const SUMMARIZE_PROMPT = `당신은 기술 콘텐츠 요약 전문가입니다. 아래 기사/영상의 핵심 내용을 한국어로 구조화된 요약을 작성해주세요.
 
 규칙:
-- 3~5문장으로 간결하게 요약
-- 기술적 핵심 포인트를 빠짐없이 포함
-- 전문 용어는 원문 그대로 유지 (예: API, SDK, LLM 등)
+- 아래 형식을 반드시 따를 것
+- 전문 용어는 원문 그대로 유지 (예: API, SDK, LLM, React 등)
 - 주관적 평가 없이 사실만 전달
 - 최대 ${MAX_DESCRIPTION_LENGTH}자 이내
+
+형식:
+## 개요
+
+(1~2문장으로 이 콘텐츠가 무엇인지 설명)
+
+## 주요 내용
+
+- (핵심 포인트 1)
+- (핵심 포인트 2)
+- (핵심 포인트 3)
+- (필요 시 추가)
+
+## 시사점
+
+(이 콘텐츠의 의의, 결론, 또는 실무 적용 가능성을 1~2문장으로 정리)
 
 기사 제목: {title}
 
 기사 본문:
 {content}
 
-한국어 요약:`;
+한국어 구조화 요약:`;
 
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));

@@ -4,8 +4,8 @@
 
 ## ⚠️ 제출 언어 요구사항
 
-> **모든 제출 내용(tags, type, short description)은 영어로 작성해야 합니다.**
-> All submission fields must be written in **English**.
+> **Tags는 영어로, 요약(Summary)은 한국어로 작성해야 합니다.**
+> Tags must be in English. Summaries should be written in **Korean**.
 
 ## 사전 준비
 
@@ -79,9 +79,15 @@ Article
 
 AI, LLM, startup
 
-### Short Description
+### Summary
 
-An in-depth analysis of practical AI agent usage in production"
+## 개요
+AI 에이전트를 프로덕션 환경에서 활용하는 실전 분석 기사
+## 주요 내용
+- 에이전트 아키텍처 설계 패턴
+- 프로덕션 배포 시 고려사항
+## 시사점
+실무에서 바로 적용 가능한 에이전트 구축 가이드"
 ```
 
 ### CLI 래퍼 사용 (더 간편)
@@ -93,7 +99,7 @@ bun run scripts/submit-cli.ts \
   --url "https://example.com/great-article" \
   --type "Article" \
   --tags "AI, LLM, startup" \
-  --note "An in-depth analysis of practical AI agent usage in production"
+  --note "AI 에이전트를 프로덕션 환경에서 활용하는 실전 분석 기사"
 ```
 
 ### Type Options
@@ -114,9 +120,9 @@ bun run scripts/submit-cli.ts \
 
 ```text
 # items.txt — 주석 줄은 무시됩니다
-https://example.com/article-1 | Article | AI, LLM | In-depth analysis of AI agents in production
-https://youtube.com/watch?v=abc123 | YouTube | tutorial, AI | Practical AI tutorial for developers
-https://example.com/article-2 | Article | startup, SaaS | SaaS startup growth strategies and lessons
+https://example.com/article-1 | Article | AI, LLM | AI 에이전트를 프로덕션 환경에서 활용하는 실전 분석 기사
+https://youtube.com/watch?v=abc123 | YouTube | tutorial, AI | 개발자를 위한 실전 AI 튜토리얼
+https://example.com/article-2 | Article | startup, SaaS | SaaS 스타트업 성장 전략과 교훈
 ```
 
 실행:
@@ -133,9 +139,9 @@ gh issue create \
   --title "📦 Bulk Submit" \
   --body "### Link List
 
-https://example.com/article-1 | Article | AI, LLM | In-depth analysis of AI agents in production
-https://youtube.com/watch?v=abc123 | YouTube | tutorial, AI | Practical AI tutorial for developers
-https://example.com/article-2 | Article | startup, SaaS | SaaS startup growth strategies and lessons"
+https://example.com/article-1 | Article | AI, LLM | AI 에이전트를 프로덕션 환경에서 활용하는 실전 분석 기사
+https://youtube.com/watch?v=abc123 | YouTube | tutorial, AI | 개발자를 위한 실전 AI 튜토리얼
+https://example.com/article-2 | Article | startup, SaaS | SaaS 스타트업 성장 전략과 교훈"
 ```
 
 ### 방법 3: 반복문으로 단건 반복
@@ -163,7 +169,7 @@ Article
 
 general
 
-### Short Description
+### Summary
 "
   sleep 2  # GitHub API rate limit 방지
 done
@@ -203,7 +209,7 @@ Issue 생성 → GitHub Actions 자동 트리거
 | 대량 제출 최대 항목 | 20개/Issue |
 | 태그 | 최대 5개 |
 | 제목(한줄 소개) | 최대 200자 |
-| 설명 | 최대 1,000자 |
+| 요약 | 최대 5,000자 |
 | GitHub API rate limit | 5,000 요청/시간 (인증 기준) |
 | 중복 URL | 자동 거부 |
 | 스팸 키워드 | 자동 거부 |
@@ -231,9 +237,9 @@ gh issue create \
 
 {tags in English}
 
-### Short Description
+### Summary
 
-{Short description in English}"
+{한국어 구조화 요약}"
 ```
 
 여러 건을 한번에 제출할 경우:
@@ -247,8 +253,8 @@ gh issue create \
   --title "📦 Bulk Submit" \
   --body "### Link List
 
-{URL1} | {Type} | {English tags} | {English description}
-{URL2} | {Type} | {English tags} | {English description}
+{URL1} | {Type} | {English tags} | {한국어 요약}
+{URL2} | {Type} | {English tags} | {한국어 요약}
 ..."
 ```
 
@@ -259,7 +265,7 @@ gh issue create \
 ```bash
 # 이것만으로 충분합니다
 gh auth login
-gh issue create --repo orientpine/honeycombo --title "📎 Submit Link" --body "### URL\n\nhttps://...\n\n### Type\n\nArticle\n\n### Tags (comma-separated, max 5)\n\nAI\n\n### Short Description\n\nA brief description in English"
+gh issue create --repo orientpine/honeycombo --title "📎 Submit Link" --body "### URL\n\nhttps://...\n\n### Type\n\nArticle\n\n### Tags (comma-separated, max 5)\n\nAI\n\n### Summary\n\n## 개요\nAI 에이전트 활용 실전 분석\n## 주요 내용\n- 설계 패턴\n- 배포 고려사항"
 ```
 
 CLI 래퍼(`scripts/submit-cli.ts`)를 사용하려면 프로젝트 클론이 필요합니다:
@@ -285,3 +291,4 @@ bun run scripts/submit-cli.ts --url "..." --type "Article"
 |------|----------|
 | 2026-04-12 | 최초 작성 |
 | 2026-04-13 | 영어 작성 가이드 추가, 예시 영문화 |
+| 2026-04-20 | 요약 형식 한국어 구조화 전환, 최대 5000자로 확대 |

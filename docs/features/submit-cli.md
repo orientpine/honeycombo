@@ -12,7 +12,7 @@
 CLI 인자 → scripts/submit-cli.ts 파싱/검증 → gh issue create → GitHub Issue 생성
 ```
 
-- 단건 모드는 `URL / Type / Tags / Short Description`을 템플릿 본문으로 변환한다.
+- 단건 모드는 `URL / Type / Tags / Summary`를 템플릿 본문으로 변환한다.
 - 대량 모드는 파이프 구분 파일을 읽어 `### Link List` 본문으로 단일 bulk Issue를 만든다.
 - `--dry-run` 사용 시 실제 실행 대신 최종 `gh` 명령만 출력한다.
 
@@ -35,7 +35,7 @@ CLI 인자 → scripts/submit-cli.ts 파싱/검증 → gh issue create → GitHu
 - `gh auth status`가 통과해야 실제 실행이 가능하다.
 - 대량 제출은 빈 줄/주석 줄(`#`)을 제외하고 최대 20개 항목만 포함한다.
 - 태그는 최대 5개까지만 본문에 포함한다.
-- **Tags and short descriptions must be written in English.**
+- **Tags must be written in English. Summaries can be in Korean.**
 
 ---
 
@@ -51,3 +51,4 @@ CLI 인자 → scripts/submit-cli.ts 파싱/검증 → gh issue create → GitHu
 |------|----------|
 | 2026-04-12 | 최초 작성 |
 | 2026-04-13 | 영어 작성 요구사항 추가 |
+| 2026-04-20 | 요약 한국어 전환 반영 |

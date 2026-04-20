@@ -64,7 +64,7 @@ Single submission:
   --url <url>        URL to submit (required)
   --type <type>      Content type: Article, YouTube, X Thread, Threads, Other (default: Article)
   --tags <태그>      Comma-separated tags, in English (max 5)
-  --note <메모>      Short description (must be in English)
+  --note <메모>      요약 / Summary (한국어 가능)
 
 Bulk submission:
   --bulk <file>      Path to file with multiple items (pipe-delimited)
@@ -74,7 +74,7 @@ Options:
   --dry-run          Print gh command without executing
   --help             Show this help
 
-Note: Tags and descriptions must be written in English.
+Note: Tags must be written in English. Summaries can be in Korean.
 `);
 }
 
@@ -179,7 +179,7 @@ async function submitSingle(args: CliArgs): Promise<void> {
     '',
     normalizeTags(args.tags),
     '',
-    '### Short Description',
+    '### Summary',
     '',
     args.note ?? '',
   ].join('\n');
