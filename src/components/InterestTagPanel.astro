@@ -702,7 +702,22 @@ const tagCountsJson = JSON.stringify(tagCounts);
   }
 
   // ---------- Initialization ----------
-  function initInterestTagPanel() {
+function initInterestTagPanel() {
+    // Reset persisted search state from URL on EVERY page load.
+    // Without this, persisted `state.activeSearchResults` from window.__itpState would
+    // survive Astro view-transition navigation and incorrectly keep the new page filtered
+    // by the previous page's search query when the new URL has no `?q=`.
+    const urlQuery = new URLSearchParams(window.location.search).get('q') || '';
+    if (!urlQuery) {
+      state.activeSearchQuery = '';
+      state.activeSearchResults = null;
+    }
+    // Reset the article cache too — a different page has a different #all-articles-data
+    // payload (e.g. /articles vs /articles/page/2 share the same set, but a future page
+    // partition would not), so we conservatively re-parse on each navigation.
+    state.allArticles = null;
+    state.tagCounts = null;
+
     // Always refresh the top row + UI on every page-load (View Transitions navigation
     // re-runs astro:page-load even though listeners persist).
     refreshTopRow();
@@ -720,9 +735,15 @@ const tagCountsJson = JSON.stringify(tagCounts);
     const initialTag = tagParam && validTags.has(tagParam) ? tagParam : 'all';
     setActiveTagChip(initialTag);
 
-    // If URL had a tag or origin or active search, render the filtered view
+    // If URL had a tag or origin or active search, render the filtered view.
     if (initialTag !== 'all' || getActiveOrigin() !== 'all' || state.activeSearchResults !== null) {
       renderFilteredView();
+    } else {
+      // Ensure SSR view is restored if persisted state is now cleared.
+      const filteredContainer = document.getElementById('itp-filtered-results');
+      if (filteredContainer && filteredContainer.style.display !== 'none') {
+        renderFilteredView();
+      }
     }
 
     // Bind document/event delegation listeners ONCE, never re-bind on subsequent page loads.
