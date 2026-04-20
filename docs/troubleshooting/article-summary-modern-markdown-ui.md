@@ -93,10 +93,37 @@
 - **디자인 토큰 재사용**: 색상·간격은 `--color-*`, `--space-*` 디자인 토큰만 사용하고 하드코딩 금지 (AGENTS.md UI 디자인 원칙 준수).
 - **참조 디자인 연결**: 동일한 톤의 UI를 여러 곳에서 사용한다면 디자인 결정을 `docs/decisions/`로 승격해 일관성 유지.
 
+## 후속 이슈: 동적 innerHTML 자식에 scoped CSS 미적용
+
+최초 적용(PR #105) 후 사용자 피드백으로 "헤딩 아래 구분선이 안 보이고 헤딩-본문 간격이 좁다"는 문제가 보고됐다. 원인은 Astro scoped CSS 동작:
+
+- `<div class="article-summary">`는 Astro 정적 요소 → `data-astro-cid-xutx2pvd` 부여됨
+- 그 안의 `<h3 class="summary-heading">`, `<p>`, `<ul>` 등은 `set:html={summaryHtml}`로 주입되는 raw HTML 문자열 → `data-astro-cid-*` 미부여
+- 컴파일된 셀렉터 `.article-summary[data-astro-cid-xutx2pvd] .summary-heading[data-astro-cid-xutx2pvd]`가 **자식에 매칭 실패** → border-bottom, font-size, margin 등이 모두 무시됨
+- 결과: 헤딩이 그냥 브라우저 기본 `<h3>` 스타일로 보이고 단락 마진도 사라짐
+
+### 해결: 자식 셀렉터에 `:global()` 적용
+
+[astro-scoped-css-dynamic-innerhtml.md](./astro-scoped-css-dynamic-innerhtml.md)에 정리된 패턴을 그대로 적용:
+
+```diff
+- .article-summary .summary-heading { ... }
++ .article-summary :global(.summary-heading) { ... }
+- .article-summary p { ... }
++ .article-summary :global(p) { ... }
+- .article-summary .summary-list li { ... }
++ .article-summary :global(.summary-list li) { ... }
+```
+
+정적 부모(`.article-summary`)는 scoped 유지, 동적 자식만 `:global()`로 unscoped 매칭. 컴파일 결과 `.article-summary[data-astro-cid-*] .summary-heading`가 되어 동적 주입 요소에도 정상 적용된다.
+
+**교훈**: `set:html`로 마크다운 등 raw HTML을 렌더링하는 모든 Astro 컴포넌트에서, 그 자식 요소를 스타일링할 때는 반드시 `:global()` 래퍼를 사용한다. 단순히 `<style is:global>`로 전환하는 것도 가능하지만, 글로벌 오염을 피하려면 부모-자식 패턴이 더 안전하다.
+
 ---
 
 ## 관련 문서
 
+- [Astro Scoped CSS가 동적 innerHTML 요소에 적용되지 않는 문제](./astro-scoped-css-dynamic-innerhtml.md)
 - [기사 탭별 UI 불일치](./article-tab-ui-inconsistency.md)
 - [멀티라인 요약 파싱](./multiline-summary-parsing.md)
 
@@ -104,4 +131,5 @@
 
 | 날짜 | 변경 내용 |
 |------|----------|
-| 2026-04-20 | 최초 작성 — 요약 카드를 모던 마크다운 스타일로 개선 |
+| 2026-04-20 | 최초 작성 — 요약 카드를 모던 마크다운 스타일로 개선 (PR #105) |
+| 2026-04-20 | scoped CSS 관련 후속 이슈 명시 — 동적 innerHTML 자식에 :global() 적용 |

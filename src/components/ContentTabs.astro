@@ -177,17 +177,17 @@ const summaryHtml = description ? renderSummaryHtml(description) : '';
     font-size: 1rem;
   }
 
-  .article-summary p {
+  .article-summary :global(p) {
     color: var(--color-text);
     line-height: 1.75;
     margin: var(--space-sm) 0 var(--space-lg);
   }
 
-  .article-summary p:last-child {
+  .article-summary :global(p:last-child) {
     margin-bottom: 0;
   }
 
-  .article-summary .summary-heading {
+  .article-summary :global(.summary-heading) {
     font-size: 1.35rem;
     font-weight: 700;
     color: var(--color-text);
@@ -198,26 +198,26 @@ const summaryHtml = description ? renderSummaryHtml(description) : '';
     line-height: 1.3;
   }
 
-  .article-summary .summary-heading:first-child {
+  .article-summary :global(.summary-heading:first-child) {
     margin-top: 0;
   }
 
-  .article-summary .summary-list {
+  .article-summary :global(.summary-list) {
     margin: var(--space-sm) 0 var(--space-lg);
     padding-left: var(--space-lg);
     color: var(--color-text);
     line-height: 1.75;
   }
 
-  .article-summary .summary-list li {
+  .article-summary :global(.summary-list li) {
     margin-bottom: var(--space-sm);
   }
 
-  .article-summary .summary-list li::marker {
+  .article-summary :global(.summary-list li::marker) {
     color: var(--color-text-muted);
   }
 
-  .article-summary .summary-list li:last-child {
+  .article-summary :global(.summary-list li:last-child) {
     margin-bottom: 0;
   }
 
