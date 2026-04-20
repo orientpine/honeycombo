@@ -4,7 +4,7 @@
   "url": "https://techcrunch.com/2026/04/17/zoom-teams-up-with-world-to-verify-humans-in-meeting/",
   "source": "TechCrunch",
   "type": "article",
-  "description": "Meeting platform Zoom has announced a partnership with World, Sam Altman's human ID verification company, to ensure that the people attending meetings are actually human and not AI-generated imposters. Zoom will show a badge on verified participants' tile.",
+  "description": "## 개요\n\nZoom이 Sam Altman의 인간 ID 검증 회사인 World와 파트너십을 맺고, 회의 참석자가 AI 생성 위조가 아닌 실제 사람임을 확인하는 기능을 도입합니다.\n\n## 주요 내용\n\n- **AI 기반 사기 위협 증가**: 2024년 초 홍콩의 Arup 엔지니어링 회사가 2,500만 달러를 사기당한 사건을 포함하여, AI 생성 딥페이크를 이용한 금융 사기가 심각한 비즈니스 위험으로 부상하고 있습니다.\n- **World ID Deep Face 기술**: World는 3가지 요소를 교차 검증하는 Deep Face 기술을 사용하여 참석자가 실제 사람인지 확인합니다.\n    - World의 Orb 장치를 통해 등록 시점에 촬영된 서명된 이미지\n    - 사용자의 기기에서 실시간으로 이루어지는 얼굴 스캔\n    - 다른 회의 참가자에게 보이는 실시간 영상 프레임\n- **\"Verified Human\" 배지**: 모든 검증 요소가 일치하면 해당 참가자의 이름 옆에 \"Verified Human\" 배지가 표시됩니다.\n- **Zoom에서의 활용**: 회의 주최자는 모든 참가자에게 신원 확인을 요구하는 Deep Face 대기실을 활성화할 수 있으며, 참가자는 회의 중에도 즉석에서 신원 확인을 요청할 수 있습니다.\n- **Zoom의 개방형 생태계 접근 방식**: 이번 통합은 Zoom의 개방형 생태계 전략의 일환으로, 고객이 사용 사례에 맞게 신뢰를 구축할 수 있는 추가 방법을 제공합니다.\n- **World의 다른 파트너십**: World는 Tinder, Visa 등 다양한 소비자 플랫폼과도 인간 검증을 위한 파트너십을 맺고 있으며, AI 쇼핑 에이전트 뒤에 실제 사람이 있는지 확인하는 기술도 출시했습니다.\n\n## 시사점\n\nZoom과 World의 파트너십은 AI 딥페이크를 이용한 금융 사기 위협에 대응하기 위한 중요한 기술적 진전이며, 온라인 회의 환경에서의 신뢰 구축을 강화하는 데 기여할 것으로 예상됩니다.",
   "tags": [
     "tech",
     "apps",

@@ -4,7 +4,7 @@
   "url": "https://deepmind.google/blog/gemini-robotics-er-1-6/",
   "source": "Hacker News",
   "type": "article",
-  "description": "Comments",
+  "description": "## 개요\n\nGemini Robotics-ER 1.6은 물리적 세계에 대한 이해와 추론 능력을 강화하여 로봇의 자율성과 실제 환경 적용성을 높인 Google의 차세대 로봇용 고수준 추론 모델입니다.\n\n## 주요 내용\n\n*   **향상된 공간 및 시각적 이해:** Gemini Robotics-ER 1.6은 객체 감지, 개수 세기, \"from-to\" 관계 정의 등 공간 추론 능력이 크게 개선되었으며, 여러 시점(multi-view)의 정보를 종합적으로 이해하는 능력이 향상되었습니다.\n*   **도구 호출 및 통합:** Google Search, Vision-Language-Action(VLA) 모델, 사용자 정의 함수 등 다양한 외부 도구를 네이티브하게 호출하여 정보를 얻고 작업을 수행할 수 있습니다.\n*   **기기 판독(Instrument Reading) 기능:** 압력 게이지, 수위계 등 산업 현장에서 사용되는 다양한 기기의 눈금을 정확하게 읽고 해석하는 새로운 능력이 추가되었습니다. 이는 Boston Dynamics와의 협력을 통해 개발되었습니다.\n*   **강화된 성공 감지(Success Detection):** 로봇이 작업을 완료했는지 여부를 판단하는 능력이 향상되어, 실패 시 재시도하거나 다음 단계로 진행하는 등 더욱 지능적인 의사결정을 지원합니다.\n*   **최고 수준의 안전성:** 이전 세대 모델 대비 안전 정책 준수 능력이 향상되었으며, 물리적 안전 제약(예: 액체 취급 금지, 특정 무게 초과 물체 금지)을 더 잘 따르고 안전 위험을 정확하게 인식하는 능력이 개선되었습니다.\n*   **개발자 접근성:** Gemini Robotics-ER 1.6은 Gemini API와 Google AI Studio를 통해 개발자에게 제공되며, 사용을 돕기 위한 Colab 예제가 함께 제공됩니다.\n\n## 시사점\n\nGemini Robotics-ER 1.6은 로봇이 복잡한 물리적 환경을 더 정밀하게 이해하고 자율적으로 작업을 수행할 수 있도록 지원하며, 이는 산업 현장뿐만 아니라 일상생활에서 로봇의 활용 범위를 크게 확장할 수 있는 가능성을 제시합니다.",
   "tags": [
     "tech"
   ],
