@@ -4,7 +4,7 @@
 
 ## 개요
 
-기존 `/articles/`에서는 수백 건의 기사 (build 시점 기준 ~299건) 중에서 원하는 제목을 찾으려면 페이지네이션을 일일이 넘겨야 했다. ArticleSearch는 페이지에 임베드된 `#all-articles-data` JSON을 활용해 전체 기사를 클라이언트 사이드에서 즉시 검색한다.
+기존 `/articles/`에서는 수백 건 규모의 기사 중에서 원하는 제목을 찾으려면 페이지네이션을 일일이 넘겨야 했다. ArticleSearch는 페이지에 임베드된 `#all-articles-data` JSON을 활용해 전체 기사를 클라이언트 사이드에서 즉시 검색한다.
 
 검색은 SourceFilter와 양방향 연동된다.
 
