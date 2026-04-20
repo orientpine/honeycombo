@@ -201,12 +201,36 @@ export function renderSummaryHtml(markdown: string): string {
 /**
  * Strip markdown markers for plain-text contexts (card previews, meta tags, RSS).
  *
- * Converts structured markdown to a clean single-line text suitable for
- * <meta> tags, RSS descriptions, and 2-line card previews.
+ * For structured summaries that follow the agent-submission spec
+ * (## 개요 / ## 주요 내용 / ## 시사점), this returns the body of the FIRST
+ * section only — the heading label itself (e.g., "개요") is omitted because
+ * every article shares the same overview heading, making it visual noise on
+ * cards. The first section's body is the canonical summary by design.
+ *
+ * Falls back to the legacy header-strip behavior for plain-text descriptions
+ * or summaries whose first section has no body.
  */
 export function stripMarkdownForPreview(markdown: string): string {
   if (!markdown) return '';
-  const blockStripped = markdown
+
+  const trimmed = markdown.trim();
+
+  // Structured summary path: extract body of the first ## section.
+  // Match the first ## heading line, then capture lines until the next ##
+  // heading or end of string. The captured body is what readers actually want.
+  if (/^##\s+/m.test(trimmed)) {
+    const match = trimmed.match(/^##\s+[^\n]*\n+([\s\S]*?)(?=\n##\s+|$)/);
+    if (match && match[1].trim()) {
+      return flattenMarkdown(match[1]);
+    }
+  }
+
+  // Legacy/fallback path: plain text or unstructured markdown.
+  return flattenMarkdown(trimmed);
+}
+
+function flattenMarkdown(text: string): string {
+  const blockStripped = text
     .replace(/^#{1,6}\s+/gm, '')
     .replace(/^[-*]\s+/gm, '• ')
     .replace(/\n{2,}/g, ' ')

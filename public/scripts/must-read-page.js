@@ -16,10 +16,24 @@ document.addEventListener('astro:page-load', () => {
     return escapeHtml(value);
   }
 
+  // Mirrors src/lib/render-summary.ts stripMarkdownForPreview() and functions/lib/escape.ts stripMd().
+  // For structured Korean summaries (## 개요 / ## 주요 내용 / ## 시사점), returns the body of the FIRST
+  // section only — the heading label is visual noise on cards.
   function stripMd(text) {
-    return String(text)
+    var trimmed = String(text).trim();
+    if (/^##\s+/m.test(trimmed)) {
+      var match = trimmed.match(/^##\s+[^\n]*\n+([\s\S]*?)(?=\n##\s+|$)/);
+      if (match && match[1].trim()) {
+        return flattenMd(match[1]);
+      }
+    }
+    return flattenMd(trimmed);
+  }
+
+  function flattenMd(text) {
+    return text
       .replace(/^#{1,6}\s+/gm, '')
-      .replace(/^[-*]\s+/gm, '\u2022 ')
+      .replace(/^[-*]\s+/gm, '• ')
       .replace(/\n{2,}/g, ' ')
       .replace(/\n/g, ' ')
       // Inline markdown markers — mirror src/lib/render-summary.ts and functions/lib/escape.ts.
