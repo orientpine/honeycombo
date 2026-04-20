@@ -4,7 +4,7 @@
   "url": "https://techcrunch.com/2026/04/14/ai-datacenter-startup-fluidstack-in-talks-for-1b-round-at-18b-valuation-months-after-hitting-7-5b-says-report/",
   "source": "TechCrunch",
   "type": "article",
-  "description": "Fundraising is reportedly flowing for Fluidstack after it secured a $50 billion deal to build data centers for Anthropic.",
+  "description": "## 개요\n\nAI 기업을 위한 특화된 데이터 센터를 구축하는 스타트업 Fluidstack이 약 10억 달러 규모의 투자 유치를 협상 중이며, 이는 단 몇 달 만에 기업 가치를 두 배 이상 높이는 결과를 가져올 수 있습니다.\n\n## 주요 내용\n\n- Fluidstack은 현재 약 180억 달러의 기업 가치로 10억 달러 규모의 투자 유치를 논의 중이며, Jane Street가 주도할 가능성이 있습니다.\n- 이는 불과 몇 달 전인 작년 12월, 약 75억 달러의 기업 가치로 7억 달러 규모의 투자를 유치하던 상황에서 기업 가치가 크게 상승한 것입니다.\n- Fluidstack은 AI 워크로드에 최적화된 데이터 센터 인프라를 제공하며, AWS와 같은 일반적인 클라우드 서비스 제공업체(hyperscaler)와 차별화됩니다.\n- Anthropic은 Fluidstack과 500억 달러 규모의 계약을 체결하여 텍사스와 뉴욕에 맞춤형 데이터 센터를 구축하고 있으며, 이는 Fluidstack에 대한 강력한 신뢰를 보여줍니다.\n- 이 계약으로 인해 Fluidstack은 본사를 영국에서 뉴욕으로 이전했으며, 프랑스의 주요 AI 프로젝트에서 철수하여 미국 시장에 집중하고 있습니다.\n- Anthropic 외에도 Meta, Poolside, Black Forest Labs 등이 Fluidstack의 고객으로 알려져 있으며, Mistral에게 인프라를 제공한 것으로도 알려져 있습니다.\n\n## 시사점\n\nFluidstack의 급격한 기업 가치 상승은 AI 산업의 폭발적인 성장과 더불어 AI 특화 인프라 구축 스타트업의 중요성이 부각되고 있음을 시사합니다. 이는 AI 기업들이 자체 클라우드 인프라 확보에 대한 필요성이 증대하고 있음을 보여줍니다.",
   "tags": [
     "tech",
     "enterprise",

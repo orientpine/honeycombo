@@ -4,7 +4,7 @@
   "url": "https://arstechnica.com/ai/2026/04/gemini-can-now-create-personalized-ai-images-by-digging-around-in-google-photos/",
   "source": "Ars Technica",
   "type": "article",
-  "description": "Google is making it easier to feed your photos into Nano Banana for more personal image generation.",
+  "description": "## 개요\n\nGoogle Gemini가 Google Photos 라이브러리에 접근하여 사용자의 사진을 기반으로 개인화된 AI 이미지를 생성하는 새로운 기능을 출시했습니다.\n\n## 주요 내용\n\n-   **Google Photos 연동 이미지 생성:** Gemini는 이제 사용자의 Google Photos 라이브러리를 탐색하여 이미지 생성 시 참조할 사진을 선택할 수 있습니다.\n-   **개인 정보 보호 강조:** Google은 Gemini가 사용자의 사진 라이브러리 데이터를 AI 학습에 사용하지 않으며, 데이터는 프롬프트 내에서만 사용된다고 강조합니다. 다만, 입력(사용자 입력)과 출력(모델 결과)은 AI 제품 개선을 위해 사용될 수 있습니다.\n-   **수동 제어 및 개선:** 생성된 이미지가 만족스럽지 않을 경우, 사용자는 참조된 사진 목록을 확인하거나 후속 프롬프트를 통해 Gemini가 선택한 이미지에 대해 문의할 수 있습니다. 또한, Gemini 내의 플러스 버튼을 사용하여 사진을 수동으로 선택함으로써 이러한 단점을 보완할 수 있습니다.\n-   **개인 정보 설정:** '개인 정보 보호' 기능은 기본적으로 비활성화되어 있으며, 현재 유료 Google AI 플랜 사용자에게만 제공됩니다. Gemini는 개인 정보 보호 기능 활성화를 적극적으로 유도하지만, 사용자는 설정 과정에서 어떤 Google 서비스(Gmail, YouTube 등)와의 연동을 허용할지 결정할 수 있습니다.\n-   **향후 확장 가능성:** 현재 유료 플랜에 제공되는 기능이지만, 과거 사례를 볼 때 향후 모든 Google 계정 사용자에게 확장될 가능성이 있습니다.\n\n## 시사점\n\nGemini의 Google Photos 연동 기능은 개인화된 AI 이미지 생성 경험을 향상시킬 수 있으나, 개인 정보 보호 및 데이터 사용에 대한 명확한 이해와 사용자 제어가 중요합니다.",
   "tags": [
     "tech",
     "ai",

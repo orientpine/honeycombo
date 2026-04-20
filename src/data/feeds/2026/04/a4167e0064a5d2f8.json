@@ -4,7 +4,7 @@
   "url": "https://www.theverge.com/tech/914723/vercel-hacked",
   "source": "The Verge",
   "type": "article",
-  "description": "Vercel, a major development platform that hosts and deploys web apps, was compromised, and the hackers are attempting to sell stolen data. A person claiming to be a member of ShinyHunters, which was behind the recent hack of Rockstar Games, posted some data online, including employee names, email addresses, and activity time stamps. Vercel confirmed in a post on X that a \"security incident\" had occurred, and that it impacted a \"limited subset\" of its customers. Vercel said that a compromised third-party AI tool was the avenue for attack, though it did not specify which third-party was involved. We've identified a security incident that inv … Read the full story at The Verge.",
+  "description": "## 개요\n\n클라우드 개발 플랫폼 Vercel이 제3자 AI 도구의 해킹을 통해 침해당했으며, 현재 해커들이 탈취한 데이터를 판매하려 하고 있습니다.\n\n## 주요 내용\n\n*   Vercel은 \"보안 사고\"가 발생했음을 확인했으며, 이는 \"제한된 범위의\" 고객에게 영향을 미쳤다고 밝혔습니다.\n*   해커들은 ShinyHunters 팀의 일원이라고 주장하며, 직원 이름, 이메일 주소, 활동 타임스탬프 등 일부 데이터를 온라인에 게시했습니다.\n*   Vercel은 공격 경로가 제3자 AI 도구였으며, 해당 도구의 Google Workspace OAuth 앱이 광범위한 침해의 대상이 되었을 가능성을 언급했습니다.\n*   Vercel은 고객들에게 의심스러운 활동에 대한 로그 검토, 환경 변수 검토 및 교체, API 키 및 토큰 노출 가능성 점검을 권고했습니다.\n\n## 시사점\n\n이번 Vercel 해킹 사건은 제3자 서비스, 특히 AI 도구의 보안 취약성이 개발 플랫폼 전반에 걸쳐 심각한 영향을 미칠 수 있음을 보여주며, 공급망 보안의 중요성을 강조합니다.",
   "tags": [
     "tech"
   ],

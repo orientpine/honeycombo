@@ -4,7 +4,7 @@
   "url": "https://github.com/GRVYDEV/marky",
   "source": "Hacker News",
   "type": "article",
-  "description": "Comments",
+  "description": "## 개요\n\nMarky는 macOS용으로 Tauri v2, React, markdown-it를 사용하여 제작된 경량 Markdown 뷰어로, 터미널에서 .md 파일을 열고 아름답고 즉각적인 렌더링을 제공하는 데 초점을 맞춘 데스크톱 애플리케이션입니다.\n\n## 주요 내용\n\n*   **CLI 중심 및 빠른 렌더링**: 터미널에서 `marky FILENAME` 명령어로 Markdown 파일을 열면 즉각적으로 아름다운 렌더링을 제공하며, `marky FOLDER` 명령어로 폴더를 Obsidian 스타일의 영구 작업 공간으로 열 수 있습니다.\n*   **라이브 리로드 및 폴더 작업 공간**: 파일이 디스크에서 변경될 때마다(에디터, Claude 등에서 작성 시) 뷰가 즉시 업데이트되는 라이브 리로드 기능을 제공하며, 폴더를 작업 공간으로 추가하면 사이드바에 나타나고 재실행 시 복원됩니다.\n*   **풍부한 기능 지원**: Cmd+K 명령 팔레트를 통한 퍼지 파일 검색(nucleo 기반), Shiki 및 VS Code 테마를 사용한 구문 강조, KaTeX를 이용한 수식 렌더링, Mermaid 다이어그램, GFM(테이블, 작업 목록, 취소선, 자동 링크, 각주) 지원, 라이트/다크 테마, DOMPurify를 통한 안전한 HTML 렌더링 기능을 포함합니다.\n*   **경량 및 성능**: Electron 대신 네이티브 웹뷰를 사용하며, 프로덕션 .dmg 파일 크기가 15MB 미만으로 작고 빠릅니다.\n*   **설치 및 개발**: Homebrew를 통한 설치를 지원하며, Rust, Node.js, pnpm을 요구하여 소스 코드로부터 직접 빌드하고 설치할 수 있습니다.\n\n## 시사점\n\nMarky는 개발자가 터미널 환경에서 Markdown 파일을 효율적으로 보고 관리할 수 있도록 돕는 빠르고 기능이 풍부한 도구로, 특히 에이전트 코딩 워크플로우와 같이 동적으로 생성되거나 수정되는 문서를 실시간으로 확인하는 데 유용합니다.",
   "tags": [
     "tech"
   ],

@@ -4,7 +4,7 @@
   "url": "https://techcrunch.com/2026/04/15/can-ai-judge-journalism-a-thiel-backed-startup-says-yes-even-if-it-risks-chilling-whistleblowers/",
   "source": "TechCrunch",
   "type": "article",
-  "description": "Objection, a Thiel-backed startup, aims to use AI to judge journalism, letting users pay to challenge stories. Critics warn it could chill whistleblowers and reshape how media accountability works.",
+  "description": "## 개요\n\n이 콘텐츠는 아론 디수자(Aron D'Souza)가 설립한 스타트업 'Objection'이 AI를 활용하여 저널리즘의 사실 여부를 판단하고, $2,000의 비용으로 기사에 대한 공개 조사를 트리거할 수 있는 시스템에 대해 설명합니다.\n\n## 주요 내용\n\n- **AI 기반 저널리즘 심판 시스템**: Objection은 AI를 사용하여 저널리즘 보도의 진실성을 판단하는 소프트웨어 플랫폼입니다.\n- **유료 기사 이의 제기 시스템**: $2,000를 지불하면 누구나 특정 기사에 대해 이의를 제기하고 공개 조사를 시작할 수 있습니다.\n- **'Honor Index'**: AI와 전직 법 집행 요원, 탐사 보도 기자가 수집한 데이터를 기반으로 기자의 무결성, 정확성, 실적을 나타내는 수치 점수인 'Honor Index'를 생성합니다.\n- **익명 출처에 대한 낮은 평가**: 익명으로 제공된 정보는 독립적으로 검증되지 않은 경우 낮은 증거 및 신뢰도 점수를 받게 되며, 규제 서류나 공식 이메일과 같은 1차 기록이 가장 높은 가중치를 가집니다.\n- **비판론**: 언론 전문가들은 이 시스템이 강력한 기관을 감시하는 보도, 특히 기밀 출처에 의존하는 보도의 발행을 어렵게 만들 수 있으며, 휘파람 불기(whistleblowing)를 위축시킬 수 있다고 우려합니다.\n- **'Fire Blanket' 기능**: 'Fire Blanket' 기능은 X(구 트위터)와 같은 플랫폼에서 실시간으로 논란이 되는 주장을 플래그 지정하고 \"조사 중\"이라는 경고를 게시하여 의심을 제기합니다.\n- **LLM 기반 평가**: OpenAI, Anthropic, xAI, Mistral, Google의 대규모 언어 모델(LLM)이 평균적인 독자로서 증거 주장을 평가하는 데 사용됩니다.\n- **의도와 논란**: 디수자는 이를 저널리즘에 대한 신뢰를 회복하려는 시도라고 주장하지만, 비평가들은 부유하고 강력한 개인이나 기업이 언론을 괴롭히는 수단이 될 수 있다고 비판합니다.\n\n## 시사점\n\nObjection은 AI를 활용하여 저널리즘의 신뢰성을 평가하려는 새로운 시도이지만, 익명 출처의 중요성을 간과하고 강력한 행위자들에게 불균형적인 힘을 실어줄 수 있다는 비판에 직면하고 있으며, 이는 저널리즘의 근간을 흔들 수 있는 잠재력을 가지고 있습니다.",
   "tags": [
     "tech",
     "ai",
