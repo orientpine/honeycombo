@@ -4,7 +4,7 @@
   "url": "https://www.wired.com/story/black-forest-labs-ai-image-generation/",
   "source": "Wired",
   "type": "article",
-  "description": "Black Forest Labs has long punched above its weight in the AI image generation space. Its next move? Powering physical AI.",
+  "description": "## 개요\n\n이 콘텐츠는 독일 블랙포레스트 지역에 본사를 둔 70인 규모의 AI 스타트업인 Black Forest Labs가 실리콘밸리의 거대 기업들과 AI 이미지 생성 분야에서 경쟁하고 있는 현황을 다룹니다.\n\n## 주요 내용\n\n-   Black Forest Labs는 Adobe, Canva와 같은 플랫폼뿐만 아니라 Microsoft, Meta, xAI와 같은 주요 AI 기업들과도 파트너십을 맺고 AI 이미지 생성 기술을 제공하고 있습니다.\n-   2024년 12월, Black Forest Labs는 32억 5천만 달러의 기업 가치로 펀딩을 유치했으며, 이는 경쟁사 대비 적은 자원으로도 뛰어난 성능을 보여주는 latent diffusion 기술 덕분입니다.\n-   과거 xAI와 Grok의 이미지 생성 기능에 대한 파트너십을 맺었으나, xAI의 혼란스러운 작업 환경으로 인해 재계약은 거절했습니다.\n-   Meta와는 1억 4천만 달러 규모의 다년간 계약을 체결하여 AI 이미지 생성 기술 접근 권한을 부여했습니다.\n-   Black Forest Labs의 AI 이미지 생성 모델은 OpenAI와 Google에 이어 제3자 평가에서 상위권을 차지하고 있으며, Hugging Face에서 가장 많이 다운로드되는 텍스트-이미지 모델 중 하나를 제공합니다.\n-   이 스타트업은 단순한 콘텐츠 생성을 넘어, AI가 물리적 세계를 인지하고 행동하는 'Physical AI' 분야로 확장할 계획이며, 올해 말 AI 모델 기반 로봇을 공개할 예정입니다.\n-   Black Forest Labs의 공동 창립자들은 2021년 AI 이미지 모델에 대한 연구로 명성을 쌓았고, 2022년 Stability AI에서 Stable Diffusion을 출시한 경험이 있습니다.\n\n## 시사점\n\nBlack Forest Labs는 효율적인 기술 개발과 전략적인 파트너십을 통해 거대 기술 기업들과의 경쟁에서 성공적으로 자리매김하고 있으며, AI의 적용 범위를 콘텐츠 생성에서 물리적 세계로 확장하는 데 중요한 역할을 할 것으로 기대됩니다.",
   "tags": [
     "tech",
     "business",

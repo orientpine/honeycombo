@@ -4,7 +4,7 @@
   "url": "https://arstechnica.com/ai/2026/04/robot-dogs-now-read-gauges-and-thermometers-using-google-gemini/",
   "source": "Ars Technica",
   "type": "article",
-  "description": "Google's AI enables robots to read gauges while inspecting industrial facilities.",
+  "description": "## 개요\n\nBoston Dynamics의 로봇 개 Spot이 Google DeepMind의 새로운 AI 모델을 통해 아날로그 계기판과 온도계를 읽는 능력을 갖추게 되었으며, 이는 로봇의 물리적 환경 상호작용 능력을 향상시키는 '체화된 추론'을 목표로 합니다.\n\n## 주요 내용\n\n*   **Gemini Robotics-ER 1.6 모델:** Google DeepMind가 발표한 이 고수준 추론 모델은 로봇이 계획을 세우고 작업을 실행할 수 있도록 지원합니다.\n*   **향상된 계기판 판독 능력:** Gemini Robotics-ER 1.6은 복잡한 계기판, 온도계, 압력계와 같은 산업용 기기를 정확하게 읽을 수 있으며, 탱크 내부를 시각적으로 확인하는 Sight glass 검사 능력도 향상되었습니다.\n*   **'Agentic Vision' 적용:** 이 모델은 'Agentic Vision'을 통해 시각적 추론과 코드 실행 능력을 결합하여 이미지 검사 및 조작을 위한 'visual scratchpad'를 생성합니다. 이는 Gemini 3.0 Flash 모델에 처음 도입된 기능입니다.\n*   **성능 향상:** Agentic Vision 적용 시, Gemini Robotics-ER 1.6 모델의 계기판 판독 정확도는 기존 Gemini Robotics-ER 1.5 모델의 23%에서 98%로 크게 향상되었습니다. Gemini 3.0 Flash는 67%의 정확도를 보였습니다.\n*   **Multi-view Reasoning:** Agentic Vision 없이도 Gemini Robotics-ER 1.6은 86%의 정확도를 달성하며, 시각 이미지의 다양한 요소를 가리키며 복잡한 작업을 처리하는 능력을 보여줍니다. 또한, 여러 카메라 스트림을 활용하여 환경을 더 잘 이해하는 'multi-view reasoning' 기능도 개선되었습니다.\n*   **Boston Dynamics와의 협력:** 이러한 성능 향상은 Google DeepMind와 Boston Dynamics 간의 지속적인 협력을 통해 이루어졌으며, Spot 로봇이 산업 시설을 순찰하며 점검하는 로봇 검사원으로 시험되고 있습니다.\n\n## 시사점\n\n새로운 AI 모델은 로봇이 복잡한 물리적 환경에서 정확한 시각적 추론을 수행하고 작업을 실행하는 능력을 비약적으로 향상시켜, 산업 현장에서의 자동화된 검사 및 모니터링 작업에 대한 가능성을 크게 확장합니다.",
   "tags": [
     "tech",
     "ai",
