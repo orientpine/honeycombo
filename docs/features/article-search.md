@@ -4,7 +4,7 @@
 
 ## 개요
 
-기존 `/articles/`에서는 600+개 기사 중에서 원하는 제목을 찾으려면 페이지네이션을 일일이 넘겨야 했다. ArticleSearch는 페이지에 임베드된 `#all-articles-data` JSON을 활용해 전체 기사를 클라이언트 사이드에서 즉시 검색한다.
+기존 `/articles/`에서는 수백 건의 기사 (build 시점 기준 ~299건) 중에서 원하는 제목을 찾으려면 페이지네이션을 일일이 넘겨야 했다. ArticleSearch는 페이지에 임베드된 `#all-articles-data` JSON을 활용해 전체 기사를 클라이언트 사이드에서 즉시 검색한다.
 
 검색은 SourceFilter와 양방향 연동된다.
 
@@ -66,7 +66,7 @@
 
 - 검색은 **제목 substring** 매칭만 수행한다. 본문(description)·태그·소스명은 검색 대상이 아니다.
 - 검색은 **클라이언트 사이드**에서 동작한다. JS가 비활성화된 환경에서는 SSR 뷰만 노출된다.
-- `serializeArticles()`가 임베드하는 JSON 크기에 제한이 있다 (~244건 기준 ~135KB raw, gzip 후 ~30KB). 기사 수가 크게 늘면 인덱스 분리/지연 로드를 검토해야 한다.
+- `serializeArticles()`가 임베드하는 JSON 크기에 제한이 있다 (현 build 기준 수백 건 규모 ≈ 수백 KB raw, gzip 후 수십 KB 수준). 기사 수가 수천 건 규모로 늘면 인덱스 분리/지연 로드를 검토해야 한다.
 - URL은 `history.replaceState`로 갱신되어 브라우저 뒤로 가기에 검색 단계가 누적되지 않는다.
 
 ---
@@ -84,3 +84,4 @@
 |------|----------|
 | 2026-04-20 | 최초 작성 — `/articles/` 페이지에 제목 검색 기능 추가 |
 | 2026-04-20 | Oracle 검증 대응 — ArticleSearch 입력 리스너와 `source-filter-changed` 도큐먼트 리스너에 누적 방지 가드(`__articleSearchState`) 추가. 페이지 네비게이션 시 검색 캐시 초기화. `getFilteredPool` 통합 테스트 10건 추가. |
+| 2026-04-20 | View-transition stale state 수정 — `?q=`가 없는 URL로 네비게이션 시 이전 쿼리가 있었다면 빈 `article-search-changed` 이벤트를 디스패치해 InterestTagPanel의 persisted 검색 상태를 명시적으로 클리어. 관련 단일 쿼리 수치 제거 ("~244건" → "현 build 기준 수백 건")로 문서 정확성 개선. |
