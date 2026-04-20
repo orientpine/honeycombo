@@ -1,9 +1,11 @@
 ---
+import { renderSummaryHtml } from '../lib/render-summary';
 interface Props {
   description?: string;
   url: string;
 }
 const { description, url } = Astro.props;
+const summaryHtml = description ? renderSummaryHtml(description) : '';
 ---
 
 <div class="content-tabs" data-url={url}>
@@ -30,9 +32,9 @@ const { description, url } = Astro.props;
 
   <div class="tab-panels">
     <div class="tab-panel active" id="panel-summary" role="tabpanel" data-panel="summary">
-      {description ? (
+      {summaryHtml ? (
         <div class="article-summary">
-          <p>{description}</p>
+          <Fragment set:html={summaryHtml} />
         </div>
       ) : (
         <p class="no-summary">요약이 제공되지 않았습니다.</p>
@@ -178,6 +180,28 @@ const { description, url } = Astro.props;
   .article-summary p {
     color: var(--color-text);
     line-height: 1.7;
+  }
+
+  .article-summary .summary-heading {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: var(--space-md) 0 var(--space-xs);
+  }
+
+  .article-summary .summary-heading:first-child {
+    margin-top: 0;
+  }
+
+  .article-summary .summary-list {
+    margin: var(--space-xs) 0;
+    padding-left: var(--space-lg);
+    color: var(--color-text);
+    line-height: 1.7;
+  }
+
+  .article-summary .summary-list li {
+    margin-bottom: var(--space-xs);
   }
 
   .no-summary {

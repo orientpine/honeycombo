@@ -15,6 +15,7 @@ import ContentTabs from '../../components/ContentTabs.astro';
 import AddToPlaylist from '../../components/AddToPlaylist.astro';
 import ShareButtons from '../../components/ShareButtons.astro';
 import BookmarkButton from '../../components/BookmarkButton.astro';
+import { stripMarkdownForPreview } from '../../lib/render-summary';
 
 export async function getStaticPaths() {
   const curatedEntries = await getCollection('curated', (entry: any) => entry.data.status === 'approved').catch((err: unknown) => {
@@ -59,7 +60,7 @@ const pageUrl = new URL(canonicalPath, 'https://honeycombo.pages.dev').href;
 
 <BaseLayout
   title={`${article.title} — HoneyCombo`}
-  description={article.description || `${article.title} - ${article.source}에서 큐레이션된 기사`}
+  description={article.description ? stripMarkdownForPreview(article.description) : `${article.title} - ${article.source}에서 큐레이션된 기사`}
   ogImage={article.thumbnail_url}
   ogType="article"
   canonicalPath={canonicalPath}
