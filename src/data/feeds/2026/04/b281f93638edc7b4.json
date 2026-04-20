@@ -4,7 +4,7 @@
   "url": "https://techcrunch.com/2026/04/12/trump-officials-may-be-encouraging-banks-to-test-anthropics-mythos-model/",
   "source": "TechCrunch",
   "type": "article",
-  "description": "The report is particularly surprising since the Department of Defense recently declared Anthropic a supply-chain risk.",
+  "description": "## 개요\n\n미국 재무부와 연방준비제도(Fed)가 주요 은행 경영진에게 Anthropic의 새로운 Mythos 모델을 활용하여 취약점을 탐지하도록 권장했다는 내용입니다.\n\n## 주요 내용\n\n*   **정책 권고:** 재무장관 Scott Bessent와 연준 의장 Jerome Powell은 은행 경영진과의 회의에서 Anthropic의 Mythos 모델을 사용하여 시스템의 취약점을 탐지할 것을 권장했습니다.\n*   **주요 은행들의 시험:** Bloomberg 보도에 따르면, 초기 파트너 조직으로 JPMorgan Chase만 명시되었지만, Goldman Sachs, Citigroup, Bank of America, Morgan Stanley와 같은 주요 은행들도 Mythos 모델을 시험 중인 것으로 알려졌습니다.\n*   **Mythos 모델의 특성:** Anthropic은 이번 주 Mythos 모델을 발표했으며, 이 모델은 사이버 보안을 위해 특별히 훈련된 것은 아니지만 보안 취약점을 발견하는 데 매우 뛰어나 현재 접근을 제한하고 있다고 밝혔습니다. (일부에서는 이를 과장된 홍보 또는 기업 영업 전략으로 해석하기도 합니다.)\n*   **정부와의 갈등 속 시험:** Anthropic은 현재 미국 국방부의 공급망 위험 지정에 대해 트럼프 행정부와 법정에서 다투고 있으며, 이는 정부의 AI 모델 사용 제한 노력에 대한 협상이 결렬된 후에 발생한 결정입니다.\n*   **영국 규제 당국의 관심:** Financial Times 보도에 따르면, 영국의 금융 규제 당국 역시 Mythos 모델이 제기하는 위험에 대해 논의하고 있습니다.\n\n## 시사점\n\n트럼프 행정부의 정책 권고와 주요 은행들의 Mythos 모델 테스트는 AI의 보안 취약점 탐지 능력에 대한 기대와 함께, AI 기술의 활용 및 규제에 대한 정부와 금융 업계의 복잡한 관계를 보여줍니다.",
   "tags": [
     "tech",
     "ai",

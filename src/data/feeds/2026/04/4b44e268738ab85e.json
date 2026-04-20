@@ -4,7 +4,7 @@
   "url": "https://techcrunch.com/2026/04/10/anthropic-temporarily-banned-openclaws-creator-from-accessing-claude/",
   "source": "TechCrunch",
   "type": "article",
-  "description": "This ban took place after Claude's pricing changed for OpenClaw users last week.",
+  "description": "## 개요\n\n이 콘텐츠는 OpenClaw 개발자인 Peter Steinberger가 Anthropic의 Claude 모델 접근에 일시적으로 차단되었던 사건과 관련된 경위를 설명합니다.\n\n## 주요 내용\n\n*   **일시적 계정 차단 및 복구:** OpenClaw 개발자 Peter Steinberger는 Anthropic 모델 접근에 대한 \"수상한 활동\"으로 계정이 일시적으로 차단되었으나, 해당 게시물이 바이럴이 된 후 몇 시간 만에 계정이 복구되었습니다.\n*   **OpenClaw 사용 정책 변경:** Anthropic은 Claude 구독에 OpenClaw와 같은 \"서드파티 하네스\" 사용이 더 이상 포함되지 않으며, OpenClaw 사용자는 Claude API를 통해 별도로 사용량 기반 요금을 지불해야 한다고 발표했습니다.\n*   **요금 변경 이유와 개발자의 반박:** Anthropic은 구독 모델이 OpenClaw의 \"사용 패턴\"을 처리하도록 설계되지 않았다고 설명했으나, Steinberger는 Anthropic이 유사 기능을 자체 에이전트(Cowork)에 추가한 후 오픈 소스를 차단하는 시점 일치에 의문을 제기했습니다.\n*   **OpenAI 소속 개발자의 OpenClaw 테스트:** Steinberger는 OpenAI 소속이지만, OpenClaw 업데이트가 Claude 사용자에게 영향을 미치지 않도록 테스트 목적으로 Claude를 사용한다고 밝혔습니다.\n*   **OpenClaw의 중요성:** OpenClaw 사용자들 사이에서 Claude가 ChatGPT보다 여전히 인기 있는 선택지이며, 이에 따라 Claude에 대한 테스트 필요성이 강조되었습니다.\n\n## 시사점\n\nOpenAI 소속 개발자가 경쟁사의 AI 모델을 테스트하는 상황과 서드파티 하네스에 대한 AI 모델 제공업체의 정책 변화는 AI 생태계 내 협력 및 경쟁 관계를 보여줍니다.",
   "tags": [
     "tech",
     "ai",

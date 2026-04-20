@@ -4,7 +4,7 @@
   "url": "https://techcrunch.com/2026/04/15/fathom-adds-a-bot-less-meeting-mode-in-a-bid-to-take-on-granola/",
   "source": "TechCrunch",
   "type": "article",
-  "description": "Fathom will allow you to choose between video, audio-only, and transcription modes.",
+  "description": "## 개요\n\nFathom은 AI 기반 회의록 작성 도구로서, AI 봇 없이도 회의 내용을 녹음하고 정확한 화자 구분이 가능한 새로운 기능을 출시하여 기존의 봇이 참여하는 방식의 단점을 개선하고자 합니다.\n\n## 주요 내용\n\n*   **봇-less 회의 모드 도입:** Fathom은 AI 어시스턴트 봇이 회의에 직접 참여하지 않고도 모든 회의를 녹음 및 전사할 수 있는 기능을 추가했습니다.\n*   **경쟁사 대비 차별점:** Granola, Talat, Notion, ChatGPT와 같은 기존 봇-less 전사 도구들과 달리, Fathom은 회의 영상 녹화 기능과 다양한 전사 모드를 제공합니다.\n*   **정확한 화자 구분 (Speaker Diarization):** Fathom은 사용자가 회의 내용을 더 쉽게 기억할 수 있도록 화자 구분을 개선하는 데 중점을 두었으며, 이는 특히 과거 회의 내용에 대한 질문 시 잘못된 정보 전달 문제를 해결하는 데 도움을 줍니다.\n*   **AI 기반 쿼리 기능:** 사용자는 회의 데이터베이스를 AI로 쿼리하여 비즈니스에 더 넓은 맥락을 제공할 수 있습니다.\n*   **Model Context Protocol (MCP) 서버 출시:** 사용자가 회의 데이터를 추출하여 자체 AI 도구에 통합할 수 있도록 MCP 서버를 공개합니다.\n*   **향후 계획:** Fathom은 iOS 앱을 출시하여 대면 회의 녹음도 지원할 예정입니다.\n\n## 시사점\n\nFathom의 봇-less 회의 모드 도입은 회의 참여자 수를 줄이고, 정확한 화자 구분을 통해 회의록의 활용성을 높이며, 외부 AI 도구와의 연동성을 강화함으로써 회의 효율성을 증대시키는 데 기여할 것으로 보입니다.",
   "tags": [
     "tech",
     "apps",

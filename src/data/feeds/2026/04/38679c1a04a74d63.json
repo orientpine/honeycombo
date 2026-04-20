@@ -4,7 +4,7 @@
   "url": "https://arstechnica.com/ai/2026/04/new-codex-features-include-the-ability-to-use-your-computer-in-the-background/",
   "source": "Ars Technica",
   "type": "article",
-  "description": "An in-app browser allows visual feedback while building websites and more.",
+  "description": "## 개요\n\nOpenAI의 Codex 데스크톱 앱 최신 버전이 출시되어 백그라운드 작업, 멀티 에이전트 병렬 처리, 웹 브라우저 통합 등 다양한 신규 기능을 제공합니다.\n\n## 주요 내용\n\n-   **백그라운드 작업 가능:** Codex가 사용자의 PC에서 백그라운드로 작업을 수행할 수 있게 되었으며, 이는 사용자의 현재 데스크톱 활동에 간섭하지 않는다고 OpenAI는 밝혔습니다. Codex는 자체 커서를 통해 컴퓨터상의 모든 앱을 보고, 클릭하고, 입력할 수 있습니다.\n-   **멀티 에이전트 병렬 처리:** 여러 Codex 에이전트가 Mac에서 병렬로 작업할 수 있으며, 다른 앱에서의 사용자 작업과 간섭하지 않습니다. 이는 프론트엔드 변경 사항 반복 작업, 앱 테스트, API를 노출하지 않는 앱에서의 작업에 유용합니다.\n-   **예약 작업 및 자체 실행:** Codex는 향후 몇 시간, 며칠 또는 몇 주 후에 수행할 작업을 예약하고, 지정된 시간에 작업을 수행하기 위해 스스로 실행될 수 있습니다.\n-   **인앱 웹 브라우저:** Codex에 웹 브라우저가 내장되어, 웹 경험을 통해 Codex의 작업을 평가하고 페이지의 특정 부분에 웹 디자이너 및 개발자에게 피드백을 제공하는 기존 도구와 유사하게 지침을 포함한 댓글을 남길 수 있습니다.\n-   **이미지 생성 기능 추가:** `gpt-image-1.5`를 활용하여 이미지를 생성하는 기능이 추가되었으며, 이는 목업 등에 포함될 수 있습니다.\n\n## 시사점\n\n이번 Codex 업데이트는 개발자 생산성 향상뿐만 아니라 일반 지식 작업으로의 확장 및 \"슈퍼 앱\" 기반 마련에 기여할 것으로 보입니다.",
   "tags": [
     "tech",
     "ai",

@@ -8,14 +8,14 @@ const { curatedCount, submittedCount, feedCount } = Astro.props;
 ---
 
 <div class="source-filter" data-testid="source-filter">
-  <button class="source-filter-btn active" data-origin="all">
-    전체 <span class="source-count">{curatedCount + submittedCount + feedCount}</span>
+  <button class="source-filter-btn active" data-origin="all" data-original-count={curatedCount + submittedCount + feedCount}>
+    전체 <span class="source-count" data-count-for="all">{curatedCount + submittedCount + feedCount}</span>
   </button>
-  <button class="source-filter-btn" data-origin="submitted">
-    제출 기사 <span class="source-count">{submittedCount}</span>
+  <button class="source-filter-btn" data-origin="submitted" data-original-count={submittedCount}>
+    제출 기사 <span class="source-count" data-count-for="submitted">{submittedCount}</span>
   </button>
-  <button class="source-filter-btn" data-origin="feed">
-    RSS 피드 <span class="source-count">{feedCount}</span>
+  <button class="source-filter-btn" data-origin="feed" data-original-count={feedCount}>
+    RSS 피드 <span class="source-count" data-count-for="feed">{feedCount}</span>
   </button>
 </div>
 
@@ -40,8 +40,22 @@ function filterByOrigin(origin: string) {
   }
   window.history.pushState({}, '', url.toString());
 
-  // Dispatch event so TagFilter handles cross-page rendering
+  // Dispatch event so InterestTagPanel + ArticleSearch handle cross-page rendering
   document.dispatchEvent(new CustomEvent('source-filter-changed', { detail: { origin } }));
+}
+
+function updateCounts(detail: { all?: number; submitted?: number; feed?: number; reset?: boolean }) {
+  const buttons = document.querySelectorAll<HTMLElement>('[data-testid="source-filter"] .source-filter-btn');
+  buttons.forEach((btn) => {
+    const origin = btn.dataset.origin || 'all';
+    const span = btn.querySelector<HTMLElement>('.source-count');
+    if (!span) return;
+    if (detail.reset) {
+      span.textContent = btn.dataset.originalCount || '0';
+    } else if (typeof detail[origin as 'all' | 'submitted' | 'feed'] === 'number') {
+      span.textContent = String(detail[origin as 'all' | 'submitted' | 'feed']);
+    }
+  });
 }
 
 function initSourceFilter() {
@@ -51,11 +65,24 @@ function initSourceFilter() {
   // Server-side counts (passed as props) reflect the total across all pages.
   // Do NOT recalculate from rendered cards — that only counts the current page.
 
+  // Per-button click listeners: bind exactly once per element.
+  // View Transitions persist DOM and may re-fire astro:page-load on the same buttons.
   buttons.forEach(btn => {
+    if (btn.dataset.sfBound === 'true') return;
+    btn.dataset.sfBound = 'true';
     btn.addEventListener('click', () => {
       filterByOrigin(btn.dataset.origin || 'all');
     });
   });
+
+  // Document-level listener: bind exactly once per page.
+  const w = window as any;
+  if (!w.__sourceFilterDocBound) {
+    w.__sourceFilterDocBound = true;
+    document.addEventListener('source-counts-update', ((e: CustomEvent) => {
+      updateCounts(e.detail || {});
+    }) as EventListener);
+  }
 
   const originParam = new URLSearchParams(window.location.search).get('origin');
   if (originParam && validOrigins.has(originParam)) {

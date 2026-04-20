@@ -1,0 +1,1578 @@
+---
+// Unified Interests + Tag Filter panel.
+//
+// Replaces the previous PersonalizationBar (interests / soft / localStorage)
+// and TagFilter (cross-page hard filter) into one component.
+//
+// Behavior model:
+//   - Click chip body  -> hard tag filter (cross-page, hides SSR list, shows filtered grid).
+//                         **Multi-select**: clicking another chip ADDS to selection (OR semantics).
+//                         Clicking an active chip again removes it.
+//   - Click chip star  -> toggle as personal interest (saved to localStorage).
+//                         Articles matching saved interests get a visible "interest" highlight
+//                         (background tint + corner star) and are pinned to the top of the list.
+//   - "전체" chip       -> clears ALL active tag filters.
+//   - Top 6 chips      -> always visible. Active filters first (so they don't disappear when
+//                         a non-popular tag is selected), then saved interests, then popular.
+//                         Built at runtime so per-user interests can actually be promoted.
+//   - Toggle button    -> expands the full tag list (all tags), grouped into
+//                         "내 관심사" (saved) and "전체 태그".
+//
+// State sources:
+//   - localStorage[honeycombo_interests] : string[] (persistent, soft pin)
+//   - URL ?tag=&tag=                     : string[] (ephemeral, hard filter, multi-value)
+//
+// Events consumed:
+//   - source-filter-changed   ({ origin })          - re-applies active filter under new origin
+//   - article-search-changed  ({ query, origin, results }) - search results take precedence
+//
+// Events emitted:
+//   - interests-changed       ({ interests })       - so other components can react
+//   - source-counts-update    ({ all, submitted, feed } | { reset: true })
+
+interface Props {
+  availableTags: string[];
+  tagCounts: Record<string, number>;
+}
+const { availableTags, tagCounts } = Astro.props;
+
+// Sort tags by article count desc, then alphabetically — used as the fallback popular order
+// when a user has no saved interests. The actual top row is rebuilt client-side because we
+// can't know the user's saved interests at build time.
+const sortedTags = [...availableTags].sort((a, b) => {
+  const diff = (tagCounts[b] || 0) - (tagCounts[a] || 0);
+  if (diff !== 0) return diff;
+  return a.localeCompare(b);
+});
+
+// Embed tag counts as JSON so client code can call getTopTags() at runtime.
+const tagCountsJson = JSON.stringify(tagCounts);
+---
+
+<div class="interest-tag-panel" data-testid="interest-tag-panel">
+  <div class="itp-header">
+    <div class="itp-header-left">
+      <span class="itp-label" id="itp-label">⭐ 관심사 &amp; 태그</span>
+      <span class="itp-match-badge" id="itp-match-badge" hidden></span>
+    </div>
+    <button
+      type="button"
+      class="itp-toggle"
+      id="itp-toggle"
+      aria-expanded="false"
+      aria-controls="itp-expanded"
+    >
+      모든 태그 보기 ▼
+    </button>
+  </div>
+
+  <!--
+    Always-visible top row.
+    Rendered server-side with popular tags as a fallback so JS-disabled or pre-hydration users
+    still see something useful. Once the script runs, refreshTopRow() rewrites this row to put
+    saved interests first.
+  -->
+  <div class="itp-chips-row" id="itp-chips-row" data-testid="itp-chips-row">
+    <button class="itp-chip itp-chip-all active" data-tag="all" type="button" aria-pressed="true">
+      <span class="itp-chip-label">전체</span>
+    </button>
+    {sortedTags.slice(0, 6).map((tag) => (
+      <span class="itp-chip-wrap">
+        <button class="itp-chip" data-tag={tag} type="button" aria-pressed="false">
+          <span class="itp-chip-label">{tag}</span>
+          <span class="itp-chip-count">{tagCounts[tag] ?? 0}</span>
+        </button>
+        <button
+          class="itp-chip-star"
+          type="button"
+          data-star
+          data-tag={tag}
+          aria-label={`${tag} 관심사로 저장`}
+          aria-pressed="false"
+          title="관심사로 저장"
+        >☆</button>
+      </span>
+    ))}
+  </div>
+
+  <!-- Selected filters summary (visible only when 1+ tags active). Helps multi-tag UX:
+       user sees what's filtering at a glance + can remove individual tags. -->
+  <div class="itp-selected-summary" id="itp-selected-summary" hidden></div>
+
+  <!-- Expanded panel -->
+  <div class="itp-expanded" id="itp-expanded" hidden>
+    <section class="itp-section" id="itp-section-interests">
+      <div class="itp-section-header">
+        <h4 class="itp-section-title">⭐ 내 관심사 <span class="itp-section-count" id="itp-interests-count">(0)</span></h4>
+        <button type="button" class="itp-clear" id="itp-clear" hidden>초기화</button>
+      </div>
+      <p class="itp-section-hint" id="itp-interests-hint">
+        ☆ 별표를 눌러 관심사로 저장하면 일치하는 기사가 상단에 강조 표시됩니다.
+      </p>
+      <div class="itp-interests-row" id="itp-interests-row" hidden></div>
+    </section>
+
+    <section class="itp-section">
+      <div class="itp-section-header">
+        <h4 class="itp-section-title">전체 태그 <span class="itp-section-count">({availableTags.length})</span></h4>
+      </div>
+      <div class="itp-all-tags" id="itp-all-tags">
+        {sortedTags.map((tag) => (
+          <span class="itp-chip-wrap">
+            <button class="itp-chip" data-tag={tag} type="button" aria-pressed="false">
+              <span class="itp-chip-label">{tag}</span>
+              <span class="itp-chip-count">{tagCounts[tag] ?? 0}</span>
+            </button>
+            <button
+              class="itp-chip-star"
+              type="button"
+              data-star
+              data-tag={tag}
+              aria-label={`${tag} 관심사로 저장`}
+              aria-pressed="false"
+              title="관심사로 저장"
+            >☆</button>
+          </span>
+        ))}
+      </div>
+    </section>
+
+    <!-- Bottom collapse button: when expanded panel is long, user can collapse from the bottom
+         without scrolling all the way back up. Mirrors the top toggle's behavior. -->
+    <div class="itp-expanded-footer">
+      <button type="button" class="itp-toggle itp-toggle-bottom" id="itp-toggle-bottom">
+        접기 ▲
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- tagCounts payload for runtime getTopTags() -->
+<script type="application/json" id="itp-tag-counts" set:html={tagCountsJson} />
+
+<!-- Container for dynamically-rendered cross-page filtered/searched results -->
+<div class="itp-filtered-results" id="itp-filtered-results" style="display:none;">
+  <div class="itp-filtered-header">
+    <span id="itp-filtered-count"></span>
+  </div>
+  <div class="article-grid grid grid-3" id="itp-filtered-grid"></div>
+  <p class="itp-filtered-empty" id="itp-filtered-empty" hidden>
+    조건에 해당하는 기사가 없습니다.
+  </p>
+</div>
+
+<script>
+  interface ClientArticle {
+    _id: string;
+    title: string;
+    url: string;
+    source: string;
+    type: string;
+    description?: string;
+    tags: string[];
+    date: string;
+    thumbnail_url?: string;
+    articleOrigin: 'curated' | 'submitted' | 'feed';
+    slug?: string;
+    isExternal: boolean;
+  }
+
+  const STORAGE_KEY = 'honeycombo_interests';
+  const TOP_N = 6;
+
+  // ---- Per-document state. Resets on full page load; survives view transitions ----
+  // We hang state off `window` so re-runs of this script (View Transitions, HMR) don't
+  // accidentally start with a stale module-scope cache.
+  const w = window as any;
+  if (!w.__itpState) {
+    w.__itpState = {
+      allArticles: null as ClientArticle[] | null,
+      tagCounts: null as Record<string, number> | null,
+      activeTags: new Set<string>() as Set<string>,
+      activeSearchQuery: '' as string,
+      activeSearchResults: null as ClientArticle[] | null, // null = no active search
+      // Track delegated listeners so we never bind twice across astro:page-load.
+      listenersBound: false as boolean,
+    };
+  }
+  const state = w.__itpState;
+
+  // ---------- Multi-tag filter helpers (Oracle review: OR within tag facet) ----------
+  function hasActiveTags(): boolean {
+    return state.activeTags.size > 0;
+  }
+  function toggleTag(tag: string): void {
+    if (tag === 'all') {
+      state.activeTags.clear();
+      return;
+    }
+    if (state.activeTags.has(tag)) state.activeTags.delete(tag);
+    else state.activeTags.add(tag);
+  }
+  function clearTags(): void {
+    state.activeTags.clear();
+  }
+  function parseTagsFromUrl(validTags: Set<string>): Set<string> {
+    // Repeated params: ?tag=ai&tag=llm. Robust against tag names containing commas.
+    const raw = new URLSearchParams(window.location.search).getAll('tag');
+    const result = new Set<string>();
+    for (const t of raw) {
+      if (t && validTags.has(t)) result.add(t);
+    }
+    return result;
+  }
+  function syncTagsToUrl(): void {
+    const url = new URL(window.location.href);
+    url.searchParams.delete('tag');
+    // Append in sorted order for stable, copy-pastable URLs.
+    const sorted = Array.from(state.activeTags).sort();
+    for (const t of sorted) url.searchParams.append('tag', t);
+    window.history.replaceState({}, '', url.toString());
+  }
+
+  // ---------- localStorage interests ----------
+  function getInterests(): string[] {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return [];
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed.filter((t) => typeof t === 'string') : [];
+    } catch {
+      return [];
+    }
+  }
+  function saveInterests(interests: string[]): void {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(interests));
+    } catch {
+      /* noop */
+    }
+  }
+  function toggleInterest(tag: string): void {
+    const interests = getInterests();
+    const idx = interests.indexOf(tag);
+    if (idx === -1) interests.push(tag);
+    else interests.splice(idx, 1);
+    saveInterests(interests);
+    document.dispatchEvent(
+      new CustomEvent('interests-changed', { detail: { interests } })
+    );
+    refreshTopRow();
+    refreshInterestsUI();
+    applyInterestHighlights();
+    refreshMatchBadgeFromFullDataset();
+    if (isFilteredViewActive()) renderFilteredView();
+  }
+  function clearInterests(): void {
+    saveInterests([]);
+    document.dispatchEvent(
+      new CustomEvent('interests-changed', { detail: { interests: [] } })
+    );
+    refreshTopRow();
+    refreshInterestsUI();
+    applyInterestHighlights();
+    refreshMatchBadgeFromFullDataset();
+    if (isFilteredViewActive()) renderFilteredView();
+  }
+
+  // ---------- Articles + tag counts JSON ----------
+  function getAllArticles(): ClientArticle[] {
+    if (state.allArticles) return state.allArticles;
+    const el = document.getElementById('all-articles-data');
+    if (!el?.textContent) return [];
+    try {
+      state.allArticles = JSON.parse(el.textContent) as ClientArticle[];
+    } catch {
+      state.allArticles = [];
+    }
+    return state.allArticles;
+  }
+  function getTagCounts(): Record<string, number> {
+    if (state.tagCounts) return state.tagCounts;
+    const el = document.getElementById('itp-tag-counts');
+    if (!el?.textContent) return {};
+    try {
+      state.tagCounts = JSON.parse(el.textContent) as Record<string, number>;
+    } catch {
+      state.tagCounts = {};
+    }
+    return state.tagCounts;
+  }
+
+  function getActiveOrigin(): string {
+    const active = document.querySelector<HTMLElement>(
+      '[data-testid="source-filter"] .source-filter-btn.active'
+    );
+    return active?.dataset.origin || 'all';
+  }
+
+  // ---------- Pure helper: getTopTags (mirrors src/lib/article-search.ts) ----------
+  function computeTopTags(interests: readonly string[], counts: Record<string, number>, limit = TOP_N): string[] {
+    const result: string[] = [];
+    const seen = new Set<string>();
+    for (const tag of interests) {
+      if (seen.has(tag) || result.length >= limit) continue;
+      seen.add(tag);
+      result.push(tag);
+    }
+    if (result.length >= limit) return result.slice(0, limit);
+    const sorted = Object.keys(counts).sort((a, b) => {
+      const diff = (counts[b] || 0) - (counts[a] || 0);
+      if (diff !== 0) return diff;
+      return a.localeCompare(b);
+    });
+    for (const tag of sorted) {
+      if (seen.has(tag) || result.length >= limit) continue;
+      seen.add(tag);
+      result.push(tag);
+    }
+    return result.slice(0, limit);
+  }
+
+  // ---------- Card rendering (mirrors ArticleCard.astro) ----------
+  function escapeHtml(str: string): string {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+  // Mirrors src/lib/render-summary.ts stripMarkdownForPreview() and functions/lib/escape.ts stripMd().
+  // For structured Korean summaries (## 개요 / ## 주요 내용 / ## 시사점), returns the body of the FIRST
+  // section only — the heading label is visual noise on cards.
+  function stripMd(text: string): string {
+    if (!text) return '';
+    // Structured summary path: split on ## boundaries, return first non-empty body.
+    if (/^##\s+/m.test(text)) {
+      const sections = text.split(/(?:^|\n)##\s+[^\n]*\n?/);
+      for (const section of sections) {
+        if (section.trim()) {
+          return flattenMd(section);
+        }
+      }
+      return '';
+    }
+    return flattenMd(text);
+  }
+
+  function flattenMd(text: string): string {
+    return text
+      .replace(/^#{1,6}\s+/gm, '')
+      .replace(/^[-*]\s+/gm, '• ')
+      .replace(/\n{2,}/g, ' ')
+      .replace(/\n/g, ' ')
+      .replace(/`([^`\n]+)`/g, '$1')
+      // Bold uses [^\n]+? (allows internal *) so nested **outer *inner* outer** strips fully.
+      .replace(/\*\*([^\n]+?)\*\*/g, '$1')
+      .replace(/(^|[^*A-Za-z0-9_])\*(?!\s)([^*\n]+?)(?<!\s)\*(?![A-Za-z0-9_])/g, '$1$2')
+      .replace(/(^|[^A-Za-z0-9_])_([^_\n]+?)_(?![A-Za-z0-9_])/g, '$1$2')
+      .replace(/\[([^\]\n]+)\]\([^)\s]+\)/g, '$1')
+      .trim();
+  }
+
+  function renderCard(a: ClientArticle, interests: Set<string>): string {
+    const articleUrl = a.isExternal ? a.url : `/articles/${a.slug || a._id}`;
+    const target = a.isExternal ? ' target="_blank" rel="noopener noreferrer"' : '';
+    const formatted = new Date(a.date).toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+    const title = escapeHtml(a.title);
+    const source = escapeHtml(a.source);
+    const articleSlug = a.slug || a._id;
+    const articlePath = `/articles/${articleSlug}/`;
+
+    const thumb = a.thumbnail_url
+      ? `<div class="article-thumbnail"><img src="${escapeHtml(a.thumbnail_url)}" alt="${title}" loading="lazy" width="300" height="160" /></div>`
+      : '';
+
+    const typeBadge = a.type === 'youtube' ? '<span class="badge badge-primary">YouTube</span>' : '';
+    const sourceLabel = a.articleOrigin === 'submitted' ? 'User Submission' : source;
+
+    const desc = a.description
+      ? `<p class="article-description">${escapeHtml(stripMd(a.description))}</p>`
+      : '';
+
+    const tagsHtml = a.tags.map((t) => `<span class="tag">${escapeHtml(t)}</span>`).join('');
+    const tagsAttr = a.tags.map((t) => escapeHtml(t)).join(',');
+
+    const sourceType = a.articleOrigin === 'feed' ? 'feed' : 'curated';
+    const isMatch = interests.size > 0 && a.tags.some((t) => interests.has(t));
+    const matchClass = isMatch ? ' interest-match' : '';
+
+    return `<article class="card article-card${matchClass}" data-testid="article-card" data-tags="${tagsAttr}" data-origin="${a.articleOrigin}" data-article-path="${articlePath}">
+  ${thumb}
+  <div class="article-body">
+    <div class="article-meta">
+      <span class="badge">${sourceLabel}</span>
+      ${typeBadge}
+      <time class="article-date" datetime="${new Date(a.date).toISOString()}">${formatted}</time>
+    </div>
+    <h3 class="article-title">
+      <a href="${escapeHtml(articleUrl)}"${target}>${title}</a>
+    </h3>
+    ${desc}
+    <div class="article-tags">${tagsHtml}</div>
+    <div class="article-footer">
+      <div class="article-stats">
+        <button class="bookmark-btn bookmark-sm" data-bookmark-id="${escapeHtml(articleSlug)}" title="북마크" aria-label="북마크">
+          <svg class="bookmark-icon-outline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+          <svg class="bookmark-icon-filled" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+        </button>
+        <a href="/articles/${escapeHtml(articleSlug)}/#comments" class="comment-indicator" data-comment-path="${articlePath}">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <span class="comment-count-value">&ndash;</span>
+        </a>
+      </div>
+      <div class="add-to-playlist-container" data-article-id="${escapeHtml(a._id)}" data-title="${title}" data-url="${escapeHtml(a.url)}" data-description="${escapeHtml(a.description || '')}" data-source-type="${sourceType}">
+        <button class="add-to-playlist-btn tag">➕ 플레이리스트에 추가</button>
+        <div class="playlist-dropdown" style="display: none;">
+          <div class="playlist-dropdown-header">플레이리스트 선택</div>
+          <ul class="playlist-list">
+            <li class="playlist-loading">불러오는 중...</li>
+          </ul>
+          <div class="playlist-dropdown-footer">
+            <a href="/p/new" class="new-playlist-link">➕ 새 플레이리스트 만들기</a>
+          </div>
+        </div>
+        <div class="playlist-toast" style="display: none;"></div>
+      </div>
+    </div>
+  </div>
+</article>`;
+  }
+
+  // ---------- Filter pipeline ----------
+  function isFilteredViewActive(): boolean {
+    return (
+      hasActiveTags() ||
+      getActiveOrigin() !== 'all' ||
+      state.activeSearchResults !== null
+    );
+  }
+
+  /**
+   * Build the active pool for the filtered view.
+   *
+   * Search/origin/tag are all applied. We re-derive search from the canonical
+   * `getAllArticles()` so changes to origin AFTER search dispatch don't see a
+   * stale origin-scoped search-result snapshot.
+   */
+  function getFilteredPool(): { all: ClientArticle[]; perOrigin: { submitted: number; feed: number; curated: number } } {
+    const origin = getActiveOrigin();
+    const q = state.activeSearchQuery.trim().toLowerCase();
+    const tags = state.activeTags;
+    let pool = getAllArticles();
+    if (q) pool = pool.filter((a) => a.title.toLowerCase().includes(q));
+    // Multi-tag OR semantics (Oracle review): article matches if it has ANY selected tag.
+    if (tags.size > 0) pool = pool.filter((a) => a.tags.some((t) => tags.has(t)));
+
+    // Per-origin breakdown is computed BEFORE applying origin filter,
+    // so SourceFilter can show "0 in Submitted / N in RSS" honestly.
+    const perOrigin = {
+      submitted: pool.filter((a) => a.articleOrigin === 'submitted').length,
+      feed: pool.filter((a) => a.articleOrigin === 'feed').length,
+      curated: pool.filter((a) => a.articleOrigin === 'curated').length,
+    };
+
+    const all = origin === 'all' ? pool : pool.filter((a) => a.articleOrigin === origin);
+    return { all, perOrigin };
+  }
+
+  function buildFilterLabel(count: number): string {
+    const labels: string[] = [];
+    const origin = getActiveOrigin();
+    if (origin !== 'all') {
+      const m: Record<string, string> = { curated: '에디터 추천', submitted: '제출 기사', feed: 'RSS 피드' };
+      labels.push(m[origin] || origin);
+    }
+    if (hasActiveTags()) {
+      const tagList = Array.from(state.activeTags).sort();
+      labels.push(tagList.length === 1 ? `"${tagList[0]}" 태그` : `태그 ${tagList.length}개 (${tagList.join(', ')})`);
+    }
+    if (state.activeSearchQuery) {
+      labels.push(`"${state.activeSearchQuery}" 검색`);
+    }
+    const prefix = labels.length > 0 ? `${labels.join(' · ')} · ` : '';
+    return `${prefix}기사 ${count}건`;
+  }
+
+  function renderFilteredView() {
+    const ssrList = document.querySelector('[data-testid="article-list"]') as HTMLElement | null;
+    const pagination = document.querySelector('.pagination') as HTMLElement | null;
+    const container = document.getElementById('itp-filtered-results') as HTMLElement | null;
+    const grid = document.getElementById('itp-filtered-grid') as HTMLElement | null;
+    const countEl = document.getElementById('itp-filtered-count');
+    const emptyEl = document.getElementById('itp-filtered-empty');
+    const ssrEmpty = document.querySelector<HTMLElement>('[data-testid="source-filter-empty"]');
+
+    if (!container || !grid || !countEl) return;
+
+    if (!isFilteredViewActive()) {
+      // Restore SSR view
+      if (ssrList) ssrList.style.display = '';
+      if (pagination) pagination.style.display = '';
+      container.style.display = 'none';
+      if (ssrEmpty) ssrEmpty.style.display = 'none';
+      // Reset source counts to SSR originals
+      document.dispatchEvent(
+        new CustomEvent('source-counts-update', { detail: { reset: true } })
+      );
+      // Re-apply highlights to SSR cards (interests may still be active)
+      applyInterestHighlights();
+      pinInterestMatchesInList();
+      refreshMatchBadgeFromFullDataset();
+      return;
+    }
+
+    // Filtered view
+    if (ssrList) ssrList.style.display = 'none';
+    if (pagination) pagination.style.display = 'none';
+    container.style.display = '';
+
+    const interests = new Set(getInterests());
+    const { all: filtered, perOrigin } = getFilteredPool();
+
+    // Pin interest-matched articles to top
+    let articles = filtered;
+    if (interests.size > 0) {
+      const matched: ClientArticle[] = [];
+      const unmatched: ClientArticle[] = [];
+      for (const a of articles) {
+        if (a.tags.some((t) => interests.has(t))) matched.push(a);
+        else unmatched.push(a);
+      }
+      articles = [...matched, ...unmatched];
+    }
+
+    countEl.textContent = buildFilterLabel(articles.length);
+    grid.dataset.activeTags = Array.from(state.activeTags).sort().join(',');
+    grid.innerHTML = articles.map((a) => renderCard(a, interests)).join('');
+    if (emptyEl) emptyEl.hidden = articles.length > 0;
+    if (ssrEmpty) ssrEmpty.style.display = 'none';
+
+    // Re-init dynamically rendered card components
+    if ((window as any).__initAddToPlaylistContainers) {
+      (window as any).__initAddToPlaylistContainers(grid);
+    }
+    if ((window as any).__initBookmarkButtons) {
+      (window as any).__initBookmarkButtons();
+    }
+    if ((window as any).__initCommentCounts) {
+      (window as any).__initCommentCounts(grid);
+    }
+
+    // Update SourceFilter counts based on the current filtered pool
+    document.dispatchEvent(
+      new CustomEvent('source-counts-update', {
+        detail: {
+          all: perOrigin.submitted + perOrigin.feed + perOrigin.curated,
+          submitted: perOrigin.submitted,
+          feed: perOrigin.feed,
+        },
+      })
+    );
+
+    // Match badge counts against the FULL filtered pool (not just rendered cards)
+    refreshMatchBadgeFromArticles(filtered, interests);
+  }
+
+  /**
+   * Match badge for the SSR view. Counts against the FULL article dataset (not just
+   * current-page cards), so the user sees an honest total even when matches live on
+   * other pages — the user's complaint was that interests appeared to "do nothing"
+   * because the visible 20 cards don't always include matches.
+   */
+  function refreshMatchBadgeFromFullDataset() {
+    const interests = new Set(getInterests());
+    const all = getAllArticles();
+    refreshMatchBadgeFromArticles(all, interests);
+  }
+  function refreshMatchBadgeFromArticles(articles: ClientArticle[], interests: Set<string>) {
+    const badge = document.getElementById('itp-match-badge');
+    if (!badge) return;
+    if (interests.size === 0) {
+      badge.hidden = true;
+      badge.textContent = '';
+      return;
+    }
+    const count = articles.filter((a) => a.tags.some((t) => interests.has(t))).length;
+    if (count === 0) {
+      badge.hidden = true;
+      badge.textContent = '';
+      return;
+    }
+    badge.hidden = false;
+    badge.textContent = `관심사 일치 ${count}건`;
+  }
+
+  // ---------- SSR card highlight + pinning (current-page visual only) ----------
+  function applyInterestHighlights() {
+    const list = document.querySelector('[data-testid="article-list"]');
+    if (!list) return;
+    const interests = new Set(getInterests());
+    const cards = list.querySelectorAll<HTMLElement>('[data-testid="article-card"]');
+    cards.forEach((card) => {
+      const tags = (card.dataset.tags || '').split(',').filter(Boolean);
+      const isMatch = interests.size > 0 && tags.some((t) => interests.has(t));
+      card.classList.toggle('interest-match', isMatch);
+    });
+  }
+
+  function pinInterestMatchesInList() {
+    const list = document.querySelector('[data-testid="article-list"]');
+    if (!list) return;
+    const interests = getInterests();
+    const cards = Array.from(list.querySelectorAll<HTMLElement>('[data-testid="article-card"]'));
+
+    cards.forEach((card, i) => {
+      if (!card.dataset.originalIndex) card.dataset.originalIndex = String(i);
+    });
+
+    if (interests.length === 0) {
+      const sorted = [...cards].sort(
+        (a, b) => Number(a.dataset.originalIndex ?? 0) - Number(b.dataset.originalIndex ?? 0)
+      );
+      sorted.forEach((card) => list.appendChild(card));
+      return;
+    }
+
+    const matched: HTMLElement[] = [];
+    const unmatched: HTMLElement[] = [];
+    cards.forEach((card) => {
+      const tags = (card.dataset.tags || '').split(',').filter(Boolean);
+      const isMatch = interests.some((i) => tags.includes(i));
+      (isMatch ? matched : unmatched).push(card);
+    });
+    [...matched, ...unmatched].forEach((card) => list.appendChild(card));
+  }
+
+  // ---------- Top-row rebuild ----------
+  /**
+   * Rebuild the top-6 row. Priority order (Oracle review):
+   *   1. Currently-active filter tags (so user never loses sight of what's filtering)
+   *   2. Saved interests (per-user pinning)
+   *   3. Most-popular tags (fallback)
+   * Active filter chips also get visual + aria-pressed state.
+   */
+  function refreshTopRow() {
+    const row = document.getElementById('itp-chips-row');
+    if (!row) return;
+    const interests = getInterests();
+    const counts = getTagCounts();
+    const active = state.activeTags;
+    const interestsSet = new Set(interests);
+
+    // Compose top row: active first, then interests, then popular. Dedup via Set.
+    const seen = new Set<string>();
+    const composed: string[] = [];
+    const pushIfNew = (t: string) => {
+      if (seen.has(t) || composed.length >= TOP_N) return;
+      seen.add(t);
+      composed.push(t);
+    };
+    Array.from(active).sort().forEach(pushIfNew);
+    interests.forEach(pushIfNew);
+    computeTopTags(interests, counts, TOP_N).forEach(pushIfNew);
+
+    const allActive = active.size === 0;
+    const allChip = `<button class="itp-chip itp-chip-all${allActive ? ' active' : ''}" data-tag="all" type="button" aria-pressed="${allActive}">
+      <span class="itp-chip-label">전체</span>
+    </button>`;
+
+    const chips = composed.map((tag) => {
+      const isActive = active.has(tag);
+      const isSaved = interestsSet.has(tag);
+      const star = isSaved ? '★' : '☆';
+      const safeTag = escapeHtml(tag);
+      return `<span class="itp-chip-wrap${isActive ? ' active' : ''}">
+        <button class="itp-chip${isActive ? ' active' : ''}" data-tag="${safeTag}" type="button" aria-pressed="${isActive}">
+          <span class="itp-chip-label">${safeTag}</span>
+          <span class="itp-chip-count">${counts[tag] ?? 0}</span>
+        </button>
+        <button class="itp-chip-star${isSaved ? ' on' : ''}" type="button" data-star data-tag="${safeTag}" aria-label="${safeTag} 관심사 토글" aria-pressed="${isSaved}" title="${isSaved ? '관심사에서 제거' : '관심사로 저장'}">${star}</button>
+      </span>`;
+    }).join('');
+
+    row.innerHTML = allChip + chips;
+  }
+
+  // ---------- UI: stars + interest pills (expanded panel) ----------
+  function refreshInterestsUI() {
+    const interests = getInterests();
+    const interestsSet = new Set(interests);
+
+    // Star state on every chip across the panel (top row stars are also rebuilt by refreshTopRow).
+    document.querySelectorAll<HTMLElement>('[data-star]').forEach((star) => {
+      const tag = star.dataset.tag || '';
+      const on = interestsSet.has(tag);
+      star.textContent = on ? '★' : '☆';
+      star.classList.toggle('on', on);
+      star.setAttribute('aria-pressed', String(on));
+      star.setAttribute('title', on ? '관심사에서 제거' : '관심사로 저장');
+    });
+
+    // Header label
+    const label = document.getElementById('itp-label');
+    if (label) {
+      label.textContent =
+        interests.length > 0
+          ? `⭐ 관심사 & 태그 (${interests.length}개 저장)`
+          : '⭐ 관심사 & 태그';
+    }
+
+    const countEl = document.getElementById('itp-interests-count');
+    if (countEl) countEl.textContent = `(${interests.length})`;
+    const clearBtn = document.getElementById('itp-clear');
+    if (clearBtn) (clearBtn as HTMLElement).hidden = interests.length === 0;
+    const hint = document.getElementById('itp-interests-hint');
+    if (hint) (hint as HTMLElement).hidden = interests.length > 0;
+
+    const row = document.getElementById('itp-interests-row');
+    if (row) {
+      if (interests.length === 0) {
+        row.hidden = true;
+        row.innerHTML = '';
+      } else {
+        row.hidden = false;
+        row.innerHTML = interests
+          .map(
+            (t) => `
+            <button type="button" class="itp-interest-pill" data-remove-interest data-tag="${escapeHtmlAttr(t)}">
+              <span>★ ${escapeHtmlText(t)}</span>
+              <span class="itp-interest-pill-x" aria-hidden="true">×</span>
+            </button>`
+          )
+          .join('');
+      }
+    }
+  }
+
+  function escapeHtmlAttr(s: string): string {
+    return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function escapeHtmlText(s: string): string {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  // ---------- Active tag chip styling ----------
+  /**
+   * Sync DOM active state to state.activeTags. Multi-tag aware: every chip whose tag is in
+   * the set gets .active + aria-pressed=true. The "전체" chip is active when set is empty.
+   * Also ensures the wrapper gets .active so CSS can style the whole pill (chip + star).
+   */
+  function syncChipActiveStates() {
+    const active = state.activeTags;
+    const noFilter = active.size === 0;
+    document.querySelectorAll<HTMLElement>('.itp-chip').forEach((chip) => {
+      const tag = chip.dataset.tag || '';
+      const on = tag === 'all' ? noFilter : active.has(tag);
+      chip.classList.toggle('active', on);
+      chip.setAttribute('aria-pressed', String(on));
+    });
+    document.querySelectorAll<HTMLElement>('.itp-chip-wrap').forEach((wrap) => {
+      const chip = wrap.querySelector<HTMLElement>('.itp-chip');
+      const tag = chip?.dataset.tag || '';
+      wrap.classList.toggle('active', !!tag && active.has(tag));
+    });
+  }
+
+  function applyTagFilter(tag: string) {
+    toggleTag(tag);
+    syncChipActiveStates();
+    syncTagsToUrl();
+    refreshTopRow();
+    syncChipActiveStates(); // re-sync after refreshTopRow rebuilds top row
+    refreshSelectedSummary();
+    renderFilteredView();
+  }
+
+  /**
+   * Renders the "selected filters" summary bar shown above the expanded panel when
+   * the user has 1+ active tags. Each chip is removable (X). Helps multi-tag UX:
+   * user sees what's active at a glance and can clear individual tags without scrolling.
+   */
+  function refreshSelectedSummary() {
+    const summary = document.getElementById('itp-selected-summary');
+    if (!summary) return;
+    const tags = Array.from(state.activeTags).sort();
+    if (tags.length === 0) {
+      summary.hidden = true;
+      summary.innerHTML = '';
+      return;
+    }
+    summary.hidden = false;
+    const items = tags.map(
+      (t) => `<button type="button" class="itp-selected-pill" data-remove-tag data-tag="${escapeHtmlAttr(t)}" title="&quot;${escapeHtmlAttr(t)}&quot; 필터 제거">
+        <span>#${escapeHtmlText(t)}</span>
+        <span class="itp-selected-pill-x" aria-hidden="true">×</span>
+      </button>`
+    ).join('');
+    summary.innerHTML =
+      `<span class="itp-selected-label">활성 필터</span>${items}` +
+      `<button type="button" class="itp-selected-clear" id="itp-selected-clear">모두 지우기</button>`;
+  }
+
+  // ---------- Initialization ----------
+function initInterestTagPanel() {
+    // Reset persisted search state from URL on EVERY page load.
+    // Without this, persisted `state.activeSearchResults` from window.__itpState would
+    // survive Astro view-transition navigation and incorrectly keep the new page filtered
+    // by the previous page's search query when the new URL has no `?q=`.
+    const urlQuery = new URLSearchParams(window.location.search).get('q') || '';
+    if (!urlQuery) {
+      state.activeSearchQuery = '';
+      state.activeSearchResults = null;
+    }
+    // Reset the article cache too — a different page has a different #all-articles-data
+    // payload (e.g. /articles vs /articles/page/2 share the same set, but a future page
+    // partition would not), so we conservatively re-parse on each navigation.
+    state.allArticles = null;
+    state.tagCounts = null;
+
+    // Always refresh the top row + UI on every page-load (View Transitions navigation
+    // re-runs astro:page-load even though listeners persist).
+    refreshTopRow();
+    refreshInterestsUI();
+    applyInterestHighlights();
+    pinInterestMatchesInList();
+    refreshMatchBadgeFromFullDataset();
+
+    // Apply initial state from URL (?tag=&tag=) — must run after refreshTopRow so chips exist.
+    const validTags = new Set<string>();
+    document.querySelectorAll<HTMLElement>('.itp-chip').forEach((c) => {
+      if (c.dataset.tag && c.dataset.tag !== 'all') validTags.add(c.dataset.tag);
+    });
+    state.activeTags = parseTagsFromUrl(validTags);
+    // Some active tags from the URL may not be in the popular top-N — rebuild the top row to pin them.
+    refreshTopRow();
+    syncChipActiveStates();
+    refreshSelectedSummary();
+
+    // If URL had any tag or origin or active search, render the filtered view.
+    if (hasActiveTags() || getActiveOrigin() !== 'all' || state.activeSearchResults !== null) {
+      renderFilteredView();
+    } else {
+      // Ensure SSR view is restored if persisted state is now cleared.
+      const filteredContainer = document.getElementById('itp-filtered-results');
+      if (filteredContainer && filteredContainer.style.display !== 'none') {
+        renderFilteredView();
+      }
+    }
+
+    // Bind document/event delegation listeners ONCE, never re-bind on subsequent page loads.
+    if (state.listenersBound) return;
+    state.listenersBound = true;
+
+    // ----- Delegated click handler covers chips, stars, clear, remove-pill, toggle.
+    // Using event delegation means newly-rendered top-row chips and re-rendered pills
+    // automatically work without re-binding.
+    document.addEventListener('click', (ev) => {
+      // Oracle review: normalize ev.target. On some browsers raw clicks on text inside a
+      // <button> can yield a Text node, where .closest() does not exist — silently breaking
+      // the toggle. Walk up to the nearest Element first.
+      const raw = ev.target as Node | null;
+      if (!raw) return;
+      const target =
+        raw.nodeType === 1
+          ? (raw as Element)
+          : (raw.parentElement as Element | null);
+      if (!target) return;
+
+      // Star toggle (sibling button so no nesting issues).
+      const star = target.closest<HTMLElement>('[data-star]');
+      if (star) {
+        ev.preventDefault();
+        const tag = star.dataset.tag || '';
+        if (tag) toggleInterest(tag);
+        return;
+      }
+
+      // Remove-interest pill
+      const removePill = target.closest<HTMLElement>('[data-remove-interest]');
+      if (removePill) {
+        ev.preventDefault();
+        const tag = removePill.dataset.tag || '';
+        if (tag) toggleInterest(tag);
+        return;
+      }
+
+      // Remove a single active tag filter (X on selected-summary pill).
+      const removeTag = target.closest<HTMLElement>('[data-remove-tag]');
+      if (removeTag) {
+        ev.preventDefault();
+        const tag = removeTag.dataset.tag || '';
+        if (tag) applyTagFilter(tag); // toggleTag removes if present
+        return;
+      }
+
+      // Clear all active tag filters (selected-summary "모두 지우기")
+      if (target.closest('#itp-selected-clear')) {
+        ev.preventDefault();
+        clearTags();
+        syncChipActiveStates();
+        syncTagsToUrl();
+        refreshTopRow();
+        syncChipActiveStates();
+        refreshSelectedSummary();
+        renderFilteredView();
+        return;
+      }
+
+      // Clear all interests
+      if (target.closest('#itp-clear')) {
+        ev.preventDefault();
+        clearInterests();
+        return;
+      }
+
+      // Expand/collapse toggle (sticky button at top of expanded panel works too via #itp-toggle-bottom)
+      const toggle = target.closest<HTMLElement>('#itp-toggle, #itp-toggle-bottom');
+      if (toggle) {
+        const expanded = document.getElementById('itp-expanded');
+        const topToggle = document.getElementById('itp-toggle');
+        if (!expanded || !topToggle) return;
+        const wasHidden = expanded.hidden;
+        expanded.hidden = !wasHidden;
+        topToggle.setAttribute('aria-expanded', String(wasHidden));
+        topToggle.textContent = wasHidden ? '접기 ▲' : '모든 태그 보기 ▼';
+        // If user clicked the bottom collapse, scroll the panel back into view so they don't get lost.
+        if (toggle.id === 'itp-toggle-bottom') {
+          document.querySelector('.interest-tag-panel')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        return;
+      }
+
+      // Tag chip body (last so other handlers above take precedence)
+      const chip = target.closest<HTMLElement>('.itp-chip');
+      if (chip && chip.closest('.interest-tag-panel')) {
+        ev.preventDefault();
+        const tag = chip.dataset.tag || 'all';
+        applyTagFilter(tag);
+      }
+    });
+
+    // Source filter changes — re-render filtered view (origin is read live via getActiveOrigin()).
+    document.addEventListener('source-filter-changed', () => {
+      renderFilteredView();
+    });
+
+    // Article search — store result and re-render.
+    document.addEventListener('article-search-changed', ((e: CustomEvent<{ query: string; origin: string; results: ClientArticle[] }>) => {
+      const { query, results } = e.detail;
+      state.activeSearchQuery = query;
+      state.activeSearchResults = query ? results : null;
+      renderFilteredView();
+    }) as EventListener);
+  }
+
+  document.addEventListener('astro:page-load', initInterestTagPanel);
+</script>
+
+<style>
+  /* ============================================================
+     Modern Apple-style panel.
+
+     SCOPING STRATEGY (important):
+     The panel container `.interest-tag-panel` itself is SSR-rendered and gets
+     Astro's data-astro-cid attribute, so its selector stays scoped.
+
+     But all interactive children (chips, pills, summary bar) are rebuilt at
+     RUNTIME via JS innerHTML — those new DOM nodes do NOT have the scoping
+     attribute, so a plain scoped selector wouldn't match them.
+
+     Astro's `:global()` per-selector escape hatch solves this cleanly:
+     `.interest-tag-panel :global(.itp-foo)` keeps the parent scoped (no
+     site-wide leak) while opting the inner selector out of scoping so it
+     matches both SSR and JS-rendered nodes.
+
+     Keep the `.itp-` prefix discipline for new selectors so we never collide.
+     ============================================================ */
+
+  /* Honor [hidden] on flex/inline-flex elements (Oracle review). */
+  .interest-tag-panel :global([hidden]) {
+    display: none !important;
+  }
+
+  .interest-tag-panel {
+    background: linear-gradient(135deg, #FFFFFF 0%, var(--color-bg-secondary) 100%);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-lg);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .interest-tag-panel:hover {
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Header --------------------------------------------------- */
+  .interest-tag-panel :global(.itp-header) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+  }
+  .interest-tag-panel :global(.itp-header-left) {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+  .interest-tag-panel :global(.itp-label) {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text);
+    letter-spacing: -0.01em;
+  }
+  .interest-tag-panel :global(.itp-match-badge) {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px var(--space-sm);
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--color-accent) 0%, #FFA000 100%);
+    color: #FFFFFF;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    box-shadow: 0 1px 3px rgba(252, 185, 36, 0.4);
+  }
+
+  /* Toggle button (top + bottom collapse) -------------------- */
+  .interest-tag-panel :global(.itp-toggle) {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 6px var(--space-md);
+    transition:
+      background 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+      color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .interest-tag-panel :global(.itp-toggle:hover) {
+    background: var(--color-primary);
+    color: #FFFFFF;
+    border-color: var(--color-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(245, 124, 34, 0.25);
+  }
+  .interest-tag-panel :global(.itp-toggle:active) {
+    transform: translateY(0);
+  }
+  .interest-tag-panel :global(.itp-toggle:focus-visible) {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  /* Selected filters summary (visible when 1+ tags active) -- */
+  .interest-tag-panel :global(.itp-selected-summary) {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    padding: var(--space-sm) var(--space-md);
+    margin-top: var(--space-md);
+    margin-bottom: var(--space-xs);
+    background: rgba(245, 124, 34, 0.06);
+    border: 1px solid rgba(245, 124, 34, 0.2);
+    border-radius: var(--radius-md);
+  }
+  .interest-tag-panel :global(.itp-selected-label) {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-right: var(--space-xs);
+  }
+  .interest-tag-panel :global(.itp-selected-pill) {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 6px 4px var(--space-sm);
+    border-radius: 999px;
+    background: var(--color-primary);
+    color: #FFFFFF;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 600;
+    transition:
+      transform 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+      background 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .interest-tag-panel :global(.itp-selected-pill:hover) {
+    background: var(--color-primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(245, 124, 34, 0.3);
+  }
+  .interest-tag-panel :global(.itp-selected-pill:focus-visible) {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+  .interest-tag-panel :global(.itp-selected-pill-x) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.25);
+    font-size: 0.85rem;
+    line-height: 1;
+    transition: background 0.15s;
+  }
+  .interest-tag-panel :global(.itp-selected-pill:hover .itp-selected-pill-x) {
+    background: rgba(255, 255, 255, 0.4);
+  }
+  .interest-tag-panel :global(.itp-selected-clear) {
+    margin-left: auto;
+    padding: 4px var(--space-sm);
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    color: var(--color-text-muted);
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .interest-tag-panel :global(.itp-selected-clear:hover) {
+    color: var(--color-danger);
+    border-color: var(--color-danger);
+    background: rgba(239, 68, 68, 0.05);
+  }
+  .interest-tag-panel :global(.itp-selected-clear:focus-visible) {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  /* Chips ---------------------------------------------------- */
+  .interest-tag-panel :global(.itp-chips-row),
+  .interest-tag-panel :global(.itp-all-tags) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+
+  /* Standalone "전체" chip — always visible, distinct treatment. */
+  .interest-tag-panel :global(.itp-chip-all) {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px var(--space-md);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-bg);
+    color: var(--color-text-muted);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.2;
+    transition:
+      background 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+      color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .interest-tag-panel :global(.itp-chip-all:hover) {
+    color: var(--color-text);
+    border-color: var(--color-primary);
+    transform: translateY(-1px);
+  }
+  .interest-tag-panel :global(.itp-chip-all.active) {
+    background: var(--color-text);
+    color: #FFFFFF;
+    border-color: var(--color-text);
+    box-shadow: 0 2px 6px rgba(47, 43, 49, 0.2);
+  }
+  .interest-tag-panel :global(.itp-chip-all:focus-visible) {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  /* Chip-wrap groups chip body + star button as siblings. */
+  .interest-tag-panel :global(.itp-chip-wrap) {
+    display: inline-flex;
+    align-items: stretch;
+    border-radius: 999px;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
+    transition:
+      border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .interest-tag-panel :global(.itp-chip-wrap:hover) {
+    border-color: var(--color-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+  .interest-tag-panel :global(.itp-chip-wrap:focus-within) {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+  .interest-tag-panel :global(.itp-chip-wrap.active) {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    box-shadow: 0 2px 8px rgba(245, 124, 34, 0.3);
+  }
+
+  .interest-tag-panel :global(.itp-chip) {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px var(--space-sm);
+    background: transparent;
+    color: var(--color-text-muted);
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: 500;
+    line-height: 1.2;
+    transition: color 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .interest-tag-panel :global(.itp-chip:hover) {
+    color: var(--color-text);
+  }
+  .interest-tag-panel :global(.itp-chip-wrap.active .itp-chip) {
+    color: #FFFFFF;
+  }
+  .interest-tag-panel :global(.itp-chip-label) {
+    font-weight: 600;
+  }
+  .interest-tag-panel :global(.itp-chip-count) {
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    font-variant-numeric: tabular-nums;
+    padding: 1px 6px;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 999px;
+  }
+  .interest-tag-panel :global(.itp-chip-wrap.active .itp-chip-count) {
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* Star button (sibling of chip body inside chip-wrap). */
+  .interest-tag-panel :global(.itp-chip-star) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    padding: 0 8px;
+    background: transparent;
+    color: var(--color-text-muted);
+    border: none;
+    border-left: 1px solid var(--color-border);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.95rem;
+    user-select: none;
+    transition:
+      background 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+      color 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .interest-tag-panel :global(.itp-chip-star:hover) {
+    background: rgba(252, 185, 36, 0.15);
+    color: var(--color-accent);
+    transform: scale(1.15);
+  }
+  .interest-tag-panel :global(.itp-chip-star:focus-visible) {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
+  }
+  .interest-tag-panel :global(.itp-chip-star.on) {
+    color: var(--color-accent);
+  }
+  .interest-tag-panel :global(.itp-chip-wrap.active .itp-chip-star) {
+    color: rgba(255, 255, 255, 0.85);
+    border-left-color: rgba(255, 255, 255, 0.3);
+  }
+  .interest-tag-panel :global(.itp-chip-wrap.active .itp-chip-star.on) {
+    color: var(--color-accent);
+  }
+  .interest-tag-panel :global(.itp-chip-wrap.active .itp-chip-star:hover) {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--color-accent);
+  }
+
+  /* Expanded sections ---------------------------------------- */
+  .interest-tag-panel :global(.itp-expanded) {
+    margin-top: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    animation: itpFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes itpFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .interest-tag-panel :global(.itp-section) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+  .interest-tag-panel :global(.itp-section-header) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+  }
+  .interest-tag-panel :global(.itp-section-title) {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+    letter-spacing: -0.005em;
+  }
+  .interest-tag-panel :global(.itp-section-count) {
+    color: var(--color-text-muted);
+    font-weight: 500;
+    font-size: 0.78rem;
+  }
+  .interest-tag-panel :global(.itp-section-hint) {
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    margin: 0;
+    padding: var(--space-sm) var(--space-md);
+    background: rgba(252, 185, 36, 0.06);
+    border: 1px solid rgba(252, 185, 36, 0.2);
+    border-radius: var(--radius-md);
+    line-height: 1.5;
+  }
+  .interest-tag-panel :global(.itp-clear) {
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 4px var(--space-sm);
+    transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .interest-tag-panel :global(.itp-clear:hover) {
+    color: var(--color-danger);
+    border-color: var(--color-danger);
+    background: rgba(239, 68, 68, 0.05);
+  }
+  .interest-tag-panel :global(.itp-clear:focus-visible) {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  /* Bottom collapse footer ----------------------------------- */
+  .interest-tag-panel :global(.itp-expanded-footer) {
+    display: flex;
+    justify-content: center;
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+  }
+
+  /* Interest pills (saved interests in expanded panel) ------- */
+  .interest-tag-panel :global(.itp-interests-row) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .interest-tag-panel :global(.itp-interest-pill) {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 6px 4px var(--space-sm);
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--color-accent) 0%, #FFA000 100%);
+    color: #FFFFFF;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(252, 185, 36, 0.3);
+    transition:
+      transform 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .interest-tag-panel :global(.itp-interest-pill:hover) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(252, 185, 36, 0.4);
+  }
+  .interest-tag-panel :global(.itp-interest-pill:focus-visible) {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+  .interest-tag-panel :global(.itp-interest-pill-x) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    font-size: 0.85rem;
+    line-height: 1;
+    transition: background 0.15s;
+  }
+  .interest-tag-panel :global(.itp-interest-pill:hover .itp-interest-pill-x) {
+    background: rgba(255, 255, 255, 0.5);
+  }
+
+  /* Filtered results container ------------------------------- */
+  .interest-tag-panel :global(.itp-filtered-results) {
+    margin-top: var(--space-md);
+  }
+  .interest-tag-panel :global(.itp-filtered-header) {
+    margin-bottom: var(--space-md);
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    font-weight: 500;
+  }
+  .interest-tag-panel :global(.itp-filtered-empty) {
+    text-align: center;
+    padding: var(--space-xl);
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+  }
+
+  /* Mobile --------------------------------------------------- */
+  @media (max-width: 768px) {
+    .interest-tag-panel {
+      padding: var(--space-md);
+      border-radius: var(--radius-md);
+    }
+    .interest-tag-panel :global(.itp-header) {
+      flex-wrap: wrap;
+    }
+    .interest-tag-panel :global(.itp-chip),
+    .interest-tag-panel :global(.itp-chip-all) {
+      padding: 8px var(--space-sm);
+      font-size: 0.85rem;
+    }
+    .interest-tag-panel :global(.itp-chip-star) {
+      min-width: 32px;
+      font-size: 1rem;
+    }
+    .interest-tag-panel :global(.itp-selected-clear) {
+      margin-left: 0;
+      width: 100%;
+      margin-top: var(--space-xs);
+    }
+  }
+
+  /* Reduced motion respect ----------------------------------- */
+  @media (prefers-reduced-motion: reduce) {
+    .interest-tag-panel,
+    .interest-tag-panel :global(.itp-toggle),
+    .interest-tag-panel :global(.itp-chip-wrap),
+    .interest-tag-panel :global(.itp-chip-all),
+    .interest-tag-panel :global(.itp-chip-star),
+    .interest-tag-panel :global(.itp-selected-pill),
+    .interest-tag-panel :global(.itp-interest-pill) {
+      transition: none;
+      transform: none !important;
+    }
+    .interest-tag-panel :global(.itp-expanded) {
+      animation: none;
+    }
+  }
+</style>
+
+<!-- Visible interest-match highlight for ArticleCard.
+     Global because ArticleCard already declares its scoped styles separately. -->
+<style is:global>
+  .article-card.interest-match {
+    border-color: var(--color-accent) !important;
+    background: linear-gradient(
+      135deg,
+      var(--color-bg) 0%,
+      rgba(252, 185, 36, 0.08) 100%
+    );
+    box-shadow: 0 0 0 1px var(--color-accent), 0 2px 8px rgba(252, 185, 36, 0.15);
+    position: relative;
+  }
+  /*
+   * Interest-match badge — floating notification bubble OUTSIDE the card boundary,
+   * never affecting internal layout.
+   *
+   * Why outside the card?
+   *   The card's `.article-meta` row contains badges + date with `margin-left: auto`.
+   *   Putting the badge inside (whether as a flex item or with internal padding)
+   *   either pushes content (causing wrap on YouTube cards) or shrinks usable
+   *   width (causing wrap on plain cards too — measured 53.66px / 2 lines).
+   *   By positioning the badge at `top: -8px; left: -8px` it overhangs the card
+   *   like a notification dot — ZERO impact on internal layout regardless of
+   *   thumbnail/badge variants. Card has `position: relative` already, so this
+   *   anchors correctly.
+   *
+   * Outer ring (white box-shadow) crisply separates the badge from the page
+   * background, matching the modern Apple-style theme of the rest of the panel.
+   */
+  .article-card.interest-match::before {
+    content: '⭐';
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    background: linear-gradient(135deg, var(--color-accent) 0%, #FFA000 100%);
+    color: #FFFFFF;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    line-height: 1;
+    box-shadow:
+      0 0 0 2px var(--color-bg, #FFFFFF),
+      0 2px 8px rgba(252, 185, 36, 0.5);
+    pointer-events: none;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .article-card.interest-match:hover::before {
+    transform: scale(1.1);
+  }
+
+  /* Honor user's reduced-motion preference for the badge hover. */
+  @media (prefers-reduced-motion: reduce) {
+    .article-card.interest-match::before {
+      transition: none;
+    }
+    .article-card.interest-match:hover::before {
+      transform: none;
+    }
+  }
+</style>

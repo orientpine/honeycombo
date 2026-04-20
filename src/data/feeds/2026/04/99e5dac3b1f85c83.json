@@ -4,7 +4,7 @@
   "url": "https://www.wired.com/story/in-the-wake-of-anthropics-mythos-openai-has-a-new-cybersecurity-model-and-strategy/",
   "source": "Wired",
   "type": "article",
-  "description": "OpenAI says its safeguards “sufficiently reduce cyber risk” for now, while GPT-5.4-Cyber is a new cybersecurity-focused model.",
+  "description": "## 개요\n\nOpenAI는 사이버 보안 전략의 다음 단계를 발표하고, 디지털 방어자들을 위한 새로운 모델인 GPT-5.4-Cyber를 공개했습니다. 이는 경쟁사인 Anthropic의 Claude Mythos Preview 모델 공개 연기와 generative AI가 사이버 보안에 미치는 영향에 대한 업계의 논의 와중에 나왔습니다.\n\n## 주요 내용\n\n- **GPT-5.4-Cyber 모델 출시:** OpenAI는 디지털 방어자를 위해 특별히 설계된 새로운 사이버 보안 모델인 GPT-5.4-Cyber를 발표했습니다.\n- **OpenAI의 사이버 보안 전략:**\n    - **3가지 핵심 기둥:**\n        1. **Know Your Customer (KYC) 및 접근 통제:** 합법적인 사용을 위한 접근 권한 부여에 있어 자의적인 결정을 피하고, \"Trusted Access for Cyber (TAC)\"와 같은 시스템을 통해 제한적인 파트너십 출시와 자동화된 시스템을 결합합니다.\n        2. **반복적 배포 (Iterative Deployment):** 새로운 기능을 신중하게 출시하고 개선하여 실제 세계의 인사이트와 피드백을 얻으며, 특히 \"jailbreak\" 및 기타 적대적 공격에 대한 복원력과 방어 역량 향상에 중점을 둡니다.\n        3. **소프트웨어 보안 및 디지털 방어 투자:** 생성형 AI 확산에 따른 소프트웨어 보안 및 기타 디지털 방어 역량을 지원하는 투자를 강조합니다.\n    - **기존 보안 노력과의 통합:** Codex Security, 사이버 보안 보조금 프로그램, Linux Foundation 기부, \"Preparedness Framework\" 등 기존의 광범위한 보안 노력과 통합됩니다.\n- **Anthropic과의 차별화:** OpenAI는 현재 모델의 안전 장치와 방어 체계를 강조하며, 장기적으로 더 강력한 보호 조치가 필요함을 시사하는 톤을 사용했습니다. Anthropic은 더 발전된 AI 모델이 해커에 의해 악용될 수 있다는 우려로 Claude Mythos Preview 모델의 비공개 출시를 결정했습니다.\n- **업계 논의:** Anthropic의 주장은 일부 보안 전문가들 사이에서 과장되었다는 의견과, 새로운 AI 기술이 기존 보안 취약점을 악용할 수 있다는 우려가 공존하고 있습니다.\n\n## 시사점\n\nOpenAI의 GPT-5.4-Cyber 모델 출시와 새로운 사이버 보안 전략은 AI 기술 발전 속도에 맞춰 진화하는 사이버 위협에 대한 업계의 대응 방안을 제시하며, AI의 안전한 배포와 활용을 위한 기술 및 정책적 노력이 중요함을 보여줍니다.",
   "tags": [
     "tech",
     "security"

@@ -1,0 +1,13 @@
+{
+  "id": "de0785e61ed5ddde",
+  "title": "ChatGPT and Codex Down",
+  "url": "https://status.openai.com/incidents/01KPNN2V2SMP3TAN3MCJK87W50",
+  "source": "Hacker News",
+  "type": "article",
+  "tags": [
+    "tech"
+  ],
+  "published_at": "2026-04-20T15:04:52.000Z",
+  "feed_id": "hackernews",
+  "description": "## 개요\n\n이 문서는 OpenAI의 ChatGPT와 Codex 서비스의 가용성(Availability) 관련 정보를 제공하며, 개별 고객의 경험은 구독 등급 및 사용 모델에 따라 달라질 수 있음을 명시합니다.\n\n## 주요 내용\n\n*   **종합적인 가용성 지표:** 가용성 지표는 모든 티어, 모델, 오류 유형을 집계한 수준으로 보고됩니다.\n*   **개별 고객 가용성 차이:** 개별 고객의 가용성은 구독 등급, 사용 중인 특정 모델, API 기능에 따라 달라질 수 있습니다.\n\n## 시사점\n\nOpenAI는 서비스 가용성에 대한 종합적인 지표를 제공하지만, 실제 사용자 경험은 각기 다른 요인에 의해 영향을 받을 수 있음을 명확히 하고 있습니다."
+}

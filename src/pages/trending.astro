@@ -304,6 +304,26 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
   }
 
+  /* Honor user's reduced-motion preference for the new like-button transforms.
+     The color/background transitions stay (they're not motion), but lift/scale
+     micro-interactions are disabled. Layout is still locked to the 1em icon box,
+     so the no-shift behavior is preserved. */
+  @media (prefers-reduced-motion: reduce) {
+    .like-button {
+      transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .like-button:hover:not(:disabled),
+    .like-button:active:not(:disabled) {
+      transform: none;
+    }
+    .like-button-icon {
+      transition: none;
+    }
+    .like-button.is-liked .like-button-icon {
+      transform: none;
+    }
+  }
+
   /* Skeleton loading */
   .skeleton-card {
     pointer-events: none;

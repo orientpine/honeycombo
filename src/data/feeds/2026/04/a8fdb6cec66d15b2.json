@@ -4,7 +4,7 @@
   "url": "https://arstechnica.com/gadgets/2026/04/google-launches-search-app-for-windows-gemini-app-for-mac/",
   "source": "Ars Technica",
   "type": "article",
-  "description": "Google mostly creates products for the web, but it has some new desktop apps today.",
+  "description": "## 개요\n\nGoogle이 Mac 사용자를 위해 최초의 독립형 Gemini 데스크톱 앱을 출시했으며, 이는 웹 버전의 Gemini와 거의 모든 기능을 제공하며 파일 업로드, 노트북 생성, 다양한 AI 모델 접근 등의 기능을 포함합니다.\n\n## 주요 내용\n\n*   **Mac용 Gemini 데스크톱 앱 출시:** Google은 Mac 사용자를 위한 최초의 독립형 Gemini 데스크톱 앱을 출시했습니다. 이는 웹 검색 앱이 없는 macOS에 Google의 AI 기능을 제공하기 위한 것입니다.\n*   **빠른 개발 및 기능:** 이 앱은 100일 미만의 개발 기간 동안 100개 이상의 기능을 제공하도록 구축되었으며, Google Antigravity를 사용하여 개발되었습니다.\n*   **접근 방식 및 통합:** Windows 검색 앱과 유사하게 Option + Space 단축키를 사용하여 Gemini 프롬프트 바를 불러올 수 있습니다. 일반 질문뿐만 아니라 열려 있는 창을 활용하여 추가적인 맥락을 얻을 수 있습니다.\n*   **풍부한 기능:** Mac용 Gemini 앱은 웹 버전과 거의 모든 기능을 공유하며, 파일 업로드, 노트북 생성, Deep Research 및 Canvas와 같은 도구 접근, 이미지, 비디오, 음악 생성 모델 접근이 가능합니다.\n*   **Swift로 코딩 및 향후 업데이트:** 앱은 Swift 언어로 코딩되었으며, 향후 더 많은 기능이 추가될 예정입니다.\n*   **배포 방식:** App Store를 통해 제공되지 않고 Google 웹사이트에서 DMG 파일을 다운로드하여 설치해야 합니다. Gemini 지원 지역 및 언어 모두에서 사용 가능합니다.\n\n## 시사점\n\nGoogle의 Mac용 Gemini 데스크톱 앱 출시는 Mac 사용자들에게 강력한 AI 기능을 데스크톱 환경에서 직접 접근할 수 있는 새로운 방법을 제공하며, 향후 데스크톱 AI 앱 생태계에 대한 Google의 의지를 보여줍니다.",
   "tags": [
     "tech",
     "ai",

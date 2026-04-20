@@ -4,7 +4,7 @@
   "url": "https://www.ycombinator.com/companies/arc-prize-foundation/jobs/AKZRZDN-platform-engineer-benchmark-lead",
   "source": "Hacker News",
   "type": "article",
-  "description": "Comments",
+  "description": "## 개요\n\n본 문서는 Arc Prize Foundation (YC W26)에서 ARC-AGI 시리즈 벤치마크 플랫폼을 구축하고 발전시킬 플랫폼 엔지니어 채용 공고에 대한 내용을 담고 있습니다.\n\n## 주요 내용\n\n*   **채용 포지션:** Platform Engineer - Benchmark Lead\n*   **회사:** Arc Prize Foundation (YC W26)\n*   **역할:** ARC-AGI 시리즈 벤치마크 플랫폼의 기술적 오너 및 아키텍트로서, 현재 시스템 안정화부터 미래 버전의 기반 구축까지 담당.\n*   **주요 업무:**\n    *   V3 백엔드 및 인프라 안정화 및 확장, 현재 벤치마크 플랫폼의 신뢰성 유지.\n    *   검증 및 테스팅 레이어 구축: 자동화된 모델 실행, 채점, 재현 가능한 평가 파이프라인, 심층 모델 분석을 위한 데이터 수집 및 쿼리 시스템.\n    *   ARC-AGI-4 구현 지원: 새로운 환경, 인간 데이터 수집, 채점, 배포에 필요한 백엔드 및 플랫폼 구축.\n    *   ARC-AGI-5의 초기 기술적 기반 마련.\n*   **자격 요건:**\n    *   Python 기반 백엔드 엔지니어링 경험, 분산 시스템, SQL, 클라우드 인프라, 프로덕션 안정성 경험.\n    *   AI/ML 시스템 또는 대규모 기술 플랫폼을 위한 평가 허니스(evaluation harnesses), 테스팅 파이프라인, 실험/데이터 로깅, 분석 워크플로우 구축 경험 (선호).\n    *   벤치마크 플랫폼의 기술적 오너 및 아키텍트 역할 수행 가능한 시니어 레벨.\n*   **근무 조건:**\n    *   급여: $150K - $250K\n    *   근무지: 미국 / 원격 (미국 내 거주자)\n    *   고용 형태: 정규직\n    *   비자: 미국 시민권자/비자 소지자만 지원 가능\n\n## 시사점\n\n본 채용은 AI 일반 지능 벤치마크 플랫폼의 발전과 고도화를 위한 핵심적인 역할을 수행할 숙련된 엔지니어를 찾고 있으며, 이는 AI 모델 평가 및 개발 생태계에 중요한 기여를 할 것으로 보입니다.",
   "tags": [
     "tech"
   ],

@@ -4,7 +4,7 @@
   "url": "https://techcrunch.com/2026/04/15/reid-hoffman-weighs-in-on-the-tokenmaxxing-debate/",
   "source": "TechCrunch",
   "type": "article",
-  "description": "Reid Hoffman says tracking AI token use can gauge adoption, but cautions it should be paired with context and not treated as a direct productivity metric.",
+  "description": "## 개요\n\n이 콘텐츠는 AI 기술 분야에서 주목받고 있는 \"토큰맥싱(tokenmaxxing)\" 논쟁에 대해 LinkedIn 공동 창업자이자 벤처 투자가인 리드 호프먼(Reid Hoffman)의 견해를 중심으로 다룹니다.\n\n## 주요 내용\n\n- **토큰맥싱(tokenmaxxing)의 정의**: AI 모델이 프롬프트를 이해하고 응답을 생성할 때 처리하는 데이터 조각인 'AI 토큰'의 사용량을 측정하는 개념입니다. 기업들은 이를 직원들의 AI 도구 활용도를 파악하는 지표로 활용하려는 움직임을 보이고 있습니다.\n- **리드 호프먼의 지지**: 리드 호프먼은 AI 토큰 사용량 추적을 긍정적으로 평가하며, 직원들이 AI를 적극적으로 실험하고 참여하도록 장려하는 것이 중요하다고 강조했습니다.\n- **토큰 사용량 측정의 한계와 보완**: 호프먼은 토큰 사용량만으로 생산성을 완벽하게 측정할 수는 없으며, 직원들이 AI를 어떤 목적으로 활용하는지 함께 이해해야 한다고 말했습니다. 실패한 실험이라도 그 과정에서 배우는 것이 중요하다고 언급했습니다.\n- **AI 도입 전략**: 호프먼은 AI를 조직 전체에 내재화하고, 정기적인 점검을 통해 개인 및 팀의 AI 활용 경험과 학습 내용을 공유하는 것을 권장했습니다.\n\n## 시사점\n\nAI 시대에 기업들이 직원들의 AI 활용도를 파악하고 혁신을 촉진하기 위해 토큰 사용량 추적을 고려할 수 있으며, 이는 AI 도입 전략 수립에 있어 중요한 참고 자료가 될 수 있습니다.",
   "tags": [
     "tech",
     "ai",

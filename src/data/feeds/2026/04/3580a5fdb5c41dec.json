@@ -4,7 +4,7 @@
   "url": "https://www.wired.com/story/schematik-is-cursor-for-hardware-anthropic-wants-in-on-it/",
   "source": "Wired",
   "type": "article",
-  "description": "Schematik is a program that aims to help people vibe code for physical devices. Hopefully, it won’t blow anything up.",
+  "description": "## 개요\n\nSchematik은 사용자가 원하는 물리적 장치를 AI의 도움을 받아 설계하고 제작할 수 있도록 돕는 플랫폼으로, 하드웨어 제작의 진입 장벽을 낮추는 것을 목표로 합니다.\n\n## 주요 내용\n\n- **Schematik의 등장 배경:** Samuel Beek는 ChatGPT의 부정확한 안내로 인해 직접 만든 전기 장치가 오작동하여 전선이 모두 끊어지는 경험을 한 후, 하드웨어 제작에 대한 깊이 있는 이해를 돕는 AI 도구의 필요성을 느꼈습니다.\n- **Schematik의 기능:** Schematik은 사용자가 만들고 싶은 물리적 장치에 대한 설명을 입력하면, 필요한 부품 목록, 구매처 링크, 그리고 조립 가이드까지 제공하는 \"하드웨어용 Cursor\"와 같은 역할을 합니다.\n- **사용자 경험 및 투자:** Marc Vermeeren과 같은 사용자들은 Schematik을 통해 MP3 플레이어, AI 코딩 세션 관리 봇인 Clawy 등 다양한 장치를 성공적으로 제작했으며, Schematik은 $4.6 백만 달러의 투자를 유치했습니다.\n- **Anthropic의 지원:** Anthropic은 메이커 및 개발자가 Claude와 상호작용하는 하드웨어 장치를 구축할 수 있도록 지원하는 Bluetooth API를 출시했으며, 이는 Schematik 및 유사 프로젝트에 영감을 주었을 가능성이 있습니다.\n- **하드웨어 제작의 민주화:** Beek는 Schematik이 기존에 매우 제한적이었던 하드웨어 제작 분야의 진입 장벽을 낮추고, 더 많은 사람들이 기술을 배우고 제작에 참여할 수 있도록 돕기를 희망합니다.\n- **안정성 및 안전성:** Beek는 Schematik이 폭발이나 오작동을 방지하기 위해 낮은 전압(3~5V) 아키텍처 기반의 장치 제작만 지원하며, 물리 법칙에 기반한 전자 부품의 정확성을 활용하여 안전성을 확보하고자 합니다.\n- **AI와 하드웨어의 미래:** iFixit CEO Kyle Wiens는 전자 장치 설계의 복잡성을 고려할 때, AI가 부품 호환성 확인과 같은 규모 있는 문제를 해결하는 데 유용할 것이라며 Schematik의 방향성을 긍정적으로 평가했습니다.\n\n## 시사점\n\nSchematik은 AI 기술을 활용하여 복잡한 하드웨어 제작 과정을 간소화함으로써, 기술 메이커 생태계를 확장하고 더 많은 사람들이 물리적 장치를 창조할 수 있도록 하는 중요한 가능성을 제시합니다.",
   "tags": [
     "tech",
     "gear",

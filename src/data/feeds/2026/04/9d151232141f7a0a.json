@@ -4,7 +4,7 @@
   "url": "https://github.blog/ai-and-ml/github-copilot/github-copilot-cli-for-beginners-getting-started-with-github-copilot-cli/",
   "source": "GitHub Blog",
   "type": "article",
-  "description": "GitHub for Beginners: Getting started with the GitHub Copilot CLI, a step-by-step tutorial. The post GitHub Copilot CLI for Beginners: Getting started with GitHub Copilot CLI appeared first on The GitHub Blog.",
+  "description": "## 개요\n\n이 콘텐츠는 GitHub Copilot CLI를 처음 사용하는 개발자를 대상으로, 터미널에서 AI 코딩 도우미를 활용하는 방법을 단계별로 안내하는 튜토리얼입니다.\n\n## 주요 내용\n\n-   **GitHub Copilot CLI 소개**: Copilot의 에이전트 AI 기능을 CLI로 확장하여, 코드 빌드, 테스트 실행, 자체 오류 수정 등 자율적인 작업 수행을 가능하게 합니다. 이를 통해 사용자는 워크플로우를 중단하지 않고도 작업을 위임하고 결과를 검토할 수 있습니다.\n-   **설치 방법**: Node.js 환경에서 npm을 사용하여 `npm install -g @github/copilot` 명령어로 설치할 수 있습니다. WinGet 또는 Homebrew와 같은 다른 패키지 관리자를 통해서도 설치 가능합니다.\n-   **시작 방법**:\n    -   `Copilot` 명령어로 CLI를 실행합니다.\n    -   `login` 명령어를 통해 GitHub 계정으로 인증합니다.\n    -   Copilot이 폴더를 탐색하고 파일을 수정할 수 있도록 폴더 권한을 부여합니다 (일회성 또는 영구 설정 가능).\n    -   프롬프트를 통해 코드 생성, 프로젝트 개요 요청, 새로운 엔드포인트 추가 등의 작업을 지시할 수 있습니다.\n-   **주요 사용 사례**:\n    -   프로젝트 개요 요청: `Ask for an overview of this project`\n    -   코드 생성 요청: `Let’s add a new endpoint to return all categories`\n    -   Copilot Cloud agent 위임: `/delegate` 명령어로 특정 이슈(예: `#14`) 해결 등 잘 정의된 작업을 위임합니다.\n    -   Copilot 자체 문서 탐색: Copilot에게 직접 사용법에 대한 질문을 하여 안내를 받을 수 있습니다.\n-   **향후 내용 예고**: 다음 튜토리얼에서는 인터랙티브 모드와 비인터랙티브 모드, Copilot CLI의 슬래시 명령어, MCP 서버 활용 등에 대해 다룰 예정입니다.\n\n## 시사점\n\nGitHub Copilot CLI는 개발자가 터미널 환경에서 AI의 도움을 받아 코딩 작업을 효율적으로 수행하고, 학습 및 실험 과정을 간소화할 수 있도록 지원합니다.",
   "tags": [
     "dev",
     "ai & ml",

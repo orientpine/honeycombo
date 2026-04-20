@@ -78,6 +78,11 @@ describe('rss-collect', () => {
       tags: ['tech', 'ai'],
     });
     expect(article?.published_at.toISOString()).toBe('2026-04-10T08:00:00.000Z');
+    // 수집 단계에서는 description을 채우지 않는다 (summarize-articles.ts의 단일 책임).
+    // RSS contentSnippet은 영문 원문 발췌라 한국어 구조화 요약과 의미가 다르며,
+    // 채워두면 summarize가 이미 요약된 것으로 오판해 스킵한다.
+    // 자세한 배경: docs/troubleshooting/rss-summary-english-fallback.md
+    expect(article?.description).toBeUndefined();
   });
 
   it('collects fixture articles, saves files, and deduplicates on repeat runs', async () => {

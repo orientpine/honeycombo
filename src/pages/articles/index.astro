@@ -3,8 +3,8 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
 import Pagination from '../../components/Pagination.astro';
-import TagFilter from '../../components/TagFilter.astro';
-import PersonalizationBar from '../../components/PersonalizationBar.astro';
+import ArticleSearch from '../../components/ArticleSearch.astro';
+import InterestTagPanel from '../../components/InterestTagPanel.astro';
 import SourceFilter from '../../components/SourceFilter.astro';
 import { compareArticles } from '../../lib/article-sort';
 import { serializeArticles } from '../../lib/serialize-articles';
@@ -36,8 +36,10 @@ const allArticles = [
 const totalPages = Math.max(1, Math.ceil(allArticles.length / ITEMS_PER_PAGE));
 const pageArticles = allArticles.slice(0, ITEMS_PER_PAGE);
 
-// Collect all unique tags
+// Collect all unique tags + per-tag article counts (for popularity sort in InterestTagPanel)
 const allTags = [...new Set(allArticles.flatMap(a => a.tags))].sort();
+const tagCounts: Record<string, number> = {};
+allArticles.forEach(a => a.tags.forEach(t => { tagCounts[t] = (tagCounts[t] || 0) + 1; }));
 const curatedCount = allArticles.filter(a => a._type === 'curated').length;
 const submittedCount = allArticles.filter(a => a._type === 'submitted').length;
 const feedCount = allArticles.filter(a => a._type === 'feed').length;
@@ -50,11 +52,11 @@ const allArticlesJson = serializeArticles(allArticles);
     <p class="page-description">최신 기술 뉴스와 에디터 큐레이션</p>
   </header>
   
+  <ArticleSearch />
+
   <SourceFilter curatedCount={curatedCount} submittedCount={submittedCount} feedCount={feedCount} />
 
-  {allTags.length > 0 && <PersonalizationBar availableTags={allTags} />}
-
-  {allTags.length > 0 && <TagFilter tags={allTags} />}
+  {allTags.length > 0 && <InterestTagPanel availableTags={allTags} tagCounts={tagCounts} />}
   
   {allArticles.length === 0 ? (
     <p class="empty-state" data-testid="article-list-empty">

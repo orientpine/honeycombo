@@ -4,7 +4,7 @@
   "url": "https://techcrunch.com/2026/04/17/anthropic-launches-claude-design-a-new-product-for-creating-quick-visuals/",
   "source": "TechCrunch",
   "type": "article",
-  "description": "The company says Claude Design is intended to help people like founders and product managers without a design background share their ideas more easily.",
+  "description": "## 개요\n\nAnthropic이 Claude Design이라는 새로운 실험적 제품을 출시했습니다. 이 제품은 사용자가 Claude를 활용하여 프로토타입, 슬라이드, 원페이저 등 다양한 시각 자료를 빠르게 제작할 수 있도록 지원합니다.\n\n## 주요 내용\n\n- **Claude Design의 기능:** 사용자가 원하는 시각 자료의 내용을 설명하면 Claude가 초기 버전을 생성하며, 이후 직접 편집하거나 요청하여 세부 사항을 수정할 수 있습니다. 예를 들어, \"차분한 타이포그래피, 자연에서 영감을 받은 은은한 색감, 깔끔한 레이아웃을 가진 모바일 명상 앱 프로토타입\"을 요청하고, 이후 색상 변경, 타이포그래피 크기 조절, 다크 모드 추가 등을 진행할 수 있습니다.\n- **Canva와의 관계:** Claude Design은 Canva와 경쟁하기보다는 보완하는 것을 목표로 합니다. 디자인 배경이 없는 사용자가 아이디어 구상 단계에서 시각적인 결과물을 빠르게 만드는 데 중점을 둡니다.\n- **통합 및 디자인 시스템 적용:** Claude Design에서 제작된 결과물은 PDF, URL, PPTX 파일로 내보내거나 Canva로 전송하여 완전한 편집 및 협업이 가능합니다. 또한, 기업의 코드베이스와 디자인 파일을 읽어 팀의 디자인 시스템을 모든 프로젝트에 일관되게 적용할 수 있으며, 이러한 구성 요소를 개선하고 여러 디자인 시스템을 유지할 수 있습니다.\n- **기술 기반 및 접근성:** Claude Design은 Claude Opus 4.7을 기반으로 하며, Claude Pro, Max, Team, Enterprise 구독자에게 리서치 프리뷰로 제공됩니다.\n- **기업 및 프로슈머 시장 확대:** 이번 출시는 Anthropic이 기업 및 프로슈머 시장으로의 확장을 강화하려는 노력을 보여줍니다. 이는 AI 기반 워크플레이스 도구 시장의 경쟁이 심화되는 가운데 이루어졌습니다.\n\n## 시사점\n\nClaude Design은 디자인 경험이 없는 사용자도 아이디어 구상부터 시각 자료 제작까지의 과정을 간소화하여 생산성을 높일 수 있는 도구이며, 기존 디자인 툴과의 연계를 통해 협업 및 디자인 일관성 유지에 기여할 수 있습니다.",
   "tags": [
     "tech",
     "ai",

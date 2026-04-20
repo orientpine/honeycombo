@@ -4,7 +4,7 @@
   "url": "https://github.blog/ai-and-ml/github-copilot/run-multiple-agents-at-once-with-fleet-in-copilot-cli/",
   "source": "GitHub Blog",
   "type": "article",
-  "description": "/fleet lets Copilot CLI dispatch multiple agents in parallel. Learn how to write prompts that split work across files, declare dependencies, and avoid common pitfalls. The post Run multiple agents at once with /fleet in Copilot CLI appeared first on The GitHub Blog.",
+  "description": "## 개요\n\n이 콘텐츠는 GitHub Copilot CLI의 새로운 기능인 `/fleet` 명령어를 소개하며, 여러 개의 독립적인 작업을 동시에 병렬로 처리하여 생산성을 높이는 방법을 설명합니다.\n\n## 주요 내용\n\n-   `/fleet`은 Copilot CLI에서 여러 개의 하위 에이전트(sub-agents)를 병렬로 실행할 수 있게 해주는 슬래시 명령어입니다.\n-   `/fleet`은 사용자의 목표를 독립적인 작업 항목으로 분해하고, 병렬 실행 가능한 작업과 순차 실행이 필요한 작업을 식별하여 동시 다발적으로 실행합니다.\n-   효과적인 `/fleet` 프롬프트 작성을 위해서는 구체적인 결과물(파일, 테스트 스위트, 문서 섹션 등)을 명시하여 작업 분할을 명확히 해야 합니다.\n-   각 작업 항목의 파일 또는 모듈 경계, 제약 조건, 검증 기준을 명시하여 하위 에이전트의 작업 범위를 명확히 설정하는 것이 중요합니다.\n-   작업 간의 의존성이 존재할 경우, 프롬프트에 이를 명시하여 순서대로 실행되도록 조절할 수 있습니다.\n-   `.github/agents/` 디렉토리에 사용자 정의 에이전트를 생성하여 특정 작업에 특화된 모델, 도구, 지침을 지정하고 `/fleet` 프롬프트에서 참조할 수 있습니다.\n-   하위 에이전트가 파일을 덮어쓰는 것을 방지하기 위해 각 에이전트에 파일 할당을 명확히 하거나, 임시 경로에 작성 후 병합하는 방식을 사용해야 합니다.\n-   실행 중인 `/fleet` 작업은 후속 프롬프트를 통해 우선순위 변경, 상태 확인, 완료 기준 명시 등으로 제어할 수 있습니다.\n-   `/fleet`은 여러 파일에 걸친 리팩토링, 여러 컴포넌트에 대한 문서 생성, API/UI/테스트를 아우르는 기능 구현 등 자연스러운 병렬성이 존재하는 작업에 효과적입니다.\n\n## 시사점\n\n`/fleet`은 Copilot CLI의 병렬 처리 능력을 활용하여 복잡한 개발 작업을 더 효율적으로 수행할 수 있게 하며, 프롬프트 엔지니어링을 통해 개발 생산성을 크게 향상시킬 수 있는 강력한 기능입니다.",
   "tags": [
     "dev",
     "ai & ml",

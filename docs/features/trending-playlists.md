@@ -86,4 +86,5 @@
 | 2026-04-13 | 최초 작성 — 트렌딩 플레이리스트 기능 문서화 |
 | 2026-04-13 | Astro View Transitions 호환을 위해 `/trending`을 정적 shell + client fetch 구조로 전환 |
 | 2026-04-14 | 카드 UI를 `/playlists` 페이지 패턴(`playlist-card`)으로 통일 — `trending-card` 구조 제거 |
-| 2026-04-21 | 좋아요 버튼 UI 전면 개선 — pill shape, SVG 하트 아이콘, 카운트 통합, 호버/liked 마이크로-인터랙션, 접근성 강화 |
+| 2026-04-20 | **좋아요 버튼 레이아웃 시프트 해결** — `♡`(빈 하트, ≈ 12.8px)과 `♥`(채워진 하트, ≈ 7.6px) 유니코드 글리프의 고유 너비 차이로 좋아요 토글 시 버튼 폭이 ~1.8px 줄어드는 시프트를 `.like-button-icon`에 `width: 1em; flex: 0 0 1em` 고정을 적용해 해결. (후속 04-21 리디자인에서 SVG 아이콘으로 교체되면서 이 문제는 자연스럽게 해소). |
+| 2026-04-21 | 좋아요 버튼 UI 전면 개선 — 텍스트 글리프(♡♥) → SVG 하트 아이콘, pill shape, 카운트 버튼 내부 통합, 호버/liked 3-state 디자인, 접근성 강화(`aria-label`에 카운트 포함, `:focus-visible` 링, `prefers-reduced-motion` 존중). |

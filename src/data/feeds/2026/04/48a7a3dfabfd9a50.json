@@ -4,7 +4,7 @@
   "url": "https://www.wired.com/story/anthropic-opposes-the-extreme-ai-liability-bill-that-openai-backed/",
   "source": "Wired",
   "type": "article",
-  "description": "Anthropic and OpenAI are clashing over a proposed Illinois law that would let AI labs largely off the hook for mass deaths and financial disasters.",
+  "description": "## 개요\n\n본 콘텐츠는 OpenAI가 지지하는 미국 일리노이주의 AI 규제 법안(SB 3444)에 대해 Anthropic이 반대 의사를 표명하며, AI 기술의 책임 소재 및 규제 방안에 대한 두 주요 AI 기업 간의 입장 차이를 다룹니다.\n\n## 주요 내용\n\n- **SB 3444 법안의 내용:** OpenAI가 지지하는 일리노이주 법안 SB 3444는 AI 시스템이 대규모 피해(수백 명의 사망 또는 10억 달러 이상의 재산 피해)를 유발하는 데 사용될 경우, AI 개발사를 법적 책임에서 면제하는 내용을 담고 있습니다. 단, 개발사가 자체 안전 프레임워크를 마련하고 웹사이트에 게시하는 조건을 전제로 합니다.\n- **Anthropic의 반대 입장:** Anthropic은 SB 3444가 공공 안전과 기업의 책임성을 보장해야 할 투명성 입법의 취지에 반한다고 주장하며, 법안이 기업에게 \"모든 책임으로부터 벗어날 수 있는 카드\"를 제공한다고 비판합니다. Anthropic은 투명성과 함께 심각한 피해를 완화하기 위한 실질적인 책임성을 결합한 법안 수정을 제안하고 있습니다.\n- **OpenAI의 입장:** OpenAI는 SB 3444가 최첨단 AI 시스템으로 인한 심각한 피해의 위험을 줄이면서도 기술이 기업 및 개인에게 보급될 수 있도록 한다고 주장합니다. 또한, 연방 차원의 행동 부재 상황에서 일리노이주와 같은 주들과 협력하여 일관된 안전 프레임워크를 구축하고, 이를 통해 미국이 AI 분야를 선도할 수 있도록 지원하고자 한다고 밝혔습니다.\n- **전문가 및 주지사 사무실 의견:** Secure AI Project의 공동 창립자인 Thomas Woodside는 SB 3444가 이미 존재하는 법적 책임을 거의 완전히 제거하는 극단적인 조치라며, 이는 AI 기업의 책임성을 약화시키는 나쁜 아이디어라고 지적합니다. 일리노이 주지사 사무실 또한 대기업에게 공공의 이익을 보호해야 할 책임을 면제하는 완전한 면책을 부여하는 것에 대해 회의적인 입장을 보였습니다.\n- **규제 및 책임 소재 논쟁:** 이 법안을 둘러싼 논쟁은 AI 시스템의 오용으로 인한 재난 발생 시 책임 주체가 누구인지에 대한 근본적인 질문을 제기하며, 이는 최근 미국 의회가 직면하기 시작한 문제임을 시사합니다.\n\n## 시사점\n\nSB 3444 법안을 둘러싼 OpenAI와 Anthropic의 대립은 AI 기술 발전과 함께 중요해지고 있는 규제 및 책임 소재에 대한 정치적, 기업적 논쟁을 드러내며, 향후 AI 법제화 과정에 중요한 영향을 미칠 수 있습니다.",
   "tags": [
     "tech",
     "business",

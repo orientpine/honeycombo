@@ -4,7 +4,7 @@
   "url": "https://techcrunch.com/2026/04/11/nvidia-backed-sifive-hits-3-65-billion-valuation-for-open-ai-chips/",
   "source": "TechCrunch",
   "type": "article",
-  "description": "The deal is interesting for a number of reasons, including that SiFive's chip designs are based on RISC-V, not x86 or ARM.",
+  "description": "## 개요\n\nNvidia의 투자를 받은 오픈 AI 칩 설계 기업 SiFive가 36.5억 달러의 기업 가치를 달성하며 4억 달러 규모의 투자 유치에 성공했다는 내용입니다.\n\n## 주요 내용\n\n-   SiFive는 UC Berkeley 엔지니어들이 설립한 오픈 소스 칩 설계 기업으로, RISC-V 아키텍처 기반의 칩 설계를 제공합니다.\n-   이번 투자 라운드에는 Nvidia를 포함하여 Atreides Management, Apollo Global Management, D1 Capital Partners 등 다수의 VC, 사모펀드, 헤지펀드가 참여했습니다.\n-   SiFive의 비즈니스 모델은 Arm과 같이 칩 설계를 라이선스하는 방식이며, 직접 칩을 제조 및 판매하지는 않습니다.\n-   RISC-V는 기존에는 임베디드 시스템 등 소규모 용도로 주로 알려졌으나, 이번 투자와 Nvidia의 참여로 AI 데이터센터용 CPU 분야로 확장하고 있습니다.\n-   SiFive의 칩 설계는 Nvidia의 CUDA 소프트웨어 및 NVLink Fusion과 호환되어 Nvidia의 AI 인프라와 통합될 수 있습니다.\n\n## 시사점\n\n이번 투자 유치는 오픈 소스 칩 설계 생태계의 성장을 가속화하고, Nvidia가 경쟁사 Intel 및 AMD에 대응하기 위해 개방형 아키텍처 기반의 CPU 솔루션을 확보하는 전략을 시사합니다.",
   "tags": [
     "tech",
     "tc",

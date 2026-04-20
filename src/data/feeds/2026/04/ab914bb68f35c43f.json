@@ -4,7 +4,7 @@
   "url": "https://github.blog/ai-and-ml/github-copilot/github-copilot-cli-combines-model-families-for-a-second-opinion/",
   "source": "GitHub Blog",
   "type": "article",
-  "description": "Discover how Rubber Duck provides a different perspective to GitHub Copilot CLI. The post GitHub Copilot CLI combines model families for a second opinion appeared first on The GitHub Blog.",
+  "description": "## 개요\n\nGitHub Copilot CLI에 새로 추가된 실험 모드 기능인 Rubber Duck은, 자체적인 계획 및 구현에 대해 다른 AI 모델 가족으로부터 독립적인 검토를 받아 더 나은 결과를 도출하는 기술입니다.\n\n## 주요 내용\n\n- **Rubber Duck의 작동 방식:** Rubber Duck은 주된 Copilot 세션에서 사용하는 AI 모델과는 다른 계열의 AI 모델을 활용하여 독립적인 검토자 역할을 수행합니다. 예를 들어, 주 orchestrator 모델로 Claude를 선택하면 Rubber Duck으로는 GPT-5.4가 사용됩니다.\n- **문제점 해결:** 기존 코딩 에이전트는 자체적인 편향성으로 인해 초기 단계의 사소한 실수나 비효율이 후반부에서 복합적인 문제로 이어질 수 있습니다. Rubber Duck은 이러한 맹점을 보완하기 위해 제3의 관점을 제공합니다.\n- **효과 검증:** SWE-Bench Pro와 같은 대규모, 복잡한 실제 코딩 문제에 대한 평가에서 Claude Sonnet과 Rubber Duck (GPT-5.4)의 조합은 Claude Opus 단독 사용 시의 성능 격차 중 74.7%를 해소했으며, 특히 3개 이상의 파일과 70단계 이상의 복잡한 작업에서 더 높은 성능을 보였습니다.\n- **Rubber Duck의 검토 시점:**\n    - 계획 초안 작성 후: 초기 의사 결정의 오류를 방지하여 후속 작업의 복잡성을 줄입니다.\n    - 복잡한 구현 후: 복잡한 코드의 엣지 케이스를 포착합니다.\n    - 테스트 작성 후 실행 전: 테스트 커버리지의 누락이나 잘못된 단정(assertion)을 미리 발견합니다.\n    - 에이전트가 교착 상태에 빠졌을 때: 문제 해결의 실마리를 제공합니다.\n- **사용자 주도 검토:** 사용자는 언제든지 Rubber Duck에게 코드 검토를 요청할 수 있으며, Copilot은 피드백을 바탕으로 변경 사항과 그 이유를 설명합니다.\n- **도입 및 사용법:** Rubber Duck은 현재 실험 모드로 GitHub Copilot CLI에 제공되며, `/experimental` 명령어를 통해 접근할 수 있습니다. Claude 모델을 orchestrator로 선택하고 GPT-5.4 접근 권한이 있을 때 사용 가능합니다.\n\n## 시사점\n\nRubber Duck은 AI 기반 코딩 지원에서 발생하는 잠재적 오류를 사전에 감지하고 개선함으로써, 특히 복잡하고 중요한 프로젝트에서 코드의 품질과 신뢰성을 크게 향상시킬 수 있는 가능성을 제시합니다.",
   "tags": [
     "dev",
     "ai & ml",

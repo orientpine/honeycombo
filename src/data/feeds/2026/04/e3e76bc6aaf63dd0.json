@@ -4,7 +4,7 @@
   "url": "https://techcrunch.com/2026/04/16/canvas-ai-assistant-can-now-call-various-tools-to-make-designs-for-you/",
   "source": "TechCrunch",
   "type": "article",
-  "description": "The latest version of Canva's AI assistant lets users create editable designs with text prompts.",
+  "description": "## 개요\n\nCanva는 텍스트 프롬프트를 사용하여 사용자가 원하는 디자인을 생성하고 편집할 수 있도록 하는 AI 어시스턴트의 새로운 버전을 출시했습니다.\n\n## 주요 내용\n\n*   **AI 기반 디자인 생성 및 편집**: 사용자는 텍스트로 원하는 디자인을 설명하면, AI 어시스턴트가 관련 도구를 호출하여 디자인 옵션을 제안합니다. 생성된 디자인은 레이어를 통해 사용자가 자유롭게 수정할 수 있습니다.\n*   **워크플로우 통합 강화**: Canva는 AI 어시스턴트를 사용자 워크플로우의 중심으로 만들고 있으며, 이미지 생성, 웹사이트 생성, Slack, Gmail, Google Drive, Calendar, Zoom과의 통합 기능을 추가했습니다. 또한 웹 검색 및 스케줄링 기능도 지원합니다.\n*   **AI 도구 효율성 향상**: AI 코드 생성기는 HTML을 가져올 수 있으며, 사용자는 텍스트 프롬프트로 스프레드시트 생성을 요청할 수 있습니다. 이미지 생성 모델 'Lucid Origin'은 5배 더 빠르고 30배 저렴해졌으며, '12V' 이미지-비디오 모델은 7배 더 빠르고 17배 저렴해졌습니다.\n*   **경쟁 동향**: Adobe의 Firefly AI 어시스턴트와 Figma의 AI 에이전트 지원과 같이, 디자인 플랫폼들은 AI 기능을 강화하며 유사한 목표를 추구하고 있습니다.\n*   **Canva의 강점**: Cliff Obrecht COO는 많은 기업이 워크플로우를 통합하려 하지만, 최종 편집, 협업, 배포 단계는 Canva에서 이루어지는 것을 선호한다고 언급했습니다. 또한, 다른 LLM 제품과 연동하여 콘텐츠를 가져오는 작업도 지원합니다.\n*   **비즈니스 성장 및 향후 계획**: Canva의 엔터프라이즈 비즈니스는 전년 대비 100% 성장했으며, 내년에 기업 공개(IPO)를 계획하고 있습니다.\n\n## 시사점\n\nCanva의 새로운 AI 어시스턴트는 사용자가 AI를 통해 디자인 생성을 자동화하고 다양한 도구 및 서비스와의 통합을 통해 워크플로우를 효율화할 수 있도록 지원하며, 특히 디자인의 최종 편집 및 협업 단계에서 강점을 가집니다.",
   "tags": [
     "tech",
     "ai",

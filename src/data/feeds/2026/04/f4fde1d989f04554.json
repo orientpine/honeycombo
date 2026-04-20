@@ -1,0 +1,17 @@
+{
+  "id": "f4fde1d989f04554",
+  "title": "I Built an AI That Talks People Out of Cancelling Their Subscriptions",
+  "url": "https://dev.to/zee_builds/i-built-an-ai-that-talks-people-out-of-cancelling-their-subscriptions-2bm8",
+  "source": "Dev.to",
+  "type": "article",
+  "tags": [
+    "dev",
+    "saas",
+    "stripe",
+    "ai",
+    "retention"
+  ],
+  "published_at": "2026-04-20T15:35:05.000Z",
+  "feed_id": "devto",
+  "description": "## 개요\n\n본 콘텐츠는 구독 취소 시점에 고객을 설득하여 이탈을 방지하는 AI 기반 툴인 \"SaveMyChurn\"의 개발 과정과 작동 방식, 그리고 그 의의를 설명합니다.\n\n## 주요 내용\n\n-   **문제 정의**: 기존의 구독 취소 흐름은 고객이 취소를 결정한 후에야 작동하며, 일반적인 할인 쿠폰 제공은 효과가 미미합니다. 특히 월 MRR 5천 파운드에서 5만 파운드 사이의 부트스트랩 SaaS 창업가에게는 고객 이탈이 치명적입니다.\n-   **SaveMyChurn 작동 방식**:\n    1.  **실시간 모니터링**: Stripe의 `customer.subscription.deleted` 웹훅을 실시간으로 감지하여 이탈하는 고객의 프로필(구독 기간, 플랜, 결제 내역 등)을 구축합니다.\n    2.  **개인화된 전략 생성**: LLM을 활용하여 고객의 행동 패턴, 구독 정보 등을 분석하고, 개인에게 최적화된 복귀 제안(할인, 플랜 변경, 기능 번들링 등)을 생성합니다.\n    3.  **자동 후속 조치**: 단일 이메일이 아닌, 수신 확인 및 클릭 여부에 따라 조정되는 다단계 이메일 시퀀스를 통해 복귀를 유도합니다.\n-   **기술 스택**: FastAPI, MongoDB, Redis, LLM API, Resend, Docker를 사용하여 단순하고 저렴하게 구축되었습니다. LLM 전략 생성 비용은 1센트 미만입니다.\n-   **가격 모델**: 월 고정 비용 + 복구된 수익의 일정 비율을 받는 커미션 모델을 채택하여, 실제 복구 성과에 따라 수익이 발생하는 구조입니다.\n-   **학습 내용**:\n    *   웹훅의 신뢰성이 중요하며, 재시도 큐와 멱등성 키 구현이 필수적입니다.\n    *   AI 전략 생성기가 단순한 규칙 기반 시스템보다 더 창의적이고 효과적인 복귀 전략을 생성합니다.\n    *   다단계 후속 조치가 단일 이메일보다 복귀율을 두 배로 높입니다.\n\n## 시사점\n\nSaveMyChurn은 AI를 활용하여 고객 이탈을 줄이는 새로운 접근 방식을 제시하며, 특히 초기 스타트업에게는 성과 기반의 합리적인 가격 모델로 실질적인 가치를 제공할 수 있습니다."
+}
