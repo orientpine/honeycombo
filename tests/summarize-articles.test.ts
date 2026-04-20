@@ -162,29 +162,64 @@ describe('findArticlesNeedingSummary', () => {
     expect(result).toHaveLength(0);
   });
 
-  it('processes both curated and feed directories', async () => {
-    await writeArticle(CURATED_DIR, 'curated-a.json', {
-      id: 'curated-a',
-      title: 'Curated A',
-      url: 'https://example.com/curated-a',
+  it('processes curated articles only when description is empty (preserves user-authored descriptions)', async () => {
+    // Curated는 사용자가 직접 적은 곧이므로 재요약 대상이 아니다.
+    // description이 완전히 없을 때만 첫 생성으로 잡는다.
+    await writeArticle(CURATED_DIR, 'curated-empty.json', {
+      id: 'curated-empty',
+      title: 'Curated with empty description',
+      url: 'https://example.com/curated-empty',
+      // description 없음
     });
-    await writeArticle(FEEDS_DIR, 'feed-a.json', {
-      id: 'feed-a',
-      title: 'Feed A',
-      url: 'https://example.com/feed-a',
+    await writeArticle(CURATED_DIR, 'curated-short-en.json', {
+      id: 'curated-short-en',
+      title: 'Curated with short English description',
+      url: 'https://example.com/curated-short-en',
+      description: 'multica: Managed platform running coding agents as real team members',
+    });
+    await writeArticle(CURATED_DIR, 'curated-short-ko.json', {
+      id: 'curated-short-ko',
+      title: 'Curated with short Korean description',
+      url: 'https://example.com/curated-short-ko',
+      description: '쇼트 한 줄짜리 사용자 설명',
+    });
+
+    await writeArticle(FEEDS_DIR, 'feed-leak.json', {
+      id: 'feed-leak',
+      title: 'Feed with leaked English RSS content',
+      url: 'https://example.com/feed-leak',
       description: 'Raw English text from RSS feed without Korean structured headings.',
     });
-    await writeArticle(FEEDS_DIR, 'feed-b.json', {
-      id: 'feed-b',
-      title: 'Feed B (already summarized)',
-      url: 'https://example.com/feed-b',
+    await writeArticle(FEEDS_DIR, 'feed-good.json', {
+      id: 'feed-good',
+      title: 'Feed already correctly summarized',
+      url: 'https://example.com/feed-good',
       description: '## 주요 내용\n- 포인트',
     });
 
     const result = await findArticlesNeedingSummary(CURATED_DIR, FEEDS_DIR);
     const ids = result.map((a) => a.data.id).sort();
 
-    expect(ids).toEqual(['curated-a', 'feed-a']);
+    // 재요약 대상: curated-empty (비어있으니 첫 생성) + feed-leak (영문 누수)
+    // 보호됨: curated-short-en, curated-short-ko (사용자 입력), feed-good (이미 정상)
+    expect(ids).toEqual(['curated-empty', 'feed-leak']);
+  });
+
+  it('NEVER overwrites user-authored curated descriptions even when they look like raw English', async () => {
+    // 이번 회귀 방지의 핵심 테스트.
+    // 사용자가 curated에 직접 적은 description이 우연히 영문이고 구조화 형식이 아니더라도
+    // 절대 덮어쓰면 안 된다. (명시적 사용자 동의 없이 데이터 변경 금지)
+    await writeArticle(CURATED_DIR, 'user-pasted-english.json', {
+      id: 'user-pasted-english',
+      title: 'User pasted English snippet',
+      url: 'https://example.com/user-en',
+      description:
+        'OAuth vs. API Keys for Agentic AI. This blog was originally published on Descope. If you\'re a senior developer or architect, you\'ve likely weighed the OAuth vs. API key tradeoffs.',
+    });
+
+    const result = await findArticlesNeedingSummary(CURATED_DIR, FEEDS_DIR);
+
+    expect(result).toHaveLength(0);
   });
 
   it('handles malformed JSON files gracefully', async () => {
