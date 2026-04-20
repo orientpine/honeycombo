@@ -135,10 +135,19 @@ function initArticleSearch() {
       // Defer to next tick so InterestTagPanel/SourceFilter listeners are attached.
       setTimeout(() => applySearch(initialQuery), 0);
     } else {
-      // No query in URL — ensure we reset state when navigating between pages.
+      // No query in URL — reset local state AND tell downstream listeners (InterestTagPanel)
+      // to clear any persisted search state. Without this dispatch, View Transitions would
+      // leave the previous page's search filter active on the new page, since `__itpState`
+      // survives across navigations.
       input.value = '';
       if (clearBtn) clearBtn.hidden = true;
+      const hadQuery = sstate.lastQuery.trim() !== '';
       sstate.lastQuery = '';
+      if (hadQuery) {
+        // Only dispatch when we actually had a previous query to clear, so we don't fire
+        // a no-op event during the very first page load.
+        setTimeout(() => applySearch(''), 0);
+      }
     }
 
     // Bind input listener once per <input> element. View Transitions reuse the same DOM,
