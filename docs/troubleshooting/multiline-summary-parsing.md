@@ -82,17 +82,36 @@ export function extractTitleFromNote(note: string): string {
 + let title = extractTitleFromNote(note) || url;
 ```
 
+### 4. UI 렌더링 — 멀티라인 마크다운 구조 표시
+
+파서 수정으로 `description`에 멀티라인 마크다운이 저장되지만, UI가 `<p>` 태그로 렌더링하여 `## 개요` 등 마크다운 마커가 원시 텍스트로 노출되는 문제 추가 수정.
+
+- `src/lib/render-summary.ts` 유틸리티 추가:
+  - `renderSummaryHtml()`: `## ` → `<h3>`, `- ` → `<li>`, 단락 → `<p>` 변환 (HTML 이스케이프 후 적용으로 XSS 방지)
+  - `stripMarkdownForPreview()`: 카드/메타 태그용 평문 변환 (헤딩 마커 제거, 줄바꿈 공백 변환)
+- `ContentTabs.astro`: `set:html`로 구조화 HTML 렌더링 (상세 페이지)
+- `ArticleCard.astro`: `stripMarkdownForPreview`로 카드 미리보기 정리
+- `TagFilter.astro`: 클라이언트 사이드 `stripMd` 인라인 함수로 동적 카드 정리
+- `[...slug].astro`: 메타 태그 description에 `stripMarkdownForPreview` 적용
+
 ## 관련 파일
 
 | 파일 | 변경 내용 |
 |------|----------|
 | `scripts/process-submission.ts` | `parseIssueBody` 멀티라인 note 수집, `extractTitleFromNote` 함수 추가, `processSubmission`/`processBulkSubmission` 제목 파생 변경 |
 | `tests/process-submission.test.ts` | 멀티라인 Summary 테스트, 구조화 Summary 테스트, `extractTitleFromNote` 단위 테스트, 제목 파생 통합 테스트 추가 |
+| `src/lib/render-summary.ts` | `renderSummaryHtml`, `stripMarkdownForPreview` 유틸리티 신규 |
+| `tests/render-summary.test.ts` | 렌더링/스트립 유틸리티 단위 테스트 |
+| `src/components/ContentTabs.astro` | 구조화 HTML 렌더링으로 변경 |
+| `src/components/ArticleCard.astro` | 마크다운 마커 제거 미리보기 |
+| `src/components/TagFilter.astro` | 클라이언트 사이드 마크다운 스트립 |
+| `src/pages/articles/[...slug].astro` | 메타 태그 description 마크다운 스트립 |
 
 ## 예방 조치
 
 - `### Summary` 섹션은 `### URL`, `### Type`, `### Tags`와 달리 단일 값이 아닌 자유 형식 텍스트를 받는 섹션이므로, 향후 유사한 자유 형식 섹션 추가 시 동일한 멀티라인 수집 패턴을 적용해야 함.
 - 대량 제출(`parseBulkIssueBody`)은 파이프 구분 단일 행 포맷이므로 이 문제와 무관함.
+- 향후 마크다운 포맷이 확장되면(코드 블록, 링크 등) `renderSummaryHtml`에 해당 변환 추가 필요.
 
 ---
 
@@ -106,3 +125,4 @@ export function extractTitleFromNote(note: string): string {
 | 날짜 | 변경 내용 |
 |------|----------|
 | 2026-04-20 | 최초 작성 |
+| 2026-04-20 | UI 렌더링 수정 추가 (ContentTabs, ArticleCard, TagFilter, 메타 태그) |

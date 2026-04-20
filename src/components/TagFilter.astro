@@ -59,6 +59,15 @@ function escapeHtml(str: string): string {
     .replace(/"/g, '&quot;');
 }
 
+function stripMd(text: string): string {
+  return text
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/^[-*]\s+/gm, '• ')
+    .replace(/\n{2,}/g, ' ')
+    .replace(/\n/g, ' ')
+    .trim();
+}
+
 function renderCard(a: ClientArticle): string {
   const articleUrl = a.isExternal ? a.url : `/articles/${a.slug || a._id}`;
   const target = a.isExternal ? ' target="_blank" rel="noopener noreferrer"' : '';
@@ -76,7 +85,7 @@ function renderCard(a: ClientArticle): string {
   const sourceLabel = a.articleOrigin === 'submitted' ? 'User Submission' : source;
 
   const desc = a.description
-    ? `<p class="article-description">${escapeHtml(a.description)}</p>`
+    ? `<p class="article-description">${escapeHtml(stripMd(a.description))}</p>`
     : '';
 
   const tagsHtml = a.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('');
