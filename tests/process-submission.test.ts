@@ -3,6 +3,7 @@ import { readFile, rm } from 'fs/promises';
 import { join } from 'path';
 import {
   fetchYouTubeOEmbed,
+  extractTitleFromNote,
   generateId,
   isDuplicateUrl,
   isSpam,
@@ -66,17 +67,35 @@ describe('parseIssueBody', () => {
     expect(result?.tags).toEqual(['a', 'b', 'c', 'd', 'e']);
   });
 
-  it('parses "### Summary" section identically to "### Short Description"', () => {
+  it('parses multiline "### Summary" section', () => {
     const body = '### URL\n\nhttps://example.com/summary-test\n\n### Type\n\nArticle\n\n### Tags (comma-separated, max 5)\n\nai, agents\n\n### Summary\n\n## 개요\nAI 에이전트 활용에 대한 실전 가이드';
     const result = parseIssueBody(body);
 
     expect(result).not.toBeNull();
-    expect(result).toEqual({
-      url: 'https://example.com/summary-test',
-      type: 'article',
-      tags: ['ai', 'agents'],
-      note: '## 개요',
-    });
+    expect(result?.url).toBe('https://example.com/summary-test');
+    expect(result?.type).toBe('article');
+    expect(result?.tags).toEqual(['ai', 'agents']);
+    expect(result?.note).toBe('## 개요\nAI 에이전트 활용에 대한 실전 가이드');
+  });
+
+  it('parses full structured Summary with multiple sub-sections', () => {
+    const body = [
+      '### URL', '', 'https://example.com/full-summary',
+      '### Type', '', 'Article',
+      '### Tags (comma-separated, max 5)', '', 'ai, agents',
+      '### Summary', '',
+      '## 개요', 'AI 에이전트를 프로덕션 환경에서 활용하는 실전 분석 기사',
+      '', '## 주요 내용', '- 에이전트 아키텍처 설계 패턴', '- 프로덕션 배포 시 고려사항',
+      '', '## 시사점', '실무에서 바로 적용 가능한 에이전트 구축 가이드',
+    ].join('\n');
+    const result = parseIssueBody(body);
+
+    expect(result).not.toBeNull();
+    expect(result?.note).toContain('## 개요');
+    expect(result?.note).toContain('## 주요 내용');
+    expect(result?.note).toContain('## 시사점');
+    expect(result?.note).toContain('에이전트 아키텍처 설계 패턴');
+    expect(result?.note).toContain('실무에서 바로 적용 가능한 에이전트 구축 가이드');
   });
 
   it('still parses legacy "### Short Description" for backward compatibility', () => {
@@ -85,6 +104,26 @@ describe('parseIssueBody', () => {
 
     expect(result).not.toBeNull();
     expect(result?.note).toBe('legacy note');
+  });
+});
+
+describe('extractTitleFromNote', () => {
+  it('returns first non-heading line as title', () => {
+    const note = '## 개요\nAI 에이전트를 프로덕션 환경에서 활용하는 실전 분석 기사\n\n## 주요 내용\n- 설계 패턴';
+    expect(extractTitleFromNote(note)).toBe('AI 에이전트를 프로덕션 환경에서 활용하는 실전 분석 기사');
+  });
+
+  it('strips heading prefix when no content line exists', () => {
+    expect(extractTitleFromNote('## 개요')).toBe('개요');
+    expect(extractTitleFromNote('# Title')).toBe('Title');
+  });
+
+  it('returns plain text as-is for single-line notes', () => {
+    expect(extractTitleFromNote('A great AI article.')).toBe('A great AI article.');
+  });
+
+  it('returns empty string for empty note', () => {
+    expect(extractTitleFromNote('')).toBe('');
   });
 });
 
@@ -279,6 +318,37 @@ describe('processSubmission', () => {
     const result = await processSubmission(issue);
 
     expect(result).toEqual({ success: false, message: 'Could not parse issue body' });
+  });
+
+  it('derives title from first content line of multiline note', async () => {
+    const issue: IssueData = {
+      number: 300,
+      title: '📎 Submit Link',
+      body: [
+        '### URL', '', 'https://example.com/multiline-title-test',
+        '### Type', '', 'Article',
+        '### Tags (comma-separated, max 5)', '', 'ai',
+        '### Summary', '',
+        '## 개요', 'AI 에이전트를 프로덕션 환경에서 활용하는 실전 분석 기사',
+        '', '## 주요 내용', '- 설계 패턴',
+      ].join('\n'),
+      labels: [{ name: 'submission' }],
+      user: { login: 'testuser', id: 1 },
+    };
+
+    const result = await processSubmission(issue);
+    expect(result.success).toBe(true);
+    expect(result.filePath).toBeDefined();
+
+    createdFiles.push(result.filePath as string);
+    const saved = JSON.parse(await readFile(result.filePath as string, 'utf-8')) as {
+      title: string;
+      description?: string;
+    };
+
+    expect(saved.title).toBe('AI 에이전트를 프로덕션 환경에서 활용하는 실전 분석 기사');
+    expect(saved.description).toContain('## 개요');
+    expect(saved.description).toContain('## 주요 내용');
   });
 });
 

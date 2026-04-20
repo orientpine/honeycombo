@@ -52,6 +52,14 @@ function normalizeType(value: string): ParsedSubmission['type'] {
   return typeMap[value] ?? 'article';
 }
 
+export function extractTitleFromNote(note: string): string {
+  if (!note) return '';
+  const lines = note.split('\n').map((l) => l.trim()).filter(Boolean);
+  const contentLine = lines.find((line) => !line.startsWith('#'));
+  if (contentLine) return contentLine;
+  return lines[0]?.replace(/^#+\s*/, '') || '';
+}
+
 export function parseIssueBody(body: string): ParsedSubmission | null {
   try {
     const lines = body.split('\n').map((line) => line.trim());
@@ -60,6 +68,7 @@ export function parseIssueBody(body: string): ParsedSubmission | null {
     let typeLabel = '';
     let tags: string[] = [];
     let note = '';
+    const noteLines: string[] = [];
     let currentSection = '';
 
     for (const line of lines) {
@@ -88,6 +97,13 @@ export function parseIssueBody(body: string): ParsedSubmission | null {
         continue;
       }
 
+      if (currentSection === 'note') {
+        if (line !== '_No response_') {
+          noteLines.push(line);
+        }
+        continue;
+      }
+
       if (!line || line === '_No response_') {
         continue;
       }
@@ -111,10 +127,9 @@ export function parseIssueBody(body: string): ParsedSubmission | null {
         continue;
       }
 
-      if (currentSection === 'note' && !note) {
-        note = line;
-      }
     }
+
+    note = noteLines.join('\n').trim();
 
     if (!url) {
       return null;
@@ -287,7 +302,7 @@ export async function processSubmission(
     return { success: false, message: `Duplicate URL: ${url}` };
   }
 
-  let title = note || url;
+  let title = extractTitleFromNote(note) || url;
   let thumbnailUrl: string | undefined;
 
   if (type === 'youtube') {
@@ -366,7 +381,7 @@ export async function processBulkSubmission(
       continue;
     }
 
-    let title = note || url;
+    let title = extractTitleFromNote(note) || url;
     let thumbnailUrl: string | undefined;
 
     if (type === 'youtube') {
