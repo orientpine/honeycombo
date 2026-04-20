@@ -33,25 +33,32 @@ InterestTagPanel은 다음과 같이 통합한다.
     → pinInterestMatchesInList() (매칭 카드 상단 정렬)
     → URL ?tag= 있으면 applyTagFilter() (cross-page)
 
-[칩 본문 클릭]
-  → setActiveTagChip(tag) → URL ?tag= 갱신
+[칩 본문 클릭 — 멀티 태그]
+  → applyTagFilter(tag) → toggleTag(tag) (이미 있으면 제거, 없으면 추가)
+  → syncChipActiveStates() (모든 .itp-chip에 .active + aria-pressed 동기화)
+  → syncTagsToUrl() (동일 키 반복: ?tag=ai&tag=llm)
+  → refreshTopRow() (활성 태그를 상단 6칩에 고정 → 사라지는 문제 방지)
+  → refreshSelectedSummary() (“활성 필터 #ai × #llm ×” 바)
   → renderFilteredView()
-      ├── getFilteredArticles() (검색 결과 ∩ 활성 태그 ∩ 활성 origin)
+      ├── getFilteredPool() — 태그가 1개 이상이면 OR 필터: a.tags.some(t => active.has(t))
       ├── pinInterestMatches() (관심사 매칭 카드 상단 정렬)
-      ├── renderCard() × N (.interest-match 포함)
-      ├── __initAddToPlaylistContainers() / __initBookmarkButtons() / __initCommentCounts()
-      └── source-counts-update event (검색 활성 시 검색 결과 기준 카운트)
+      ├── renderCard() × N
+      └── source-counts-update event
+
+[“전체” 칩 클릭]
+  → toggleTag('all') → state.activeTags.clear()
+  → 나머지 파이프라인은 동일
 
 [칩 별표(☆) 클릭]
   → toggleInterest(tag) → localStorage 저장
   → CustomEvent('interests-changed', { interests })
-  → refreshInterestsUI() (상단 라벨, 펼침 패널의 관심사 pill, 모든 별표 상태)
-  → applyInterestHighlights() (SSR 카드)
-  → 동적 결과가 활성이면 renderFilteredView() 재실행 (재정렬)
+  → refreshInterestsUI() / applyInterestHighlights()
+  → 활성 필터 풌이 있으면 renderFilteredView() 재실행 (재정렬)
 
 [펼침 토글]
-  → #itp-expanded.hidden toggle
-  → "모든 태그 보기 ▼" ↔ "접기 ▲"
+  → #itp-expanded.hidden toggle (상/하단 두 버튼 모두 동일 핸들러)
+  → “모든 태그 보기 ▼” ↔ “접기 ▲”
+  → 하단 커늤프스 버튼 클릭 시 패널로 scrollIntoView(펼쳐진 태그 목록이 길면 다시 맨 위로 돌아갈 필요 대신 자동 스크롤)
 ```
 
 ### 동시 활성 필터 우선순위
@@ -84,17 +91,21 @@ InterestTagPanel은 다음과 같이 통합한다.
 |------|------|--------|------|
 | `STORAGE_KEY` | `src/components/InterestTagPanel.astro` (인라인 상수) | `'honeycombo_interests'` | localStorage 키. 기존 PersonalizationBar와 동일 → 마이그레이션 불필요 |
 | `TOP_N` | `src/components/InterestTagPanel.astro` (인라인 상수) | `6` | 상시 노출 칩 슬롯 개수 |
-| `?tag=` | URL 쿼리 파라미터 | (없음) | 활성 태그 필터 (페이지 새로고침 시 복원) |
+| `?tag=&tag=` | URL 쿼리 파라미터 | (없음) | 활성 태그 필터 (멀티—동일 키 반복). 읽기: `getAll('tag')`. 쓰기: `delete('tag')` 후 `append()` 정렬된 순서로 (복사·공유 가능한 URL 안정성). |
 
 ## 제약 사항
 
 - 칩 클릭은 항상 cross-page hard 필터로 동작한다 (현재 페이지에 매칭이 없어도 전체 기사에서 찾아 표시).
+- **멀티 태그는 OR 의미론**이다. 동일 facet 내 다중 선택에서는 OR이 사용자 기대와 일치 (“이 태그들 중 아무거나”). 다른 facet (검색·origin)과는 AND. Oracle 검토 근거.
+- **`전체` 칩**은 `state.activeTags.size === 0`일 때만 활성. 클릭 시 `state.activeTags.clear()`로 모든 태그 해제. `'all'`은 실제 태그와 공존하지 않는다.
+- **활성 태그는 상단 6칩에 고정**된다 (`refreshTopRow` 자동 구성 우선순위: 활성 → 관심사 → 인기). 이로써 사용자가 비인기 태그를 선택해도 상단에서 사라지지 않는다.
 - 관심사 매칭 강조(`.interest-match` 클래스)는 ArticleCard의 `<style is:global>`과 InterestTagPanel의 글로벌 스타일을 함께 사용한다. 다른 페이지에서 ArticleCard를 사용해도 InterestTagPanel이 마운트되지 않으면 `.interest-match` 클래스가 부여되지 않으므로 효과는 발생하지 않는다.
-- "관심사 일치 N건" 뱃지는 전체 기사 데이터셋을 기준으로 계산된다 (`refreshMatchBadgeFromFullDataset`). 현재 페이지에 보이는 20개 카드가 아니라 전체 기사 중 일치하는 수 — 사용자가 "차이 없어"라고 느낀 문제를 해소.
+- “관심사 일치 N건” 배지는 전체 기사 데이터셋을 기준으로 계산된다 (`refreshMatchBadgeFromFullDataset`).
 - `serializeArticles()`가 임베드한 JSON에 의존한다. 페이지에 `<script id="all-articles-data">`가 없으면 cross-page 필터는 빈 결과를 반환한다.
 - `getInterests()`는 손상된 localStorage 값을 만나면 빈 배열로 fallback한다 (사용자 데이터 손실 가능성 차단).
-- 펼침 패널의 전체 태그 리스트는 SSR로 렌더링되므로 페이지 HTML 크기가 태그 수에 비례한다 (현 build 기준 수백 개 규모로는 영향 미미). 기사/태그 수가 크게 늘어나면 페이지이션 / 인덱스 분리를 검토해야 한다.
-- 칩 UI는 *chip-wrap* 래퍼 안에 칩 버튼(태그 필터용)과 별표 버튼(관심사 토글용)을 *형제*로 둘다. 과거의 중첩 `<button>` 마크업(유효하지 않고 키보드로 관심사 조작 불가)을 사용하지 않으며, 둘 다 독립적으로 키보드 포커스가 가능하다 (Tab 이동 + Enter/Space).
+- 펼침 패널의 전체 태그 리스트는 SSR로 렌더링되므로 페이지 HTML 크기가 태그 수에 비례한다 (현 build 기준 수백 개 규모로는 영향 미미). 기사/태그 수가 크게 늘어나면 페이이션 / 인덱스 분리를 검토해야 한다.
+- 칩 UI는 *chip-wrap* 래퍼 안에 칩 버튼(태그 필터용)과 별표 버튼(관심사 토글용)을 *형제*로 둔다. 과거의 중첩 `<button>` 마크업(유효하지 않고 키보드로 관심사 조작 불가)을 사용하지 않으며, 둘 다 독립적으로 키보드 포커스가 가능하다 (Tab 이동 + Enter/Space).
+- **CSS 스코핑**: 패널 컨테이너는 scoped, 동적으로 innerHTML로 렌더링되는 철들(탁, 폈, 한주 세레트 요약) 설렉터는 Astro의 `:global()`로 표시해 `data-astro-cid-*` 재좰파리없이도 적용되게 한다. 세을렉터는 부모 `.interest-tag-panel`로 스코핑하므로 사이트 전체에 누출되지 않는다. (`<style is:global>`로 전체 블록을 전역화 안 하는 이유.)
 
 ---
 
@@ -112,3 +123,4 @@ InterestTagPanel은 다음과 같이 통합한다.
 | 2026-04-20 | 최초 작성 — PersonalizationBar + TagFilter 통합, 인기 태그 6개 상시 노출 + 관심사 매칭 시각 강조 추가 |
 | 2026-04-20 | Oracle 검증 대응 — (1) 상단 6칩 런타임 재조립으로 관심사 우선 표시, (2) per-origin 카운트를 search∩tag 풀 기준으로 계산, (3) 관심사 뱃지를 전체 데이터셋 기준으로 계산, (4) 별표를 chip-wrap 형제 버튼으로 분리 (유효 HTML + 키보드 접근성), (5) astro:page-load 리스너 누적 방지 가드 추가. 통합 테스트 10건 추가 (`getFilteredPool` search∩origin∩tag). |
 | 2026-04-20 | 문서 정확성 개선 — 고정 수치("241개 태그", "299건")를 제거하고 "build 시점 기준 수백 개" 등의 안정적 서술로 교체. 오타(풀/별표를) 수정. |
+| 2026-04-20 | **멀티 태그 + UI 현대화** — (1) 단일 태그(`activeTag: string`)을 멀티 태그(`activeTags: Set<string>`)로 전환, OR 의미론(Oracle 검토). (2) URL 형식을 동일 키 반복(`?tag=ai&tag=llm`)로 변경, 콤마가 포함된 태그명에도 안전. (3) 활성 태그를 `refreshTopRow` 세려발(활성 → 관심사 → 인기)으로 상단 고정 — 비인기 태그 선택 시 사라지는 버그 해결. (4) “활성 필터 #ai × ···” 섬머리 바 추가 — 각 칩 개별 제거 + “모두 지우기”. (5) 상/하 토글 버튼(거대한 펼쳐진 목록에서 위로 스크롤 없이 접기 가능). (6) 위임 클릭 핸들러에서 `ev.target`을 Element로 정규화 — 일부 브라우저에서 Text 노드에 `closest()` 실패하던 토글 버그 해결. (7) 패널에 `[hidden]` !important 추가 — flex/inline-flex에서 hidden 속성이 무시되던 버그(배지 “주황색 대시”) 해결. (8) Apple 스타일 리디자인 — 비선형 cubic-bezier easing, hover lift, gradient 패널, 제스처 톤 하이라이트, `prefers-reduced-motion` 존중. (9) 동적 DOM에 대응하기 위해 모든 `.itp-*` 스타일을 Astro `:global()`로 개별 표시(부모 `.interest-tag-panel`은 스코프 유지, 사이트 전체 누출 없음). |
