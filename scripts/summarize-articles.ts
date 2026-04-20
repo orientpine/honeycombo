@@ -164,7 +164,23 @@ export async function findArticlesNeedingSummary(
 ): Promise<ArticleFile[]> {
   const articles: ArticleFile[] = [];
 
-  for (const dir of [curatedDir, feedsDir]) {
+  // curated와 feeds는 완전히 다른 처리 대상이다.
+  //
+  // - curated/ (사용자 제출 콘텐츠)
+  //   description은 사용자가 직접 적은 값이다. 명시적 동의 없이 덮어쓰면 안 된다.
+  //   따라서 description이 완전히 비어 있을 때만 생성한다(기존 동작 유지).
+  //
+  // - feeds/ (RSS 자동 수집)
+  //   description은 Gemini가 생성한 한국어 구조화 요약 전용이다.
+  //   비어 있거나 RSS 원문이 누수된 경우(구조화 형식 아님) 모두 재요약한다.
+  //
+  // 자세한 배경: docs/troubleshooting/rss-summary-english-fallback.md
+  const targets: Array<{ dir: string; allowResummarize: boolean }> = [
+    { dir: curatedDir, allowResummarize: false },
+    { dir: feedsDir, allowResummarize: true },
+  ];
+
+  for (const { dir, allowResummarize } of targets) {
     const files = await listJsonFiles(dir);
 
     for (const filePath of files) {
@@ -172,10 +188,17 @@ export async function findArticlesNeedingSummary(
         const raw = await readFile(filePath, 'utf-8');
         const data = JSON.parse(raw) as Record<string, unknown>;
 
-        const description = typeof data.description === 'string' ? data.description : '';
-        const needsSummary = !description || !looksLikeKoreanStructuredSummary(description);
+        if (typeof data.url !== 'string' || data.url.length === 0) {
+          continue;
+        }
 
-        if (needsSummary && typeof data.url === 'string' && data.url.length > 0) {
+        const description = typeof data.description === 'string' ? data.description : '';
+
+        const needsSummary = allowResummarize
+          ? !description || !looksLikeKoreanStructuredSummary(description)
+          : !description;
+
+        if (needsSummary) {
           articles.push({ filePath, data });
         }
       } catch {
