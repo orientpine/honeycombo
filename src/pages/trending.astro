@@ -194,6 +194,39 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     font-size: 0.8rem;
     font-weight: 700;
     padding: var(--space-xs) var(--space-sm);
+    /* Smooth color transition between unliked↔liked states. */
+    transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .like-button:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+  .like-button:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  /*
+   * Icon-width lock to prevent layout shift on toggle.
+   * The hollow heart ♡ (U+2661) and solid heart ♥ (U+2665) have different intrinsic
+   * widths in most fonts (♡ ≈ 12.8px vs ♥ ≈ 7.6px at base size). Forcing the icon
+   * span to a fixed 1em box with centered content keeps the button's overall width
+   * identical between liked and unliked states. The label "좋아요" therefore stays
+   * pixel-perfectly anchored on click — no jitter.
+   */
+  .like-button-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1em;
+    flex: 0 0 1em;
+    line-height: 1;
+    /* Slight scale animation on the icon itself signals the state change without moving the label. */
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .like-button.is-liked .like-button-icon {
+    transform: scale(1.15);
   }
 
   .like-button.is-liked {
