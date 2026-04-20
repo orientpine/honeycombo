@@ -103,7 +103,10 @@ export function normalizeFeedItem(
     return null;
   }
 
-  const description = truncateText(item.contentSnippet || item.content || item.summary, 5000);
+  // description은 의도적으로 비워둔다.
+  // RSS contentSnippet은 영문 원문 발췌라 한국어 구조화 요약과 의미가 다르며,
+  // summarize-articles.ts가 이 필드를 채우는 단일 책임을 갖는다.
+  // 자세한 배경: docs/troubleshooting/rss-summary-english-fallback.md
   const baseTags = [feedConfig.category];
   const itemTags = (item.categories || []).map((category) => String(category).toLowerCase());
   const tags = [...new Set([...baseTags, ...itemTags])].slice(0, 5);
@@ -119,7 +122,7 @@ export function normalizeFeedItem(
     source: feedConfig.name,
     type: 'article',
     thumbnail_url: thumbnailUrl,
-    description: description || undefined,
+    description: undefined,
     tags,
     published_at: toIsoDate(item.pubDate, now),
     feed_id: feedConfig.id,

@@ -15,7 +15,7 @@ const MAX_DESCRIPTION_LENGTH = 5000;
 const REQUEST_DELAY_MS = 1500;
 const FETCH_TIMEOUT_MS = 15_000;
 const MAX_CONTENT_CHARS = 30_000;
-const MAX_ARTICLES_PER_RUN = 20;
+const MAX_ARTICLES_PER_RUN = 100;
 
 interface ArticleFile {
   filePath: string;
@@ -37,6 +37,26 @@ export interface SummarizeOptions {
   dryRun?: boolean;
   fetchContentFn?: (url: string) => Promise<string | null>;
   generateSummaryFn?: (content: string, title: string) => Promise<string | null>;
+}
+
+/**
+ * description이 Gemini가 생성한 한국어 구조화 요약 형식인지 판정한다.
+ *
+ * 정상 형식 예시:
+ *   ## 주요 내용
+ *   - ...
+ *   ## 시사점
+ *   ...
+ *
+ * '## 개요'는 모델이 종종 생략하므로 체크하지 않는다.
+ * '## 주요 내용' 또는 '## 시사점' 중 하나라도 있으면 AI 요약이 완료된 것으로 간주한다.
+ * 공백 변동을 허용하기 위해 regex를 사용한다.
+ *
+ * 이 가드는 RSS 수집 단계에서 잘못 채워진 영문 원문을 자동으로 감지해
+ * 재요약하도록 한다. 자세한 배경: docs/troubleshooting/rss-summary-english-fallback.md
+ */
+export function looksLikeKoreanStructuredSummary(text: string): boolean {
+  return /##\s*주요\s*내용|##\s*시사점/.test(text);
 }
 
 const SUMMARIZE_PROMPT = `당신은 기술 콘텐츠 요약 전문가입니다. 아래 기사/영상의 핵심 내용을 한국어로 구조화된 요약을 작성해주세요.
@@ -138,7 +158,7 @@ export function createSummaryGenerator(apiKey: string, modelName = MODEL_NAME) {
   };
 }
 
-export async function findArticlesWithoutDescription(
+export async function findArticlesNeedingSummary(
   curatedDir = CURATED_DIR,
   feedsDir = FEEDS_DIR,
 ): Promise<ArticleFile[]> {
@@ -152,7 +172,10 @@ export async function findArticlesWithoutDescription(
         const raw = await readFile(filePath, 'utf-8');
         const data = JSON.parse(raw) as Record<string, unknown>;
 
-        if (!data.description && typeof data.url === 'string' && data.url.length > 0) {
+        const description = typeof data.description === 'string' ? data.description : '';
+        const needsSummary = !description || !looksLikeKoreanStructuredSummary(description);
+
+        if (needsSummary && typeof data.url === 'string' && data.url.length > 0) {
           articles.push({ filePath, data });
         }
       } catch {
@@ -186,10 +209,10 @@ export async function summarizeArticles(options: SummarizeOptions = {}): Promise
 
   const generateSummaryFn = options.generateSummaryFn ?? createSummaryGenerator(apiKey, modelName);
 
-  const allArticles = await findArticlesWithoutDescription(curatedDir, feedsDir);
+  const allArticles = await findArticlesNeedingSummary(curatedDir, feedsDir);
   const articles = allArticles.slice(0, maxArticles);
 
-  console.log(`Found ${allArticles.length} articles without descriptions (processing ${articles.length})`);
+  console.log(`Found ${allArticles.length} articles needing summary (processing ${articles.length})`);
 
   let updated = 0;
   let skipped = 0;
