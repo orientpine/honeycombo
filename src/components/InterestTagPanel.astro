@@ -1524,35 +1524,55 @@ function initInterestTagPanel() {
     position: relative;
   }
   /*
-   * Interest-match badge.
+   * Interest-match badge — floating notification bubble OUTSIDE the card boundary,
+   * never affecting internal layout.
    *
-   * Renders as the FIRST item inside `.article-meta` (the row that already holds
-   * the source badge + date) via `::before` content. Flex layout puts it inline,
-   * so it never overlaps the date (which uses `margin-left: auto` to sit on the right).
+   * Why outside the card?
+   *   The card's `.article-meta` row contains badges + date with `margin-left: auto`.
+   *   Putting the badge inside (whether as a flex item or with internal padding)
+   *   either pushes content (causing wrap on YouTube cards) or shrinks usable
+   *   width (causing wrap on plain cards too — measured 53.66px / 2 lines).
+   *   By positioning the badge at `top: -8px; left: -8px` it overhangs the card
+   *   like a notification dot — ZERO impact on internal layout regardless of
+   *   thumbnail/badge variants. Card has `position: relative` already, so this
+   *   anchors correctly.
    *
-   * Compact icon-only pill with accent gradient + soft shadow, matching the
-   * panel's modern Apple-style theme. Hover scale gives subtle feedback.
+   * Outer ring (white box-shadow) crisply separates the badge from the page
+   * background, matching the modern Apple-style theme of the rest of the panel.
    */
-  .article-card.interest-match .article-meta::before {
+  .article-card.interest-match::before {
     content: '⭐';
-    flex: 0 0 auto;
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    z-index: 2;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 22px;
-    height: 22px;
+    width: 26px;
+    height: 26px;
     background: linear-gradient(135deg, var(--color-accent) 0%, #FFA000 100%);
     color: #FFFFFF;
     border-radius: 999px;
-    font-size: 0.78rem;
+    font-size: 0.85rem;
     line-height: 1;
-    box-shadow: 0 1px 4px rgba(252, 185, 36, 0.4);
+    box-shadow:
+      0 0 0 2px var(--color-bg, #FFFFFF),
+      0 2px 8px rgba(252, 185, 36, 0.5);
+    pointer-events: none;
     transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .article-card.interest-match:hover .article-meta::before {
+  .article-card.interest-match:hover::before {
     transform: scale(1.1);
   }
-  .article-card.interest-match .article-thumbnail {
-    position: relative;
+
+  /* Honor user's reduced-motion preference for the badge hover. */
+  @media (prefers-reduced-motion: reduce) {
+    .article-card.interest-match::before {
+      transition: none;
+    }
+    .article-card.interest-match:hover::before {
+      transform: none;
+    }
   }
 </style>
