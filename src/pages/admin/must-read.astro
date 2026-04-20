@@ -104,6 +104,15 @@ document.addEventListener('astro:page-load', () => {
       .replace(/'/g, "&#039;");
   }
 
+  function stripMd(text: string): string {
+    return text
+      .replace(/^#{1,6}\s+/gm, '')
+      .replace(/^[-*]\s+/gm, '\u2022 ')
+      .replace(/\n{2,}/g, ' ')
+      .replace(/\n/g, ' ')
+      .trim();
+  }
+
   function parseMustReadItems(data: unknown): MustReadItem[] {
     if (data === null || typeof data !== 'object' || !('items' in data)) {
       return [];
@@ -198,7 +207,7 @@ document.addEventListener('astro:page-load', () => {
       const alreadyAdded = currentItems.some(item => item.source_id === article.id && item.item_type === article.type);
       const typeLabel = article.type === 'curated' ? 'curated' : 'feed';
       const addLabel = alreadyAdded ? '이미 추가됨' : '추가';
-      const descAttr = article.description.replace(/\r?\n/g, ' ');
+      const descAttr = stripMd(article.description).replace(/\r?\n/g, ' ');
 
       return `
         <div class="search-result" data-id="${escapeHtml(article.id)}">

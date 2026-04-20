@@ -1,6 +1,7 @@
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
 import type { APIContext } from 'astro';
+import { stripMarkdownForPreview } from '../lib/render-summary';
 
 export async function GET(context: APIContext) {
   const curatedArticles = await getCollection('curated', (entry) => entry.data.status === 'approved').catch(() => []);
@@ -9,14 +10,14 @@ export async function GET(context: APIContext) {
     ...curatedArticles.map((entry) => ({
       title: entry.data.title,
       link: entry.data.url,
-      description: entry.data.description || entry.data.title,
+      description: entry.data.description ? stripMarkdownForPreview(entry.data.description) : entry.data.title,
       pubDate: new Date(entry.data.submitted_at),
       categories: entry.data.tags,
     })),
     ...feedArticles.map((entry) => ({
       title: entry.data.title,
       link: entry.data.url,
-      description: entry.data.description || entry.data.title,
+      description: entry.data.description ? stripMarkdownForPreview(entry.data.description) : entry.data.title,
       pubDate: new Date(entry.data.published_at),
       categories: entry.data.tags,
     })),

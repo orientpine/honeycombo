@@ -1,4 +1,4 @@
-import { escapeAttr, escapeHtml } from './lib/escape';
+import { escapeAttr, escapeHtml, stripMd } from './lib/escape';
 import { renderDocument } from './lib/layout';
 import { listMustReadItems } from './lib/must-read';
 import type { AppPagesFunction, Env, MustReadItemRow } from './lib/types';
@@ -28,7 +28,7 @@ function renderMustReadItems(items: MustReadItemRow[]): string {
             <div class="must-read-meta">
               <span class="badge">${escapeHtml(source)}</span>
             </div>
-            ${description ? `<p class="must-read-description">${escapeHtml(description)}</p>` : ''}
+            ${description ? `<p class="must-read-description">${escapeHtml(stripMd(description))}</p>` : ''}
           </div>
         </article>`;
     })
