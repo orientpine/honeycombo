@@ -1,10 +1,10 @@
 {
   "id": "submission-98-033cfa30",
-  "title": "## 개요",
+  "title": "Dance of Tal 기반 로컬 비주얼 에디터로 AI 멀티 에이전트 워크플로우를 설계하는 도구",
   "url": "https://github.com/dance-of-tal/dot-studio",
   "source": "User Submission",
   "type": "article",
-  "description": "## 개요",
+  "description": "## 개요\nDance of Tal 기반의 로컬 비주얼 에디터로, Figma처럼 캔버스 위에서 AI 퍼포머를 배치하고 연결하여 멀티 에이전트 워크플로우를 설계하는 도구\n\n## 주요 내용\n- Tal(정체성), Dance(스킬), Performer(에이전트), Act(협업 규칙) 4가지 빌딩 블록 제공\n- 드래그&드롭으로 퍼포머를 캔버스에 배치하고 관계를 시각적으로 정의\n- OpenCode와 연동하여 설계한 워크플로우를 런타임 실행\n- Studio Assistant로 복잡한 설정을 대화형으로 처리 가능\n- MIT 라이선스, TypeScript 기반, npm 패키지로 설치\n\n## 시사점\n에이전트 오케스트레이션을 코드가 아닌 비주얼 캔버스로 설계할 수 있는 접근법을 제시하며, OpenCode 생태계에서 멀티 에이전트 협업을 직관적으로 구성할 수 있게 한다",
   "tags": [
     "ai",
     "orchestration",

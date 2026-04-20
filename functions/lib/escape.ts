@@ -15,3 +15,13 @@ export function escapeHtml(s: string): string {
 export function escapeAttr(s: string): string {
   return escapeHtml(s);
 }
+
+/** Strip markdown markers for plain-text contexts (search previews, must-read cards). */
+export function stripMd(text: string): string {
+  return text
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/^[-*]\s+/gm, '\u2022 ')
+    .replace(/\n{2,}/g, ' ')
+    .replace(/\n/g, ' ')
+    .trim();
+}

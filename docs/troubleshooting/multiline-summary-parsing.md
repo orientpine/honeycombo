@@ -106,6 +106,13 @@ export function extractTitleFromNote(note: string): string {
 | `src/components/ArticleCard.astro` | 마크다운 마커 제거 미리보기 |
 | `src/components/TagFilter.astro` | 클라이언트 사이드 마크다운 스트립 |
 | `src/pages/articles/[...slug].astro` | 메타 태그 description 마크다운 스트립 |
+| `functions/lib/escape.ts` | 공유 `stripMd` 유틸리티 추가 |
+| `functions/p/[id].ts` | 플레이리스트 검색 미리보기 마크다운 스트립 |
+| `functions/must-read.ts` | 필독 페이지 서버 렌더링 마크다운 스트립 |
+| `public/scripts/must-read-page.js` | 필독 페이지 클라이언트 렌더링 마크다운 스트립 |
+| `src/pages/admin/must-read.astro` | 관리자 필독 검색 마크다운 스트립 |
+| `src/pages/rss.xml.ts` | RSS 피드 description 마크다운 스트립 |
+| `src/content/curated/.../submission-98-*.json` | 깨진 데이터 원본 Issue에서 복구 |
 
 ## 예방 조치
 
@@ -126,3 +133,4 @@ export function extractTitleFromNote(note: string): string {
 |------|----------|
 | 2026-04-20 | 최초 작성 |
 | 2026-04-20 | UI 렌더링 수정 추가 (ContentTabs, ArticleCard, TagFilter, 메타 태그) |
+| 2026-04-20 | 전체 사용자 노출 표면 마크다운 스트립 추가 (RSS, 플레이리스트, 필독, 관리자) + submission-98 데이터 복구 |

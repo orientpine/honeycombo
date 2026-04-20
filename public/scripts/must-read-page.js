@@ -16,6 +16,15 @@ document.addEventListener('astro:page-load', () => {
     return escapeHtml(value);
   }
 
+  function stripMd(text) {
+    return String(text)
+      .replace(/^#{1,6}\s+/gm, '')
+      .replace(/^[-*]\s+/gm, '\u2022 ')
+      .replace(/\n{2,}/g, ' ')
+      .replace(/\n/g, ' ')
+      .trim();
+  }
+
   function renderLoading() {
     listNode.innerHTML = '';
 
@@ -42,7 +51,7 @@ document.addEventListener('astro:page-load', () => {
     return items.map((item, index) => {
       const itemData = item || {};
       const source = (itemData.source_snapshot && itemData.source_snapshot.trim()) || '출처 미상';
-      const description = (itemData.description_snapshot && itemData.description_snapshot.trim()) || '';
+      const description = stripMd((itemData.description_snapshot && itemData.description_snapshot.trim()) || '');
 
       return '\n        <article class="card must-read-card">\n          <div class="must-read-rank">#' + (index + 1) + '</div>\n          <div class="must-read-body">\n            <h2 class="must-read-title">\n              <a href="' + escapeAttr(itemData.url_snapshot || '') + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(itemData.title_snapshot || '') + '</a>\n            </h2>\n            <div class="must-read-meta">\n              <span class="badge">' + escapeHtml(source) + '</span>\n            </div>\n            ' + (description ? '<p class="must-read-description">' + escapeHtml(description) + '</p>' : '') + '\n          </div>\n        </article>';
     }).join('');

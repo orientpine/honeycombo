@@ -1,6 +1,6 @@
 import { getSession } from '../lib/auth';
 import { parseCookies } from '../lib/cookies';
-import { escapeAttr, escapeHtml } from '../lib/escape';
+import { escapeAttr, escapeHtml, stripMd } from '../lib/escape';
 import { renderDocument } from '../lib/layout';
 import { getLikeStatus } from '../lib/likes';
 import { getPlaylist } from '../lib/playlists';
@@ -984,9 +984,9 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
                 const safeId = escapeAttr(article.id);
                 const safeItemType = escapeAttr(article.type);
                 const safeUrl = escapeAttr(article.url);
-                const safeDescAttr = escapeAttr((article.description || '').slice(0, 200));
+                const safeDescAttr = escapeAttr(stripMd((article.description || '').slice(0, 200)));
                 const safeDescHtml = article.description
-                  ? '<p class="search-result-desc">' + escapeHtml(article.description.slice(0, 100)) + '</p>'
+                  ? '<p class="search-result-desc">' + escapeHtml(stripMd(article.description).slice(0, 100)) + '</p>'
                   : '';
 
                 return '\\n                  <div class="search-result-card card">\\n                    <div class="search-result-meta">\\n                      <span class="badge">' + safeSource + '</span>\\n                      <span class="badge">' + safeType + '</span>\\n                    </div>\\n                    <h3 class="search-result-title">' + safeTitle + '</h3>\\n                    ' + safeDescHtml + '\\n                    <button class="btn btn-sm search-add-btn"\\n                            data-id="' + safeId + '" data-type="' + safeItemType + '"\\n                            data-title="' + escapeAttr(article.title) + '" data-url="' + safeUrl + '"\\n                            data-desc="' + safeDescAttr + '">\\n                      추가\\n                    </button>\\n                  </div>\\n                ';
