@@ -158,37 +158,46 @@ bun run validate && bun run validate:docs && bun run validate:docs -- --check-co
 
 **해결**: `docs/_templates/` 의 템플릿을 기반으로 작성하면 누락을 방지할 수 있다.
 
-## UI 디자인 원칙
+## UI 디자인 원칙 — DESIGN.md가 Single Source of Truth
 
-> 본 프로젝트의 모든 UI는 **최신 웹 디자인 트렌드**에 맞게 설계·개발한다.
+> **본 프로젝트의 모든 UI 작업은 [`DESIGN.md`](./DESIGN.md)의 지침을 따른다.** DESIGN.md는 색상·타이포그래피·간격·컴포넌트·레이아웃·그림자·반응형·금지 사항을 모두 정의한 단일 소스(Single Source of Truth)다. 이 섹션은 DESIGN.md를 **언제·어떻게 참조/수정하는지**에 대한 운영 규칙이다.
 
-### 핵심 원칙
+### UI 작업 필수 플로우 (NON-NEGOTIABLE)
 
-- **Micro-interaction**: 버튼, 카드 등 인터랙티브 요소에 `transition`, `transform` 기반 피드백을 반드시 적용한다 (hover lift, press scale 등).
-- **Depth & Shadow**: 단순 `border`만으로 구분하지 않고, `box-shadow` 레이어를 활용해 시각적 깊이를 표현한다.
-- **Generous Spacing**: 충분한 `padding`과 `gap`을 확보하여 콘텐츠가 답답하지 않게 배치한다.
-- **Smooth Animation**: `cubic-bezier` easing을 사용해 자연스러운 전환 효과를 적용한다 (linear 금지).
-- **Accessibility First**: `focus-visible` 링, 충분한 색상 대비, 키보드 내비게이션을 반드시 지원한다.
-- **Dark Mode 호환**: 모든 색상은 CSS custom property (`var(--color-*)`)를 사용하고, 하드코딩하지 않는다.
+UI 관련 파일(Astro 컴포넌트 `<style>`, `src/styles/*.css`, 레이아웃, 페이지의 스타일 블록)을 건드리는 모든 작업은 아래 순서를 **반드시** 따른다.
 
-### 버튼 스타일 가이드
+| 순서 | 행동 | 이유 |
+|------|------|------|
+| 1 | [`DESIGN.md`](./DESIGN.md)를 **처음부터 끝까지** 읽는다 | 기존 토큰·패턴·금지 사항 숙지. 회색 버튼·부족한 여백 등 AI-slop 방지. |
+| 2 | 필요한 토큰/컴포넌트 패턴이 이미 있는지 확인한다 | 중복 정의 방지. 기존 패턴이 있으면 그대로 재사용. |
+| 3-A | 기존 토큰·패턴으로 100% 커버되면 → 바로 구현 | DESIGN.md 수정 불필요. |
+| 3-B | 새 토큰/색/간격/컴포넌트 패턴이 필요하면 → **먼저 [`DESIGN.md`](./DESIGN.md)를 편집하고, `src/styles/global.css`에 토큰을 추가한 뒤** 구현한다 | DESIGN.md와 실제 코드의 진실이 어긋나면 문서가 무의미해진다. 반드시 문서 먼저. |
+| 4 | PR 제출 전 DESIGN.md §9의 "UI 작업 셀프 체크리스트"를 완주 | `var(--*)` 토큰만 사용했는지, hover/focus/disabled 정의됐는지 등. |
 
-- Primary 버튼: 그라데이션 + 그림자로 시각적 강조, hover 시 lift 효과 + 그림자 확대.
-- Secondary 버튼: 투명 배경 + 테두리, hover 시 primary 색상으로 전환.
-- 모든 버튼: `border: none`, `cursor: pointer`, `font-family: inherit`, `:disabled` 상태 처리 필수.
+**요약: 문서 → 토큰 → 구현. 절대로 구현부터 시작하지 않는다.**
 
-### 참조할 디자인 토큰 (`src/styles/global.css`)
+### DESIGN.md 수정이 필요한 대표 상황
 
-```css
---color-primary: #F57C22;      /* 주요 액션 */
---color-primary-hover: #EE7320; /* 호버 상태 */
---radius-md: 8px;              /* 기본 둥글기 */
---shadow-sm / --shadow-md;     /* 그림자 레벨 */
-```
+- 새 색상이 필요함 (예: warning yellow, info blue)
+- 새 간격 단계가 필요함 (예: `--space-3xl`)
+- 새 컴포넌트 타입을 도입 (예: Modal, Toast, Tabs)
+- 새 그림자 레벨이 필요함 (예: `--shadow-lg`)
+- 새 브레이크포인트 도입 (예: tablet 중간값)
+- 다크 모드 추가
+- 새 폰트 도입
 
-### 금지 사항
+위 상황에서 DESIGN.md를 건너뛰고 코드만 수정하면 ― **PR 리뷰에서 차단된다.**
 
-- 브라우저 기본 스타일 그대로 사용 금지 (버튼, 입력 필드 등).
-- `transition: none` 또는 `linear` easing 금지.
-- 색상 하드코딩 금지 (CSS custom property 사용).
-- 호버/포커스 상태 없는 인터랙티브 요소 금지.
+### UI agent에게 작업을 위임할 때
+
+Agent에게 UI 작업을 지시할 때는 반드시 [`DESIGN.md §9 Agent Prompt Guide`](./DESIGN.md#9-agent-prompt-guide)의 "즉시 사용 가능한 Agent Prompt 템플릿" 블록을 프롬프트에 포함한다. 그래야 agent가 회색 버튼, 부족한 마진, 하드코딩된 HEX 같은 AI-slop을 만들지 않는다.
+
+### 금지 사항 (요약 — 상세는 [`DESIGN.md §7`](./DESIGN.md#7-dos-and-donts))
+
+- 회색 버튼 / 중립 회색 배경 카드 금지 — primary는 항상 warm orange `#F57C22`.
+- HEX·px 하드코딩 금지 — 모든 값은 `var(--*)` 토큰 사용.
+- `!important` 금지.
+- Hover/focus-visible/disabled 상태 없는 interactive 요소 금지.
+- `linear` easing 금지 — `cubic-bezier` 또는 `ease-out` (0.15s~0.2s).
+- 섹션 간 여백 `--space-xl`(32px) 미만으로 축소 금지.
+- DESIGN.md에 등록되지 않은 새 색/폰트/그림자 임의 도입 금지.
