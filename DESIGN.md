@@ -24,7 +24,7 @@
 |------|------|
 | **Content-first** | UI가 콘텐츠를 가리지 않는다. 화려한 장식 대신 타이포그래피·간격으로 위계 표현. |
 | **Token-driven** | 모든 색·간격·반경은 `var(--*)` CSS custom property로만 사용. HEX/px 하드코딩 금지(예외: §6의 warm shadow rgba). |
-| **Energetic CTAs, calm surfaces** | 주요 CTA(`.btn-primary`), 브랜드 로고, nav bottom border, hero accent 텍스트 등 **핵심 포인트에는 `linear-gradient(135deg, var(--color-primary), var(--color-accent))`** 그라데이션을 의도적으로 사용. 별도 토큰을 가진 `.like-button.is-liked`는 핑크·적 like-계열 그라데이션(§2 Like Family)을 쓰다 — primary-accent와 혼용하지 않는다. 그 외 일반 카드·배경·보조 버튼은 solid 색 유지. **그라데이션 남용 금지** — §4에 열거된 패턴 외에는 solid 우선. |
+| **Energetic CTAs, calm surfaces** | 주요 CTA(`.btn-primary`), 브랜드 로고, nav bottom border, hero accent 텍스트 등 **핵심 포인트에는 `linear-gradient(135deg, var(--color-primary), var(--color-accent))`** 그라데이션을 의도적으로 사용한다. 별도 토큰을 가진 `.like-button.is-liked`는 핑크·적 like-계열 그라데이션(§2 Like Family)을 쓴다 — primary-accent와 혼용하지 않는다. 폼 CTA·관심 태그·패널 서페이스 등에 기등록된 보조 그라데이션은 §7의 (a)～(f) 6군으로 정리됐으며, **신규 도입은 문서 먼저**. 그 외 일반 카드·배경·보조 버튼은 solid 유지.
 | **Micro-interaction** | interactive 요소는 `transition` (0.15s ~ 0.2s) 필수. Primary CTA는 hover 시 `translateY(-2px)` + 그림자 확대로 lift. |
 | **Warm shadow on primary, like shadow on likes** | Primary CTA에는 오렌지 rgba 그림자(`rgba(245, 124, 34, *)`)를 사용. 좋아요 버튼은 전용 like shadow(`--shadow-like`, `--shadow-like-hover`)를 사용. 일반 카드는 중립 검정 rgba. 무작위 shadow 색 도입 금지. |
 | **Light-only** | 현재 dark mode 미구현 — `color-scheme: light` 고정(`BaseLayout.astro` meta + `:root`). 다크모드 추가 시 반드시 이 문서부터 갱신. |
@@ -126,11 +126,11 @@
 | Tag | `.tag` | `0.75rem` | default | default | pill shape | `styles/global.css` |
 | Form hint | `.form-hint`, `.article-date` | `0.8rem` | default | default | muted | `pages/p/new.astro`, components |
 | Playlist card title | `.playlist-title` | `1.1~1.25rem` | `700` | default | 접근 방식마다 오버라이드됨(home vs my vs trending) | `pages/index.astro`, `pages/my/playlists.astro`, `pages/playlists/index.astro`, `pages/trending.astro` |
-| Influencer name | `.influencer-name` | 체크 필요 | `700` | default | 인플루언서 카드 제목 | `components/InfluencerCard.astro` |
-| Admin pending title | `.pending-title` | 체크 필요 | `700` | default | admin 검토 캐드 제목 | `pages/admin/playlists.astro` |
-| Interest panel section title | `.itp-section-title` | 체크 필요 | 체크 필요 | default | 관심 팬널 내 렌더 적용 | `components/InterestTagPanel.astro` |
+| Influencer name | `.influencer-name` | `1.1rem` | `700` | default | inherit color, hover에 primary underline | `components/InfluencerCard.astro:48` |
+| Admin pending title | `.pending-title` | `1.2rem` | `700` | `1.4` | admin 검토 카드 제목, `margin: 0` | `pages/admin/playlists.astro:288` |
+| Interest panel section title | `.itp-section-title` | `0.9rem` | `700` | default | letter-spacing `-0.005em`, `margin: 0` | `components/InterestTagPanel.astro:1379` |
 | Submit guide card h3 | `.guide-card h3` | `0.95rem` | `700` | default | 제출 가이드 카드 | `pages/submit.astro` |
-| Community write-form h2 | `.write-form h2` | 체크 필요 | | | 커뮤니티 작성 폼 서브헤딩 | `pages/community.astro` |
+| Community write-form h2 | `.write-form h2` | `1.1rem` | `700` | default | `margin-bottom: var(--space-md)` | `pages/community.astro:77` |
 
 ### 타이포그래피 규칙
 
@@ -516,7 +516,7 @@ box-shadow: 0 0 0 3px rgba(245, 124, 34, 0.15);
 - **Inline `style="..."` 금지.** 동적 값은 CSS custom property 주입 (`style={\`--w: ${w}px\`}`).
 - **transition 없는 interactive 요소 금지.**
 - **파란색/보라색 focus ring 금지** (`rgba(37, 99, 235, *)`, `rgba(59, 130, 246, *)` 등). warm rgba만 사용.
-- **Gradient 남용 금지.** 허용된 그라데이션은 오직: §4.1 `.btn-primary` (primary→accent), `.nav-logo`, `.nav` border-image, `.hero-headline-accent`, §4.6 `.like-button.is-liked` (like family, primary-accent 미사용). 이 외에 도입은 문서 먼저.
+- **Gradient 남용 지양.** 현재 코드에 등록된 그라데이션 패턴은 대표적으로: (a) primary→accent 패밀리 — §4.1 `.btn-primary`, `.nav-logo`, `.nav` border-image, `.hero-headline-accent`; (b) primary→primary-hover (폼 CTA) — `src/pages/community.astro:180,188`; (c) accent→amber #FFA000 (관심 태그 배지/토글) — `src/components/InterestTagPanel.astro:1067,1097` 계열; (d) neutral bg→bg-secondary (무드 서페이스) — `InterestTagPanel.astro:1030`; (e) bg→rgba(accent,0.08) (`.article-card.interest-match` 강조) — `InterestTagPanel.astro:1544`; (f) §4.6 `.like-button.is-liked` (Like family, brand orange 미사용). 이 6군에 해당하지 않는 새 그라데이션을 도입하면 반드시 DESIGN.md에 그룹을 도츍고 추가한 뒤 사용. primary orange와 like family는 혼용하지 않는다.
 - **불투명도만으로 "비활성" 표현 금지.** `opacity` + `cursor: not-allowed` + `pointer-events: none` 세트.
 - **다크 모드 media query 임의 추가 금지.** 다크모드는 DESIGN.md 전체 개정이 선행되어야 함.
 
@@ -678,3 +678,4 @@ body with rationale.
 | 2026-04-21 | 최초 작성 — 9개 섹션 초판 (global.css + 주요 컴포넌트 기반). |
 | 2026-04-21 | Oracle 검증 피드백 반영 — (1) §1에서 "gradient는 브랜드 포인트만" 문구를 "Energetic CTAs"로 교정해 `.btn-primary`/`.like-button` 실 사용 반영, (2) §3 Hierarchy에 `.hero-headline`/`.home-section-title`/`.article-detail-title`/`.platform-title`/`.comments-title` 추가, (3) §4에 전역 `.btn`/`.btn-primary`/`.btn-secondary` 실패턴과 `.form-control`/`.search-input`/`.article-search-input` 3종 input을 실제 코드 기준으로 기술, (4) §6에 warm shadow rgba 공식화, (5) §7에 파란색 focus ring 금지 + gradient 남용 금지 추가, (6) AGENTS.md에서 "항상 DESIGN.md를 먼저 편집"을 리터럴 조항으로 강제하는 방향으로 동기화. |
 | 2026-04-21 | Oracle 2차 검증 피드백 반영 — (a) `.like-button.is-liked`가 primary→accent 그라데이션이 아닌 별도 Like 토큰(`--color-like-*`, `--shadow-like`)을 쓴다는 실제 코드를 반영해 §1/§2/§4/§6/§7 전반에서 오보 제거. (b) §2에 Like Family 전용 토큰 도표 추가. (c) §4.6 Like Button + §4.7 기타 전용 버튼 패밀리(bookmark/itp/playlist-item/article-search-clear/auth) 추가. (d) §3 "현행 코드에서 실제 정의된 모든" 문구를 "주요 텍스트 계층"으로 완화하고 `.playlist-title`/`.influencer-name`/`.pending-title`/`.itp-section-title`/`.guide-card h3`/`.write-form h2` 추가. (e) §6 L7/L8 계층 추가 (Like 전용 shadow, pink rgba 231,76,111). (f) §7 Gradient 남용 조항에 like-family 명시. (g) AGENTS.md 리터럴 규칙을 "항상 DESIGN.md를 열고 검토, 변경 없어도 변경 이력에 작업 것짓장 남김"으로 강화 + garbled 한국어 교정. |
+| 2026-04-21 | Oracle 3차 검증 피드백 반영 — §3 타이포그래피 테이블의 '체크 필요' 플레이스홀더 4개를 실제 코드에서 추출한 값으로 교체: `.influencer-name` `1.1rem`/`700` (InfluencerCard.astro:48), `.pending-title` `1.2rem`/`700`/`1.4` (admin/playlists.astro:288), `.itp-section-title` `0.9rem`/`700` (InterestTagPanel.astro:1379), `.write-form h2` `1.1rem`/`700` (community.astro:77). §1 시각 철학과 §7 Gradient 조항을 '오직 등록된 것만' 에서 (a)~(f) 6군 실제 그라데이션 패턴(community.astro btn-primary primary→hover, InterestTagPanel accent→#FFA000 배지/토글, panel neutral bg 그라데이션, article-card.interest-match accent tint, like family 등)으로 정리해 코드 실상과 일치시킴. '남용 금지' → '남용 지양, 신규 그룹 도입은 문서 먼저'로 소프닝. |
