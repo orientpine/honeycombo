@@ -379,12 +379,12 @@ const PAGE_STYLES = `
       .like-btn.is-liked {
         background: linear-gradient(135deg, var(--color-like-gradient-from) 0%, var(--color-like-gradient-to) 100%);
         border-color: transparent;
-        color: #fff;
+        color: var(--color-like-contrast-text);
         box-shadow: var(--shadow-like);
       }
 
       .like-btn.is-liked:hover:not(:disabled) {
-        color: #fff;
+        color: var(--color-like-contrast-text);
         background: linear-gradient(135deg, var(--color-like-gradient-from-hover) 0%, var(--color-like-gradient-to-hover) 100%);
         border-color: transparent;
         box-shadow: var(--shadow-like-hover);

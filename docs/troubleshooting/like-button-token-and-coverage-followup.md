@@ -34,19 +34,20 @@ PR #131은 첫 번째만 갱신했다.
 
 ### 1) 디자인 토큰 추출 (`src/styles/global.css`)
 
-좋아요 액션 전용 CSS custom property 6개 + shadow 2개를 `:root`에 추가:
+좋아요 액션 전용 CSS custom property 8개(호버/그라데이션/contrast) + shadow 2개를 `:root`에 추가:
 
 ```diff
 + /* Like button — modern pill design tokens.
 +    Reds (not orange primary) signal an emotional/affinity action. */
-+ --color-like: #e74c6f;
+ --color-like-hover-text: #e74c6f;
 + --color-like-hover-text: #e74c6f;
 + --color-like-hover-bg: #fff5f7;
 + --color-like-hover-border: #f4b6c4;
 + --color-like-gradient-from: #ff5a7a;
 + --color-like-gradient-to: #e74c6f;
 + --color-like-gradient-from-hover: #ff4870;
-+ --color-like-gradient-to-hover: #d6395d;
+ --color-like-gradient-to-hover: #d6395d;
+ --color-like-contrast-text: #ffffff;
 + --shadow-like: 0 2px 8px rgba(231, 76, 111, 0.25);
 + --shadow-like-hover: 0 4px 14px rgba(231, 76, 111, 0.35);
 ```
@@ -101,6 +102,7 @@ PR #131은 첫 번째만 갱신했다.
 - **UI 변경 시 같은 컴포넌트가 여러 경로에 중복 정의되어 있는지 먼저 grep**: 우리 저장소는 Astro SSG와 Cloudflare Functions SSR fallback이 공존하는 구조라 같은 UI가 2~3곳에 중복되는 패턴이 흔하다. (`grep -rn "<className>" src/ functions/`)
 - **하드코딩 색상은 PR 시점에 즉시 토큰으로 추출**: 한 번에 처리하지 않으면 다른 곳에서 토큰 없이 같은 리터럴이 복사돼 부채가 누적된다.
 - **Oracle 검토를 사후가 아닌 사전에 활용**: 이번처럼 사후에 결함을 잡으면 후속 PR이 필요하다. 비자명 UI 변경은 implementation 전에 Oracle 컨설팅을 권장.
+- **Oracle의 문서 정밀도 지적("6개 + shadow 2개"는 틀린 숫자)도 진지하게 받아들일 것**: 지적된 숫자 불일치는 실제로 2026-04-21 재검토에서 지적되어 본 문서에도 수정됨.
 
 ---
 
@@ -115,3 +117,4 @@ PR #131은 첫 번째만 갱신했다.
 | 날짜 | 변경 내용 |
 |------|----------|
 | 2026-04-21 | 최초 작성 — Oracle 후속 수정으로 토큰화 + 사이트 전체 좋아요 UI 일관성 확보 |
+| 2026-04-21 | Oracle 재검토 후속 — 잔존 `#fff` 6지점(trending.astro x2, trending.ts x2, p/[id].ts x2)을 `--color-like-contrast-text: #ffffff` 토큰으로 교체, 미사용 `--color-like` 제거. `functions/trending.ts`의 login return URL을 동적(`pathname + search`)으로 변경 + 401 응답 시 재로그인 흐름을 Astro client JS와 일치. `src/pages/trending.astro`의 중복 `prefers-reduced-motion` 블록 2개를 1개로 통합. SSR fallback(`functions/trending.ts`)의 reduced-motion 규칙도 trending.astro와 동일하게 맞춤. |
