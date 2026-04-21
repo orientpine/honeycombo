@@ -259,12 +259,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .like-button.is-liked {
     background: linear-gradient(135deg, var(--color-like-gradient-from) 0%, var(--color-like-gradient-to) 100%);
     border-color: transparent;
-    color: #fff;
+    color: var(--color-like-contrast-text);
     box-shadow: var(--shadow-like);
   }
 
   .like-button.is-liked:hover:not(:disabled) {
-    color: #fff;
+    color: var(--color-like-contrast-text);
     background: linear-gradient(135deg, var(--color-like-gradient-from-hover) 0%, var(--color-like-gradient-to-hover) 100%);
     border-color: transparent;
     box-shadow: var(--shadow-like-hover);
@@ -292,34 +292,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     100% { transform: scale(1); }
   }
 
+  /* Respect the user's reduced-motion preference:
+     — keep color/background transitions (those aren't motion),
+     — disable lift/scale/pop transforms and animations. */
   @media (prefers-reduced-motion: reduce) {
-    .like-button,
+    .like-button {
+      transition: color 0.18s, background 0.18s, border-color 0.18s, box-shadow 0.18s;
+    }
     .like-button-icon,
     .like-button.is-liked .icon-filled {
       transition: none;
       animation: none;
     }
-    .like-button:hover:not(:disabled) {
-      transform: none;
-    }
-  }
-
-  /* Honor user's reduced-motion preference for the new like-button transforms.
-     The color/background transitions stay (they're not motion), but lift/scale
-     micro-interactions are disabled. Layout is still locked to the 1em icon box,
-     so the no-shift behavior is preserved. */
-  @media (prefers-reduced-motion: reduce) {
-    .like-button {
-      transition: background-color 0.2s, border-color 0.2s, color 0.2s;
-    }
     .like-button:hover:not(:disabled),
     .like-button:active:not(:disabled) {
-      transform: none;
-    }
-    .like-button-icon {
-      transition: none;
-    }
-    .like-button.is-liked .like-button-icon {
       transform: none;
     }
   }
