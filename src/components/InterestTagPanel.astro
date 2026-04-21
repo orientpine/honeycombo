@@ -152,9 +152,7 @@ const tagCountsJson = JSON.stringify(tagCounts);
 
 <!-- Container for dynamically-rendered cross-page filtered/searched results -->
 <div class="itp-filtered-results" id="itp-filtered-results" style="display:none;">
-  <div class="itp-filtered-header">
-    <span id="itp-filtered-count"></span>
-  </div>
+  <div class="itp-filtered-header" id="itp-filtered-count"></div>
   <div class="article-grid grid grid-3" id="itp-filtered-grid"></div>
   <p class="itp-filtered-empty" id="itp-filtered-empty" hidden>
     조건에 해당하는 기사가 없습니다.
@@ -1656,8 +1654,13 @@ function initInterestTagPanel() {
   }
   .itp-filtered-pill-tag {
     background: var(--color-primary);
-    color: #FFFFFF;
+    /* Foreground color on primary background. Uses --color-bg (white in light
+       mode). If dark mode is ever introduced, this stays paired with the surface
+       token instead of a literal white. */
+    color: var(--color-bg);
     border-color: var(--color-primary);
+    /* Soft primary-tinted shadow. Same rgba(245,124,34, ...) pattern used
+       elsewhere in this file for primary-tinted shadows (cf .itp-chip-wrap.active). */
     box-shadow: 0 1px 3px rgba(245, 124, 34, 0.25);
   }
   .itp-filtered-pill-origin {
