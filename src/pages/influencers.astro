@@ -15,6 +15,10 @@ const xInfluencers = influencers
 const threadsInfluencers = influencers
   .filter((i: any) => i.data.platform === 'threads')
   .sort((a: any, b: any) => a.data.name.localeCompare(b.data.name));
+
+const youtubeInfluencers = influencers
+  .filter((i: any) => i.data.platform === 'youtube')
+  .sort((a: any, b: any) => a.data.name.localeCompare(b.data.name));
 ---
 
 <BaseLayout title="추천 인플루언서 — HoneyCombo" description="기술 분야 주요 인플루언서 모음">
@@ -57,7 +61,24 @@ const threadsInfluencers = influencers
     </section>
   )}
 
-  {xInfluencers.length === 0 && threadsInfluencers.length === 0 && (
+  {youtubeInfluencers.length > 0 && (
+    <section class="platform-section">
+      <h2 class="platform-title">▶ YouTube</h2>
+      <div class="influencer-grid grid grid-2" data-testid="influencer-list-youtube">
+        {youtubeInfluencers.map((influencer: any) => (
+          <InfluencerCard
+            id={influencer.data.id}
+            name={influencer.data.name}
+            platform={influencer.data.platform}
+            handle={influencer.data.handle}
+            bio={influencer.data.bio}
+          />
+        ))}
+      </div>
+    </section>
+  )}
+
+  {xInfluencers.length === 0 && threadsInfluencers.length === 0 && youtubeInfluencers.length === 0 && (
     <p class="empty-state">추천 인플루언서를 준비 중입니다.</p>
   )}
 </BaseLayout>

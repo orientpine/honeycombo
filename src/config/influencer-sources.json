@@ -76,5 +76,40 @@
     "platform": "threads",
     "handle": "@bizmentor_kr",
     "bio": "3시간마다 인기 GitHub Repo 요약. 최신 AI 기술 트렌드 파악. By OpenClaw."
+  },
+  {
+    "id": "chester-roh",
+    "name": "노정석",
+    "platform": "youtube",
+    "handle": "@chester_roh",
+    "bio": "연쇄창업가 노정석(B factory CEO, 전 Tatter&Company·5Rocks 창업자). 주말 아침 팟캐스트 형식으로 Claude·GPT·Gemini 프런티어 모델 바이브 체크, MoE·RLVR 트렌드, 중국 오픈소스 생태계를 AI 창업가 관점에서 분석."
+  },
+  {
+    "id": "gymcoding",
+    "name": "짐코딩",
+    "platform": "youtube",
+    "handle": "@gymcoding",
+    "bio": "4만 구독자의 한국어 웹 개발 교육 채널. HTML·CSS 기초부터 React, TailwindCSS, Next.js 15, Claude Code까지 8단계 종합 로드맵을 공식 문서 기반 커리큘럼으로 제공."
+  },
+  {
+    "id": "eo-korea",
+    "name": "EO Korea",
+    "platform": "youtube",
+    "handle": "@eo_korea",
+    "bio": "74만 구독자의 한국 스타트업 전문 콘텐츠 채널. 창업가 심층 인터뷰, 실패·피벗 스토리, 한기용 멘토의 리더십 프로그램, 글로벌 스타트업 씬 번역 콘텐츠 제공."
+  },
+  {
+    "id": "today-code",
+    "name": "오늘코드",
+    "platform": "youtube",
+    "handle": "@todaycode",
+    "bio": "Microsoft MVP 박조은이 운영하는 한국어 데이터 교육 채널. Python 기반 데이터 수집·분석·시각화, NLP, LLM 실전 강의 제공 (Pandas·Plotly·LangChain 등)."
+  },
+  {
+    "id": "code-factory",
+    "name": "코드팩토리",
+    "platform": "youtube",
+    "handle": "@codefactory_official",
+    "bio": "실무 지향 개발 교육 한국어 YouTube 채널. Flutter 모바일 앱 개발, React·Next.js 프론트엔드, Node.js 백엔드, AI 코딩 워크플로우 강의와 프로젝트 기반 튜토리얼 제공."
   }
 ]
