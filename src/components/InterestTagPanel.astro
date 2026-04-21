@@ -1659,9 +1659,9 @@ function initInterestTagPanel() {
        token instead of a literal white. */
     color: var(--color-bg);
     border-color: var(--color-primary);
-    /* Soft primary-tinted shadow. Same rgba(245,124,34, ...) pattern used
-       elsewhere in this file for primary-tinted shadows (cf .itp-chip-wrap.active). */
-    box-shadow: 0 1px 3px rgba(245, 124, 34, 0.25);
+    /* Soft primary-tinted lift shadow. Centralized token in global.css so any
+       primary-color change propagates automatically. */
+    box-shadow: var(--shadow-primary-soft);
   }
   .itp-filtered-pill-origin {
     background: var(--color-bg);
