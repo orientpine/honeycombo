@@ -334,30 +334,110 @@ const PAGE_STYLES = `
         font-weight: 600;
       }
 
+      /* Modern like button — same pill design as /trending for site-wide consistency */
       .like-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.375rem;
+        min-height: 2.25rem;
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--color-border);
+        border-radius: 999px;
+        background: var(--color-bg);
+        color: var(--color-text-muted);
+        font-family: inherit;
+        font-size: 0.9rem;
         font-weight: 700;
-        min-width: 7rem;
+        line-height: 1;
+        cursor: pointer;
+        transition: color 0.18s cubic-bezier(0.4, 0, 0.2, 1),
+                    background 0.18s cubic-bezier(0.4, 0, 0.2, 1),
+                    border-color 0.18s cubic-bezier(0.4, 0, 0.2, 1),
+                    box-shadow 0.18s cubic-bezier(0.4, 0, 0.2, 1),
+                    transform 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .like-btn:hover:not(:disabled) {
+        color: var(--color-like-hover-text);
+        border-color: var(--color-like-hover-border);
+        background: var(--color-like-hover-bg);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-sm);
+      }
+
+      .like-btn:active:not(:disabled) {
+        transform: translateY(0);
+        box-shadow: none;
+      }
+
+      .like-btn:focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
       }
 
       .like-btn.is-liked {
-        background: var(--color-primary);
-        border-color: var(--color-primary);
-        color: white;
+        background: linear-gradient(135deg, var(--color-like-gradient-from) 0%, var(--color-like-gradient-to) 100%);
+        border-color: transparent;
+        color: #fff;
+        box-shadow: var(--shadow-like);
       }
 
-      .like-btn.is-liked:hover {
-        background: var(--color-primary-hover);
-        border-color: var(--color-primary-hover);
-        color: white;
+      .like-btn.is-liked:hover:not(:disabled) {
+        color: #fff;
+        background: linear-gradient(135deg, var(--color-like-gradient-from-hover) 0%, var(--color-like-gradient-to-hover) 100%);
+        border-color: transparent;
+        box-shadow: var(--shadow-like-hover);
+        transform: translateY(-1px);
       }
 
       .like-btn:disabled {
-        opacity: 0.7;
+        opacity: 0.6;
         cursor: wait;
+        transform: none;
       }
 
       .like-icon {
-        font-size: 1.1em;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+        height: 16px;
+        color: inherit;
+        transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .like-icon svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .like-icon .icon-filled {
+        display: none;
+      }
+      .like-btn.is-liked .icon-outline {
+        display: none;
+      }
+      .like-btn.is-liked .icon-filled {
+        display: block;
+        animation: like-pop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      @keyframes like-pop {
+        0% { transform: scale(1); }
+        40% { transform: scale(1.35); }
+        100% { transform: scale(1); }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .like-btn,
+        .like-icon,
+        .like-btn.is-liked .icon-filled {
+          transition: none;
+          animation: none;
+        }
+        .like-btn:hover:not(:disabled) {
+          transform: none;
+        }
       }
 
       .items {
@@ -775,13 +855,18 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
             <div class="like-section">
               <span class="like-count-display">❤️ ${likeStatus.like_count}명이 좋아합니다</span>
               <button type="button"
-                class="btn like-btn${likeStatus.liked ? ' is-liked' : ''}"
+                class="like-btn${likeStatus.liked ? ' is-liked' : ''}"
                 data-playlist-id="${escapeAttr(playlist.id)}"
                 data-liked="${likeStatus.liked ? 'true' : 'false'}"
                 data-like-count="${likeStatus.like_count}"
-                data-authenticated="${user ? 'true' : 'false'}">
-                <span class="like-icon">${likeStatus.liked ? '♥' : '♡'}</span>
-                <span>${likeStatus.liked ? '좋아요 취소' : '좋아요'}</span>
+                data-authenticated="${user ? 'true' : 'false'}"
+                aria-pressed="${likeStatus.liked ? 'true' : 'false'}"
+                aria-label="${likeStatus.liked ? '좋아요 취소' : '좋아요'} (현재 ${likeStatus.like_count}명)">
+                <span class="like-icon" aria-hidden="true">
+                  <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                </span>
+                <span class="like-btn-label">${likeStatus.liked ? '좋아요 취소' : '좋아요'}</span>
               </button>
             </div>
           ` : ''}
@@ -836,9 +921,9 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
               likeBtn.dataset.liked = liked ? 'true' : 'false';
               likeBtn.dataset.likeCount = String(count);
               likeBtn.classList.toggle('is-liked', liked);
-              const icon = likeBtn.querySelector('.like-icon');
-              if (icon) icon.textContent = liked ? '♥' : '♡';
-              const label = likeBtn.querySelector('span:last-child');
+              likeBtn.setAttribute('aria-pressed', liked ? 'true' : 'false');
+              likeBtn.setAttribute('aria-label', (liked ? '좋아요 취소' : '좋아요') + ' (현재 ' + count + '명)');
+              const label = likeBtn.querySelector('.like-btn-label');
               if (label) label.textContent = liked ? '좋아요 취소' : '좋아요';
               const countEl = document.querySelector('.like-count-display');
               if (countEl) countEl.textContent = '❤️ ' + count + '명이 좋아합니다';

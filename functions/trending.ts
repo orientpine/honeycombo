@@ -78,8 +78,10 @@ function renderCards(playlists: TrendingPlaylistItem[], currentPage: number, isL
     .map((playlist, index) => {
       const rank = rankOffset + index + 1;
       const description = playlist.description?.trim() || `${getOwnerName(playlist)}의 플레이리스트 · ${playlist.item_count}개 기사`;
-      const likeButtonLabel = playlist.user_liked ? '좋아요 취소' : '좋아요';
-      const likeIcon = playlist.user_liked ? '♥' : '♡';
+      const likeCount = playlist.like_count;
+      const likeButtonLabel = playlist.user_liked
+        ? `좋아요 취소 (현재 ${likeCount}개)`
+        : `좋아요 (현재 ${likeCount}개)`;
       const username = playlist.user.username || 'unknown';
 
       return `
@@ -96,19 +98,21 @@ function renderCards(playlists: TrendingPlaylistItem[], currentPage: number, isL
             </span>
             <span class="trending-stats">
               <span class="rank-badge">#${rank}</span>
-              <span class="like-count" data-like-count-for="${escapeAttr(playlist.id)}">❤️ ${playlist.like_count}</span>
               <button
                 type="button"
-                class="btn like-button${playlist.user_liked ? ' is-liked' : ''}"
+                class="like-button${playlist.user_liked ? ' is-liked' : ''}"
                 data-playlist-id="${escapeAttr(playlist.id)}"
                 data-liked="${playlist.user_liked ? 'true' : 'false'}"
-                data-like-count="${playlist.like_count}"
+                data-like-count="${likeCount}"
                 data-authenticated="${isLoggedIn ? 'true' : 'false'}"
                 aria-pressed="${playlist.user_liked ? 'true' : 'false'}"
                 aria-label="${escapeAttr(likeButtonLabel)}"
               >
-                <span class="like-button-icon" aria-hidden="true">${likeIcon}</span>
-                <span class="like-button-label">좋아요</span>
+                <span class="like-button-icon" aria-hidden="true">
+                  <svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  <svg class="icon-filled" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                </span>
+                <span class="like-button-count">${likeCount}</span>
               </button>
             </span>
           </div>
@@ -247,33 +251,120 @@ const PAGE_STYLES = `
         font-size: 0.8rem;
       }
 
+      /* Like count is no longer rendered as a separate sibling — */
+      /* the count is now embedded inside the like button itself. */
       .like-count {
-        color: var(--color-text-muted);
-        font-size: 0.8rem;
-        font-weight: 600;
+        display: none;
       }
 
+      /* Modern like button — pill-shaped, icon + count, hover lift, liked-state gradient */
       .like-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.375rem;
+        min-height: 2rem;
+        padding: 0.375rem 0.875rem;
+        border: 1px solid var(--color-border);
+        border-radius: 999px;
+        background: var(--color-bg);
+        color: var(--color-text-muted);
+        font-family: inherit;
         font-size: 0.8rem;
         font-weight: 700;
-        padding: var(--space-xs) var(--space-sm);
+        line-height: 1;
+        cursor: pointer;
+        transition: color 0.18s cubic-bezier(0.4, 0, 0.2, 1),
+                    background 0.18s cubic-bezier(0.4, 0, 0.2, 1),
+                    border-color 0.18s cubic-bezier(0.4, 0, 0.2, 1),
+                    box-shadow 0.18s cubic-bezier(0.4, 0, 0.2, 1),
+                    transform 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .like-button:hover:not(:disabled) {
+        color: var(--color-like-hover-text);
+        border-color: var(--color-like-hover-border);
+        background: var(--color-like-hover-bg);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-sm);
+      }
+
+      .like-button:active:not(:disabled) {
+        transform: translateY(0);
+        box-shadow: none;
+      }
+
+      .like-button:focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
+      }
+
+      .like-button-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 14px;
+        height: 14px;
+        color: inherit;
+        transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .like-button-icon svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .like-button-icon .icon-filled {
+        display: none;
+      }
+
+      .like-button-count {
+        font-variant-numeric: tabular-nums;
+        font-weight: 700;
+        letter-spacing: 0.01em;
       }
 
       .like-button.is-liked {
-        background: var(--color-primary);
-        border-color: var(--color-primary);
-        color: white;
+        background: linear-gradient(135deg, var(--color-like-gradient-from) 0%, var(--color-like-gradient-to) 100%);
+        border-color: transparent;
+        color: #fff;
+        box-shadow: var(--shadow-like);
       }
-
-      .like-button.is-liked:hover {
-        color: white;
-        background: var(--color-primary-hover);
-        border-color: var(--color-primary-hover);
+      .like-button.is-liked:hover:not(:disabled) {
+        color: #fff;
+        background: linear-gradient(135deg, var(--color-like-gradient-from-hover) 0%, var(--color-like-gradient-to-hover) 100%);
+        border-color: transparent;
+        box-shadow: var(--shadow-like-hover);
+        transform: translateY(-1px);
       }
-
+      .like-button.is-liked .icon-outline {
+        display: none;
+      }
+      .like-button.is-liked .icon-filled {
+        display: block;
+        animation: like-pop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
       .like-button:disabled {
-        opacity: 0.7;
+        opacity: 0.6;
         cursor: wait;
+        transform: none;
+      }
+
+      @keyframes like-pop {
+        0% { transform: scale(1); }
+        40% { transform: scale(1.35); }
+        100% { transform: scale(1); }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .like-button,
+        .like-button-icon,
+        .like-button.is-liked .icon-filled {
+          transition: none;
+          animation: none;
+        }
+        .like-button:hover:not(:disabled) {
+          transform: none;
+        }
       }
 
       @media (max-width: 768px) {
@@ -330,17 +421,15 @@ export const onRequest: AppPagesFunction = async (context: { env: Env; request: 
         button.dataset.liked = liked ? 'true' : 'false';
         button.dataset.likeCount = String(likeCount);
         button.setAttribute('aria-pressed', liked ? 'true' : 'false');
-        button.setAttribute('aria-label', liked ? '좋아요 취소' : '좋아요');
+        button.setAttribute(
+          'aria-label',
+          (liked ? '좋아요 취소 (현재 ' : '좋아요 (현재 ') + likeCount + '개)'
+        );
         button.classList.toggle('is-liked', liked);
 
-        const icon = button.querySelector('.like-button-icon');
-        if (icon) {
-          icon.textContent = liked ? '♥' : '♡';
-        }
-
-        const countEl = document.querySelector('[data-like-count-for="' + button.dataset.playlistId + '"]');
+        const countEl = button.querySelector('.like-button-count');
         if (countEl) {
-          countEl.textContent = '❤️ ' + likeCount;
+          countEl.textContent = String(likeCount);
         }
       }
 
