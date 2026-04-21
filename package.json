@@ -9,6 +9,7 @@
     "preview": "bun run build && wrangler pages dev dist",
     "check": "astro check",
     "validate": "bun run scripts/validate.ts",
+    "backfill:submissions": "bun run scripts/backfill-submissions.ts",
     "test": "vitest run",
     "generate-types": "wrangler types",
     "deploy": "bun run build && wrangler pages deploy dist",
