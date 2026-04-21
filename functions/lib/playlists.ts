@@ -166,7 +166,7 @@ export async function getPlaylist(db: D1Database, playlistId: string): Promise<P
               description_snapshot, note, position, added_at
        FROM playlist_items
        WHERE playlist_id = ?
-       ORDER BY position ASC`,
+       ORDER BY position DESC`,
     )
     .bind(playlistId)
     .all<PlaylistItemRow>();

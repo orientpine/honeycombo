@@ -128,7 +128,7 @@ describe('playlists repository', () => {
     const queries = controller.getQueries();
     expect(queries).toHaveLength(2);
     expect(queries[0]?.sql).toContain('INNER JOIN users');
-    expect(queries[1]?.sql).toContain('ORDER BY position ASC');
+    expect(queries[1]?.sql).toContain('ORDER BY position DESC');
   });
 
   it('getPlaylist returns null for non-existent ID', async () => {

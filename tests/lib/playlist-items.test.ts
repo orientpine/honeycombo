@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import * as idLib from '../../functions/lib/id';
-import { addItem, removeItem, swapItemPositions, updateItem } from '../../functions/lib/playlist-items';
+import { addItem, removeItem, reorderItems, swapItemPositions, updateItem } from '../../functions/lib/playlist-items';
 import type { PlaylistItemRow } from '../../functions/lib/types';
 import { createMockD1 } from '../helpers/d1-mock';
 
@@ -155,5 +155,55 @@ describe('playlist-items repository', () => {
     expect(getQueries()[1]?.sql).toContain('WITH swap AS MATERIALIZED');
     expect(getQueries()[1]?.params).toEqual(['item-b', playlistId, 'item-a', playlistId]);
     expect(getQueries()[2]?.sql).toContain('UPDATE user_playlists SET updated_at = CURRENT_TIMESTAMP');
+  });
+
+  describe('reorderItems', () => {
+    it('reorders items with correct DESC-compatible positions', async () => {
+      const { db, getQueries, setResults } = createMockD1();
+
+      setResults([{ user_id: 'user_1' }, [{ id: 'item_a' }, { id: 'item_b' }, { id: 'item_c' }], [{}], [{}], [{}], [{}]]);
+
+      const result = await reorderItems(db, 'pl_1', 'user_1', ['item_c', 'item_a', 'item_b']);
+
+      expect(result).toBe(true);
+
+      const queries = getQueries();
+      expect(queries[2]?.params[0]).toBe(2);
+      expect(queries[2]?.params[1]).toBe('item_c');
+      expect(queries[3]?.params[0]).toBe(1);
+      expect(queries[3]?.params[1]).toBe('item_a');
+      expect(queries[4]?.params[0]).toBe(0);
+      expect(queries[4]?.params[1]).toBe('item_b');
+    });
+
+    it('rejects when user is not owner', async () => {
+      const { db, setResults } = createMockD1();
+
+      setResults([{ user_id: 'user_2' }]);
+
+      const result = await reorderItems(db, 'pl_1', 'user_1', ['item_a']);
+
+      expect(result).toBe(false);
+    });
+
+    it('rejects when item count mismatch', async () => {
+      const { db, setResults } = createMockD1();
+
+      setResults([{ user_id: 'user_1' }, [{ id: 'item_a' }, { id: 'item_b' }]]);
+
+      const result = await reorderItems(db, 'pl_1', 'user_1', ['item_a']);
+
+      expect(result).toBe(false);
+    });
+
+    it('rejects when item IDs do not belong to playlist', async () => {
+      const { db, setResults } = createMockD1();
+
+      setResults([{ user_id: 'user_1' }, [{ id: 'item_a' }, { id: 'item_b' }]]);
+
+      const result = await reorderItems(db, 'pl_1', 'user_1', ['item_a', 'item_x']);
+
+      expect(result).toBe(false);
+    });
   });
 });
