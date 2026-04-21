@@ -1,0 +1,20 @@
+{
+  "id": "submission-149-8d20db04",
+  "title": "What Is Yann LeCun Cooking? JEPA Explained Simply",
+  "url": "https://www.youtube.com/watch?v=oM4neOyZOi0",
+  "source": "YouTube",
+  "type": "youtube",
+  "thumbnail_url": "https://i.ytimg.com/vi/oM4neOyZOi0/hqdefault.jpg",
+  "description": "## 개요\nYann LeCun이 제안한 JEPA(Joint Embedding Predictive Architecture)를 쉽게 풀어 설명하는 영상. LLM의 한계를 지적하고, 원시 픽셀·토큰이 아닌 추상 표현(embedding) 공간에서 누락된 부분을 예측하는 비생성형 세계 모델을 대안으로 제시한다.\n\n## 주요 내용\n- JEPA 핵심 구조: context encoder + target encoder + predictor가 표현 공간에서 예측 오차를 최소화하며 학습\n- LLM과의 차이: \"다음 토큰 이어쓰기\"가 아니라 \"무엇이 그럴듯한가\"를 추상 수준에서 학습\n- 파생 모델: I-JEPA(이미지), V-JEPA(비디오)로 이미지·영상 이해 및 물리 법칙 위반 감지 시연\n- 자율 에이전트가 내부 상상으로 행동을 시뮬레이션해 계획(planning)에 활용하는 프레임워크의 기반\n\n## 시사점\n생성형 AI 일변도에 대한 구조적 대안으로서, 로봇·AR·자율주행 등 물리 세계 상호작용이 중요한 응용에서 JEPA 계열 세계 모델이 차별적 가치를 가질 수 있다. AGI로 가는 길은 LLM 스케일업이 아니라 세계 모델 + 계획 + 지속 메모리의 조합이라는 LeCun의 주장이 압축적으로 제시된다.",
+  "tags": [
+    "ai",
+    "jepa",
+    "world-model",
+    "lecun",
+    "self-supervised"
+  ],
+  "submitted_by": "orientpine",
+  "submitted_by_id": "32758428",
+  "submitted_at": "2026-04-21T02:03:09.291Z",
+  "status": "approved"
+}
