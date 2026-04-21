@@ -206,3 +206,44 @@ export async function swapItemPositions(
 
   return true;
 }
+
+export async function reorderItems(
+  db: D1Database,
+  playlistId: string,
+  userId: string,
+  itemIds: string[],
+): Promise<boolean> {
+  const owner = await db
+    .prepare('SELECT user_id FROM user_playlists WHERE id = ?')
+    .bind(playlistId)
+    .first<{ user_id: string }>();
+
+  if (!owner || owner.user_id !== userId) {
+    return false;
+  }
+
+  const existing = await db
+    .prepare('SELECT id FROM playlist_items WHERE playlist_id = ?')
+    .bind(playlistId)
+    .all<{ id: string }>();
+
+  if (existing.results.length !== itemIds.length) {
+    return false;
+  }
+
+  const existingIds = new Set(existing.results.map((row) => row.id));
+  if (!itemIds.every((id) => existingIds.has(id))) {
+    return false;
+  }
+
+  const stmts = itemIds.map((id, idx) =>
+    db
+      .prepare('UPDATE playlist_items SET position = ? WHERE id = ? AND playlist_id = ?')
+      .bind(itemIds.length - 1 - idx, id, playlistId),
+  );
+  await db.batch(stmts);
+
+  await db.prepare('UPDATE user_playlists SET updated_at = CURRENT_TIMESTAMP WHERE id = ?').bind(playlistId).run();
+
+  return true;
+}
