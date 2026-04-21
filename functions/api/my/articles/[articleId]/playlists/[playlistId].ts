@@ -73,7 +73,10 @@ export const onRequest: AppPagesFunction[] = [
         return json({ error: 'Article not in this playlist' }, 404);
       }
 
-      await env.DB.prepare('DELETE FROM playlist_items WHERE id = ?').bind(playlistItem.id).run();
+      await env.DB.batch([
+        env.DB.prepare('DELETE FROM playlist_items WHERE id = ?').bind(playlistItem.id),
+        env.DB.prepare('UPDATE user_playlists SET updated_at = CURRENT_TIMESTAMP WHERE id = ?').bind(playlist.id),
+      ]);
 
       return json({ success: true });
     }

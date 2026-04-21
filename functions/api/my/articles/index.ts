@@ -11,7 +11,7 @@ interface UnassignedArticleRow {
 }
 
 interface AssignedArticleRow extends UnassignedArticleRow {
-  playlist_info: string | null;
+  playlists_json: string | null;
 }
 
 interface CountRow {
@@ -51,27 +51,25 @@ function parseStatus(value: string | null): ArticleStatus {
   return 'all';
 }
 
-function parsePlaylistInfo(playlistInfo: string | null): PlaylistSummary[] {
-  if (!playlistInfo) {
+function parsePlaylists(playlistsJson: string | null): PlaylistSummary[] {
+  if (!playlistsJson) {
     return [];
   }
 
-  return playlistInfo.split(',').reduce<PlaylistSummary[]>((playlists, entry) => {
-    const separatorIndex = entry.indexOf('::');
-    if (separatorIndex === -1) {
-      return playlists;
+  try {
+    const parsed = JSON.parse(playlistsJson);
+    if (!Array.isArray(parsed)) {
+      return [];
     }
-
-    const id = entry.slice(0, separatorIndex);
-    const title = entry.slice(separatorIndex + 2);
-
-    if (!id || !title) {
-      return playlists;
-    }
-
-    playlists.push({ id, title });
-    return playlists;
-  }, []);
+    return parsed.reduce<PlaylistSummary[]>((acc, entry) => {
+      if (entry && typeof entry === 'object' && typeof entry.id === 'string' && typeof entry.title === 'string' && entry.id && entry.title) {
+        acc.push({ id: entry.id, title: entry.title });
+      }
+      return acc;
+    }, []);
+  } catch {
+    return [];
+  }
 }
 
 function mapUnassignedArticle(row: UnassignedArticleRow): ArticleResponse {
@@ -90,7 +88,7 @@ function mapAssignedArticle(row: AssignedArticleRow): ArticleResponse {
     title: row.title,
     url: row.url,
     submitted_at: row.created_at,
-    playlists: parsePlaylistInfo(row.playlist_info),
+    playlists: parsePlaylists(row.playlists_json),
   };
 }
 
@@ -173,7 +171,7 @@ async function listAssignedArticles(
   const result = await db
     .prepare(
       `SELECT s.article_id, s.title, s.url, s.submitted_by_id, s.created_at,
-              GROUP_CONCAT(up.id || '::' || up.title) AS playlist_info
+              json_group_array(json_object('id', up.id, 'title', up.title)) AS playlists_json
        FROM submissions s
        INNER JOIN playlist_items pi ON pi.source_id = s.article_id
          AND pi.item_type IN ('curated', 'feed')
