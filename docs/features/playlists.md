@@ -154,6 +154,7 @@
 
 ### 승인 기사 자동 추가 (auto-playlist)
 
+> 참고: 기사 자동 플레이리스트 추가 기능은 2026-04-21부로 제거되었습니다. [ADR 0006](../decisions/0006-remove-auto-playlist-add.md) 참조.
 ```text
 승인 webhook → functions/webhooks/submission-approved.ts
             → users.id = submitted_by_id 조회
@@ -282,6 +283,7 @@
 
 ## 관련 문서
 
+- [기사 관리 페이지](./article-management.md)
 - [아키텍처 개요](../architecture/overview.md)
 - [기사 승인 시 플레이리스트 자동 추가](./auto-playlist-add.md)
 - [플레이리스트 데이터 미스매치 트러블슈팅](../troubleshooting/playlist-data-mismatch.md)
@@ -293,6 +295,7 @@
 
 | 날짜 | 변경 내용 |
 |------|----------|
+| 2026-04-21 | 자동 플레이리스트 추가 제거 반영. /my/articles 페이지 링크 추가. |
 | 2026-04-12 | 최초 작성 — 플레이리스트 기능 전체 문서화 |
 | 2026-04-12 | AddToPlaylist 로그인 return URL, 중복 추가 409 처리, contains_item 기반 비활성화 표시 반영 |
 | 2026-04-12 | 유저 플레이리스트 상세(`/p/{id}`)에 소유자 전용 아이템 삭제/재정렬/메모 수정 UI 반영 |
