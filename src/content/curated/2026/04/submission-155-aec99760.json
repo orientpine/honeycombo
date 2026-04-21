@@ -1,10 +1,10 @@
 {
   "id": "submission-155-aec99760",
-  "title": "Microsoft MVP 박조은이 운영하는 한국어 데이터 교육 채널. Python 기반 데이터 수집·분석·시각화, NLP, LLM 실전 강의를 제공하며 FinanceDataReader·Pandas·Plotly·LangChain 등 실무 스택을 다루는 데이터 교육 크리에이터의 무료 콘텐츠 허브.",
+  "title": "오늘코드 - Python 데이터 분석·NLP 강의",
   "url": "https://www.youtube.com/@todaycode",
   "source": "YouTube",
   "type": "youtube",
-  "description": "Microsoft MVP 박조은이 운영하는 한국어 데이터 교육 채널. Python 기반 데이터 수집·분석·시각화, NLP, LLM 실전 강의를 제공하며 FinanceDataReader·Pandas·Plotly·LangChain 등 실무 스택을 다루는 데이터 교육 크리에이터의 무료 콘텐츠 허브.",
+  "description": "Microsoft MVP 박조은이 운영하는 한국어 데이터 교육 채널. Python 기반 데이터 수집·분석·시각화, NLP, LLM 실전 강의를 제공하며 FinanceDataReader·Pandas·Plotly·Seaborn·LangChain 등 실무 스택을 다루는 데이터 교육 크리에이터의 무료 콘텐츠 허브.",
   "tags": [
     "python",
     "data-analysis",

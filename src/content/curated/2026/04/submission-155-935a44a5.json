@@ -1,10 +1,10 @@
 {
   "id": "submission-155-935a44a5",
-  "title": "한국어 개발·기술·스타트업 뉴스 큐레이션 사이트 GeekNews. Hacker News 스타일의 토픽·투표·토론 구조로 해외 기술 뉴스를 한국어로 번역 요약하며 편집자 큐레이션 GN+ 콘텐츠와 Slack·Discord 등 다양한 채널 봇을 통한 구독을 지원한다.",
+  "title": "GeekNews - 개발·기술·스타트업 뉴스 큐레이션",
   "url": "https://news.hada.io/",
   "source": "User Submission",
   "type": "article",
-  "description": "한국어 개발·기술·스타트업 뉴스 큐레이션 사이트 GeekNews. Hacker News 스타일의 토픽·투표·토론 구조로 해외 기술 뉴스를 한국어로 번역 요약하며 편집자 큐레이션 GN+ 콘텐츠와 Slack·Discord 등 다양한 채널 봇을 통한 구독을 지원한다.",
+  "description": "Hacker News 스타일의 한국어 기술 뉴스 사이트. 해외 IT·오픈소스·스타트업 관련 기사와 블로그를 편집자 큐레이션 및 커뮤니티 투표로 선별해 번역·요약 제공한다. Slack·Discord·Teams 등 주요 협업 도구용 봇으로 자동 구독이 가능하며, 국내 개발자 커뮤니티의 핵심 정보 허브로 자리 잡은 서비스.",
   "tags": [
     "news",
     "korean",

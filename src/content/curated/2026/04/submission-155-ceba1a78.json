@@ -1,11 +1,11 @@
 {
   "id": "submission-155-ceba1a78",
-  "title": "LLM Wiki를 업그레이드한 Graphify 개념 + 실습 가이드",
+  "title": "LLM Wiki → Graphify: 지식 그래프로 AI 코딩 메모리 레이어 구축",
   "url": "https://www.youtube.com/watch?v=s15ojX1P4NY",
   "source": "YouTube",
   "type": "youtube",
   "thumbnail_url": "https://i.ytimg.com/vi/s15ojX1P4NY/hqdefault.jpg",
-  "description": "Andrej Karpathy의 LLM Wiki 아이디어를 발전시킨 오픈소스 Graphify 실습 영상. RAG의 토큰 낭비 문제를 AST 기반 확정 파싱과 Leiden 커뮤니티 탐지 지식 그래프로 해결하는 3-Pass 아키텍처와 설치·사용법을 실습 중심으로 안내한다.",
+  "description": "Andrej Karpathy가 제안한 LLM Wiki 아이디어를 코드베이스에 자동 적용한 오픈소스 Graphify를 소개하는 실습 가이드 영상. AST 기반 확정 파싱과 Leiden 커뮤니티 탐지 알고리즘으로 코드·문서를 지식 그래프로 변환하는 3-Pass 아키텍처, 설치 방법, Claude Code·Cursor·OpenCode 등 주요 AI 코딩 어시스턴트와의 통합 방법까지 다룬다.",
   "tags": [
     "llm",
     "graphify",
