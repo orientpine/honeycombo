@@ -64,6 +64,23 @@ const BASE_STYLES = `
         --color-accent: #FCB924;
         --color-success: #10b981;
         --color-danger: #ef4444;
+        /* Like button — modern pill design tokens (DESIGN.md §2 Like Family).
+           MUST stay in sync with src/styles/global.css :root. SSR pages
+           (functions/p/[id].ts, functions/trending.ts) pull tokens from
+           this block instead of the Astro-compiled CSS. */
+        --color-like-default-icon: #d67a8d;
+        --color-like-default-border: #f0dde2;
+        --color-like-default-count: var(--color-text);
+        --color-like-hover-text: #e74c6f;
+        --color-like-hover-bg: #fff5f7;
+        --color-like-hover-border: #f4b6c4;
+        --color-like-gradient-from: #ff5a7a;
+        --color-like-gradient-to: #e74c6f;
+        --color-like-gradient-from-hover: #ff4870;
+        --color-like-gradient-to-hover: #d6395d;
+        --color-like-contrast-text: #ffffff;
+        --shadow-like: 0 2px 8px rgba(231, 76, 111, 0.25);
+        --shadow-like-hover: 0 4px 14px rgba(231, 76, 111, 0.35);
         --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
         --font-mono: 'Fira Code', 'Cascadia Code', monospace;
         --space-xs: 0.25rem;
