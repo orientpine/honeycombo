@@ -16,6 +16,9 @@
      Reds (not orange primary) signal an emotional/affinity action,
      keeping it distinct from the brand-action orange while staying
      consistent with the bookmark hue used elsewhere on the site. */
+  --color-like-default-icon: #d67a8d;          /* soft rose icon tint — reads as "like" at rest, not dead gray */
+  --color-like-default-border: #f0dde2;        /* subtle pink hint on resting border (≠ dead beige) */
+  --color-like-default-count: var(--color-text);  /* readable count numeric at rest */
   --color-like-hover-text: #e74c6f;
   --color-like-hover-bg: #fff5f7;
   --color-like-hover-border: #f4b6c4;
