@@ -487,44 +487,46 @@ const tagCountsJson = JSON.stringify(tagCounts);
   /**
    * Build a structured filter summary for the active filtered view.
    *
-   * Returns HTML (not plain text) so each part can carry its own visual treatment:
-   *   - origin pill   ("에디터 추천" / "제출 기사" / "RSS 피드")
-   *   - tag pills     (one per active tag)
-   *   - search pill   ("\"query\" 검색")
-   *   - count badge   ("기사 213건")
+   * Returns HTML (not plain text) so the count can be visually accentuated
+   * separately from the filter context description.
    *
-   * Each fragment is independently styled in CSS — see `.itp-filtered-header`
-   * and `.itp-filtered-pill` rules.
+   * Text format preserves the user's original wording shape:
+   *   `"tech" 태그로 필터링된 기사 213건`
+   *   `태그 3개(ai, llm, tech) · "검색어" 검색 결과 · 기사 126건`
+   *   `에디터 추천 · "ai" 태그 · 기사 80건`
+   *
+   * Design rationale:
+   *   - DO NOT repeat tag chips here — `.itp-selected-summary` above the panel
+   *     already shows active tags as removable pills. Duplicating them in this
+   *     results header would be visual noise (Oracle review feedback).
+   *   - The header's job is to answer "what am I looking at?" in natural prose,
+   *     with the count as the single visual accent.
    */
   function buildFilterLabelHTML(count: number): string {
     const escape = (s: string) =>
       s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-    const parts: string[] = [];
+    const descriptorParts: string[] = [];
     const origin = getActiveOrigin();
     if (origin !== 'all') {
       const m: Record<string, string> = { curated: '에디터 추천', submitted: '제출 기사', feed: 'RSS 피드' };
-      parts.push(
-        `<span class="itp-filtered-pill itp-filtered-pill-origin">${escape(m[origin] || origin)}</span>`
-      );
+      descriptorParts.push(escape(m[origin] || origin));
     }
     if (hasActiveTags()) {
       const tagList = Array.from(state.activeTags).sort();
-      for (const t of tagList) {
-        parts.push(
-          `<span class="itp-filtered-pill itp-filtered-pill-tag">#${escape(t)}</span>`
-        );
+      if (tagList.length === 1) {
+        descriptorParts.push(`\u201c${escape(tagList[0])}\u201d 태그`);
+      } else {
+        descriptorParts.push(`태그 ${tagList.length}개(${tagList.map(escape).join(', ')})`);
       }
     }
     if (state.activeSearchQuery) {
-      parts.push(
-        `<span class="itp-filtered-pill itp-filtered-pill-search">🔍 \u201c${escape(state.activeSearchQuery)}\u201d</span>`
-      );
+      descriptorParts.push(`\u201c${escape(state.activeSearchQuery)}\u201d 검색`);
     }
+    const descriptor = descriptorParts.length > 0
+      ? `<span class="itp-filtered-descriptor">${descriptorParts.join(' · ')}</span>`
+      : '';
     const countHtml = `<span class="itp-filtered-count-badge"><strong>${count}</strong>건의 기사</span>`;
-    if (parts.length === 0) {
-      return countHtml;
-    }
-    return `<span class="itp-filtered-pills">${parts.join('')}</span>${countHtml}`;
+    return descriptor + countHtml;
   }
 
   function renderFilteredView() {
@@ -1635,45 +1637,15 @@ function initInterestTagPanel() {
     color: var(--color-text);
     line-height: 1.4;
   }
-  .itp-filtered-pills {
-    display: inline-flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-xs);
-  }
-  .itp-filtered-pill {
-    display: inline-flex;
-    align-items: center;
-    padding: 4px 10px;
-    border-radius: 999px;
-    font-size: 0.85rem;
+  /* Natural-prose descriptor of active filters (tag/search/origin).
+   * Uses font-weight to emphasize within flowing text instead of pill chips,
+   * since `.itp-selected-summary` above already shows active tags as removable
+   * pills. This header's job is to describe "what am I looking at" in plain
+   * Korean, with the count badge as the only visual accent. */
+  .itp-filtered-descriptor {
+    color: var(--color-text);
     font-weight: 600;
-    line-height: 1;
-    border: 1px solid transparent;
-    transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .itp-filtered-pill-tag {
-    background: var(--color-primary);
-    /* Foreground color on primary background. Uses --color-bg (white in light
-       mode). If dark mode is ever introduced, this stays paired with the surface
-       token instead of a literal white. */
-    color: var(--color-bg);
-    border-color: var(--color-primary);
-    /* Soft primary-tinted lift shadow. Centralized token in global.css so any
-       primary-color change propagates automatically. */
-    box-shadow: var(--shadow-primary-soft);
-  }
-  .itp-filtered-pill-origin {
-    background: var(--color-bg);
-    color: var(--color-text);
-    border-color: var(--color-border);
-  }
-  .itp-filtered-pill-search {
-    background: var(--color-bg);
-    color: var(--color-text);
-    border-color: var(--color-border);
-    font-style: italic;
-    font-weight: 500;
+    letter-spacing: -0.005em;
   }
   .itp-filtered-count-badge {
     margin-left: auto;

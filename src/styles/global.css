@@ -43,12 +43,6 @@
   
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
   --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
-  /* Primary-tinted shadow tokens. rgb() of --color-primary (#F57C22) with alpha.
-   * Used by interactive elements that want a soft primary-colored glow/lift
-   * (pills, active chips, filter tags). Centralized so future color-primary
-   * changes propagate automatically. */
-  --shadow-primary-soft: 0 1px 3px rgba(245, 124, 34, 0.25);
-  --shadow-primary-lift: 0 4px 12px rgba(245, 124, 34, 0.25);
   
   --max-width: 1200px;
   --nav-height: 60px;
