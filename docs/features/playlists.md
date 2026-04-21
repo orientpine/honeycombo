@@ -39,6 +39,7 @@
 - **YouTube 썸네일**: `url_snapshot`이 YouTube URL인 경우 `img.youtube.com/vi/{videoId}/mqdefault.jpg` 썸네일을 카드 좌측에 자동 표시한다. `extractYouTubeVideoId()`가 `youtube.com`, `youtu.be`, `m.youtube.com`, `youtube-nocookie.com`, `/shorts/`, `/live/`, `/embed/`, `/v/` 패턴을 URL 파싱으로 처리한다.
 - **내부 링크**: `source_id`가 있는 curated/feed 아이템은 `/articles/${source_id}`로 내부 페이지에 링크한다. `source_id`가 없는 external 아이템만 외부 URL(`url_snapshot`)로 링크하며 `target="_blank"`를 적용한다.
 - **하위 호환**: DB에 year/month 경로 접두사 없이 저장된 레거시 `source_id`(예: `submission-62-xxx`)를 위해 `[...slug].astro`가 filename-only slug도 추가 생성한다. 이 alias 페이지는 정규 canonical URL과 Giscus term을 `entry.id` 기반으로 설정하여 SEO와 댓글 분리를 방지한다.
+- **정렬 순서 (최신순)**: 아이템은 `ORDER BY position DESC`로 조회되어 **최근 추가된 기사가 최상단**에 표시된다. `addItem()`은 여전히 `position = MAX(position) + 1`을 사용하므로 새 기사는 자동으로 가장 큰 position을 얻고 DESC 정렬에서 맨 위에 온다.
 
 ### 기사 추가
 
@@ -72,14 +73,36 @@
 소유자 → /p/{id} (SSR)
        → functions/p/[id].ts 에서 소유자 전용 컨트롤 렌더링
        → DELETE /api/playlists/{id}/items/{itemId} (삭제)
-       → PUT /api/playlists/{id}/items/{itemId} (메모 수정, position 변경)
+       → PUT /api/playlists/{id}/items/{itemId} (메모 수정)
+       → PUT /api/playlists/{id}/items/reorder (배치 재정렬 — 배치 편집 모드)
 ```
 
-- 소유자에게만 상세 페이지 카드별 관리 버튼(`삭제`, `↑`, `↓`, `💬 메모 수정/추가`)을 노출한다.
+- 소유자에게만 상세 페이지 카드별 관리 컨트롤(`삭제`, `💬 메모 수정/추가`)과 왼쪽 드래그 핸들(`⋮⋮`)을 노출한다.
 - 삭제 성공 시 카드가 페이드아웃 후 DOM에서 제거되며, 헤더의 기사 수(`N개 기사`)가 자동으로 -1 갱신된다.
-- 순서 이동은 인접 두 아이템의 `position`을 서로 바꾸는 방식으로 처리한다. 실패 시 `window.location.reload()`로 서버 상태를 즉시 동기화한다.
 - 메모 수정은 카드 내부 인라인 에디터에서 수행하며, 저장 성공 시 화면 표시를 즉시 갱신한다.
 
+### 배치 편집 모드 (드래그 재정렬)
+
+```
+소유자 → /p/{id} (아이템 2개 이상)
+       → 📋 배치 편집 버튼 클릭 → SortableJS CDN 지연 로드 (https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js)
+       → 드래그 핸들로 카드 순서 자유 재배치
+       → 저장 버튼 클릭
+       → PUT /api/playlists/{id}/items/reorder (body: { item_ids: string[] })
+       → reorderItems() → D1 batch UPDATE로 position 원자 재할당
+       → 페이지 reload (서버 상태 동기화)
+```
+
+- **진입 조건**: 소유자 + `items.length > 1`일 때만 `📋 배치 편집` 버튼을 노출한다.
+- **편집 모드 UI** (DESIGN.md §4.8, §4.9 준수):
+  - `.items` 컨테이너에 `.batch-edit-mode` 클래스가 붙어 점선 테두리 + `--color-bg-secondary` 배경 + 단일 열 그리드로 전환된다.
+  - `.drag-handle`(`⋮⋮` grip)이 각 카드 좌측에 표시되며, 이 영역에서만 드래그를 개시할 수 있어 스크롤·읽기 중 오동작을 방지한다.
+  - 편집 중에는 기사 링크(`.item-title a`)에 `pointer-events: none`이 적용되어 페이지 이탈을 차단하고, `.item-controls`(삭제·메모 버튼)는 숨겨진다.
+- **저장 흐름**: `저장` 버튼 → 현재 DOM 순서의 `item_ids` 배열을 `PUT /reorder`로 전송 → 성공 시 `window.location.reload()`로 서버 상태 재동기화.
+- **취소 흐름**: `취소` 버튼 → 진입 시점에 저장한 `originalOrder` 배열대로 DOM 재배치 → SortableJS 인스턴스 destroy → 편집 모드 종료 (API 호출 없음).
+- **실패 처리**: CDN 로드 실패 시 alert + 배치 모드 자동 종료. 저장 API 실패 시 버튼 복구 + alert, 편집 모드 유지하여 재시도 가능.
+- **position 재할당 공식**: `position = (itemIds.length - 1) - idx`. 배열의 첫 ID가 가장 큰 position을 받아 DESC 정렬에서 최상단에 온다. 재정렬 후 position은 `0..(N-1)`로 정규화되므로 이후 `addItem()`의 `MAX + 1`이 계속 정상 동작한다.
+- **기존 인접 swap 호환**: `swapItemPositions()` 백엔드 함수와 `/items/swap` API는 프론트엔드에서 더 이상 호출되지 않지만 향후 재사용을 위해 유지된다.
 ### 태그 편집 (플레이리스트 소유자)
 
 ```
@@ -166,6 +189,8 @@
 | `functions/api/playlists/[id]/index.ts` | GET/PUT/DELETE (개별 CRUD) |
 | `functions/api/playlists/[id]/items/index.ts` | POST (기사 추가) |
 | `functions/api/playlists/[id]/items/[itemId].ts` | PUT/DELETE (기사 수정/삭제) |
+| `functions/api/playlists/[id]/items/swap.ts` | PUT (인접 swap — 프론트엔드 미사용, 하위호환 유지) |
+| `functions/api/playlists/[id]/items/reorder.ts` | PUT (배치 재정렬 — `{ item_ids: string[] }` 수용, `db.batch()`로 원자 position 재할당) |
 | `functions/api/playlists/[id]/visibility.ts` | PUT (공개 범위 변경) |
 | `functions/api/admin/playlists/pending.ts` | GET (관리자: 승인 대기 목록) |
 | `functions/api/admin/playlists/[id]/approve.ts` | PUT (관리자: 승인) |
@@ -179,7 +204,7 @@
 | 파일 | 역할 |
 |------|------|
 | `functions/lib/playlists.ts` | 플레이리스트 CRUD, 공개 범위, 상태 관리 |
-| `functions/lib/playlist-items.ts` | 아이템 추가/수정/삭제, 포지션 관리 |
+| `functions/lib/playlist-items.ts` | 아이템 추가/수정/삭제, 포지션 관리 (`reorderItems()` 배치 재정렬 포함) |
 | `functions/lib/types.ts` | PlaylistRow, PlaylistDetail, UserPlaylistWithCount 등 타입 |
 | `functions/lib/validate.ts` | 제목/설명 길이 검증, URL 검증 |
 | `functions/lib/likes.ts` | 좋아요 토글, 상태 조회, 트렌딩 쿼리 |
@@ -249,6 +274,8 @@
 - 기사 추가 시 스냅샷(title, url, description) 저장 → 원본 삭제돼도 정보 유지
 - 아이템 타입: `curated` (큐레이션 기사), `feed` (피드 기사), `external` (외부 URL)
 - YouTube 썸네일은 `url_snapshot` URL 기반 클라이언트 측 추출이므로, 삭제/비공개 동영상은 깨진 이미지로 표시될 수 있다
+- 아이템 순서는 `position DESC`로 조회되어 최신 추가 아이템이 최상단에 표시된다. 소유자는 배치 편집 모드(SortableJS CDN 지연 로드)에서만 순서를 재배치할 수 있다.
+- 배치 편집 모드는 소유자 + 아이템 2개 이상에서만 노출된다. CDN 로드 실패 시 alert 후 모드를 종료한다 (graceful degradation).
 
 ---
 
@@ -259,6 +286,7 @@
 - [플레이리스트 데이터 미스매치 트러블슈팅](../troubleshooting/playlist-data-mismatch.md)
 - [플레이리스트 검색 렌더링·순서 변경 트러블슈팅](../troubleshooting/playlist-detail-search-and-reorder.md)
 - [플레이리스트 기사 링크 홈 리다이렉트 트러블슈팅](../troubleshooting/playlist-article-links-redirect-to-home.md)
+- [최신순 정렬 및 드래그 재정렬 (ADR 0005)](../decisions/0005-playlist-newest-first-and-drag-reorder.md)
 
 ## 변경 이력
 
@@ -278,3 +306,4 @@
 | 2026-04-13 | GitHub Actions 승인 감지와 OAuth catch-up 기반 auto-playlist 동기화 반영 |
 | 2026-04-17 | YouTube 썸네일 표시, 2열 가로형 카드 레이아웃(좌측 썸네일), 기사 내부 링크 수정(source_id 기반), alias 페이지 canonical/Giscus 정규화, BaseLayout canonicalPath 프롭 추가, Comments 컨포넌트 data-giscus-term 지원 |
 | 2026-04-21 | 플레이리스트 상세 페이지(`/p/{id}`) 소유자 전용 “🏷️ 태그 편집” 섹션 추가 — inline 태그 관리 UI(pill + Enter/쉼표 추가 + × 제거), `data-initial-tags` 속성 기반 XSS-safe 전달, PUT /api/playlists/{id} 호출, 리로드 없이 헤더 태그 디스플레이 즉시 갱신, DESIGN.md §4.4/§4.2 패턴 재사용. |
+| 2026-04-21 | **최신순 정렬 + 드래그 재정렬 전환** — `ORDER BY position DESC`로 정렬 방향 역전, `↑`/`↓` 버튼 전면 제거, `📋 배치 편집` 토글 모드 + SortableJS 드래그 도입, 새 API `PUT /api/playlists/{id}/items/reorder`와 `reorderItems()` 함수 추가 (D1 `batch()`로 원자 position 재할당). DESIGN.md §4.8 Drag Handle, §4.9 Batch Edit Mode, §6 L9 Dragging Elevation 패턴 참조. |
