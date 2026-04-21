@@ -6,6 +6,7 @@ import {
   findArticlesNeedingSummary,
   hasSelfReferentialOpening,
   looksLikeKoreanStructuredSummary,
+  summarizeArticles,
 } from '../scripts/summarize-articles';
 import { readFile } from 'fs/promises';
 
@@ -399,4 +400,245 @@ describe('clearStaleDescription', () => {
     expect(updated.description).toBeUndefined();
     expect(updated.id).toBe('empty');
   });
+});
+
+describe('findArticlesNeedingSummary (self-referential backfill)', () => {
+  // Separate describe block to verify feed articles with existing
+  // self-referential openings are re-queued for re-summarization.
+  const BACKFILL_TEST_DIR = join(ROOT, 'tests/tmp-backfill-test');
+  const BACKFILL_CURATED_DIR = join(BACKFILL_TEST_DIR, 'curated');
+  const BACKFILL_FEEDS_DIR = join(BACKFILL_TEST_DIR, 'feeds');
+
+  beforeEach(async () => {
+    await rm(BACKFILL_TEST_DIR, { recursive: true, force: true });
+    await mkdir(BACKFILL_CURATED_DIR, { recursive: true });
+    await mkdir(BACKFILL_FEEDS_DIR, { recursive: true });
+  });
+
+  afterEach(async () => {
+    await rm(BACKFILL_TEST_DIR, { recursive: true, force: true });
+  });
+
+  async function writeArticle(dir: string, name: string, data: Record<string, unknown>): Promise<void> {
+    await writeFile(join(dir, name), JSON.stringify(data, null, 2));
+  }
+
+  it('picks up feed articles with self-referential opening (backfill existing bad summaries)', async () => {
+    // Existing feed summaries already containing "이 콘텐츠는" must be re-queued
+    // so the fix applies retroactively, not only to new articles.
+    await writeArticle(BACKFILL_FEEDS_DIR, 'self-ref.json', {
+      id: 'self-ref',
+      title: 'Article with self-referential opening',
+      url: 'https://example.com/self-ref',
+      description: [
+        '## 개요',
+        '',
+        '이 콘텐츠는 AI 도구를 소개한다',
+        '',
+        '## 주요 내용',
+        '- 포인트 1',
+        '',
+        '## 시사점',
+        '중요한 통찰을 제공한다',
+      ].join('\n'),
+    });
+
+    const result = await findArticlesNeedingSummary(BACKFILL_CURATED_DIR, BACKFILL_FEEDS_DIR);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].data.id).toBe('self-ref');
+  });
+
+  it('picks up feed articles when ONLY the 시사점 section has a self-referential opening', async () => {
+    // Validates the regex catches openings in any section body, not only 개요
+    await writeArticle(BACKFILL_FEEDS_DIR, 'sijachom-ref.json', {
+      id: 'sijachom-ref',
+      title: 'Only 시사점 is self-referential',
+      url: 'https://example.com/sijachom-ref',
+      description: [
+        '## 개요',
+        '',
+        'Vercel이 발표한 실험',
+        '',
+        '## 주요 내용',
+        '- 포인트 1',
+        '',
+        '## 시사점',
+        '본 기사는 중요한 통찰을 제공한다',
+      ].join('\n'),
+    });
+
+    const result = await findArticlesNeedingSummary(BACKFILL_CURATED_DIR, BACKFILL_FEEDS_DIR);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].data.id).toBe('sijachom-ref');
+  });
+
+  it('NEVER picks up curated articles with self-referential opening (user-authored preserved)', async () => {
+    // Even if a curated description starts with "이 기사는", it is user input.
+    // allowResummarize=false protects it from any Gemini overwrite.
+    await writeArticle(BACKFILL_CURATED_DIR, 'user-self-ref.json', {
+      id: 'user-self-ref',
+      title: 'User wrote self-referential intentionally',
+      url: 'https://example.com/user-self-ref',
+      description: '이 기사는 사용자가 직접 적은 내용이다',
+    });
+
+    const result = await findArticlesNeedingSummary(BACKFILL_CURATED_DIR, BACKFILL_FEEDS_DIR);
+
+    expect(result).toHaveLength(0);
+  });
+
+  it('does NOT pick up feed articles with clean subject-first opening', async () => {
+    // Regression guard: clean summaries must not be re-queued
+    await writeArticle(BACKFILL_FEEDS_DIR, 'clean.json', {
+      id: 'clean',
+      title: 'Clean article',
+      url: 'https://example.com/clean',
+      description: [
+        '## 개요',
+        '',
+        'Vercel이 발표한 실험은 AGENTS.md 구조의 우수성을 입증했다',
+        '',
+        '## 주요 내용',
+        '- 포인트 1',
+        '',
+        '## 시사점',
+        '문서 기반 접근의 실용성을 검증',
+      ].join('\n'),
+    });
+
+    const result = await findArticlesNeedingSummary(BACKFILL_CURATED_DIR, BACKFILL_FEEDS_DIR);
+
+    expect(result).toHaveLength(0);
+  });
+});
+
+describe('summarizeArticles (integration)', () => {
+  const INT_TEST_DIR = join(ROOT, 'tests/tmp-integration');
+  const INT_CURATED_DIR = join(INT_TEST_DIR, 'curated');
+  const INT_FEEDS_DIR = join(INT_TEST_DIR, 'feeds');
+
+  beforeEach(async () => {
+    await rm(INT_TEST_DIR, { recursive: true, force: true });
+    await mkdir(INT_CURATED_DIR, { recursive: true });
+    await mkdir(INT_FEEDS_DIR, { recursive: true });
+  });
+
+  afterEach(async () => {
+    await rm(INT_TEST_DIR, { recursive: true, force: true });
+  });
+
+  it('rejects Gemini response starting with self-referential opening and clears stale description', async () => {
+    const filePath = join(INT_FEEDS_DIR, 'test.json');
+    await writeFile(
+      filePath,
+      JSON.stringify({ id: 'test', title: 'Test Article', url: 'https://example.com/test' }, null, 2),
+    );
+
+    const mockFetch = async () => 'A'.repeat(500);
+    const mockGenerate = async () =>
+      [
+        '## 개요',
+        '이 기사는 중요한 내용을 다룬다',
+        '',
+        '## 주요 내용',
+        '- 포인트 1',
+        '',
+        '## 시사점',
+        '결론',
+      ].join('\n');
+
+    const result = await summarizeArticles({
+      curatedDir: INT_CURATED_DIR,
+      feedsDir: INT_FEEDS_DIR,
+      apiKey: 'fake-key',
+      fetchContentFn: mockFetch,
+      generateSummaryFn: mockGenerate,
+      maxArticles: 1,
+    });
+
+    expect(result.updated).toBe(0);
+    expect(result.errors.length).toBeGreaterThanOrEqual(1);
+    expect(result.errors.some((e) => e.includes('Rejected self-referential opening'))).toBe(true);
+
+    // File description should be cleared so it gets re-queued next run
+    const updated = JSON.parse(await readFile(filePath, 'utf-8'));
+    expect(updated.description).toBeUndefined();
+  }, 30_000);
+
+  it('accepts Gemini response with subject-first opening and writes summary', async () => {
+    const filePath = join(INT_FEEDS_DIR, 'test.json');
+    await writeFile(
+      filePath,
+      JSON.stringify({ id: 'test', title: 'Test Article', url: 'https://example.com/test' }, null, 2),
+    );
+
+    const cleanSummary = [
+      '## 개요',
+      'Vercel이 발표한 실험은 AGENTS.md 구조가 높은 정확도를 보였음을 입증했다',
+      '',
+      '## 주요 내용',
+      '- AGENTS.md 접근법은 70% 통과율',
+      '',
+      '## 시사점',
+      '항상 보이는 문서가 성능을 높인다',
+    ].join('\n');
+
+    const result = await summarizeArticles({
+      curatedDir: INT_CURATED_DIR,
+      feedsDir: INT_FEEDS_DIR,
+      apiKey: 'fake-key',
+      fetchContentFn: async () => 'A'.repeat(500),
+      generateSummaryFn: async () => cleanSummary,
+      maxArticles: 1,
+    });
+
+    expect(result.updated).toBe(1);
+    expect(result.errors).toHaveLength(0);
+
+    const updated = JSON.parse(await readFile(filePath, 'utf-8'));
+    expect(updated.description).toBe(cleanSummary);
+  }, 30_000);
+
+  it('skips curated articles with non-empty description even when self-referential', async () => {
+    // Defense: even though user-written curated description has "이 기사는",
+    // allowResummarize=false means summarizeArticles never touches it.
+    const filePath = join(INT_CURATED_DIR, 'user.json');
+    await writeFile(
+      filePath,
+      JSON.stringify(
+        {
+          id: 'user',
+          title: 'User authored',
+          url: 'https://example.com/user',
+          description: '이 기사는 사용자가 적은 설명',
+        },
+        null,
+        2,
+      ),
+    );
+
+    let generateCallCount = 0;
+    const result = await summarizeArticles({
+      curatedDir: INT_CURATED_DIR,
+      feedsDir: INT_FEEDS_DIR,
+      apiKey: 'fake-key',
+      fetchContentFn: async () => 'A'.repeat(500),
+      generateSummaryFn: async () => {
+        generateCallCount += 1;
+        return 'never called';
+      },
+      maxArticles: 1,
+    });
+
+    expect(result.updated).toBe(0);
+    expect(result.skipped).toBe(0);
+    expect(result.errors).toHaveLength(0);
+    expect(generateCallCount).toBe(0); // Gemini never invoked for curated with description
+
+    // User's description must remain untouched
+    const preserved = JSON.parse(await readFile(filePath, 'utf-8'));
+    expect(preserved.description).toBe('이 기사는 사용자가 적은 설명');
+  }, 30_000);
 });
