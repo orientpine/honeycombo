@@ -143,11 +143,7 @@ function renderItems(items: PlaylistItemRow[], isOwner: boolean, playlistId: str
       const ownerControls = isOwner
         ? `
           <div class="item-controls">
-            <div class="item-control-row">
-              <button class="btn btn-sm item-move-up" data-item-id="${escapeAttr(item.id)}" data-position="${item.position}" title="위로" ${index === 0 ? 'hidden' : ''}>↑</button>
-              <button class="btn btn-sm item-move-down" data-item-id="${escapeAttr(item.id)}" data-position="${item.position}" title="아래로" ${index === items.length - 1 ? 'hidden' : ''}>↓</button>
-              <button class="btn btn-sm btn-danger item-delete" data-item-id="${escapeAttr(item.id)}" title="삭제">삭제</button>
-            </div>
+            <button class="btn btn-sm btn-danger item-delete" data-item-id="${escapeAttr(item.id)}" title="삭제">삭제</button>
             <div class="item-note-edit">
               <button class="btn btn-sm item-edit-note" data-item-id="${escapeAttr(item.id)}" data-note="${escapeAttr(item.note || '')}" data-playlist-id="${escapeAttr(playlistId)}">
                 ${item.note ? '💬 메모 수정' : '💬 메모 추가'}
@@ -158,6 +154,7 @@ function renderItems(items: PlaylistItemRow[], isOwner: boolean, playlistId: str
 
       return `
         <article class="item-card card" data-item-id="${escapeAttr(item.id)}" data-position="${item.position}">
+          ${isOwner ? `<div class="drag-handle" aria-label="드래그하여 순서 변경"></div>` : ''}
           ${thumbnail ? `<div class="item-thumbnail"><img src="${escapeAttr(thumbnail)}" alt="" loading="lazy" width="160" height="90" /></div>` : ''}
           <div class="item-body">
             <h2 class="item-title">
@@ -476,6 +473,104 @@ const PAGE_STYLES = `
         grid-template-columns: repeat(2, 1fr);
         gap: var(--space-md);
         margin-top: var(--space-lg);
+      }
+
+      /* Batch edit toolbar */
+      .items-toolbar {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: var(--space-sm);
+        margin-bottom: var(--space-md);
+      }
+      .batch-action-bar {
+        display: flex;
+        gap: var(--space-sm);
+        align-items: center;
+      }
+      .batch-edit-btn,
+      .batch-cancel-btn,
+      .batch-save-btn {
+        cursor: pointer;
+        transition: background 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), color 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .batch-edit-btn:focus-visible,
+      .batch-cancel-btn:focus-visible,
+      .batch-save-btn:focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
+      }
+      .batch-save-btn {
+        background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+        color: white;
+        border: none;
+        box-shadow: 0 4px 14px rgba(245, 124, 34, 0.3);
+      }
+      .batch-save-btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(245, 124, 34, 0.4);
+        color: white;
+      }
+      .batch-save-btn:disabled {
+        opacity: 0.7;
+        cursor: wait;
+        transform: none;
+      }
+
+      /* Drag handle (§4.8) */
+      .drag-handle {
+        display: none;
+        flex-shrink: 0;
+        width: 24px;
+        align-items: center;
+        justify-content: center;
+        cursor: grab;
+        color: var(--color-text-muted);
+        transition: color 0.15s ease-out;
+        user-select: none;
+        touch-action: none;
+      }
+      .drag-handle::before {
+        content: '⋮⋮';
+        font-size: 1.1rem;
+        letter-spacing: 2px;
+        line-height: 1;
+      }
+      .drag-handle:hover {
+        color: var(--color-primary);
+      }
+
+      /* Batch edit mode container (§4.9) */
+      .batch-edit-mode {
+        border: 2px dashed var(--color-border);
+        border-radius: var(--radius-md);
+        padding: var(--space-md);
+        background: var(--color-bg-secondary);
+        grid-template-columns: 1fr;
+      }
+      .batch-edit-mode .drag-handle {
+        display: flex;
+      }
+      .batch-edit-mode .item-title a {
+        pointer-events: none;
+        color: var(--color-text-muted);
+      }
+      .batch-edit-mode .item-controls {
+        display: none;
+      }
+
+      /* SortableJS drag states (§6 L9) */
+      .sortable-ghost {
+        opacity: 0.35;
+        border: 2px dashed var(--color-primary);
+      }
+      .sortable-chosen {
+        box-shadow: var(--shadow-md);
+        transform: scale(1.02) rotate(1deg);
+        cursor: grabbing;
+      }
+      .sortable-drag {
+        opacity: 0.9;
       }
 
       .item-card {
@@ -1066,7 +1161,16 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
           ${playlist.tags && playlist.tags.length > 0 ? `<div class="playlist-tags">${playlist.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
           <p class="meta-text">${escapeHtml(ownerName)}가 모은 기술 콘텐츠를 한 번에 확인해보세요.</p>
         </header>
-        <section class="items">${renderItems(playlist.items, isOwner, playlist.id)}</section>
+        ${isOwner && playlist.items.length > 1 ? `
+          <div class="items-toolbar">
+            <button type="button" class="btn btn-sm batch-edit-btn" id="batch-edit-btn">📋 배치 편집</button>
+            <div class="batch-action-bar" id="batch-action-bar" hidden>
+              <button type="button" class="btn btn-sm batch-cancel-btn" id="batch-cancel-btn">취소</button>
+              <button type="button" class="btn btn-sm btn-primary batch-save-btn" id="batch-save-btn">저장</button>
+            </div>
+          </div>
+        ` : ''}
+        <section class="items" id="items-container">${renderItems(playlist.items, isOwner, playlist.id)}</section>
         ${isOwner ? renderOwnerControls(playlist) : ''}
       </article>`,
     script: [
@@ -1361,32 +1465,6 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
             });
           }
 
-          function getItemCards() {
-            return Array.from(document.querySelectorAll('.item-card'));
-          }
-
-          function syncItemControls() {
-            const cards = getItemCards();
-
-            cards.forEach((card, index) => {
-              const position = index + 1;
-              card.dataset.position = String(position);
-
-              const upButton = card.querySelector('.item-move-up');
-              const downButton = card.querySelector('.item-move-down');
-
-              if (upButton) {
-                upButton.dataset.position = String(position);
-                upButton.hidden = index === 0;
-              }
-
-              if (downButton) {
-                downButton.dataset.position = String(position);
-                downButton.hidden = index === cards.length - 1;
-              }
-            });
-          }
-
           document.querySelectorAll('.item-delete').forEach((btn) => {
             btn.addEventListener('click', async () => {
               const itemId = btn.dataset.itemId;
@@ -1413,7 +1491,6 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
                 card.classList.add('removing');
                 window.setTimeout(() => {
                   card.remove();
-                  syncItemControls();
                   updateItemCount(-1);
                   var itemsEl = document.querySelector('.items');
                   if (itemsEl && !itemsEl.querySelector('.item-card')) {
@@ -1422,51 +1499,6 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
                 }, 300);
               } catch {
                 window.alert('삭제에 실패했습니다.');
-              }
-            });
-          });
-
-          async function moveItem(itemId, direction) {
-            const cards = getItemCards();
-            const currentCard = cards.find((card) => card.dataset.itemId === itemId);
-            if (!currentCard) return;
-
-            const currentIndex = cards.indexOf(currentCard);
-            const targetIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
-            if (targetIndex < 0 || targetIndex >= cards.length) return;
-
-            const targetCard = cards[targetIndex];
-            const targetItemId = targetCard.dataset.itemId;
-            if (!targetItemId) return;
-
-            document.querySelectorAll('.item-move-up, .item-move-down').forEach(function(b) { b.disabled = true; });
-
-            try {
-              await fetch('/api/playlists/' + playlistId + '/items/swap', {
-                method: 'PUT',
-                credentials: 'same-origin',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ itemA: itemId, itemB: targetItemId })
-              });
-            } catch {}
-
-            window.location.reload();
-          }
-
-          document.querySelectorAll('.item-move-up').forEach((btn) => {
-            btn.addEventListener('click', () => {
-              const itemId = btn.dataset.itemId;
-              if (itemId) {
-                void moveItem(itemId, 'up');
-              }
-            });
-          });
-
-          document.querySelectorAll('.item-move-down').forEach((btn) => {
-            btn.addEventListener('click', () => {
-              const itemId = btn.dataset.itemId;
-              if (itemId) {
-                void moveItem(itemId, 'down');
               }
             });
           });
@@ -1751,7 +1783,116 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
 
           renderEditorTags();
           // ========== End Tag Editor ==========
-          syncItemControls();
+
+          // === Batch Edit Mode (drag-to-reorder) ===
+          var batchEditBtn = document.getElementById('batch-edit-btn');
+          var batchActionBar = document.getElementById('batch-action-bar');
+          var batchSaveBtn = document.getElementById('batch-save-btn');
+          var batchCancelBtn = document.getElementById('batch-cancel-btn');
+          var itemsContainer = document.getElementById('items-container');
+          var sortableInstance = null;
+          var originalOrder = [];
+
+          function loadSortableJS() {
+            if (window.Sortable) return Promise.resolve();
+            return new Promise(function(resolve, reject) {
+              var s = document.createElement('script');
+              s.src = 'https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js';
+              s.onload = function() { resolve(); };
+              s.onerror = function() { reject(new Error('SortableJS load failed')); };
+              document.head.appendChild(s);
+            });
+          }
+
+          function getCurrentItemIds() {
+            if (!itemsContainer) return [];
+            return Array.from(itemsContainer.querySelectorAll('.item-card')).map(function(c) {
+              return c.dataset.itemId;
+            });
+          }
+
+          function enterBatchMode() {
+            if (!itemsContainer || !batchEditBtn || !batchActionBar) return;
+            originalOrder = getCurrentItemIds();
+            itemsContainer.classList.add('batch-edit-mode');
+            batchEditBtn.hidden = true;
+            batchActionBar.hidden = false;
+
+            loadSortableJS().then(function() {
+              sortableInstance = window.Sortable.create(itemsContainer, {
+                handle: '.drag-handle',
+                animation: 150,
+                ghostClass: 'sortable-ghost',
+                chosenClass: 'sortable-chosen',
+                dragClass: 'sortable-drag'
+              });
+            }).catch(function() {
+              window.alert('드래그 기능을 불러오지 못했습니다. 페이지를 새로고침해주세요.');
+              exitBatchMode();
+            });
+          }
+
+          function exitBatchMode() {
+            if (sortableInstance) {
+              sortableInstance.destroy();
+              sortableInstance = null;
+            }
+            if (itemsContainer) itemsContainer.classList.remove('batch-edit-mode');
+            if (batchEditBtn) batchEditBtn.hidden = false;
+            if (batchActionBar) batchActionBar.hidden = true;
+          }
+
+          function cancelBatchEdit() {
+            if (!itemsContainer) { exitBatchMode(); return; }
+            originalOrder.forEach(function(id) {
+              var card = itemsContainer.querySelector('[data-item-id="' + id + '"]');
+              if (card) itemsContainer.appendChild(card);
+            });
+            exitBatchMode();
+          }
+
+          async function saveBatchOrder() {
+            var itemIds = getCurrentItemIds();
+            if (itemIds.length === 0) return;
+
+            if (batchSaveBtn) {
+              batchSaveBtn.disabled = true;
+              batchSaveBtn.textContent = '저장 중...';
+            }
+
+            try {
+              var res = await fetch('/api/playlists/' + playlistId + '/items/reorder', {
+                method: 'PUT',
+                credentials: 'same-origin',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ item_ids: itemIds })
+              });
+
+              if (!res.ok) {
+                throw new Error('Reorder failed');
+              }
+
+              window.location.reload();
+            } catch (err) {
+              if (batchSaveBtn) {
+                batchSaveBtn.disabled = false;
+                batchSaveBtn.textContent = '저장';
+              }
+              window.alert('순서 저장에 실패했습니다. 다시 시도해주세요.');
+            }
+          }
+
+          if (batchEditBtn) {
+            batchEditBtn.addEventListener('click', enterBatchMode);
+          }
+          if (batchCancelBtn) {
+            batchCancelBtn.addEventListener('click', cancelBatchEdit);
+          }
+          if (batchSaveBtn) {
+            batchSaveBtn.addEventListener('click', function() {
+              void saveBatchOrder();
+            });
+          }
         </script>` : '',
     ].filter(Boolean).join('\n') || undefined,
   });
