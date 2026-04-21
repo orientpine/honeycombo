@@ -388,6 +388,60 @@ transition: background 0.15s, color 0.15s;
 - `.auth-login-btn`, `.auth-logout-btn` — `src/components/Navigation.astro`. 인증 관련 드롭다운 버튼.
 
 새 패밀리 도입 수준으로 가면 이 리스트도 동시에 갱신한다.
+#### 4.8 Drag Handle (`.drag-handle`) — `functions/p/[id].ts`
+
+플레이리스트 아이템 재정렬 전용 드래그 핸들. `.batch-edit-mode` 컨테이너 내부에서만 노출되고, 일반 보기에서는 숨어 있다. 카드 전체를 draggable하지 않고 **핸들 영역에서만 드래그를 개시**하게 해 스크롤·읽기 중 우발적 드래그를 방지한다.
+
+| Property | Value |
+|----------|-------|
+| Icon | ⋮⋮ grip pattern via CSS `::before` content |
+| Size | width 24px, 카드 높이에 맞춰 flex 수직 중앙 정렬 |
+| Color (default) | `var(--color-text-muted)` (`#6B6168`) |
+| Color (hover) | `var(--color-primary)` (`#F57C22`) |
+| Cursor | `grab` (default), `grabbing` (SortableJS가 `.sortable-chosen`으로 제어) |
+| Transition | `color 0.15s ease-out` |
+| Position | `.item-card`의 첫 자식 (썸네일·본문 앞), `flex-shrink: 0` |
+| Touch | `touch-action: none`, `user-select: none` (모바일 터치 드래그 안정화) |
+| Visibility | 기본 `display: none`; `.batch-edit-mode` 하위에서 `display: flex` |
+| A11y | `aria-label="드래그하여 순서 변경"` |
+
+#### 4.9 Batch Edit Mode (플레이리스트 배치 편집) — `functions/p/[id].ts`
+
+플레이리스트 소유자가 아이템 순서를 한 번에 재배치할 수 있는 토글 모드. `📋 배치 편집` 버튼으로 진입 → SortableJS 드래그로 재정렬 → `저장` 또는 `취소`로 종료한다. 아이템이 2개 이상인 소유자에게만 노출.
+
+**컨테이너 (`.items.batch-edit-mode`)**
+
+- `border: 2px dashed var(--color-border)` (편집 중임을 나타내는 점선 테두리)
+- `border-radius: var(--radius-md)`
+- `padding: var(--space-md)`
+- `background: var(--color-bg-secondary)` (따뜻한 cream 배경으로 모드 차별화)
+- `grid-template-columns: 1fr` (배치 중에는 단일 열로 강제 — 세로 드래그에 집중)
+
+**링크·컨트롤 비활성화 (`.batch-edit-mode` 하위)**
+
+- `.item-title a { pointer-events: none; color: var(--color-text-muted); }` — 편집 중 페이지 이탈 방지
+- `.item-controls { display: none; }` — 삭제/메모 버튼 숨김 (배치 작업에 집중)
+
+**툴바 (`.items-toolbar`)**
+
+- `display: flex; justify-content: flex-end; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-md);`
+- 평상시: `📋 배치 편집` 버튼 한 개 노출 (§4.2 Inline small button 패턴, `.btn-sm`)
+- 편집 중: `.batch-edit-btn`은 `hidden`, `.batch-action-bar` 노출
+
+**액션 바 (`.batch-action-bar`)**
+
+- `display: flex; gap: var(--space-sm); align-items: center;`
+- `취소` 버튼: §4.3 Ghost 패턴 (`.btn.btn-sm`, transparent bg → bg-secondary hover)
+- `저장` 버튼: §4.1 Global `.btn-primary` 패턴 (gradient + warm shadow)
+- 저장 중에는 `disabled` + `저장 중...` 라벨
+
+**상태 전이 요약**
+
+| 전이 | 트리거 | 동작 |
+|------|--------|------|
+| normal → editing | `📋 배치 편집` 클릭 | 원래 순서 snapshot, SortableJS lazy-load·초기화, 툴바·링크 비활성화 |
+| editing → normal (저장) | `저장` 클릭 | `PUT /api/playlists/{id}/items/reorder` → 성공 시 reload |
+| editing → normal (취소) | `취소` 클릭 | snapshot으로 DOM 복원, SortableJS destroy |],op:
 
 ### Card (`.card`) — `styles/global.css`
 
@@ -537,6 +591,7 @@ box-shadow: 0 0 0 3px rgba(245, 124, 34, 0.15);   /* warm focus ring */
 | L6 Focus ring (input/button) | — | **warm** `rgba(245, 124, 34, 0.15)` 3px halo | `.article-search-input:focus` |
 | L7 Like CTA active | gradient (like-from→like-to, pink/red) | `var(--shadow-like)` = `0 2px 8px rgba(231, 76, 111, 0.25)` | `.like-button.is-liked` |
 | L8 Like CTA hover | gradient (like-from-hover→like-to-hover) | `var(--shadow-like-hover)` = `0 4px 14px rgba(231, 76, 111, 0.35)` | `.like-button.is-liked:hover` |
+| L9 Dragging item | `var(--color-bg)` | `var(--shadow-md)` + `transform: scale(1.02) rotate(1deg)` | `.sortable-chosen` (SortableJS) |
 
 ### Shadow Tokens
 
@@ -566,6 +621,7 @@ box-shadow: 0 0 0 3px rgba(245, 124, 34, 0.15);
 - **Warm shadow는 primary CTA / focus ring 전용.** 일반 카드 hover에는 중립 `var(--shadow-md)`.
 - **그림자 스택 2단계만.** `shadow-sm`, `shadow-md` 외 neutral 그림자 추가 시 토큰 먼저 등록.
 - **Primary CTA는 hover 시 translateY(-2px) + shadow 확대 + `cubic-bezier(0.34, 1.56, 0.64, 1)` bounce.** 이 spring-like easing은 `.btn`의 시그니처 모션.
+- **Drag elevation (배치 편집)**: SortableJS가 드래그 중인 카드에 `.sortable-chosen` 클래스를 부여하면 `var(--shadow-md)` + `transform: scale(1.02) rotate(1deg)`로 띄운다. Drop ghost(`.sortable-ghost`)는 `opacity: 0.35; border: 2px dashed var(--color-primary)`로 투명화해 드롭 위치를 암시한다. 기본 easing `cubic-bezier(0.4, 0, 0.2, 1)` 사용 — 여기엔 spring easing을 쓰지 않는다 (드래그 종료 시점에 bounce가 들어가면 불안정해 보임).
 
 ### Border Radius
 
@@ -593,6 +649,7 @@ box-shadow: 0 0 0 3px rgba(245, 124, 34, 0.15);
 - **Cubic-bezier easing.** primary lift에는 `cubic-bezier(0.34, 1.56, 0.64, 1)` (spring), 일반 전환에는 `ease-out` 또는 `cubic-bezier(0.4, 0, 0.2, 1)`. **`linear` 금지.**
 - **모바일 breakpoint는 768px 단일.** 신규 브레이크포인트 도입 시 문서 먼저.
 - **Focus ring은 warm** (`rgba(245, 124, 34, 0.15)` 3px). 파란색 focus ring 금지.
+- **드래그 재정렬은 핸들 방식.** 카드 전체를 draggable로 만들지 말고 `.drag-handle` 요소로만 드래그를 개시하게 한다. 스크롤·읽기 중 오동작 방지. (§4.8)
 
 ### ❌ Don't
 
@@ -679,6 +736,10 @@ Easing: primary lift = cubic-bezier(0.34, 1.56, 0.64, 1)
 Transition duration: 0.15s ~ 0.2s
 Breakpoint: 768px (single)
 Gradient pattern: linear-gradient(135deg, var(--color-primary), var(--color-accent))
+Drag handle:     color default = var(--color-text-muted) → hover = var(--color-primary), cursor grab/grabbing
+Batch container: border 2px dashed var(--color-border), bg var(--color-bg-secondary), grid 1fr
+Drag elevation:  var(--shadow-md) + scale(1.02) rotate(1deg) (.sortable-chosen)
+Drop ghost:      opacity 0.35 + 2px dashed var(--color-primary) (.sortable-ghost)
 ```
 
 ### 📝 즉시 사용 가능한 Agent Prompt 템플릿
@@ -775,3 +836,4 @@ body with rationale.
 | 2026-04-21 | Oracle 4차 검증 피드백 반영 — §3 'Button (small) | `.btn` (forms)' 행의 잘못된 추출값을 실제 코드 값으로 교체(pages/p/new.astro:425-437, admin/must-read.astro:565-579). |
 | 2026-04-21 | **Like button 전용 패턴 등록** (PR #146 — Oracle 최종 리뷰 후속) — PR #131→#142 작업으로 구현된 좋아요 pill 버튼의 완전 스펙을 §4.6에 추가(default/hover/liked/liked-hover CSS 블록, icon color state machine, ´/trending´ vs ´/p/[id]´ 사이즈 변형). §2 Like Family 표에 각 토큰의 역할 설명 강화. master의 §2/§4.6 간소 표현을 보존하면서 PR #146 내용과 통합. §7 Don't 조항 3개 추가: 'like 토큰 재사용 금지', 'brand orange/amber 그라데이션을 like에 쓰는 것 금지', '카운트를 버튼 밖으로 분리 금지'. |
 | 2026-04-21 | **플레이리스트 태그 편집 UI 추가** (`/p/{id}` 소유자 전용 섹션) — 신규 토큰 없음, 기존 패턴만 재사용: §4.4 Pill/Tag(태그 pill + × 버튼), §4.2 Inline Button(primary 저장 버튼 `has-changes` 상태), `.search-input` 패턴(태그 입력 필드 focus ring), warm shadow rgba(245, 124, 34, 0.25/0.35)를 primary 저장 버튼 hover lift에 적용. `cubic-bezier(0.34, 1.56, 0.64, 1)` spring easing 사용. DESIGN.md 변경 없음 — 변경 이력만 기록. |
+| 2026-04-21 | **플레이리스트 배치 편집 모드 + 드래그 재정렬 추가** — §4.8 Drag Handle (⋮⋮ grip, 24px 폭, muted→primary 색 전환, grab/grabbing cursor, `.batch-edit-mode`에서만 표시), §4.9 Batch Edit Mode (점선 테두리 컨테이너, bg-secondary 배경, 단일 열 그리드, 툴바·액션 바, 편집 중 링크·컨트롤 비활성화), §6 L9 Dragging Elevation (`var(--shadow-md)` + `scale(1.02) rotate(1deg)`, ghost는 opacity 0.35 + primary dashed border), §7 Do: 드래그는 핸들 방식, §9 토큰 참조. **신규 CSS custom property 없음 — 기존 토큰만 조합.** |
