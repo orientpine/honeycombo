@@ -62,6 +62,7 @@ const currentPath = Astro.url.pathname;
     '<img src="' + avatar + '" alt="' + name + '" class="auth-avatar" />' +
     '<span class="auth-username">' + name + '</span>' +
     '<div class="auth-dropdown">' +
+    '<a href="/my/articles" class="auth-dropdown-item">내 기사 관리</a>' +
     '<a href="/my/playlists" class="auth-dropdown-item">내 플레이리스트</a>' +
     (user.is_admin ? '<a href="/admin/must-read" class="auth-dropdown-item auth-dropdown-admin">⭐ Must-read 관리</a><a href="/admin/playlists" class="auth-dropdown-item auth-dropdown-admin">🛡️ 플레이리스트 관리</a><a href="/admin" class="auth-dropdown-item auth-dropdown-admin">🛡️ 기사 검토 (CMS)</a>' : '') +
     '<button class="auth-dropdown-item text-danger auth-logout-btn">로그아웃</button>' +
@@ -89,6 +90,7 @@ function renderAuthUser(authArea: HTMLElement, user: { username: string; avatar_
     '<img src="' + avatarUrl + '" alt="' + safeName + '" class="auth-avatar" />' +
     '<span class="auth-username">' + safeName + '</span>' +
     '<div class="auth-dropdown">' +
+    '<a href="/my/articles" class="auth-dropdown-item">내 기사 관리</a>' +
     '<a href="/my/playlists" class="auth-dropdown-item">내 플레이리스트</a>' +
     (user.is_admin ? '<a href="/admin/must-read" class="auth-dropdown-item auth-dropdown-admin">⭐ Must-read 관리</a><a href="/admin/playlists" class="auth-dropdown-item auth-dropdown-admin">🛡️ 플레이리스트 관리</a><a href="/admin" class="auth-dropdown-item auth-dropdown-admin">🛡️ 기사 검토 (CMS)</a>' : '') +
     '<button class="auth-dropdown-item text-danger auth-logout-btn">로그아웃</button>' +

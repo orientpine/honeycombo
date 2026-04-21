@@ -1,4 +1,7 @@
 # 기사 승인 시 플레이리스트 자동 추가
+> ⚠️ **DEPRECATED (2026-04-21)**: 이 기능은 제거되었습니다.
+> 대체: [기사 관리 페이지 (/my/articles)](./article-management.md)
+> 관련 ADR: [0006. 자동 플레이리스트 추가 제거](../decisions/0006-remove-auto-playlist-add.md)
 
 > 승인된 제출 기사를 제출자 플레이리스트에 자동 반영하고, 미가입 제출자는 deferred submission으로 보관하는 기능.
 
@@ -64,6 +67,7 @@ PR merge 이벤트 (새 파일 감지) → functions/webhooks/submission-approve
 
 | 날짜 | 변경 내용 |
 |------|----------|
+| 2026-04-21 | Deprecated. 자동 플레이리스트 추가 제거됨. /my/articles로 대체. |
 | 2026-04-13 | 최초 작성 |
 | 2026-04-13 | Wave 4: OAuth callback catch-up과 `synced_to_playlist` 갱신 흐름 반영 |
 | 2026-04-13 | 환경변수 설정 가이드 보강 (WEBHOOK_SECRET, SITE_URL), _routes.json 제약 추가 |

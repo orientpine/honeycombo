@@ -1,5 +1,3 @@
-import { addItem, DuplicateItemError } from '../lib/playlist-items';
-import { getOrCreateAutoPlaylist } from '../lib/playlists';
 import type { Env } from '../lib/types';
 import { verifyWebhookSecret } from '../lib/webhooks';
 
@@ -11,11 +9,6 @@ interface ApprovedPayload {
   description?: string;
 }
 
-interface WebhookContext {
-  request: Request;
-  env: Env;
-}
-
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
     status,
@@ -23,11 +16,7 @@ function json(data: unknown, status = 200): Response {
   });
 }
 
-export const onRequest = async ({ request, env }: WebhookContext): Promise<Response> => {
-  if (request.method !== 'POST') {
-    return new Response('Method Not Allowed', { status: 405 });
-  }
-
+export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   if (!verifyWebhookSecret(request, env)) {
     return json({ error: 'Unauthorized' }, 401);
   }
@@ -44,35 +33,17 @@ export const onRequest = async ({ request, env }: WebhookContext): Promise<Respo
   }
 
   const user = await env.DB.prepare('SELECT id FROM users WHERE id = ?').bind(payload.submitted_by_id).first<{ id: string }>();
+  const submittedById = user?.id ?? payload.submitted_by_id;
 
-  if (user) {
-    const playlist = await getOrCreateAutoPlaylist(env.DB, user.id);
-
-    try {
-      const item = await addItem(env.DB, playlist.id, user.id, {
-        item_type: 'curated',
-        source_id: payload.article_id,
-        title_snapshot: payload.title,
-        url_snapshot: payload.url,
-        description_snapshot: payload.description,
-      });
-
-      if (!item) {
-        throw new Error('Failed to add approved submission to playlist');
-      }
-    } catch (err) {
-      if (err instanceof DuplicateItemError) {
-        return Response.json({ status: 'already_exists' });
-      }
-      throw err;
-    }
-
-    return Response.json({ status: 'added', playlist_id: playlist.id });
-  }
-
+  // submissions table repurposed as canonical article registry. synced_to_playlist column semantics: 0 = not yet in any playlist, 1 = has been added to at least one (reserved for future use; currently unused).
   await env.DB.prepare(
-    'INSERT OR IGNORE INTO submissions (article_id, submitted_by_id, title, url) VALUES (?, ?, ?, ?)',
-  ).bind(payload.article_id, payload.submitted_by_id, payload.title, payload.url).run();
+    `INSERT INTO submissions (article_id, submitted_by_id, title, url, synced_to_playlist, created_at)
+     VALUES (?, ?, ?, ?, 0, datetime('now'))
+     ON CONFLICT(article_id) DO UPDATE SET
+       submitted_by_id = excluded.submitted_by_id,
+       title = excluded.title,
+       url = excluded.url`,
+  ).bind(payload.article_id, submittedById, payload.title, payload.url).run();
 
-  return Response.json({ status: 'deferred' });
+  return json({ success: true, article_id: payload.article_id });
 };

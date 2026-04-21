@@ -1,0 +1,645 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="내 기사 관리">
+  <header class="page-header">
+    <h1 class="page-title">내 기사 관리</h1>
+    <p class="page-description">내가 제출한 기사를 플레이리스트에 배정하고 관리하세요.</p>
+  </header>
+
+  <div id="page-loading" class="state-message">
+    <p>데이터를 불러오는 중입니다...</p>
+  </div>
+
+  <div id="auth-gate" class="state-message" hidden>
+    <p>기사를 관리하려면 로그인이 필요합니다.</p>
+    <a href="/api/auth/github/login?return_to=/my/articles" class="btn btn-primary">GitHub로 로그인</a>
+  </div>
+
+  <div id="main-content" hidden>
+    <div id="page-notification" role="status" aria-live="polite" hidden></div>
+
+    <div class="tab-header" role="tablist">
+      <button class="tab-btn active" role="tab" data-tab="unassigned" aria-selected="true">미배정 기사 <span class="tab-count" data-count="unassigned">(0)</span></button>
+      <button class="tab-btn" role="tab" data-tab="assigned" aria-selected="false">배정된 기사 <span class="tab-count" data-count="assigned">(0)</span></button>
+    </div>
+
+    <div class="tab-panel" role="tabpanel" data-panel="unassigned">
+      <div class="articles-grid" id="unassigned-grid"></div>
+    </div>
+
+    <div class="tab-panel" role="tabpanel" data-panel="assigned" hidden>
+      <div class="articles-grid" id="assigned-grid"></div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+document.addEventListener('astro:page-load', () => {
+  const loadingEl = document.getElementById('page-loading');
+  const authGateEl = document.getElementById('auth-gate');
+  const mainContentEl = document.getElementById('main-content');
+  const notificationEl = document.getElementById('page-notification');
+  const unassignedGrid = document.getElementById('unassigned-grid');
+  const assignedGrid = document.getElementById('assigned-grid');
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabPanels = document.querySelectorAll('.tab-panel');
+  const countUnassigned = document.querySelector('[data-count="unassigned"]');
+  const countAssigned = document.querySelector('[data-count="assigned"]');
+
+  if (!loadingEl || !authGateEl || !mainContentEl) return;
+
+  let articles: any[] = [];
+  let playlists: any[] = [];
+  let activeDropdown: HTMLElement | null = null;
+
+  async function init() {
+    try {
+      const authRes = await fetch('/api/auth/me');
+      if (!authRes.ok) {
+        loadingEl!.hidden = true;
+        authGateEl!.hidden = false;
+        return;
+      }
+      
+      const [articlesRes, playlistsRes] = await Promise.all([
+        fetch('/api/my/articles?status=all&limit=100'),
+        fetch('/api/playlists?mine=true')
+      ]);
+
+      if (!articlesRes.ok || !playlistsRes.ok) throw new Error('데이터를 불러오는데 실패했습니다.');
+
+      const articlesData = await articlesRes.json();
+      const playlistsData = await playlistsRes.json();
+
+      articles = articlesData.articles || [];
+      playlists = playlistsData.playlists || [];
+
+      loadingEl!.hidden = true;
+      mainContentEl!.hidden = false;
+
+      setupTabs();
+      renderAll();
+    } catch (err: any) {
+      loadingEl!.hidden = true;
+      showNotification(err.message || '오류가 발생했습니다.', 'error');
+    }
+  }
+
+  function setupTabs() {
+    const hash = window.location.hash.replace('#', '') || 'unassigned';
+    switchTab(hash);
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tab = btn.getAttribute('data-tab');
+        if (tab) {
+          switchTab(tab);
+          window.location.hash = tab;
+        }
+      });
+    });
+  }
+
+  function switchTab(tabId: string) {
+    tabBtns.forEach(btn => {
+      const isSelected = btn.getAttribute('data-tab') === tabId;
+      btn.classList.toggle('active', isSelected);
+      btn.setAttribute('aria-selected', isSelected.toString());
+    });
+
+    tabPanels.forEach(panel => {
+      (panel as HTMLElement).hidden = panel.getAttribute('data-panel') !== tabId;
+    });
+  }
+
+  function renderAll() {
+    const unassigned = articles.filter(a => !a.playlists || a.playlists.length === 0);
+    const assigned = articles.filter(a => a.playlists && a.playlists.length > 0);
+
+    if (countUnassigned) countUnassigned.textContent = `(${unassigned.length})`;
+    if (countAssigned) countAssigned.textContent = `(${assigned.length})`;
+
+    renderUnassigned(unassigned);
+    renderAssigned(assigned);
+  }
+
+  function renderUnassigned(items: any[]) {
+    if (!unassignedGrid) return;
+    if (items.length === 0) {
+      unassignedGrid.innerHTML = `<div class="empty-state">플레이리스트에 추가되지 않은 기사가 없습니다.</div>`;
+      return;
+    }
+
+    unassignedGrid.innerHTML = items.map(article => `
+      <article class="article-card card" data-article-id="${article.article_id}">
+        <a class="article-title" href="${escapeHtml(article.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(article.title)}</a>
+        <div class="article-meta">제출일 ${formatDate(article.submitted_at)}</div>
+        <div class="article-actions">
+          <button class="btn btn-secondary btn-add-to-playlist" type="button">플레이리스트에 추가</button>
+        </div>
+      </article>
+    `).join('');
+  }
+
+  function renderAssigned(items: any[]) {
+    if (!assignedGrid) return;
+    if (items.length === 0) {
+      assignedGrid.innerHTML = `<div class="empty-state">아직 플레이리스트에 배정된 기사가 없습니다. 미배정 탭에서 기사를 플레이리스트에 추가해보세요.</div>`;
+      return;
+    }
+
+    assignedGrid.innerHTML = items.map(article => `
+      <article class="article-card card" data-article-id="${article.article_id}">
+        <a class="article-title" href="${escapeHtml(article.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(article.title)}</a>
+        <div class="article-meta">제출일 ${formatDate(article.submitted_at)}</div>
+        <div class="playlist-badges">
+          ${(article.playlists || []).map((p: any) => `
+            <span class="playlist-badge" data-playlist-id="${p.id}">
+              <span class="playlist-badge-title">${escapeHtml(p.title)}</span>
+              <button class="playlist-badge-remove" type="button" aria-label="${escapeHtml(p.title)} 플레이리스트에서 제거">✕</button>
+            </span>
+          `).join('')}
+        </div>
+        <div class="article-actions">
+          <button class="btn btn-secondary btn-add-to-playlist" type="button">다른 플레이리스트에 추가</button>
+        </div>
+      </article>
+    `).join('');
+  }
+
+  // Event delegation for adding/removing playlists
+  mainContentEl.addEventListener('click', async (e) => {
+    const target = e.target as HTMLElement;
+
+    // Close dropdown if clicked outside
+    if (activeDropdown && !target.closest('.dropdown-container')) {
+      activeDropdown.remove();
+      activeDropdown = null;
+    }
+
+    // Remove from playlist
+    if (target.classList.contains('playlist-badge-remove')) {
+      const badge = target.closest('.playlist-badge');
+      const card = target.closest('.article-card');
+      if (!badge || !card) return;
+      
+      const articleId = card.getAttribute('data-article-id');
+      const playlistId = badge.getAttribute('data-playlist-id');
+
+      try {
+        (target as HTMLButtonElement).disabled = true;
+        const res = await fetch(`/api/my/articles/${articleId}/playlists/${playlistId}`, { method: 'DELETE' });
+        if (!res.ok) throw new Error('제거 실패');
+
+        // Update state
+        const article = articles.find(a => a.article_id === articleId);
+        if (article) {
+          article.playlists = article.playlists.filter((p: any) => p.id !== playlistId);
+        }
+        renderAll();
+        showNotification('플레이리스트에서 제거되었습니다.', 'success');
+      } catch (err) {
+        (target as HTMLButtonElement).disabled = false;
+        showNotification('제거 중 오류가 발생했습니다.', 'error');
+      }
+      return;
+    }
+
+    // Open dropdown
+    if (target.classList.contains('btn-add-to-playlist')) {
+      e.stopPropagation();
+      if (activeDropdown) {
+        activeDropdown.remove();
+        if (activeDropdown.previousElementSibling === target) {
+          activeDropdown = null;
+          return; // Toggle off
+        }
+      }
+
+      const card = target.closest('.article-card');
+      if (!card) return;
+      
+      const articleId = card.getAttribute('data-article-id');
+      const article = articles.find(a => a.article_id === articleId);
+      const existingPlaylistIds = new Set((article.playlists || []).map((p: any) => p.id));
+
+      const availablePlaylists = playlists.filter(p => !existingPlaylistIds.has(p.id));
+
+      const dropdown = document.createElement('div');
+      dropdown.className = 'playlist-dropdown dropdown-container';
+      
+      if (availablePlaylists.length === 0) {
+        dropdown.innerHTML = `<div class="dropdown-empty">추가할 수 있는 플레이리스트가 없습니다.</div>`;
+      } else {
+        dropdown.innerHTML = `<ul class="dropdown-list">
+          ${availablePlaylists.map(p => `
+            <li><button class="dropdown-item" data-playlist-id="${p.id}">${escapeHtml(p.title)}</button></li>
+          `).join('')}
+        </ul>`;
+      }
+
+      target.parentNode!.insertBefore(dropdown, target.nextSibling);
+      activeDropdown = dropdown;
+      return;
+    }
+
+    // Add to playlist (dropdown item click)
+    if (target.classList.contains('dropdown-item')) {
+      const playlistId = target.getAttribute('data-playlist-id');
+      const card = target.closest('.article-card');
+      if (!card) return;
+      
+      const articleId = card.getAttribute('data-article-id');
+      const playlist = playlists.find(p => p.id === playlistId);
+
+      try {
+        (target as HTMLButtonElement).disabled = true;
+        const res = await fetch(`/api/my/articles/${articleId}/playlists`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ playlist_id: playlistId })
+        });
+
+        if (res.status === 409) {
+          showNotification('이미 추가된 플레이리스트입니다.', 'error');
+          if (activeDropdown) activeDropdown.remove();
+          activeDropdown = null;
+          return;
+        }
+        if (!res.ok) throw new Error('추가 실패');
+
+        // Update state
+        const article = articles.find(a => a.article_id === articleId);
+        if (article) {
+          if (!article.playlists) article.playlists = [];
+          article.playlists.push({ id: playlist.id, title: playlist.title });
+        }
+        
+        if (activeDropdown) {
+          activeDropdown.remove();
+          activeDropdown = null;
+        }
+        
+        renderAll();
+        showNotification('플레이리스트에 추가되었습니다.', 'success');
+      } catch (err) {
+        (target as HTMLButtonElement).disabled = false;
+        showNotification('추가 중 오류가 발생했습니다.', 'error');
+      }
+    }
+  });
+
+  let notificationTimeout: ReturnType<typeof setTimeout>;
+  function showNotification(message: string, type = 'success') {
+    if (!notificationEl) return;
+    
+    clearTimeout(notificationTimeout);
+    notificationEl.className = `page-notification page-notification--${type}`;
+    notificationEl.textContent = message;
+    notificationEl.hidden = false;
+
+    notificationTimeout = setTimeout(() => {
+      notificationEl.classList.add('page-notification--exiting');
+      setTimeout(() => {
+        notificationEl.hidden = true;
+        notificationEl.classList.remove('page-notification--exiting');
+        notificationEl.textContent = '';
+      }, 200);
+    }, 3000);
+  }
+
+  function escapeHtml(unsafe: string) {
+    if (!unsafe) return '';
+    return unsafe
+         .replace(/&/g, "&amp;")
+         .replace(/</g, "&lt;")
+         .replace(/>/g, "&gt;")
+         .replace(/"/g, "&quot;")
+         .replace(/'/g, "&#039;");
+  }
+
+  function formatDate(iso: string) {
+    if (!iso) return '';
+    const d = new Date(iso);
+    return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
+  }
+
+  init();
+});
+</script>
+
+<style>
+.page-header {
+  margin-bottom: var(--space-xl);
+}
+
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: var(--space-xs);
+}
+
+.page-description {
+  color: var(--color-text-muted);
+}
+
+.state-message {
+  padding: var(--space-2xl) var(--space-xl);
+  text-align: center;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.15s ease-out;
+  text-decoration: none;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--color-bg-secondary);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+  color: white;
+}
+
+.btn-secondary {
+  background: var(--color-bg-secondary);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--color-border);
+}
+
+/* 4.10 Content Tabs */
+.tab-header {
+  display: flex;
+  border-bottom: 2px solid var(--color-border);
+  margin-bottom: var(--space-lg);
+  gap: var(--space-md);
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: var(--space-sm) var(--space-xs);
+  margin-bottom: -2px;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color 0.15s ease-out, border-color 0.15s ease-out;
+}
+
+.tab-btn:hover:not(:disabled) {
+  color: var(--color-text);
+}
+
+.tab-btn.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+  font-weight: 600;
+}
+
+.tab-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.tab-count {
+  font-size: 0.85em;
+  opacity: 0.8;
+}
+
+/* 4.12 Page Notification */
+.page-notification {
+  position: sticky;
+  top: var(--space-md);
+  z-index: 10;
+  max-width: var(--max-width, 1200px);
+  margin: 0 auto var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-secondary);
+  font-size: 0.9375rem;
+  transform: translateY(0);
+  opacity: 1;
+  transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+}
+
+.page-notification--success {
+  border-left: 3px solid var(--color-success);
+  color: var(--color-text);
+}
+
+.page-notification--error {
+  border-left: 3px solid var(--color-danger);
+  color: var(--color-text);
+}
+
+.page-notification--exiting {
+  opacity: 0;
+}
+
+/* Articles Grid */
+.articles-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.empty-state {
+  padding: var(--space-xl);
+  text-align: center;
+  color: var(--color-text-muted);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--color-border);
+}
+
+/* Article Card */
+#main-content :global(.article-card) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+#main-content :global(.article-title) {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  text-decoration: none;
+  line-height: 1.4;
+}
+
+#main-content :global(.article-title:hover) {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+#main-content :global(.article-meta) {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+#main-content :global(.article-actions) {
+  position: relative;
+  margin-top: var(--space-xs);
+}
+
+/* 4.11 Playlist Badge */
+#main-content :global(.playlist-badges) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: var(--space-xs);
+}
+
+#main-content :global(.playlist-badge) {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font-size: 0.8125rem;
+  transition: border-color 0.15s ease-out;
+}
+
+#main-content :global(.playlist-badge:hover) {
+  border-color: var(--color-primary);
+}
+
+#main-content :global(.playlist-badge:focus-within) {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+#main-content :global(.playlist-badge-remove) {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  padding: 0;
+  font-size: inherit;
+  line-height: 1;
+  transition: color 0.15s ease-out;
+}
+
+#main-content :global(.playlist-badge-remove:hover) {
+  color: var(--color-danger);
+}
+
+#main-content :global(.playlist-badge-remove:focus-visible) {
+  outline: none; /* Handled by focus-within on parent */
+}
+
+/* Dropdown */
+#main-content :global(.dropdown-container) {
+  position: absolute;
+  top: calc(100% + var(--space-xs));
+  left: 0;
+  z-index: 20;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-width: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+#main-content :global(.dropdown-empty) {
+  padding: var(--space-sm) var(--space-md);
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+#main-content :global(.dropdown-list) {
+  list-style: none;
+  margin: 0;
+  padding: var(--space-xs) 0;
+}
+
+#main-content :global(.dropdown-item) {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: var(--space-sm) var(--space-md);
+  font-size: 0.9rem;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background 0.15s ease-out;
+}
+
+#main-content :global(.dropdown-item:hover) {
+  background: var(--color-bg-secondary);
+}
+
+#main-content :global(.dropdown-item:focus-visible) {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+  background: var(--color-bg-secondary);
+}
+
+@media (max-width: 768px) {
+  .tab-header {
+    flex-direction: column;
+    border-bottom: none;
+    gap: 0;
+  }
+  
+  .tab-btn {
+    width: 100%;
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--space-sm) var(--space-md);
+    margin-bottom: 0;
+  }
+  
+  .tab-btn.active {
+    border-bottom-color: var(--color-primary);
+    background: var(--color-bg-secondary);
+  }
+}
+</style>

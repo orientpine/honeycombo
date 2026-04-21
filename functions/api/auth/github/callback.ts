@@ -93,46 +93,7 @@ export const onRequest: AppPagesFunction = async (context: { env: Env; request: 
   });
   const { sessionId } = await createSession(env.DB, user.id);
 
-  // Catch-up: sync pending submissions to playlist
-  try {
-    const pending = await env.DB
-      .prepare(
-        'SELECT article_id, title, url FROM submissions WHERE submitted_by_id = ? AND synced_to_playlist = 0'
-      )
-      .bind(user.id)
-      .all();
-
-    const pendingResults = pending.results as Array<{ article_id: string; title: string; url: string }>;
-
-    if (pendingResults.length > 0) {
-      const { getOrCreateAutoPlaylist } = await import('../../../lib/playlists');
-      const { addItem, DuplicateItemError } = await import('../../../lib/playlist-items');
-      const playlist = await getOrCreateAutoPlaylist(env.DB, user.id);
-
-      for (const sub of pendingResults) {
-        try {
-          await addItem(env.DB, playlist.id, user.id, {
-            item_type: 'curated',
-            source_id: sub.article_id,
-            title_snapshot: sub.title,
-            url_snapshot: sub.url,
-          });
-        } catch (err) {
-          if (!(err instanceof DuplicateItemError)) {
-            console.error(`Catch-up failed for ${sub.article_id}:`, err);
-          }
-        }
-      }
-
-      await env.DB
-        .prepare('UPDATE submissions SET synced_to_playlist = 1 WHERE submitted_by_id = ?')
-        .bind(user.id)
-        .run();
-    }
-  } catch (err) {
-    console.error('Catch-up sync failed:', err);
-    // Non-blocking — user can still log in
-  }
+  // Auto-playlist catch-up sync removed — articles are now managed manually via /my/articles. See docs/decisions/0006-remove-auto-playlist-add.md.
 
   const headers = new Headers({
     Location: (returnTo && returnTo.startsWith('/') && !returnTo.startsWith('//')) ? returnTo : '/my/playlists',

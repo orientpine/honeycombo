@@ -89,6 +89,9 @@
 | `lib/validate.ts` | URL/제목/source_id 검증 |
 | `webhooks/submission-approved.ts` | 기사 승인 시 플레이리스트 자동 추가 webhook |
 | `webhooks/submission-removed.ts` | 기사 삭제/거부 시 플레이리스트 자동 정리 webhook |
+| `api/my/articles/index.ts` | GET 기사 목록 (status=unassigned/assigned/all) |
+| `api/my/articles/[articleId]/playlists/index.ts` | POST 기사를 플레이리스트에 추가 |
+| `api/my/articles/[articleId]/playlists/[playlistId].ts` | DELETE 기사를 플레이리스트에서 제거 |
 | `lib/webhooks.ts` | Webhook shared secret 검증 유틸리티 |
 
 ### `.github/workflows/` — CI/CD
@@ -117,6 +120,7 @@
 | `/p/new` | `p/new.astro` | 유저 플레이리스트 생성 폼 |
 | `/p/{id}` | `functions/p/[id].ts` | 유저 플레이리스트 상세 (SSR, 기사 검색/관리) |
 | `/my/playlists` | `my/playlists.astro` | 내 플레이리스트 관리 |
+| `/my/articles` | `my/articles.astro` | 사용자의 제출 기사를 미배정/배정 탭으로 관리 |
 | `/admin/playlists` | `admin/playlists.astro` | 관리자 플레이리스트 승인 페이지 |
 | `/admin/must-read` | `admin/must-read.astro` | 관리자 Must-read 선정 페이지 |
 | `/search-index.json` | `search-index.json.ts` | 플레이리스트 상세 기사 검색용 정적 JSON 인덱스 |
@@ -156,9 +160,7 @@ GitHub Issue (single/bulk) → scripts/process-submission.ts → PR (src/content
 - 제출 시 GitHub Issue 작성자의 numeric user id(`submitted_by_id`)도 함께 저장해 승인 webhook에서 D1 사용자와 매칭한다.
 ### 4. 기사 승인 시 플레이리스트 자동 추가
 
-PR merge (새 파일 감지) → git push master → on-article-approved.yml → POST /webhooks/submission-approved → D1 (플레이리스트 자동 추가)
-
-미로그인 제출자 → submissions 적재 → `/api/auth/github/callback` 로그인 시 catch-up → 자동 플레이리스트 반영
+GitHub Issue → PR → merge → webhook → submissions table (D1) → 사용자가 /my/articles에서 수동 배정
 
 
 ### 5. 빌드
@@ -204,6 +206,7 @@ src/ (pages + components + data + content) → astro build → dist/
 
 | 날짜 | 변경 내용 |
 |------|----------|
+| 2026-04-21 | /my/articles 페이지 및 /api/my/articles/* API 추가. 자동 플레이리스트 추가 흐름 제거 반영. |
 | 2026-04-11 | 최초 작성 — 현재 프로젝트 구조 기반 |
 | 2026-04-12 | validate-docs 스크립트 추가, CI 파이프라인 반영 |
 | 2026-04-12 | 단건 제출 워크플로우에 bulk submission 처리 추가 |
