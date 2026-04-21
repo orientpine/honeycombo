@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-04-20T21:20:52.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\n이 콘텐츠는 OpenAI의 공식 광고 파트너사인 StackAdapt이 ChatGPT 내 광고 게재를 시험적으로 진행하며, 'prompt relevance'를 기반으로 광고 효율을 높이려는 시도에 대해 다룹니다.\n\n## 주요 내용\n\n*   **StackAdapt의 ChatGPT 광고 테스트:** 독립적인 수요 측 플랫폼인 StackAdapt은 광고주들에게 ChatGPT 내부에 광고를 배치할 수 있는 기회를 제공하고 있습니다.\n*   **저렴한 CPM 및 수수료:** StackAdapt은 CPM을 15달러까지 낮추고, 플랫폼 및 관리 수수료 할인도 제공하며 광고주들을 유치하고 있습니다.\n*   **'Discovery Layer'로의 접근:** StackAdapt은 이 광고 테스트를 사람들이 ChatGPT에서 제품을 조사하고 비교하는 과정에 참여할 수 있는 새로운 'discovery layer'에 대한 초기 접근 기회로 홍보하고 있습니다.\n*   **'Prompt Relevance' 기반 광고:** 광고 게재는 사용자의 검색어(prompt)와 관련성이 높은 광고를 노출하는 방식으로 이루어질 예정입니다.\n*   **초기 단계의 파일럿 프로그램:** StackAdapt은 OpenAI와의 파트너십을 통해 이 광고 시스템을 시험적으로 운영하며, 아직 개발 중인 초기 단계의 광고 시스템 내에서 진행되는 테스트임을 강조하고 있습니다.\n\n## 시사점\n\nChatGPT와 같은 대화형 AI 플랫폼에 대한 광고 테스트는 새로운 사용자 참여 및 제품 발견 기회를 창출할 수 있으며, 'prompt relevance'는 광고 타겟팅의 새로운 가능성을 제시합니다."
 }

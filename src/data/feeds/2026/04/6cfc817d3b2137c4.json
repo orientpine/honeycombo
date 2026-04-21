@@ -12,5 +12,6 @@
     "gemini"
   ],
   "published_at": "2026-04-20T22:00:00.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nGoogle이 AI 기능인 Gemini를 Chrome 브라우저에 통합하는 기능을 호주, 인도네시아, 일본, 필리핀, 싱가포르, 대한민국, 베트남 등 7개 신규 국가에 출시했다는 내용입니다.\n\n## 주요 내용\n\n*   **Gemini in Chrome 기능 확장:** Google은 Gemini in Chrome 기능을 호주, 인도네시아, 일본, 필리핀, 싱가포르, 대한민국, 베트남의 7개 신규 시장으로 확대했습니다.\n*   **지원 플랫폼:** 일본을 제외한 모든 국가에서 데스크톱 및 iOS 환경에 해당 기능이 배포됩니다.\n*   **이전 기능과의 연동:** Gemini in Chrome은 작년부터 부유창 형태의 AI 통합으로 시작되었으며, 올해 초에는 탭 간 질문 답변을 돕는 사이드바 기반 어시스턴트와 Gmail, Google Photos 등과 연동하여 개인화된 답변을 제공하는 Personal Intelligence 기능이 도입되었습니다.\n*   **주요 활용 기능:** 사용자는 Gemini in Chrome을 통해 Calendar를 이용한 회의 일정 예약, Maps를 이용한 위치 정보 확인, Gmail을 이용한 이메일 초안 작성 및 전송이 가능합니다. 또한, Nano Banana 2를 사용하여 웹상의 이미지를 변환할 수도 있습니다.\n*   **글로벌 출시 현황:** Gemini in Chrome은 1월 미국 출시를 시작으로, 3월에는 인도, 캐나다, 뉴질랜드로 확대되었으며, 이번 7개국 확대로 더 많은 국가에서 사용 가능하게 되었습니다.\n*   **향후 개발 및 제한 사항:** 사용자를 대신하여 브라우저 창을 제어하는 Google의 agentic 기능은 현재 테스트 중이며, 미국 내 AI Pro 및 AI Ultra 유료 플랜 사용자에게만 제공됩니다.\n\n## 시사점\n\n이번 Gemini in Chrome의 7개국 확장은 Google이 AI를 통한 브라우저 경험 강화에 집중하고 있음을 보여주며, 향후 더 개인화되고 자동화된 웹 경험을 제공할 가능성을 시사합니다."
 }
