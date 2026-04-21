@@ -7,11 +7,16 @@ body:
     attributes:
       label: Link List
       description: |
-        한 줄에 하나씩 입력하세요. 태그는 영어로, 요약은 한국어로 작성해주세요.
-        Format: URL | Type | tags (English, comma-separated) | 요약 (한국어 가능)
+        한 줄에 하나씩 입력하세요. 태그는 영어로, 제목·요약은 한국어로 작성해주세요.
+
+        두 포맷 중 선택 가능 (파서가 자동 감지):
+          v1 (legacy): URL | Type | tags (English, comma-separated) | 요약 (한국어)
+          v2 (제목 포함): URL | Type | 제목 (한국어) | tags (English, comma-separated) | 요약 (한국어)
+
         Type options: Article, YouTube, X Thread, Threads, Other
+        제목·요약에는 `|`, 탭, 개행을 포함할 수 없습니다 (컬럼 구분자 충돌).
       placeholder: |
-        https://example.com/article | Article | AI, LLM | AI 에이전트 활용에 대한 실전 분석
-        https://youtube.com/watch?v=abc | YouTube | tutorial | 개발자를 위한 AI 튜토리얼
+        https://example.com/article | Article | AI 에이전트 활용 가이드 | AI, LLM | AI 에이전트 활용에 대한 실전 분석
+        https://youtube.com/watch?v=abc | YouTube | Claude Code 튜토리얼 | tutorial | 개발자를 위한 AI 튜토리얼
     validations:
       required: true

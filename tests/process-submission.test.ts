@@ -2,8 +2,11 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { readFile, rm } from 'fs/promises';
 import { join } from 'path';
 import {
-  fetchYouTubeOEmbed,
+  buildUrlIndex,
+  deriveShortTitle,
   extractTitleFromNote,
+  fetchYouTubeOEmbed,
+  findDuplicateUrl,
   generateId,
   isDuplicateUrl,
   isSpam,
@@ -11,8 +14,11 @@ import {
   parseIssueBody,
   processBulkSubmission,
   processSubmission,
+  resolveSubmissionTitle,
   type BulkResult,
   type IssueData,
+  type OEmbedData,
+  type ParsedSubmission,
 } from '../scripts/process-submission';
 
 const ROOT = process.cwd();
@@ -164,6 +170,138 @@ describe('extractTitleFromNote', () => {
 
   it('returns empty string for empty note', () => {
     expect(extractTitleFromNote('')).toBe('');
+  });
+});
+
+describe('deriveShortTitle', () => {
+  it('skips section heading lines when finding the first real content line', () => {
+    // First meaningful content line has TWO sentences, so deriveShortTitle
+    // returns only the first sentence and is therefore distinct from the
+    // underlying content line (no title==description overlap).
+    const note = ['## 개요', '이것은 추출될 제목입니다. 나머지 문장은 무시됩니다.', '', '## 주요 내용', '- 포인트 1'].join('\n');
+    expect(deriveShortTitle(note)).toBe('이것은 추출될 제목입니다.');
+  });
+
+  it('returns null when derivation would equal the first content line (prevents title==description)', () => {
+    const note = ['## 개요', 'AI 에이전트를 프로덕션 환경에서 활용하는 실전 분석 기사', '', '## 주요 내용', '- 설계 패턴'].join('\n');
+    expect(deriveShortTitle(note)).toBeNull();
+  });
+
+  it('extracts only the first sentence from a multi-sentence paragraph', () => {
+    const note = '첫 번째 문장입니다. 두 번째 문장은 무시되어야 합니다. 세 번째 문장.';
+    expect(deriveShortTitle(note)).toBe('첫 번째 문장입니다.');
+  });
+
+  it('truncates grapheme-aware at 80 characters with ellipsis', () => {
+    const longLine = '가'.repeat(120);
+    const result = deriveShortTitle(longLine);
+    expect(result).not.toBeNull();
+    expect(Array.from(result!).length).toBeLessThanOrEqual(81); // 80 + 1 ellipsis
+    expect(result!.endsWith('…')).toBe(true);
+  });
+
+  it('returns null for empty or whitespace-only input', () => {
+    expect(deriveShortTitle('')).toBeNull();
+    expect(deriveShortTitle('   \n  \t ')).toBeNull();
+  });
+
+  it('skips URL-only lines and uses the next content line', () => {
+    // Two sentences in the content line so truncation differs from the full line.
+    const note = 'https://example.com/first-line\n실제 콘텐츠의 첫 문장. 다음 문장.';
+    expect(deriveShortTitle(note)).toBe('실제 콘텐츠의 첫 문장.');
+  });
+});
+
+describe('resolveSubmissionTitle', () => {
+  const parsedBase: ParsedSubmission = {
+    url: 'https://example.com/resolve',
+    type: 'article',
+    tags: ['test'],
+    note: 'First meaningful content line.',
+  };
+
+  it('prefers parsed.title when set', () => {
+    const parsed: ParsedSubmission = { ...parsedBase, title: 'Explicit Title' };
+    expect(resolveSubmissionTitle(parsed, null, parsed.url)).toBe('Explicit Title');
+  });
+
+  it('falls through to oEmbed title when parsed.title is missing', () => {
+    const oembed: OEmbedData = { title: 'From oEmbed' };
+    expect(resolveSubmissionTitle(parsedBase, oembed, parsedBase.url)).toBe('From oEmbed');
+  });
+
+  it('falls through to deriveShortTitle when oEmbed is null and content has multiple sentences', () => {
+    const parsed: ParsedSubmission = { ...parsedBase, note: '첫 문장. 두번째 문장.' };
+    expect(resolveSubmissionTitle(parsed, null, parsed.url)).toBe('첫 문장.');
+  });
+
+  it('falls back to hostname when everything else would equal description', () => {
+    const parsed: ParsedSubmission = { ...parsedBase, note: ['## 개요', 'Only one content line.'].join('\n') };
+    expect(resolveSubmissionTitle(parsed, null, parsed.url)).toBe('example.com');
+  });
+});
+
+describe('parseBulkIssueBody 5-column format', () => {
+  it('parses optional title column when 5 pipe-separated fields are present', () => {
+    const body = [
+      '### Link List', '',
+      'https://example.com/a | Article | Hand Title | ai, llm | 요약 내용',
+    ].join('\n');
+    const result = parseBulkIssueBody(body);
+    expect(result).toHaveLength(1);
+    expect(result[0].title).toBe('Hand Title');
+    expect(result[0].tags).toEqual(['ai', 'llm']);
+    expect(result[0].note).toBe('요약 내용');
+  });
+
+  it('still parses legacy 4-column format with no title', () => {
+    const body = [
+      '### Link List', '',
+      'https://example.com/b | Article | ai, llm | 요약 내용',
+    ].join('\n');
+    const result = parseBulkIssueBody(body);
+    expect(result).toHaveLength(1);
+    expect(result[0].title).toBeUndefined();
+    expect(result[0].tags).toEqual(['ai', 'llm']);
+    expect(result[0].note).toBe('요약 내용');
+  });
+
+  it('ignores TITLE field when line has malformed extra pipes (client responsibility to sanitize)', () => {
+    // Pipe inside title breaks column alignment on the server; server cannot
+    // recover the intended title unambiguously. We accept the line but the
+    // client-side wrapper is responsible for rejecting pipe-in-title before submit.
+    const body = [
+      '### Link List', '',
+      'https://example.com/c | Article | Bad|Title | ai | 요약',
+    ].join('\n');
+    const result = parseBulkIssueBody(body);
+    // Server still parses something (not ideal, but documented):
+    expect(result).toHaveLength(1);
+    // rawTitle="Bad", rawTags="Title" — demonstrates the ambiguity:
+    expect(result[0].title).toBe('Bad');
+  });
+});
+
+describe('findDuplicateUrl', () => {
+  it('returns the matching file path for a known duplicate URL', async () => {
+    const result = await findDuplicateUrl('https://arstechnica.com/tech-policy/2026/04/californians-sue-over-ai-tool-that-records-doctor-visits/');
+    expect(result).not.toBeNull();
+    expect(result).toContain('src');
+    expect(result).toMatch(/\.json$/);
+  });
+
+  it('returns null for a URL not in the repo', async () => {
+    await expect(findDuplicateUrl('https://totally-new-url-xyz-12345.com/article')).resolves.toBeNull();
+  });
+});
+
+describe('buildUrlIndex', () => {
+  it('builds an index mapping existing URLs to their file paths', async () => {
+    const index = await buildUrlIndex();
+    expect(index.size).toBeGreaterThan(0);
+    const match = index.get('https://arstechnica.com/tech-policy/2026/04/californians-sue-over-ai-tool-that-records-doctor-visits/');
+    expect(match).toBeDefined();
+    expect(match).toMatch(/\.json$/);
   });
 });
 
@@ -360,7 +498,7 @@ describe('processSubmission', () => {
     expect(result).toEqual({ success: false, message: 'Could not parse issue body' });
   });
 
-  it('derives title from first content line of multiline note', async () => {
+  it('avoids title == description by falling back to hostname when the only content line IS the description', async () => {
     const issue: IssueData = {
       number: 300,
       title: '📎 Submit Link',
@@ -386,9 +524,37 @@ describe('processSubmission', () => {
       description?: string;
     };
 
-    expect(saved.title).toBe('AI 에이전트를 프로덕션 환경에서 활용하는 실전 분석 기사');
+    // Previously title was copied from the note's first content line,
+    // which ended up identical to description. Now it falls back to hostname
+    // so title and description stay visually distinct.
+    expect(saved.title).toBe('example.com');
     expect(saved.description).toContain('## 개요');
     expect(saved.description).toContain('## 주요 내용');
+  });
+
+  it('uses explicit parsed.title when bulk submission provides a title column', async () => {
+    const issue: IssueData = {
+      number: 301,
+      title: '📦 Bulk Submit',
+      body: [
+        '### Link List', '',
+        'https://example.com/explicit-title | Article | Hand-Crafted Title | ai | AI 에이전트를 프로덕션 환경에서 활용하는 실전 분석 기사',
+      ].join('\n'),
+      labels: [{ name: 'submission' }, { name: 'bulk' }],
+      user: { login: 'testuser', id: 2 },
+    };
+
+    const result = await processBulkSubmission(issue);
+    expect(result.succeeded).toHaveLength(1);
+    expect(result.failed).toHaveLength(0);
+
+    createdFiles.push(result.succeeded[0].filePath);
+    const saved = JSON.parse(await readFile(result.succeeded[0].filePath, 'utf-8')) as {
+      title: string;
+      description?: string;
+    };
+    expect(saved.title).toBe('Hand-Crafted Title');
+    expect(saved.description).toContain('AI 에이전트');
   });
 });
 
