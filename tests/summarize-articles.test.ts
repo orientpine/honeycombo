@@ -4,6 +4,7 @@ import { join } from 'path';
 import {
   clearStaleDescription,
   findArticlesNeedingSummary,
+  hasSelfReferentialOpening,
   looksLikeKoreanStructuredSummary,
 } from '../scripts/summarize-articles';
 import { readFile } from 'fs/promises';
@@ -79,6 +80,119 @@ describe('looksLikeKoreanStructuredSummary', () => {
   it('returns false for plain Korean prose without structured headings', () => {
     const text = 'AI 기술이 빠르게 발전하고 있습니다. 다양한 분야에서 응용되고 있습니다.';
     expect(looksLikeKoreanStructuredSummary(text)).toBe(false);
+  });
+});
+
+describe('hasSelfReferentialOpening', () => {
+  // Positive cases: these MUST be detected as self-referential
+  it.each([
+    ['이 콘텐츠는 AI 기술을 다룬다'],
+    ['본 콘텐츠는 새로운 도구를 소개한다'],
+    ['이 기사는 중요한 내용이다'],
+    ['본 기사는 핵심 기술을 소개한다'],
+    ['해당 기사는 분석 내용입니다'],
+    ['이 글은 LLM을 설명한다'],
+    ['본 글은 분석입니다'],
+    ['해당 글은 추첵할 만한 내용이다'],
+    ['이 아티클은 새 도구를 다룬다'],
+    ['본 아티클은 핵심을 설명한다'],
+    ['이 영상은 튜토리얼이다'],
+    ['본 영상은 핵심을 다룬다'],
+    ['이 포스트는 가이드다'],
+    ['본 포스트는 가이드입니다'],
+    ['이 뉴스는 놓칠 수 없다'],
+    ['이 내용은 중요하다'],
+    ['본 문서는 정리된 내용을 담는다'],
+    // whitespace variations
+    ['이  콘텐츠는 마지막 문장'], // double space
+    ['이콘텐츠는 없으므로'], // no space at all
+    // adjacent to leading whitespace
+    ['   이 기사는 서부러 공백'],
+  ])('detects self-referential opening in "%s"', (text) => {
+    expect(hasSelfReferentialOpening(text)).toBe(true);
+  });
+
+  // Negative cases: these MUST NOT be flagged
+  it.each([
+    ['Vercel 블로그가 발표한 새 실험은 Next.js 16 API 대상 평가에서 높은 정확도를 기록했다'],
+    ['AI 에이전트를 프로덕션 환경에서 활용하는 실전 분석'],
+    ['OpenAI의 새 API는 중요한 변화를 가져온다'],
+    ['2026년 AI 동향을 살펴본다'],
+    // "이" / "본" + non-article noun (not self-referential)
+    ['이 기술은 혁신적이다'], // 기술 is the TOPIC, not the article
+    ['본 프레임워크는 구성 요소가 많다'], // 프레임워크 is the topic
+    ['이 제품은 출시되었다'], // 제품 is the topic
+    ['이 회사는 생성형 AI에 집중한다'], // 회사 is the topic
+    ['해당 연구는 새로운 방법론을 제시한다'], // 연구 is the topic
+    // word boundary edge cases
+    ['글자가 큰 폰트를 사용한다'], // 글자 starts with 글 but is different word
+    ['자료산이 풍부한 국가의 경제 전략'], // 자료산 starts with 자료 but different word
+    // empty/whitespace
+    [''],
+    ['   '],
+    ['\n\n'],
+  ])('does not flag non-self-referential text "%s"', (text) => {
+    expect(hasSelfReferentialOpening(text)).toBe(false);
+  });
+
+  it('ignores markdown headings even if they contain the pattern', () => {
+    // "## 이 기사" as a heading is unusual but not prose; ignored by rule
+    const text = [
+      '## 이 기사의 핵심',
+      '',
+      '주제에 대한 내용',
+    ].join('\n');
+    expect(hasSelfReferentialOpening(text)).toBe(false);
+  });
+
+  it('ignores bullet items even if they start with the pattern', () => {
+    const text = [
+      '## 주요 내용',
+      '- 이 기사에서 언급된 포인트',
+    ].join('\n');
+    expect(hasSelfReferentialOpening(text)).toBe(false);
+  });
+
+  it('detects self-referential opening inside a ## 개요 section body', () => {
+    const text = [
+      '## 개요',
+      '',
+      '이 콘텐츠는 AI 도구를 소개한다',
+      '',
+      '## 주요 내용',
+      '- 포인트',
+    ].join('\n');
+    expect(hasSelfReferentialOpening(text)).toBe(true);
+  });
+
+  it('detects self-referential opening inside a ## 시사점 section body', () => {
+    const text = [
+      '## 개요',
+      '저자가 발표한 실험',
+      '',
+      '## 주요 내용',
+      '- 포인트 1',
+      '',
+      '## 시사점',
+      '본 기사는 중요한 통찰을 제공한다',
+    ].join('\n');
+    expect(hasSelfReferentialOpening(text)).toBe(true);
+  });
+
+  it('passes a clean structured summary with subject-first openings', () => {
+    const text = [
+      '## 개요',
+      '',
+      'Vercel이 발표한 새 실험은 AGENTS.md 구조가 Skills보다 높은 정확도를 보였음을 입증했다.',
+      '',
+      '## 주요 내용',
+      '- AGENTS.md 접근법은 70% 통과율을 기록',
+      '- Skills 접근법은 53% 통과율',
+      '',
+      '## 시사점',
+      '예측 가능한 문서가 에이전트 성능을 높인다는 점에서 설계 관점을 제시한다.',
+    ].join('\n');
+    expect(hasSelfReferentialOpening(text)).toBe(false);
   });
 });
 
