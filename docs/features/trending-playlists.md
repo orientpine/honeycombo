@@ -88,3 +88,4 @@
 | 2026-04-14 | 카드 UI를 `/playlists` 페이지 패턴(`playlist-card`)으로 통일 — `trending-card` 구조 제거 |
 | 2026-04-20 | **좋아요 버튼 레이아웃 시프트 해결** — `♡`(빈 하트, ≈ 12.8px)과 `♥`(채워진 하트, ≈ 7.6px) 유니코드 글리프의 고유 너비 차이로 좋아요 토글 시 버튼 폭이 ~1.8px 줄어드는 시프트를 `.like-button-icon`에 `width: 1em; flex: 0 0 1em` 고정을 적용해 해결. (후속 04-21 리디자인에서 SVG 아이콘으로 교체되면서 이 문제는 자연스럽게 해소). |
 | 2026-04-21 | 좋아요 버튼 UI 전면 개선 — 텍스트 글리프(♡♥) → SVG 하트 아이콘, pill shape, 카운트 버튼 내부 통합, 호버/liked 3-state 디자인, 접근성 강화(`aria-label`에 카운트 포함, `:focus-visible` 링, `prefers-reduced-motion` 존중). |
+| 2026-04-21 | **좋아요 버튼 Oracle 후속** — (1) `src/pages/trending.astro`의 하드코딩 색상을 `--color-like-*` / `--shadow-like-*` 토큰으로 와전 추출 (`src/styles/global.css`에 정의). (2) `functions/trending.ts` legacy SSR fallback도 동일한 모던 pill UI로 갱신. (3) `functions/p/[id].ts` 플레이리스트 상세 페이지의 좋아요 버튼도 동일 패턴으로 교체 — 사이트 전체 좋아요 UI 일관성 확보. |

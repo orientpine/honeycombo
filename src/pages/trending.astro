@@ -212,9 +212,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
 
   .like-button:hover:not(:disabled) {
-    color: #e74c6f;
-    border-color: #f4b6c4;
-    background: #fff5f7;
+    color: var(--color-like-hover-text);
+    border-color: var(--color-like-hover-border);
+    background: var(--color-like-hover-bg);
     transform: translateY(-1px);
     box-shadow: var(--shadow-sm);
   }
@@ -257,17 +257,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   /* Liked state — vibrant gradient, white text, soft glow */
   .like-button.is-liked {
-    background: linear-gradient(135deg, #ff5a7a 0%, #e74c6f 100%);
+    background: linear-gradient(135deg, var(--color-like-gradient-from) 0%, var(--color-like-gradient-to) 100%);
     border-color: transparent;
     color: #fff;
-    box-shadow: 0 2px 8px rgba(231, 76, 111, 0.25);
+    box-shadow: var(--shadow-like);
   }
 
   .like-button.is-liked:hover:not(:disabled) {
     color: #fff;
-    background: linear-gradient(135deg, #ff4870 0%, #d6395d 100%);
+    background: linear-gradient(135deg, var(--color-like-gradient-from-hover) 0%, var(--color-like-gradient-to-hover) 100%);
     border-color: transparent;
-    box-shadow: 0 4px 14px rgba(231, 76, 111, 0.35);
+    box-shadow: var(--shadow-like-hover);
     transform: translateY(-1px);
   }
 
