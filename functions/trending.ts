@@ -341,6 +341,12 @@ const PAGE_STYLES = `
         box-shadow: var(--shadow-like-hover);
         transform: translateY(-1px);
       }
+      /* Liked state: the icon must inherit the button color so it reads as
+         white against the pink gradient (otherwise the rose default-icon
+         tint blends into the gradient and the heart disappears). */
+      .like-button.is-liked .like-button-icon {
+        color: inherit;
+      }
       .like-button.is-liked .icon-outline {
         display: none;
       }
