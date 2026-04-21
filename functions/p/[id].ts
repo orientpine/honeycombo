@@ -1824,7 +1824,16 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
                 animation: 150,
                 ghostClass: 'sortable-ghost',
                 chosenClass: 'sortable-chosen',
-                dragClass: 'sortable-drag'
+                dragClass: 'sortable-drag',
+                // Auto-scroll while dragging near viewport edges. bubbleScroll
+                // propagates to window/body because the page scrolls, not the
+                // .items container. forceAutoScrollFallback ensures consistent
+                // behavior across browsers and touch devices.
+                scroll: true,
+                scrollSensitivity: 80,
+                scrollSpeed: 20,
+                bubbleScroll: true,
+                forceAutoScrollFallback: true
               });
             }).catch(function() {
               window.alert('드래그 기능을 불러오지 못했습니다. 페이지를 새로고침해주세요.');
