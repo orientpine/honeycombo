@@ -57,7 +57,7 @@
 
 ### Like Family (좋아요 전용)
 
-좋아요(감정적 affinity) 액션은 브랜드 오렉지와 흐려야 하므로 **핏크/로즈 계열 전용 토큰을 따로 가진다**(`src/styles/global.css:15-31`). `src/pages/trending.astro`, `functions/trending.ts`, `functions/p/[id].ts` 3경로에 적용된 동일한 모던 pill 패턴(§4.6). 이 토큰은 오로지 `.like-button`과 관련 UI에서만 사용한다 — 다른 용도로 재사용 금지.
+좋아요(감정적 affinity) 액션은 브랜드 오렉지와 흐려야 하므로 **핏크/로즈 계열 전용 토큰을 따로 가진다**. 토큰은 **두 곳에 중복 정의**되어 있음에 주의 — 반드시 두 곳을 함께 갱신해야 한다: (1) **`src/styles/global.css:15-31`** (Astro 빌드 페이지용), (2) **`functions/lib/layout.ts` 안의 `BASE_STYLES :root`** (Cloudflare Functions SSR 페이지용, §3.5 SSR Token Duplication 참조). `src/pages/trending.astro`, `functions/trending.ts`, `functions/p/[id].ts` 3경로에 적용된 동일한 모던 pill 패턴(§4.6). 이 토큰은 오로지 `.like-button`과 관련 UI에서만 사용한다 — 다른 용도로 재사용 금지.
 
 | 역할 | Token | 값 |
 |------|-------|------|
