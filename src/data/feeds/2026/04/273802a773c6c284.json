@@ -4,7 +4,7 @@
   "url": "https://www.theverge.com/ai-artificial-intelligence/914385/world-id-tinder-identity-verifying-orb",
   "source": "The Verge",
   "type": "article",
-  "description": "## 개요\n\n이 콘텐츠는 OpenAI CEO Sam Altman이 공동 창립한 World사의 'World ID'가 Tinder 등 다양한 서비스에서 사용자 신원 인증 수단으로 채택되고 있으며, 이를 통해 사용자에게 혜택을 제공하는 최신 동향을 소개합니다.\n\n## 주요 내용\n\n- World ID는 사용자가 물리적으로 World사의 'orb'를 방문하여 얼굴 스캔을 통해 신원을 인증하는 서비스입니다.\n- 인증된 World ID는 Tinder와 같은 제휴 앱에 연결되어 프로필에 'verified human badge'를 부여합니다.\n- Tinder는 World ID 인증 사용자에게 한시적으로 5개의 무료 부스트를 제공합니다.\n- World ID는 Tinder 외에도 Zoom, Docusign 등 다양한 서비스와 통합을 진행하고 있습니다.\n- World ID 앱은 이러한 'proof of human' 인증을 관리하는 별도의 애플리케이션으로 출시될 예정입니다.\n\n## 시사점\n\nWorld ID의 확산은 온라인 환경에서 봇과 AI로부터 인간 사용자를 구분하는 새로운 신원 인증 방식의 가능성을 제시하며, 이를 통해 사용자 경험 개선 및 혜택 제공이라는 실질적인 가치를 창출하고 있습니다.",
+  "description": "## 개요\n\nSam Altman이 공동 창립한 World ID 서비스가 Tinder와 협력하여 사용자가 실제 인간임을 증명하면 5개의 무료 부스트를 제공하는 프로그램을 시작합니다.\n\n## 주요 내용\n\n- World ID는 사용자가 물리적으로 World의 'orb'를 방문하여 얼굴 스캔을 통해 신원을 인증하는 방식입니다.\n- 이 orb는 사용자의 얼굴과 눈 사진을 찍어 암호화하고 휴대폰에 저장하며, 기본적으로 사용자만 제어할 수 있도록 합니다.\n- 얼굴 스캔 완료 후, 사용자는 World ID를 Tinder와 같은 앱에 연결할 수 있으며, 이는 프로필에 '인증된 인간 배지'를 부여합니다.\n- Tinder는 사진이나 정부 발급 신분증으로도 프로필을 인증할 수 있지만, 5개의 무료 부스트 혜택은 World ID 인증 사용자에게만 한정적으로 제공됩니다.\n- World ID 서비스는 Tinder 외에도 Zoom, Docusign 등 다양한 앱과 서비스에 통합될 예정입니다.\n- World는 또한 World ID 앱을 출시하여 사용자가 다양한 앱 및 서비스와의 '인간 증명' 인증을 관리할 수 있도록 합니다.\n\n## 시사점\n\nWorld ID는 인간임을 증명하는 새로운 방법을 제시하며, 이를 통해 봇이나 AI 에이전트로부터 사용자를 보호하고 온라인 서비스에서의 신뢰성을 높이는 데 기여할 수 있습니다.",
   "tags": [
     "tech"
   ],
