@@ -98,6 +98,7 @@
   - `.items` 컨테이너에 `.batch-edit-mode` 클래스가 붙어 점선 테두리 + `--color-bg-secondary` 배경 + 단일 열 그리드로 전환된다.
   - `.drag-handle`(`⋮⋮` grip)이 각 카드 좌측에 표시되며, 이 영역에서만 드래그를 개시할 수 있어 스크롤·읽기 중 오동작을 방지한다.
   - 편집 중에는 기사 링크(`.item-title a`)에 `pointer-events: none`이 적용되어 페이지 이탈을 차단하고, `.item-controls`(삭제·메모 버튼)는 숨겨진다.
+- **드래그 자동 스크롤**: 드래그 중 카드를 뷰포트 상/하단 80px 이내로 가져가면 페이지가 자동으로 위/아래로 스크롤된다. SortableJS 옵션 `scroll: true`, `scrollSensitivity: 80`, `scrollSpeed: 20`, `bubbleScroll: true`(window/body에 스크롤 이벤트 전파), `forceAutoScrollFallback: true`(브라우저·터치 일관성)로 활성화된다. 긴 플레이리스트에서도 드래그를 유지한 채 원하는 위치까지 자연스럽게 이동할 수 있으며, 데스크톱 마우스·모바일 터치 모두 동일하게 동작한다.
 - **저장 흐름**: `저장` 버튼 → 현재 DOM 순서의 `item_ids` 배열을 `PUT /reorder`로 전송 → 성공 시 `window.location.reload()`로 서버 상태 재동기화.
 - **취소 흐름**: `취소` 버튼 → 진입 시점에 저장한 `originalOrder` 배열대로 DOM 재배치 → SortableJS 인스턴스 destroy → 편집 모드 종료 (API 호출 없음).
 - **실패 처리**: CDN 로드 실패 시 alert + 배치 모드 자동 종료. 저장 API 실패 시 버튼 복구 + alert, 편집 모드 유지하여 재시도 가능.
@@ -307,3 +308,4 @@
 | 2026-04-17 | YouTube 썸네일 표시, 2열 가로형 카드 레이아웃(좌측 썸네일), 기사 내부 링크 수정(source_id 기반), alias 페이지 canonical/Giscus 정규화, BaseLayout canonicalPath 프롭 추가, Comments 컨포넌트 data-giscus-term 지원 |
 | 2026-04-21 | 플레이리스트 상세 페이지(`/p/{id}`) 소유자 전용 “🏷️ 태그 편집” 섹션 추가 — inline 태그 관리 UI(pill + Enter/쉼표 추가 + × 제거), `data-initial-tags` 속성 기반 XSS-safe 전달, PUT /api/playlists/{id} 호출, 리로드 없이 헤더 태그 디스플레이 즉시 갱신, DESIGN.md §4.4/§4.2 패턴 재사용. |
 | 2026-04-21 | **최신순 정렬 + 드래그 재정렬 전환** — `ORDER BY position DESC`로 정렬 방향 역전, `↑`/`↓` 버튼 전면 제거, `📋 배치 편집` 토글 모드 + SortableJS 드래그 도입, 새 API `PUT /api/playlists/{id}/items/reorder`와 `reorderItems()` 함수 추가 (D1 `batch()`로 원자 position 재할당). DESIGN.md §4.8 Drag Handle, §4.9 Batch Edit Mode, §6 L9 Dragging Elevation 패턴 참조. |
+| 2026-04-21 | 배치 편집 드래그 **자동 스크롤 활성화** — SortableJS `scroll`/`scrollSensitivity: 80`/`scrollSpeed: 20`/`bubbleScroll: true`/`forceAutoScrollFallback: true` 옵션 추가. 드래그 중 뷰포트 가장자리 근처에서 페이지 자동 스크롤되어 긴 플레이리스트의 먼 위치로 드래그 가능. 신규 토큰·UI 변경 없음. |
