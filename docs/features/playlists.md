@@ -80,6 +80,27 @@
 - 순서 이동은 인접 두 아이템의 `position`을 서로 바꾸는 방식으로 처리한다. 실패 시 `window.location.reload()`로 서버 상태를 즉시 동기화한다.
 - 메모 수정은 카드 내부 인라인 에디터에서 수행하며, 저장 성공 시 화면 표시를 즉시 갱신한다.
 
+### 태그 편집 (플레이리스트 소유자)
+
+```
+소유자 → /p/{id} (SSR)
+       → functions/p/[id].ts 소유자 전용 “🏷️ 태그 편집” 섹션 렌더링
+       → 태그 추가/제거/변경 후 저장 버튼 클릭
+       → PUT /api/playlists/{id} { tags: string[] } (최대 5개 검증)
+       → 성공 시 헤더의 `.playlist-tags` 디스플레이 즉시 갱신 (페이지 리로드 없음)
+```
+
+- 소유자 전용 섹션은 공개/비공개 섹션과 기사 추가 섹션 사이에 배치되며, 현재 태그를 pill 형태로 표시한다.
+- 입력 필드에서 **Enter 또는 쉼표(`,`)** 키로 태그를 추가한다. blur 이벤트에서도 미커밋된 입력이 추가된다.
+- 입력값의 선두 `#` 기호와 내부 쉼표는 자동 제거되며, 공백만 있는 값은 무시한다.
+- 각 태그 pill의 `×` 버튼으로 개별 제거 가능. aria-label 로 접근성을 보장한다.
+- **태그당 최대 30자**, **플레이리스트당 최대 5개** 제한을 클라이언트와 서버(`functions/api/playlists/[id]/index.ts:73-84`) 양쪽에서 검증한다. 중복 태그도 차단한다.
+- 저장 버튼은 변경 없을 때 `disabled`, 변경 있을 때 `.has-changes` 클래스로 primary warm orange 색 + warm shadow를 부여한다 (DESIGN.md §4.4 / §6 준수).
+- 초기 태그는 XSS 안전을 위해 서버 측에서 `data-initial-tags` HTML 속성(`escapeAttr(JSON.stringify(...))`)으로 전달되며, 클라이언트는 `dataset`에서 `JSON.parse`로 복원한다.
+- XHR 401/403 응답은 전용 한국어 메시지로 대체한다. 일반 실패는 서버의 `data.error` 메시지를 우선 표시한다.
+- 성공 시에는 상단 헤더의 기존 `.playlist-tags` 노드를 부분적으로 갱신하며, 페이지 전체 새로고침은 발생하지 않는다. 성공 피드백(“태그가 저장되었습니다.”)은 3초 뒤 자동 사라진다.
+- 모바일(`≤768px`)에서는 입력/저장 버튼이 세로 종막으로 전환되며 저장 버튼이 전체 넓이를 차지한다.
+
 ### 공개 플레이리스트 승인
 
 ```
@@ -256,3 +277,4 @@
 | 2026-04-13 | 승인 기사 auto-playlist webhook, auto-created playlist 생성 규칙, deferred submissions 흐름 문서화 |
 | 2026-04-13 | GitHub Actions 승인 감지와 OAuth catch-up 기반 auto-playlist 동기화 반영 |
 | 2026-04-17 | YouTube 썸네일 표시, 2열 가로형 카드 레이아웃(좌측 썸네일), 기사 내부 링크 수정(source_id 기반), alias 페이지 canonical/Giscus 정규화, BaseLayout canonicalPath 프롭 추가, Comments 컨포넌트 data-giscus-term 지원 |
+| 2026-04-21 | 플레이리스트 상세 페이지(`/p/{id}`) 소유자 전용 “🏷️ 태그 편집” 섹션 추가 — inline 태그 관리 UI(pill + Enter/쉼표 추가 + × 제거), `data-initial-tags` 속성 기반 XSS-safe 전달, PUT /api/playlists/{id} 호출, 리로드 없이 헤더 태그 디스플레이 즉시 갱신, DESIGN.md §4.4/§4.2 패턴 재사용. |
