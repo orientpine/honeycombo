@@ -234,6 +234,26 @@ function renderOwnerControls(playlist: PlaylistDetail): string {
       </div>
       <button type="button" class="${visibilityBtnClass}" onclick="toggleVisibility('${visibilityBtnAction}')">${escapeHtml(visibilityBtnLabel)}</button>
     </section>` : ''}
+    <section class="tag-editor-section card" data-initial-tags="${escapeAttr(JSON.stringify(playlist.tags || []))}">
+      <div>
+        <h2>🏷️ 태그 편집</h2>
+        <p class="tag-editor-desc">플레이리스트를 분류할 태그를 관리하세요. 최대 5개까지 추가할 수 있습니다.</p>
+      </div>
+      <div class="tag-editor-tags" id="tag-editor-tags" aria-live="polite"></div>
+      <div class="tag-editor-input-row">
+        <input
+          type="text"
+          id="tag-editor-input"
+          class="tag-editor-input"
+          placeholder="태그 입력 후 Enter (최대 5개)"
+          maxlength="30"
+          autocomplete="off"
+        />
+        <button type="button" id="tag-save-btn" class="tag-save-btn" disabled aria-label="태그 변경 사항 저장">저장</button>
+      </div>
+      <div id="tag-editor-feedback" class="tag-editor-feedback" role="status" aria-live="polite"></div>
+      <div class="tag-editor-hint">쉼표(,) 또는 Enter로 태그를 추가하세요. # 기호는 자동으로 제거됩니다.</div>
+    </section>
     <section class="article-search-section">
       <h2>기사 추가</h2>
       <div class="search-box">
@@ -647,6 +667,160 @@ const PAGE_STYLES = `
         color: var(--color-danger);
       }
 
+      .tag-editor-section {
+        margin-top: var(--space-md);
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-sm);
+      }
+
+      .tag-editor-section h2 {
+        font-size: 1.1rem;
+        margin-bottom: var(--space-xs);
+      }
+
+      .tag-editor-section .tag-editor-desc {
+        color: var(--color-text-muted);
+        font-size: 0.9rem;
+        margin-bottom: var(--space-sm);
+      }
+
+      .tag-editor-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-xs);
+        min-height: 1.75rem;
+        align-items: center;
+      }
+
+      .tag-editor-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 2px 4px 2px var(--space-sm);
+        background: var(--color-bg-secondary);
+        color: var(--color-text-muted);
+        border: 1px solid var(--color-border);
+        border-radius: 999px;
+        font-size: 0.8rem;
+        transition: background 0.15s ease-out, color 0.15s ease-out, border-color 0.15s ease-out;
+      }
+
+      .tag-editor-tag-remove {
+        background: none;
+        border: none;
+        color: inherit;
+        cursor: pointer;
+        padding: 0 4px;
+        font-size: 1.05rem;
+        line-height: 1;
+        display: inline-flex;
+        align-items: center;
+        border-radius: var(--radius-sm);
+        transition: color 0.15s ease-out, background 0.15s ease-out;
+      }
+
+      .tag-editor-tag-remove:hover {
+        color: var(--color-danger);
+      }
+
+      .tag-editor-tag-remove:focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
+      }
+
+      .tag-editor-empty {
+        color: var(--color-text-muted);
+        font-size: 0.85rem;
+        font-style: italic;
+        padding: var(--space-xs) 0;
+      }
+
+      .tag-editor-input-row {
+        display: flex;
+        gap: var(--space-sm);
+        align-items: stretch;
+      }
+
+      .tag-editor-input {
+        flex: 1;
+        min-width: 0;
+        padding: var(--space-sm) var(--space-md);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        font: inherit;
+        font-size: 0.95rem;
+        background: var(--color-bg);
+        color: var(--color-text);
+        transition: border-color 0.15s ease-out, box-shadow 0.15s ease-out;
+      }
+
+      .tag-editor-input:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(245, 124, 34, 0.15);
+      }
+
+      .tag-save-btn {
+        padding: var(--space-sm) var(--space-lg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        background: var(--color-bg);
+        color: var(--color-text-muted);
+        font: inherit;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.15s ease-out, color 0.15s ease-out, border-color 0.15s ease-out, transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.15s ease-out;
+        white-space: nowrap;
+      }
+
+      .tag-save-btn:hover:not(:disabled) {
+        background: var(--color-bg-secondary);
+      }
+
+      .tag-save-btn:focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
+      }
+
+      .tag-save-btn.has-changes {
+        background: var(--color-primary);
+        border-color: var(--color-primary);
+        color: white;
+        box-shadow: 0 2px 8px rgba(245, 124, 34, 0.25);
+      }
+
+      .tag-save-btn.has-changes:hover:not(:disabled) {
+        background: var(--color-primary-hover);
+        border-color: var(--color-primary-hover);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(245, 124, 34, 0.35);
+      }
+
+      .tag-save-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .tag-editor-feedback {
+        font-size: 0.85rem;
+        min-height: 1.25rem;
+      }
+
+      .tag-editor-feedback.is-error {
+        color: var(--color-danger);
+      }
+
+      .tag-editor-feedback.is-success {
+        color: var(--color-success);
+      }
+
+      .tag-editor-hint {
+        font-size: 0.8rem;
+        color: var(--color-text-muted);
+      }
+
       .article-search-section {
         margin-top: var(--space-xl);
         padding-top: var(--space-xl);
@@ -776,6 +950,14 @@ const PAGE_STYLES = `
         .owner-actions .btn {
           width: 100%;
         }
+        .tag-editor-input-row {
+          flex-direction: column;
+        }
+
+        .tag-save-btn {
+          width: 100%;
+        }
+
       }
 `;
 
@@ -1382,6 +1564,193 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
             });
           });
 
+          // ========== Tag Editor ==========
+          const tagEditorSectionEl = document.querySelector('.tag-editor-section');
+          let initialTags = [];
+          if (tagEditorSectionEl && tagEditorSectionEl.dataset && tagEditorSectionEl.dataset.initialTags) {
+            try {
+              const parsed = JSON.parse(tagEditorSectionEl.dataset.initialTags);
+              if (Array.isArray(parsed)) {
+                initialTags = parsed.filter(function(t) { return typeof t === 'string'; });
+              }
+            } catch (e) {}
+          }
+          let currentTags = initialTags.slice();
+
+          const tagEditorTagsEl = document.getElementById('tag-editor-tags');
+          const tagEditorInputEl = document.getElementById('tag-editor-input');
+          const tagSaveBtnEl = document.getElementById('tag-save-btn');
+          const tagEditorFeedbackEl = document.getElementById('tag-editor-feedback');
+
+          function tagsEqual(a, b) {
+            if (a.length !== b.length) return false;
+            for (let i = 0; i < a.length; i++) {
+              if (a[i] !== b[i]) return false;
+            }
+            return true;
+          }
+
+          function clearTagFeedback() {
+            if (!tagEditorFeedbackEl) return;
+            tagEditorFeedbackEl.textContent = '';
+            tagEditorFeedbackEl.classList.remove('is-error', 'is-success');
+          }
+
+          function showTagFeedback(message, type) {
+            if (!tagEditorFeedbackEl) return;
+            tagEditorFeedbackEl.textContent = message;
+            tagEditorFeedbackEl.classList.remove('is-error', 'is-success');
+            if (type) tagEditorFeedbackEl.classList.add('is-' + type);
+          }
+
+          function updateTagSaveButton() {
+            if (!tagSaveBtnEl) return;
+            const changed = !tagsEqual(currentTags, initialTags);
+            tagSaveBtnEl.disabled = !changed;
+            tagSaveBtnEl.classList.toggle('has-changes', changed);
+          }
+
+          function renderEditorTags() {
+            if (!tagEditorTagsEl) return;
+            tagEditorTagsEl.innerHTML = '';
+            if (currentTags.length === 0) {
+              const empty = document.createElement('span');
+              empty.className = 'tag-editor-empty';
+              empty.textContent = '아직 태그가 없습니다.';
+              tagEditorTagsEl.appendChild(empty);
+            } else {
+              currentTags.forEach(function(tag, index) {
+                const pill = document.createElement('span');
+                pill.className = 'tag-editor-tag';
+                const label = document.createElement('span');
+                label.textContent = tag;
+                const removeBtn = document.createElement('button');
+                removeBtn.type = 'button';
+                removeBtn.className = 'tag-editor-tag-remove';
+                removeBtn.setAttribute('aria-label', '태그 ' + tag + ' 제거');
+                removeBtn.textContent = '×';
+                removeBtn.addEventListener('click', function() {
+                  currentTags.splice(index, 1);
+                  renderEditorTags();
+                  clearTagFeedback();
+                });
+                pill.appendChild(label);
+                pill.appendChild(removeBtn);
+                tagEditorTagsEl.appendChild(pill);
+              });
+            }
+            updateTagSaveButton();
+          }
+
+          function addEditorTag(rawValue) {
+            const cleaned = rawValue.trim().replace(/^#/, '').replace(/,/g, '').trim();
+            if (!cleaned) return;
+            if (cleaned.length > 30) {
+              showTagFeedback('태그는 30자 이내로 입력해주세요.', 'error');
+              return;
+            }
+            if (currentTags.length >= 5) {
+              showTagFeedback('태그는 최대 5개까지만 추가할 수 있습니다.', 'error');
+              return;
+            }
+            if (currentTags.indexOf(cleaned) !== -1) {
+              showTagFeedback('이미 추가된 태그입니다.', 'error');
+              return;
+            }
+            currentTags.push(cleaned);
+            renderEditorTags();
+            clearTagFeedback();
+          }
+
+          function updateHeaderTags(tags) {
+            const header = document.querySelector('.playlist-header');
+            if (!header) return;
+            let container = header.querySelector('.playlist-tags');
+            if (!tags || tags.length === 0) {
+              if (container) container.remove();
+              return;
+            }
+            if (!container) {
+              container = document.createElement('div');
+              container.className = 'playlist-tags';
+              const ownerLine = header.querySelector('p.meta-text');
+              if (ownerLine) {
+                header.insertBefore(container, ownerLine);
+              } else {
+                header.appendChild(container);
+              }
+            }
+            container.innerHTML = '';
+            tags.forEach(function(t) {
+              const span = document.createElement('span');
+              span.className = 'tag';
+              span.textContent = t;
+              container.appendChild(span);
+            });
+          }
+
+          async function saveTags() {
+            if (!tagSaveBtnEl) return;
+            tagSaveBtnEl.disabled = true;
+            const originalLabel = tagSaveBtnEl.textContent;
+            tagSaveBtnEl.textContent = '저장 중...';
+            clearTagFeedback();
+            try {
+              const res = await fetch('/api/playlists/' + playlistId, {
+                method: 'PUT',
+                credentials: 'same-origin',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tags: currentTags })
+              });
+              if (!res.ok) {
+                let errorMsg = '태그 저장에 실패했습니다.';
+                try {
+                  const data = await res.json();
+                  if (data && data.error) errorMsg = data.error;
+                } catch (e) {}
+                if (res.status === 401) errorMsg = '로그인이 필요합니다. 페이지를 새로고침한 뒤 다시 시도해주세요.';
+                else if (res.status === 403) errorMsg = '이 플레이리스트를 수정할 권한이 없습니다.';
+                throw new Error(errorMsg);
+              }
+              initialTags.length = 0;
+              currentTags.forEach(function(t) { initialTags.push(t); });
+              updateHeaderTags(currentTags);
+              updateTagSaveButton();
+              showTagFeedback('태그가 저장되었습니다.', 'success');
+              window.setTimeout(clearTagFeedback, 3000);
+            } catch (err) {
+              const message = err && err.message ? err.message : '태그 저장에 실패했습니다.';
+              showTagFeedback(message, 'error');
+              updateTagSaveButton();
+            } finally {
+              tagSaveBtnEl.textContent = originalLabel;
+            }
+          }
+
+          if (tagEditorInputEl) {
+            tagEditorInputEl.addEventListener('keydown', function(e) {
+              if (e.key === 'Enter' || e.key === ',') {
+                e.preventDefault();
+                addEditorTag(tagEditorInputEl.value);
+                tagEditorInputEl.value = '';
+              }
+            });
+            tagEditorInputEl.addEventListener('blur', function() {
+              if (tagEditorInputEl.value.trim()) {
+                addEditorTag(tagEditorInputEl.value);
+                tagEditorInputEl.value = '';
+              }
+            });
+          }
+
+          if (tagSaveBtnEl) {
+            tagSaveBtnEl.addEventListener('click', function() {
+              if (!tagSaveBtnEl.disabled) void saveTags();
+            });
+          }
+
+          renderEditorTags();
+          // ========== End Tag Editor ==========
           syncItemControls();
         </script>` : '',
     ].filter(Boolean).join('\n') || undefined,
