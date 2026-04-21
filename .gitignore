@@ -11,3 +11,5 @@ node_modules/
 .playwright-mcp/
 .sisyphus/
 wrangler-dev.log
+
+bulk-result.json

@@ -26,6 +26,7 @@ export interface ParsedSubmission {
   type: 'article' | 'youtube' | 'x_thread' | 'threads' | 'other';
   tags: string[];
   note: string;
+  title?: string;
 }
 
 export interface OEmbedData {
@@ -58,6 +59,92 @@ export function extractTitleFromNote(note: string): string {
   const contentLine = lines.find((line) => !line.startsWith('#'));
   if (contentLine) return contentLine;
   return lines[0]?.replace(/^#+\s*/, '') || '';
+}
+
+const SECTION_HEADINGS = new Set([
+  '개요',
+  '주요 내용',
+  '시사점',
+  '핵심 내용',
+  '요약',
+  'TL;DR',
+  'Overview',
+  'Summary',
+  'Background',
+  'Context',
+]);
+
+function normalizeForComparison(text: string): string {
+  return text.replace(/\s+/g, '').toLowerCase();
+}
+
+/**
+ * Derive a short (<= 80 grapheme) title from a structured note.
+ *
+ * Returns null when the derivation would produce a title that is effectively
+ * identical to the first meaningful content line (which would lead to
+ * `title === description` in downstream storage). Callers must fall back to
+ * another source (oEmbed, URL hostname) in that case.
+ */
+export function deriveShortTitle(note: string): string | null {
+  if (!note) return null;
+
+  const candidates = note
+    .split('\n')
+    .map((line) => line.replace(/^[#>*_`\s-]+/, '').trim())
+    .filter(Boolean)
+    .filter((line) => !SECTION_HEADINGS.has(line))
+    .filter((line) => !/^https?:\/\//i.test(line));
+
+  const first = candidates[0];
+  if (!first) return null;
+
+  // Extract the first sentence (ASCII + CJK terminators).
+  const sentenceMatch = first.match(/^[^.!?。]*[.!?。]/u);
+  const firstSentence = sentenceMatch ? sentenceMatch[0].trim() : first;
+
+  // Grapheme-aware truncation at 80 characters.
+  const graphemes = Array.from(firstSentence);
+  const truncated = graphemes.slice(0, 80).join('').trim();
+  if (!truncated) return null;
+
+  // Reject if the result is effectively identical to the first content line —
+  // that case would make `title` overlap with `description` once stored.
+  if (normalizeForComparison(truncated) === normalizeForComparison(first)) {
+    return null;
+  }
+
+  return graphemes.length > 80 ? `${truncated}…` : truncated;
+}
+
+function hostnameFallback(url: string): string {
+  try {
+    return new URL(url).hostname.replace(/^www\./, '') || url;
+  } catch {
+    return url;
+  }
+}
+
+/**
+ * Resolve the final `title` for a submission using a deterministic fallback
+ * chain: explicit parsed.title → oEmbed title → deriveShortTitle(note) →
+ * URL hostname. This is shared by single and bulk flows to prevent drift.
+ */
+export function resolveSubmissionTitle(
+  parsed: ParsedSubmission,
+  oembed: OEmbedData | null,
+  url: string,
+): string {
+  const fromSubmission = parsed.title?.trim();
+  if (fromSubmission) return fromSubmission;
+
+  const fromOembed = oembed?.title?.trim();
+  if (fromOembed) return fromOembed;
+
+  const fromDerivation = deriveShortTitle(parsed.note);
+  if (fromDerivation) return fromDerivation;
+
+  return hostnameFallback(url);
 }
 
 export function parseIssueBody(body: string): ParsedSubmission | null {
@@ -176,12 +263,29 @@ export function parseBulkIssueBody(body: string): ParsedSubmission[] {
         continue;
       }
 
-      const [rawUrl = '', rawType = '', rawTags = '', ...rawNoteParts] = line
-        .split('|')
-        .map((part) => part.trim());
+      const parts = line.split('|').map((part) => part.trim());
+      let rawUrl = '';
+      let rawType = '';
+      let rawTitle = '';
+      let rawTags = '';
+      let rawNoteParts: string[] = [];
+
+      if (parts.length >= 5) {
+        // 5-column format (v2): URL | Type | Title | Tags | Summary+
+        [rawUrl = '', rawType = '', rawTitle = '', rawTags = '', ...rawNoteParts] = parts;
+      } else {
+        // 4-column format (v1, legacy): URL | Type | Tags | Summary+
+        [rawUrl = '', rawType = '', rawTags = '', ...rawNoteParts] = parts;
+      }
 
       if (!rawUrl) {
         console.warn(`Skipping bulk submission line without URL: ${line}`);
+        continue;
+      }
+
+      // TITLE must not contain the column delimiter or line-breaking chars.
+      if (rawTitle && /[|\t\r\n]/.test(rawTitle)) {
+        console.warn(`Skipping bulk submission line with forbidden char in title: ${rawTitle}`);
         continue;
       }
 
@@ -199,6 +303,7 @@ export function parseBulkIssueBody(body: string): ParsedSubmission[] {
       submissions.push({
         url: rawUrl,
         type,
+        title: rawTitle || undefined,
         tags: tags.length > 0 ? tags : ['general'],
         note: rawNoteParts.join(' | '),
       });
@@ -231,7 +336,11 @@ export async function fetchYouTubeOEmbed(url: string): Promise<OEmbedData | null
   }
 }
 
-export async function isDuplicateUrl(url: string): Promise<boolean> {
+/**
+ * Find the file path of an already-curated article with the same URL.
+ * Returns the absolute path when a match exists; otherwise null.
+ */
+export async function findDuplicateUrl(url: string): Promise<string | null> {
   for (const dir of [CURATED_DIR, FEEDS_DIR]) {
     const files = await listJsonFiles(dir);
 
@@ -239,7 +348,7 @@ export async function isDuplicateUrl(url: string): Promise<boolean> {
       try {
         const content = JSON.parse(await readFile(filePath, 'utf-8')) as { url?: unknown };
         if (content.url === url) {
-          return true;
+          return filePath;
         }
       } catch (error) {
         console.warn(`Failed to read submission source JSON: ${filePath}`, error);
@@ -247,7 +356,46 @@ export async function isDuplicateUrl(url: string): Promise<boolean> {
     }
   }
 
-  return false;
+  return null;
+}
+
+/**
+ * Backward-compatible boolean wrapper around findDuplicateUrl.
+ * Prefer findDuplicateUrl in new code so callers can surface the matching path.
+ */
+export async function isDuplicateUrl(url: string): Promise<boolean> {
+  return (await findDuplicateUrl(url)) !== null;
+}
+
+/**
+ * Build a single `url -> filePath` index over curated + feed JSON files.
+ * Used by bulk submission to avoid rescanning the repo once per item.
+ */
+export async function buildUrlIndex(): Promise<Map<string, string>> {
+  const index = new Map<string, string>();
+  for (const dir of [CURATED_DIR, FEEDS_DIR]) {
+    const files = await listJsonFiles(dir);
+    for (const filePath of files) {
+      try {
+        const content = JSON.parse(await readFile(filePath, 'utf-8')) as { url?: unknown };
+        if (typeof content.url === 'string' && !index.has(content.url)) {
+          index.set(content.url, filePath);
+        }
+      } catch (error) {
+        console.warn(`Failed to read submission source JSON: ${filePath}`, error);
+      }
+    }
+  }
+  return index;
+}
+
+function formatRelativePath(absolutePath: string): string {
+  const normalizedRoot = ROOT.replace(/\\/g, '/');
+  const normalized = absolutePath.replace(/\\/g, '/');
+  if (normalized.startsWith(`${normalizedRoot}/`)) {
+    return normalized.slice(normalizedRoot.length + 1);
+  }
+  return normalized;
 }
 
 export async function isSpam(text: string): Promise<boolean> {
@@ -297,21 +445,24 @@ export async function processSubmission(
     return { success: false, message: 'Spam detected in submission' };
   }
 
-  if (await isDuplicateUrl(url)) {
-    console.warn(`Duplicate URL detected: ${url}`);
-    return { success: false, message: `Duplicate URL: ${url}` };
+  const duplicatePath = await findDuplicateUrl(url);
+  if (duplicatePath) {
+    const relPath = formatRelativePath(duplicatePath);
+    console.warn(`Duplicate URL detected: ${url} (already in ${relPath})`);
+    return { success: false, message: `Duplicate URL: ${url} (already in ${relPath})` };
   }
 
-  let title = extractTitleFromNote(note) || url;
+  let oembed: OEmbedData | null = null;
   let thumbnailUrl: string | undefined;
 
   if (type === 'youtube') {
-    const oembed = await fetchYouTubeOEmbed(url);
+    oembed = await fetchYouTubeOEmbed(url);
     if (oembed) {
-      title = oembed.title || title;
       thumbnailUrl = oembed.thumbnail_url;
     }
   }
+
+  const title = resolveSubmissionTitle(parsed, oembed, url);
 
   const id = generateId(url, issue.number);
   const submittedAt = new Date().toISOString();
@@ -356,6 +507,7 @@ export async function processBulkSubmission(
     return { total: 0, succeeded: [], failed: [] };
   }
 
+  const urlIndex = await buildUrlIndex();
   const succeeded: BulkResult['succeeded'] = [];
   const failed: BulkResult['failed'] = [];
 
@@ -375,22 +527,25 @@ export async function processBulkSubmission(
       continue;
     }
 
-    if (await isDuplicateUrl(url)) {
-      console.warn(`Duplicate URL detected in bulk submission: ${url}`);
-      failed.push({ url, reason: `Duplicate URL: ${url}` });
+    const duplicatePath = urlIndex.get(url);
+    if (duplicatePath) {
+      const relPath = formatRelativePath(duplicatePath);
+      console.warn(`Duplicate URL detected in bulk submission: ${url} (already in ${relPath})`);
+      failed.push({ url, reason: `Duplicate URL: ${url} (already in ${relPath})` });
       continue;
     }
 
-    let title = extractTitleFromNote(note) || url;
+    let oembed: OEmbedData | null = null;
     let thumbnailUrl: string | undefined;
 
     if (type === 'youtube') {
-      const oembed = await fetchYouTubeOEmbed(url);
+      oembed = await fetchYouTubeOEmbed(url);
       if (oembed) {
-        title = oembed.title || title;
         thumbnailUrl = oembed.thumbnail_url;
       }
     }
+
+    const title = resolveSubmissionTitle(parsed, oembed, url);
 
     try {
       const id = generateId(url, issue.number);
@@ -492,7 +647,25 @@ if (import.meta.main) {
       }
     }
 
-    if (result.succeeded.length === 0) {
+    // Write a machine-readable summary for the workflow comment step.
+    const reportPayload = {
+      issueNumber: resolvedIssue.number,
+      total: result.total,
+      succeeded: result.succeeded.map((item) => ({
+        url: item.url,
+        filePath: formatRelativePath(item.filePath),
+      })),
+      failed: result.failed,
+    };
+    await writeFile(
+      join(ROOT, 'bulk-result.json'),
+      `${JSON.stringify(reportPayload, null, 2)}\n`,
+      'utf-8',
+    );
+
+    // Partial success keeps exit 0 so downstream steps (PR, auto-merge) run
+    // for the items that DID succeed. Only a total failure fails the job.
+    if (result.total > 0 && result.succeeded.length === 0) {
       process.exit(1);
     }
 

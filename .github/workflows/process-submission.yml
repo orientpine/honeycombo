@@ -110,6 +110,62 @@ jobs:
           ISSUE_USER_ID: ${{ env.ISSUE_USER_ID }}
         run: bun run scripts/process-submission.ts
 
+      - name: Report bulk submission results (upsert comment)
+        if: always() && github.event_name == 'issues'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          ISSUE_NUMBER: ${{ env.ISSUE_NUMBER }}
+        run: |
+          if [ ! -f bulk-result.json ]; then
+            echo 'No bulk-result.json; skipping bulk report step.'
+            exit 0
+          fi
+
+          TOTAL=$(jq -r '.total' bulk-result.json)
+          if [ "$TOTAL" = '0' ] || [ -z "$TOTAL" ]; then
+            echo 'Empty bulk-result; nothing to report.'
+            exit 0
+          fi
+
+          SUCCEEDED=$(jq -r '.succeeded | length' bulk-result.json)
+          FAILED=$(jq -r '.failed | length' bulk-result.json)
+          MARKER='<!-- honeycombo-bulk-result -->'
+
+          {
+            echo "$MARKER"
+            echo
+            if [ "$FAILED" = '0' ]; then
+              echo "## ✅ 대량 제출 처리 결과"
+            else
+              echo "## ⚠️ 대량 제출 처리 결과 (일부 실패)"
+            fi
+            echo
+            echo "- 성공: $SUCCEEDED / $TOTAL"
+            echo "- 실패: $FAILED / $TOTAL"
+            if [ "$FAILED" -gt 0 ]; then
+              echo
+              echo '### ❌ 실패 항목'
+              echo
+              echo '| URL | 사유 |'
+              echo '|---|---|'
+              jq -r '.failed[] | "| \(.url) | \(.reason) |"' bulk-result.json
+            fi
+          } > /tmp/bulk-comment.md
+
+          # Upsert: patch existing marked comment if present, else create new.
+          EXISTING_ID=$(gh api "repos/$REPO/issues/$ISSUE_NUMBER/comments" --paginate \
+            --jq "[.[] | select(.body | contains(\"$MARKER\"))] | .[0].id // empty")
+
+          if [ -n "$EXISTING_ID" ]; then
+            echo "Updating existing comment #$EXISTING_ID"
+            gh api --method PATCH "repos/$REPO/issues/comments/$EXISTING_ID" \
+              --field body=@/tmp/bulk-comment.md >/dev/null
+          else
+            echo 'Creating new bulk-result comment'
+            gh issue comment "$ISSUE_NUMBER" --repo "$REPO" --body-file /tmp/bulk-comment.md
+          fi
+
       - name: Validate generated content
         run: bun run validate
 
@@ -176,11 +232,21 @@ jobs:
             echo "IS_EDITOR=false" >> $GITHUB_ENV
           fi
 
-      - name: Comment on issue
+      - name: Comment on issue (generic success)
         if: success() && github.event_name == 'issues' && env.IS_EDITOR != 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # Suppress the generic success comment when a bulk submission had
+          # failures — the "Report bulk submission results" step already posted
+          # a detailed comment covering that case.
+          if [ -f bulk-result.json ]; then
+            FAILED=$(jq -r '.failed | length' bulk-result.json)
+            if [ "$FAILED" != '0' ] && [ -n "$FAILED" ]; then
+              echo 'Bulk had failures — skipping generic success comment (detailed comment was posted).'
+              exit 0
+            fi
+          fi
           gh issue comment $ISSUE_NUMBER \
             --body "✅ 제출이 접수되었습니다. 검토 후 게시됩니다."
 
