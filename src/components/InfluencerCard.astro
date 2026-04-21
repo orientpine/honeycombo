@@ -21,7 +21,9 @@ const profileUrl = platform === 'x'
   ? `https://x.com/${handleClean}`
   : platform === 'threads'
     ? `https://www.threads.net/@${handleClean}`
-    : '#';
+    : platform === 'youtube'
+      ? `https://www.youtube.com/@${handleClean}`
+      : '#';
 ---
 
 <article class="card influencer-card" data-testid="influencer-card">
