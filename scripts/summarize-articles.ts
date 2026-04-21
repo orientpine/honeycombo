@@ -207,9 +207,14 @@ export async function findArticlesNeedingSummary(
   //
   // - feeds/ (RSS 자동 수집)
   //   description은 Gemini가 생성한 한국어 구조화 요약 전용이다.
-  //   비어 있거나 RSS 원문이 누수된 경우(구조화 형식 아님) 모두 재요약한다.
+  //   비어 있거나, RSS 원문이 누수된 경우(구조화 형식 아님)
+  //   또는 자기 지시적 서두("이 콘텐츠는", "본 기사는" 등)로 시작하는 경우
+  //   모두 재요약한다. 자기 지시적 서두 검사는 고집들인 기존 선약 데이터도
+  //   다음 run에서 자동으로 재요약되도록 하는 백필 장치 역할을 격한다.
   //
-  // 자세한 배경: docs/troubleshooting/rss-summary-english-fallback.md
+  // 자세한 배경:
+  // - docs/troubleshooting/rss-summary-english-fallback.md (구조 검증 배경)
+  // - docs/troubleshooting/rss-summary-self-referential-opening.md (스타일 검증 배경)
   const targets: Array<{ dir: string; allowResummarize: boolean }> = [
     { dir: curatedDir, allowResummarize: false },
     { dir: feedsDir, allowResummarize: true },
@@ -230,7 +235,9 @@ export async function findArticlesNeedingSummary(
         const description = typeof data.description === 'string' ? data.description : '';
 
         const needsSummary = allowResummarize
-          ? !description || !looksLikeKoreanStructuredSummary(description)
+          ? !description ||
+            !looksLikeKoreanStructuredSummary(description) ||
+            hasSelfReferentialOpening(description)
           : !description;
 
         if (needsSummary) {

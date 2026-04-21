@@ -140,15 +140,15 @@ if (hasSelfReferentialOpening(summary)) {
 
 | 파일 | 변경 내용 |
 |------|----------|
-| `scripts/summarize-articles.ts` | `SUMMARIZE_PROMPT` 개정 (자기 지시적 서두 금지 규칙 + 주제 중심 섹션 가이드 추가), `hasSelfReferentialOpening` validator 함수 신규 export, `summarizeArticles` 루프에 Step 2.5 검증 추가 |
-| `tests/summarize-articles.test.ts` | `hasSelfReferentialOpening` describe 블록 신규 추가 (positive/negative 케이스, 섹션 구조 내부 검증, 헤딩·불릿 무시 확인) |
+| `scripts/summarize-articles.ts` | `SUMMARIZE_PROMPT` 개정(자기 지시적 서두 금지 규칙 + 주제 중심 섹션 가이드), `hasSelfReferentialOpening` validator 함수 신규 export, `summarizeArticles` 루프에 Step 2.5 검증 추가, `findArticlesNeedingSummary`가 기존 자기 지시적 서두를 가진 feed description을 자동 재요약 대상으로 pick up하도록 조건 확장 (백필) |
+| `tests/summarize-articles.test.ts` | `hasSelfReferentialOpening` 단위 테스트(positive/negative/섹션 내부/헤딩·불릿 무시), `findArticlesNeedingSummary` 백필 테스트(feed 재큐·curated 보호), `summarizeArticles` integration 테스트(mock된 Gemini 응답 reject·수용 검증) |
 
 ## 예방 조치
 
 - **Producer/Consumer 이중 가드 유지**: Gemini 프롬프트 수정만으로 안주하지 않는다. AI는 때때로 규칙을 잊으므로 runtime validator가 필요하다.
 - **새 자기 지시적 변형 감지 시**: 사용자가 새 형태 ("이 다큐멘터리는" 등)를 지적하면, 명사 리스트를 확장하기보다 **regex 패턴 자체를 확장**하는 방향으로 대응한다. 명사 리스트는 필연적으로 불완전하다.
 - **요약 품질 회귀 감시**: `Article Summarization` 워크플로우 로그에서 `Rejected self-referential opening` 경고 빈도를 모니터링한다. 빈도가 높으면 프롬프트 약화 또는 모델 변경 신호.
-- **기존 feed 데이터 백필**: 과거 저장된 description에 자기 지시적 서두가 남아 있어도 `looksLikeKoreanStructuredSummary` 가드를 통과하므로 자동 재요약되지 않는다. 필요 시 `description` 필드를 검사해 `hasSelfReferentialOpening`이 true인 항목을 `clearStaleDescription`으로 비워두는 일회성 백필 스크립트가 필요할 수 있다.
+- **기존 feed 데이터 백필**: `findArticlesNeedingSummary`가 `hasSelfReferentialOpening(description)`이 true인 feed 항목도 다음 run에 자동으로 pick up하므로, 과거 저장된 193개 선약 데이터도 추가 작업 없이 재요약된다. `MAX_ARTICLES_PER_RUN=100`이므로 2회 run에 완전 백필.
 - **Curated는 영향 없음**: curated/ 내 사용자 직접 입력 description은 `allowResummarize=false`로 보호되며 Gemini가 건드리지 않는다. 이 규칙은 유지된다.
 
 ---
