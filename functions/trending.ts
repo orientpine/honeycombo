@@ -326,11 +326,11 @@ const PAGE_STYLES = `
       .like-button.is-liked {
         background: linear-gradient(135deg, var(--color-like-gradient-from) 0%, var(--color-like-gradient-to) 100%);
         border-color: transparent;
-        color: #fff;
+        color: var(--color-like-contrast-text);
         box-shadow: var(--shadow-like);
       }
       .like-button.is-liked:hover:not(:disabled) {
-        color: #fff;
+        color: var(--color-like-contrast-text);
         background: linear-gradient(135deg, var(--color-like-gradient-from-hover) 0%, var(--color-like-gradient-to-hover) 100%);
         border-color: transparent;
         box-shadow: var(--shadow-like-hover);
@@ -355,14 +355,19 @@ const PAGE_STYLES = `
         100% { transform: scale(1); }
       }
 
+      /* Respect the user's reduced-motion preference:
+         keep color transitions, disable lift/scale/pop motion. */
       @media (prefers-reduced-motion: reduce) {
-        .like-button,
+        .like-button {
+          transition: color 0.18s, background 0.18s, border-color 0.18s, box-shadow 0.18s;
+        }
         .like-button-icon,
         .like-button.is-liked .icon-filled {
           transition: none;
           animation: none;
         }
-        .like-button:hover:not(:disabled) {
+        .like-button:hover:not(:disabled),
+        .like-button:active:not(:disabled) {
           transform: none;
         }
       }
@@ -415,7 +420,12 @@ export const onRequest: AppPagesFunction = async (context: { env: Env; request: 
         ${renderPagination(result.page, result.totalPages)}
       </section>`,
     script: `<script>
-      const loginUrl = '/api/auth/github/login?return_to=' + encodeURIComponent('/trending');
+      function getReturnTo() {
+        return window.location.pathname + window.location.search;
+      }
+      function getLoginUrl() {
+        return '/api/auth/github/login?return_to=' + encodeURIComponent(getReturnTo());
+      }
 
       function updateLikeButton(button, liked, likeCount) {
         button.dataset.liked = liked ? 'true' : 'false';
@@ -443,7 +453,7 @@ export const onRequest: AppPagesFunction = async (context: { env: Env; request: 
           }
 
           if (!isAuthenticated) {
-            window.location.href = loginUrl;
+            window.location.href = getLoginUrl();
             return;
           }
 
@@ -460,6 +470,12 @@ export const onRequest: AppPagesFunction = async (context: { env: Env; request: 
               method: 'POST',
               credentials: 'same-origin'
             });
+
+            if (response.status === 401) {
+              updateLikeButton(button, previousLiked, previousCount);
+              window.location.href = getLoginUrl();
+              return;
+            }
 
             if (!response.ok) {
               throw new Error();
