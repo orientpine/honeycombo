@@ -1,0 +1,20 @@
+{
+  "id": "submission-155-ceba1a78",
+  "title": "LLM Wiki를 업그레이드한 Graphify 개념 + 실습 가이드",
+  "url": "https://www.youtube.com/watch?v=s15ojX1P4NY",
+  "source": "YouTube",
+  "type": "youtube",
+  "thumbnail_url": "https://i.ytimg.com/vi/s15ojX1P4NY/hqdefault.jpg",
+  "description": "Andrej Karpathy의 LLM Wiki 아이디어를 발전시킨 오픈소스 Graphify 실습 영상. RAG의 토큰 낭비 문제를 AST 기반 확정 파싱과 Leiden 커뮤니티 탐지 지식 그래프로 해결하는 3-Pass 아키텍처와 설치·사용법을 실습 중심으로 안내한다.",
+  "tags": [
+    "llm",
+    "graphify",
+    "knowledge-graph",
+    "karpathy",
+    "ai-coding"
+  ],
+  "submitted_by": "orientpine",
+  "submitted_by_id": "32758428",
+  "submitted_at": "2026-04-21T11:38:21.975Z",
+  "status": "approved"
+}
