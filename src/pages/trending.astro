@@ -195,10 +195,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     gap: 0.375rem;
     min-height: 2rem;
     padding: 0.375rem 0.875rem;
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--color-like-default-border);
     border-radius: 999px;
     background: var(--color-bg);
-    color: var(--color-text-muted);
+    /* Base text color drives the count; icon has its own tint — avoids gray impression. */
+    color: var(--color-like-default-count);
     font-family: inherit;
     font-size: 0.8rem;
     font-weight: 700;
@@ -235,8 +236,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     justify-content: center;
     width: 14px;
     height: 14px;
-    color: inherit;
+    color: var(--color-like-default-icon);
     transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* On hover the whole button picks up the hover-text color; the icon joins in. */
+  .like-button:hover:not(:disabled) .like-button-icon {
+    color: inherit;
   }
 
   .like-button-icon svg {

@@ -265,10 +265,11 @@ const PAGE_STYLES = `
         gap: 0.375rem;
         min-height: 2rem;
         padding: 0.375rem 0.875rem;
-        border: 1px solid var(--color-border);
+        border: 1px solid var(--color-like-default-border);
         border-radius: 999px;
         background: var(--color-bg);
-        color: var(--color-text-muted);
+        /* Base color drives the count; icon has its own tint (avoids "dead gray" look). */
+        color: var(--color-like-default-count);
         font-family: inherit;
         font-size: 0.8rem;
         font-weight: 700;
@@ -305,8 +306,12 @@ const PAGE_STYLES = `
         justify-content: center;
         width: 14px;
         height: 14px;
-        color: inherit;
+        color: var(--color-like-default-icon);
         transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      /* On hover the button color shifts to hover-text; the icon joins in. */
+      .like-button:hover:not(:disabled) .like-button-icon {
+        color: inherit;
       }
       .like-button-icon svg {
         width: 100%;

@@ -342,10 +342,11 @@ const PAGE_STYLES = `
         gap: 0.375rem;
         min-height: 2.25rem;
         padding: 0.5rem 1rem;
-        border: 1px solid var(--color-border);
+        border: 1px solid var(--color-like-default-border);
         border-radius: 999px;
         background: var(--color-bg);
-        color: var(--color-text-muted);
+        /* Base color drives the label; icon has its own tint (avoids "dead gray" look). */
+        color: var(--color-like-default-count);
         font-family: inherit;
         font-size: 0.9rem;
         font-weight: 700;
@@ -403,8 +404,12 @@ const PAGE_STYLES = `
         justify-content: center;
         width: 16px;
         height: 16px;
-        color: inherit;
+        color: var(--color-like-default-icon);
         transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+      /* On hover the button color shifts to hover-text; the icon joins in. */
+      .like-btn:hover:not(:disabled) .like-icon {
+        color: inherit;
+      }
       }
       .like-icon svg {
         width: 100%;
