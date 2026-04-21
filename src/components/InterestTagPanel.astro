@@ -486,22 +486,47 @@ const tagCountsJson = JSON.stringify(tagCounts);
     return { all, perOrigin };
   }
 
-  function buildFilterLabel(count: number): string {
-    const labels: string[] = [];
+  /**
+   * Build a structured filter summary for the active filtered view.
+   *
+   * Returns HTML (not plain text) so each part can carry its own visual treatment:
+   *   - origin pill   ("에디터 추천" / "제출 기사" / "RSS 피드")
+   *   - tag pills     (one per active tag)
+   *   - search pill   ("\"query\" 검색")
+   *   - count badge   ("기사 213건")
+   *
+   * Each fragment is independently styled in CSS — see `.itp-filtered-header`
+   * and `.itp-filtered-pill` rules.
+   */
+  function buildFilterLabelHTML(count: number): string {
+    const escape = (s: string) =>
+      s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    const parts: string[] = [];
     const origin = getActiveOrigin();
     if (origin !== 'all') {
       const m: Record<string, string> = { curated: '에디터 추천', submitted: '제출 기사', feed: 'RSS 피드' };
-      labels.push(m[origin] || origin);
+      parts.push(
+        `<span class="itp-filtered-pill itp-filtered-pill-origin">${escape(m[origin] || origin)}</span>`
+      );
     }
     if (hasActiveTags()) {
       const tagList = Array.from(state.activeTags).sort();
-      labels.push(tagList.length === 1 ? `"${tagList[0]}" 태그` : `태그 ${tagList.length}개 (${tagList.join(', ')})`);
+      for (const t of tagList) {
+        parts.push(
+          `<span class="itp-filtered-pill itp-filtered-pill-tag">#${escape(t)}</span>`
+        );
+      }
     }
     if (state.activeSearchQuery) {
-      labels.push(`"${state.activeSearchQuery}" 검색`);
+      parts.push(
+        `<span class="itp-filtered-pill itp-filtered-pill-search">🔍 \u201c${escape(state.activeSearchQuery)}\u201d</span>`
+      );
     }
-    const prefix = labels.length > 0 ? `${labels.join(' · ')} · ` : '';
-    return `${prefix}기사 ${count}건`;
+    const countHtml = `<span class="itp-filtered-count-badge"><strong>${count}</strong>건의 기사</span>`;
+    if (parts.length === 0) {
+      return countHtml;
+    }
+    return `<span class="itp-filtered-pills">${parts.join('')}</span>${countHtml}`;
   }
 
   function renderFilteredView() {
@@ -552,7 +577,7 @@ const tagCountsJson = JSON.stringify(tagCounts);
       articles = [...matched, ...unmatched];
     }
 
-    countEl.textContent = buildFilterLabel(articles.length);
+    countEl.innerHTML = buildFilterLabelHTML(articles.length);
     grid.dataset.activeTags = Array.from(state.activeTags).sort().join(',');
     grid.innerHTML = articles.map((a) => renderCard(a, interests)).join('');
     if (emptyEl) emptyEl.hidden = articles.length > 0;
@@ -1450,22 +1475,22 @@ function initInterestTagPanel() {
     background: rgba(255, 255, 255, 0.5);
   }
 
-  /* Filtered results container ------------------------------- */
-  .interest-tag-panel :global(.itp-filtered-results) {
-    margin-top: var(--space-md);
-  }
-  .interest-tag-panel :global(.itp-filtered-header) {
-    margin-bottom: var(--space-md);
-    font-size: 0.9rem;
-    color: var(--color-text-muted);
-    font-weight: 500;
-  }
-  .interest-tag-panel :global(.itp-filtered-empty) {
-    text-align: center;
-    padding: var(--space-xl);
-    color: var(--color-text-muted);
-    font-size: 0.9rem;
-  }
+  /* Filtered results container -------------------------------
+   *
+   * Layout philosophy:
+   *   The filter panel and the resulting article grid are two distinct visual
+   *   sections — a comfortable air gap (--space-2xl) makes the cards feel like
+   *   their own surface instead of being glued to the panel.
+   *
+   *   The header itself uses a strong visual treatment (left accent bar, pills,
+   *   highlighted count) so the user immediately understands *what* they are
+   *   looking at when they jump to a tag/category page.
+   */
+  /* Filtered results container styles live in the global <style is:global>
+   * block at the bottom of this file. Reason: `.itp-filtered-results` is a
+   * sibling of `.interest-tag-panel` (not a child), so the
+   * `.interest-tag-panel :global(...)` scoping pattern doesn't match it.
+   */
 
   /* Mobile --------------------------------------------------- */
   @media (max-width: 768px) {
@@ -1490,6 +1515,7 @@ function initInterestTagPanel() {
       width: 100%;
       margin-top: var(--space-xs);
     }
+    /* mobile overrides for .itp-filtered-* moved to global block at bottom */
   }
 
   /* Reduced motion respect ----------------------------------- */
@@ -1575,4 +1601,115 @@ function initInterestTagPanel() {
       transform: none;
     }
   }
+
+  /* ----------------------------------------------------------------------
+   * Filtered results header + container.
+   *
+   * Lives in the global block because `.itp-filtered-results` is rendered as
+   * a sibling of `.interest-tag-panel` (see markup near line 154), so the
+   * panel's scoped `:global()` selectors can't reach it.
+   *
+   * Layout philosophy:
+   *   - Generous breathing room above (--space-2xl) separates the panel from
+   *     the result section so the cards feel like their own surface, not glued
+   *     to the filter UI.
+   *   - The header itself uses a strong visual treatment (left accent bar,
+   *     soft surface background, pills, highlighted count) so the user
+   *     immediately understands *what* they are looking at when they jump to
+   *     a tag/category page.
+   * -------------------------------------------------------------------- */
+  .itp-filtered-results {
+    margin-top: var(--space-2xl);
+  }
+  .itp-filtered-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-sm) var(--space-md);
+    margin-bottom: var(--space-lg);
+    padding: var(--space-md) var(--space-lg);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-primary);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    font-size: 0.95rem;
+    color: var(--color-text);
+    line-height: 1.4;
+  }
+  .itp-filtered-pills {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+  .itp-filtered-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1;
+    border: 1px solid transparent;
+    transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .itp-filtered-pill-tag {
+    background: var(--color-primary);
+    color: #FFFFFF;
+    border-color: var(--color-primary);
+    box-shadow: 0 1px 3px rgba(245, 124, 34, 0.25);
+  }
+  .itp-filtered-pill-origin {
+    background: var(--color-bg);
+    color: var(--color-text);
+    border-color: var(--color-border);
+  }
+  .itp-filtered-pill-search {
+    background: var(--color-bg);
+    color: var(--color-text);
+    border-color: var(--color-border);
+    font-style: italic;
+    font-weight: 500;
+  }
+  .itp-filtered-count-badge {
+    margin-left: auto;
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .itp-filtered-count-badge strong {
+    color: var(--color-primary);
+    font-weight: 700;
+    font-size: 1rem;
+    margin-right: 2px;
+  }
+  .itp-filtered-empty {
+    text-align: center;
+    padding: var(--space-2xl) var(--space-xl);
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    background: var(--color-bg-secondary);
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-md);
+    margin-top: var(--space-md);
+  }
+  @media (max-width: 768px) {
+    .itp-filtered-results {
+      margin-top: var(--space-xl);
+    }
+    .itp-filtered-header {
+      padding: var(--space-sm) var(--space-md);
+      font-size: 0.9rem;
+      gap: var(--space-xs) var(--space-sm);
+    }
+    .itp-filtered-count-badge {
+      margin-left: 0;
+      width: 100%;
+      padding-top: var(--space-xs);
+      border-top: 1px dashed var(--color-border);
+    }
+  }
+
 </style>
