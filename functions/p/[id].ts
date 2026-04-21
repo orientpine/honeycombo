@@ -1831,7 +1831,7 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
                 // behavior across browsers and touch devices.
                 scroll: true,
                 scrollSensitivity: 80,
-                scrollSpeed: 20,
+                scrollSpeed: 40,
                 bubbleScroll: true,
                 forceAutoScrollFallback: true
               });
