@@ -57,13 +57,13 @@
 
 ### Like Family (좋아요 전용)
 
-좋아요 버튼은 **감성/애정 행동 신호**로 브랜드 오렌지와 흐려야 하므로, 핑크/로즈 계열 전용 토큰을 따로 가진다(`src/styles/global.css:15-31`). 이 토큰은 오로지 `.like-button`과 관련 UI에서만 사용한다 — 다른 용도로 재사용 금지.
+좋아요(감정적 affinity) 액션은 브랜드 오렉지와 흐려야 하므로 **핏크/로즈 계열 전용 토큰을 따로 가진다**(`src/styles/global.css:15-31`). `src/pages/trending.astro`, `functions/trending.ts`, `functions/p/[id].ts` 3경로에 적용된 동일한 모던 pill 패턴(§4.6). 이 토큰은 오로지 `.like-button`과 관련 UI에서만 사용한다 — 다른 용도로 재사용 금지.
 
 | 역할 | Token | 값 |
 |------|-------|------|
-| Default icon | `--color-like-default-icon` | `#d67a8d` |
-| Default border | `--color-like-default-border` | `#f0dde2` |
-| Default count text | `--color-like-default-count` | `var(--color-text)` |
+| Default icon | `--color-like-default-icon` | `#d67a8d` (rose — "dead gray" 회피 + 음성적 Like 신호) |
+| Default border | `--color-like-default-border` | `#f0dde2` (은은한 pink-beige) |
+| Default count text | `--color-like-default-count` | `var(--color-text)` (가독성 우선) |
 | Hover text | `--color-like-hover-text` | `#e74c6f` |
 | Hover bg | `--color-like-hover-bg` | `#fff5f7` |
 | Hover border | `--color-like-hover-border` | `#f4b6c4` |
@@ -74,6 +74,12 @@
 | Contrast text (on gradient) | `--color-like-contrast-text` | `#ffffff` |
 | Shadow (active) | `--shadow-like` | `0 2px 8px rgba(231, 76, 111, 0.25)` |
 | Shadow (active hover) | `--shadow-like-hover` | `0 4px 14px rgba(231, 76, 111, 0.35)` |
+
+**사용 규칙**
+
+- like 전용 토큰이므로 좋아요 버튼 외 다른 컴포넌트에 재사용 금지 — brand orange 채널과 혼동할 수 있음.
+- like 액션은 항상 하트 SVG(`icon-outline` + `icon-filled`)만 사용. 하트 자체는 BookmarkButton과 동일한 glyph이지만, **채널(색 토큰 세트)이 달라 의미 구분이 되는 것을 목표**로 한다 (BookmarkButton의 hover/bookmarked 상태가 red-accent로 겹치는 점은 후속 작업에서 재검토 예정).
+- 다크 모드 도입 시 위 토큰만 재정의하면 like 패턴 전체가 자동 반영 — 각 사용처 개별 수정 불필요.
 
 ### 색 사용 규칙
 
@@ -257,35 +263,119 @@ transition: background 0.15s, color 0.15s;
   - 일반: `outline: 2px solid var(--color-primary); outline-offset: 2px;`, 또는
   - 소프트: `box-shadow: 0 0 0 3px rgba(245, 124, 34, 0.15);` (input focus ring과 동일).
 
-#### 4.6 Like Button — `src/pages/trending.astro`, `src/styles/global.css:15-31`
+#### 4.6 Like Button (Affinity Action Pill)
 
-좋아요 버튼은 브랜드 primary 오렌지와 독립된 **like-계열 전용 토큰**을 사용한다. 새 좋아요/애정 표시 버튼이 필요하면 이 패턴을 재사용하고, 변형이 필요하면 본 문서와 `§2 Like Family`를 먼저 갱신.
+좋아요 전용 pill 카드 버튼. §2 Like Family 채널을 사용해 brand orange와 시각적으로 구분되고, SVG 하트(outline ↔ filled) + 정수 카운트 숫자를 같이 표시한다. 구현: `src/pages/trending.astro`, `functions/trending.ts`, `functions/p/[id].ts`.
 
 ```css
-/* Default (resting) */
-.like-button {
-  /* 테두리·아이콘에 `--color-like-default-*` 적용 */
+/* Default (not liked) */
+.like-button {                                  /* or .like-btn (§1 detail) */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;                                /* icon↔count spacing */
+  min-height: 2rem;                             /* card trending — 2.25rem for 'playlist detail' */
+  padding: 0.375rem 0.875rem;
+  border: 1px solid var(--color-like-default-border);
+  border-radius: 999px;                         /* pill */
+  background: var(--color-bg);
+  color: var(--color-like-default-count);       /* count numeric */
+  font-family: inherit;
+  font-size: 0.8rem;                            /* 0.9rem for playlist detail */
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.18s cubic-bezier(0.4, 0, 0.2, 1),
+              background 0.18s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.18s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.18s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.18s cubic-bezier(0.4, 0, 0.2, 1);
 }
-/* Active (liked) — 오렌지 primary 미사용 */
+.like-button-icon {
+  width: 14px; height: 14px;                    /* 16px × 16px for playlist detail */
+  color: var(--color-like-default-icon);        /* rose tint — independent of button color */
+}
+
+/* Hover (not liked) — pink lift */
+.like-button:hover:not(:disabled) {
+  color: var(--color-like-hover-text);
+  border-color: var(--color-like-hover-border);
+  background: var(--color-like-hover-bg);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+.like-button:hover:not(:disabled) .like-button-icon {
+  color: inherit;                               /* icon joins hover color */
+}
+
+/* Liked — pink gradient + glow */
 .like-button.is-liked {
   background: linear-gradient(135deg,
-    var(--color-like-gradient-from) 0%,     /* #ff5a7a */
-    var(--color-like-gradient-to) 100%);    /* #e74c6f */
+              var(--color-like-gradient-from) 0%,
+              var(--color-like-gradient-to) 100%);
   border-color: transparent;
-  color: var(--color-like-contrast-text);   /* #fff */
-  box-shadow: var(--shadow-like);           /* 0 2px 8px rgba(231, 76, 111, 0.25) */
+  color: var(--color-like-contrast-text);       /* white count */
+  box-shadow: var(--shadow-like);
 }
-.like-button.is-liked:hover {
+.like-button.is-liked .like-button-icon {
+  color: inherit;                               /* icon inherits white — PR #142 */
+}
+.like-button.is-liked:hover:not(:disabled) {
   background: linear-gradient(135deg,
-    var(--color-like-gradient-from-hover) 0%,
-    var(--color-like-gradient-to-hover) 100%);
-  box-shadow: var(--shadow-like-hover);     /* 0 4px 14px rgba(231, 76, 111, 0.35) */
+              var(--color-like-gradient-from-hover) 0%,
+              var(--color-like-gradient-to-hover) 100%);
+  box-shadow: var(--shadow-like-hover);
   transform: translateY(-1px);
+}
+
+/* Icon swap — outline default, filled liked with pop animation */
+.like-button.is-liked .icon-outline { display: none; }
+.like-button.is-liked .icon-filled {
+  display: block;
+  animation: like-pop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes like-pop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
+/* Respect reduced-motion — keep color transitions, disable lift/scale/pop */
+@media (prefers-reduced-motion: reduce) {
+  .like-button {
+    transition: color 0.18s, background 0.18s, border-color 0.18s, box-shadow 0.18s;
+  }
+  .like-button-icon,
+  .like-button.is-liked .icon-filled { transition: none; animation: none; }
+  .like-button:hover:not(:disabled),
+  .like-button:active:not(:disabled) { transform: none; }
 }
 ```
 
-- 애니메이션: `animation: like-pop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);` (아이콘 스프링 스케일).
-- **오렌지 primary 그라데이션 사용 금지** — Like는 별도 브랜드 채널.
+**Icon color state machine**
+
+| State | Icon color | Source rule |
+|-------|------------|-------------|
+| Default | `var(--color-like-default-icon)` (rose `#d67a8d`) | `.like-button-icon` 기본 |
+| Hover (not liked) | `inherit` → `var(--color-like-hover-text)` | `.like-button:hover .like-button-icon` override |
+| Liked | `inherit` → `var(--color-like-contrast-text)` (white) | `.like-button.is-liked .like-button-icon` override |
+| Liked hover | `inherit` → white (유지) | liked hover도 버튼 color가 contrast-text 유지 |
+
+**마크업 규칙**
+
+- 버튼 안에 **아이콘과 카운트를 함께** 넣는다. 별도 `<span class="like-count">`을 사용하지 않는다.
+- `aria-pressed`, `aria-label` (현재 카운트 포함 — `좋아요 (현재 N개)`) 필수.
+- `icon-outline`과 `icon-filled` SVG를 둘 다 내장 — CSS로 display toggle. 텍스트 글리프(♡♥) 금지.
+- `:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }` (포커스 링은 brand orange — affinity red가 아님).
+
+**변형**
+
+| 사용처 | 선택자 | 크기 차이 |
+|---------|--------|-----------|
+| `/trending` 카드 | `.like-button`, `.like-button-icon` | `min-height: 2rem`, `padding: 0.375rem 0.875rem`, icon 14×14, font 0.8rem |
+| `/p/[id]` 상세 | `.like-btn`, `.like-icon` | `min-height: 2.25rem`, `padding: 0.5rem 1rem`, icon 16×16, font 0.9rem (공간 여유 있음) |
+
+두 변형은 **동일한 토큰과 상태 머신을 공유**하며, 크기만 문맥에 맞게 달라진다. 상세 페이지는 공간 여유로 인해 텍스트 라벨(`좋아요`/`좋아요 취소`)과 별도 카운트 디스플레이(`❤️ N명이 좋아합니다`)를 더 갖는다.
 
 #### 4.7 기타 컴포넌트 전용 버튼 패밀리 (레퍼런스)
 
@@ -297,7 +387,7 @@ transition: background 0.15s, color 0.15s;
 - `.article-search-clear` — `src/components/ArticleSearch.astro:217-240`. 검색어 초기화 아이콘.
 - `.auth-login-btn`, `.auth-logout-btn` — `src/components/Navigation.astro`. 인증 관련 드롭다운 버튼.
 
-새 패시스 도입 수준으로 가면 이 리스트도 동시에 갱신한다.
+새 패밀리 도입 수준으로 가면 이 리스트도 동시에 갱신한다.
 
 ### Card (`.card`) — `styles/global.css`
 
@@ -519,6 +609,9 @@ box-shadow: 0 0 0 3px rgba(245, 124, 34, 0.15);
 - **Gradient 남용 지양.** 현재 코드에 등록된 그라데이션 패턴은 대표적으로: (a) primary→accent 패밀리 — §4.1 `.btn-primary`, `.nav-logo`, `.nav` border-image, `.hero-headline-accent`; (b) primary→primary-hover (폼 CTA) — `src/pages/community.astro:180,188`; (c) accent→amber #FFA000 (관심 태그 배지/토글) — `src/components/InterestTagPanel.astro:1067,1097` 계열; (d) neutral bg→bg-secondary (무드 서페이스) — `InterestTagPanel.astro:1030`; (e) bg→rgba(accent,0.08) (`.article-card.interest-match` 강조) — `InterestTagPanel.astro:1544`; (f) §4.6 `.like-button.is-liked` (Like family, brand orange 미사용). 이 6군에 해당하지 않는 새 그라데이션을 도입하면 반드시 DESIGN.md에 그룹을 도츍고 추가한 뒤 사용. primary orange와 like family는 혼용하지 않는다.
 - **불투명도만으로 "비활성" 표현 금지.** `opacity` + `cursor: not-allowed` + `pointer-events: none` 세트.
 - **다크 모드 media query 임의 추가 금지.** 다크모드는 DESIGN.md 전체 개정이 선행되어야 함.
+- **Like 전용 토큰(`--color-like-*`, `--shadow-like*`)을 좋아요 버튼 외 재사용 금지.** affinity action 전용 palette이므로 다른 컴포넌트에 쓰면 brand orange 채널과 혼동된다.
+- **like 액션에 brand primary(오렉지)/accent(amber) 그라데이션 사용 금지.** like는 `--color-like-gradient-*`만 사용.
+- **좋아요 버튼 안에 별도 `<span class="like-count">`으로 카운트 분리 금지.** 카운트는 `.like-button-count` / `.like-btn-label`처럼 버튼 내부 element로 통합.
 
 ---
 
@@ -677,6 +770,7 @@ body with rationale.
 |------|----------|
 | 2026-04-21 | 최초 작성 — 9개 섹션 초판 (global.css + 주요 컴포넌트 기반). |
 | 2026-04-21 | Oracle 검증 피드백 반영 — (1) §1에서 "gradient는 브랜드 포인트만" 문구를 "Energetic CTAs"로 교정해 `.btn-primary`/`.like-button` 실 사용 반영, (2) §3 Hierarchy에 `.hero-headline`/`.home-section-title`/`.article-detail-title`/`.platform-title`/`.comments-title` 추가, (3) §4에 전역 `.btn`/`.btn-primary`/`.btn-secondary` 실패턴과 `.form-control`/`.search-input`/`.article-search-input` 3종 input을 실제 코드 기준으로 기술, (4) §6에 warm shadow rgba 공식화, (5) §7에 파란색 focus ring 금지 + gradient 남용 금지 추가, (6) AGENTS.md에서 "항상 DESIGN.md를 먼저 편집"을 리터럴 조항으로 강제하는 방향으로 동기화. |
-| 2026-04-21 | Oracle 2차 검증 피드백 반영 — (a) `.like-button.is-liked`가 primary→accent 그라데이션이 아닌 별도 Like 토큰(`--color-like-*`, `--shadow-like`)을 쓴다는 실제 코드를 반영해 §1/§2/§4/§6/§7 전반에서 오보 제거. (b) §2에 Like Family 전용 토큰 도표 추가. (c) §4.6 Like Button + §4.7 기타 전용 버튼 패밀리(bookmark/itp/playlist-item/article-search-clear/auth) 추가. (d) §3 "현행 코드에서 실제 정의된 모든" 문구를 "주요 텍스트 계층"으로 완화하고 `.playlist-title`/`.influencer-name`/`.pending-title`/`.itp-section-title`/`.guide-card h3`/`.write-form h2` 추가. (e) §6 L7/L8 계층 추가 (Like 전용 shadow, pink rgba 231,76,111). (f) §7 Gradient 남용 조항에 like-family 명시. (g) AGENTS.md 리터럴 규칙을 "항상 DESIGN.md를 열고 검토, 변경 없어도 변경 이력에 작업 것짓장 남김"으로 강화 + garbled 한국어 교정. |
-| 2026-04-21 | Oracle 3차 검증 피드백 반영 — §3 타이포그래피 테이블의 '체크 필요' 플레이스홀더 4개를 실제 코드에서 추출한 값으로 교체: `.influencer-name` `1.1rem`/`700` (InfluencerCard.astro:48), `.pending-title` `1.2rem`/`700`/`1.4` (admin/playlists.astro:288), `.itp-section-title` `0.9rem`/`700` (InterestTagPanel.astro:1379), `.write-form h2` `1.1rem`/`700` (community.astro:77). §1 시각 철학과 §7 Gradient 조항을 '오직 등록된 것만' 에서 (a)~(f) 6군 실제 그라데이션 패턴(community.astro btn-primary primary→hover, InterestTagPanel accent→#FFA000 배지/토글, panel neutral bg 그라데이션, article-card.interest-match accent tint, like family 등)으로 정리해 코드 실상과 일치시킴. '남용 금지' → '남용 지양, 신규 그룹 도입은 문서 먼저'로 소프닝. |
-| 2026-04-21 | Oracle 4차 검증 피드백 반영 — §3 'Button (small) | `.btn` (forms)' 행의 잘못된 추출값(`1rem` / `padding: var(--space-sm) var(--space-md)`)을 실제 코드 값인 `0.95rem`, `padding: var(--space-sm) var(--space-lg)`, `font-weight: 600`, `border-radius: var(--radius-md)`, `transition: all 0.15s`로 교체(pages/p/new.astro:425-437, admin/must-read.astro:565-579). |
+| 2026-04-21 | Oracle 2차 검증 피드백 반영 — (a) `.like-button.is-liked`가 primary→accent 그라데이션이 아닌 별도 Like 토큰(`--color-like-*`, `--shadow-like`)을 쓴다는 실제 코드를 반영해 §1/§2/§4/§6/§7 전반에서 오보 제거. (b) §2에 Like Family 전용 토큰 도표 추가. (c) §4.6 Like Button + §4.7 기타 전용 버튼 패밀리(bookmark/itp/playlist-item/article-search-clear/auth) 추가. (d) §3 "현행 코드에서 실제 정의된 모든" 문구를 "주요 텍스트 계층"으로 완화하고 `.playlist-title`/`.influencer-name`/`.pending-title`/`.itp-section-title`/`.guide-card h3`/`.write-form h2` 추가. (e) §6 L7/L8 계층 추가 (Like 전용 shadow, pink rgba 231,76,111). (f) §7 Gradient 남용 조항에 like-family 명시. (g) AGENTS.md 리터럴 규칙을 "항상 DESIGN.md를 열고 검토, 변경 없어도 변경 이력에 작업 것질장 남김"으로 강화. |
+| 2026-04-21 | Oracle 3차 검증 피드백 반영 — §3 타이포그래피 테이블의 '체크 필요' 플레이스홀더 4개를 실제 코드에서 추출한 값으로 교체. §1/§7 Gradient 조항을 (a)~(f) 6군 실제 그라데이션 패턴으로 정리. '남용 금지' → '남용 지양, 신규 그룹 도입은 문서 먼저'로 소프닝. |
+| 2026-04-21 | Oracle 4차 검증 피드백 반영 — §3 'Button (small) | `.btn` (forms)' 행의 잘못된 추출값을 실제 코드 값으로 교체(pages/p/new.astro:425-437, admin/must-read.astro:565-579). |
+| 2026-04-21 | **Like button 전용 패턴 등록** (PR #146 — Oracle 최종 리뷰 후속) — PR #131→#142 작업으로 구현된 좋아요 pill 버튼의 완전 스펙을 §4.6에 추가(default/hover/liked/liked-hover CSS 블록, icon color state machine, ´/trending´ vs ´/p/[id]´ 사이즈 변형). §2 Like Family 표에 각 토큰의 역할 설명 강화. master의 §2/§4.6 간소 표현을 보존하면서 PR #146 내용과 통합. §7 Don't 조항 3개 추가: 'like 토큰 재사용 금지', 'brand orange/amber 그라데이션을 like에 쓰는 것 금지', '카운트를 버튼 밖으로 분리 금지'. |
