@@ -405,43 +405,78 @@ transition: background 0.15s, color 0.15s;
 | Visibility | 기본 `display: none`; `.batch-edit-mode` 하위에서 `display: flex` |
 | A11y | `aria-label="드래그하여 순서 변경"` |
 
-#### 4.9 Batch Edit Mode (플레이리스트 배치 편집) — `functions/p/[id].ts`
+#QM|#### 4.9 Batch Edit Mode (플레이리스트 배치 편집) — `functions/p/[id].ts`
+#XK|
+#BW|플레이리스트 소유자가 아이템 순서를 한 번에 재배치할 수 있는 토글 모드. `📋 배치 편집` 버튼으로 진입 → SortableJS 드래그로 재정렬 → `저장` 또는 `취소`로 종료한다. 아이템이 2개 이상인 소유자에게만 노출.
+#PN|
+#QJ|**컨테이너 (`.items.batch-edit-mode`)**
+#RZ|
+#XR|- `border: 2px dashed var(--color-border)` (편집 중임을 나타내는 점선 테두리)
+#JP|- `border-radius: var(--radius-md)`
+#TS|- `padding: var(--space-md)`
+#RS|- `background: var(--color-bg-secondary)` (따뜻한 cream 배경으로 모드 차별화)
+#QM|- `grid-template-columns: 1fr` (배치 중에는 단일 열로 강제 — 세로 드래그에 집중)
+#WY|
+#JJ|**링크·컨트롤 비활성화 (`.batch-edit-mode` 하위)**
+#RM|
+#MZ|- `.item-title a { pointer-events: none; color: var(--color-text-muted); }` — 편집 중 페이지 이탈 방지
+#ZZ|- `.item-controls { display: none; }` — 삭제/메모 버튼 숨김 (배치 작업에 집중)
+#PX|
+#VM|**툴바 (`.items-toolbar`)**
+#XT|
+#YR|- `display: flex; justify-content: flex-end; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-md);`
+#ZJ|- 평상시: `📋 배치 편집` 버튼 한 개 노출 (§4.2 Inline small button 패턴, `.btn-sm`)
+#YJ|- 편집 중: `.batch-edit-btn`은 `hidden`, `.batch-action-bar` 노출
+#WZ|
+#TW|**액션 바 (`.batch-action-bar`)**
+#WS|
+#PV|- `display: flex; gap: var(--space-sm); align-items: center;`
+#BW|- `취소` 버튼: §4.3 Ghost 패턴 (`.btn.btn-sm`, transparent bg → bg-secondary hover)
+#HH|- `저장` 버튼: §4.1 Global `.btn-primary` 패턴 (gradient + warm shadow)
+#VV|- 저장 중에는 `disabled` + `저장 중...` 라벨
+#YY|
+#ZZ|**상태 전이 요약**
+#ST|
+#RY|| 전이 | 트리거 | 동작 |
+#MB||------|--------|------|
+#WP|| normal → editing | `📋 배치 편집` 클릭 | 원래 순서 snapshot, SortableJS lazy-load·초기화, 툴바·링크 비활성화 |
+#VV|| editing → normal (저장) | `저장` 클릭 | `PUT /api/playlists/{id}/items/reorder` → 성공 시 reload |
+#PS|| editing → normal (취소) | `취소` 클릭 | snapshot으로 DOM 복원, SortableJS destroy |
 
-플레이리스트 소유자가 아이템 순서를 한 번에 재배치할 수 있는 토글 모드. `📋 배치 편집` 버튼으로 진입 → SortableJS 드래그로 재정렬 → `저장` 또는 `취소`로 종료한다. 아이템이 2개 이상인 소유자에게만 노출.
+#### 4.10 Content Tabs (`.tab-header`, `.tab-btn`)
 
-**컨테이너 (`.items.batch-edit-mode`)**
+탭 전환 UI 패턴. `src/components/ContentTabs.astro` 및 `/my/articles` 등에서 사용.
 
-- `border: 2px dashed var(--color-border)` (편집 중임을 나타내는 점선 테두리)
-- `border-radius: var(--radius-md)`
-- `padding: var(--space-md)`
-- `background: var(--color-bg-secondary)` (따뜻한 cream 배경으로 모드 차별화)
-- `grid-template-columns: 1fr` (배치 중에는 단일 열로 강제 — 세로 드래그에 집중)
+- **Tab bar container (`.tab-header`)**: `display: flex; border-bottom: 2px solid var(--color-border);`
+- **Active state (`.tab-btn.active`)**: `color: var(--color-primary); border-bottom-color: var(--color-primary); font-weight: 600;`
+- **Inactive state (`.tab-btn`)**: `color: var(--color-text-muted); border-bottom-color: transparent;`
+- **Hover (inactive)**: `color: var(--color-text);`
+- **Focus-visible**: `outline: 2px solid var(--color-primary); outline-offset: 2px;`
+- **Transition**: `color 0.15s ease-out, border-color 0.15s ease-out;`
+- **Disabled**: `opacity: 0.5; cursor: not-allowed;`
 
-**링크·컨트롤 비활성화 (`.batch-edit-mode` 하위)**
+#### 4.11 Playlist Badge (`.playlist-badge`)
 
-- `.item-title a { pointer-events: none; color: var(--color-text-muted); }` — 편집 중 페이지 이탈 방지
-- `.item-controls { display: none; }` — 삭제/메모 버튼 숨김 (배치 작업에 집중)
+Used in `/my/articles` assigned tab to show which playlists contain an article. Each badge has a ✕ remove button.
 
-**툴바 (`.items-toolbar`)**
+- **Container**: `display: inline-flex; align-items: center; gap: var(--space-xs); padding: var(--space-xs) var(--space-sm); background: var(--color-bg-secondary); border: 1px solid var(--color-border); border-radius: var(--radius-sm); color: var(--color-text); font-size: 0.8125rem; transition: border-color 0.15s ease-out;`
+- **Hover**: `border-color: var(--color-primary);`
+- **Focus-visible** (keyboard navigation on the badge): `outline: 2px solid var(--color-primary); outline-offset: 2px;`
+- **Remove button (`.playlist-badge-remove`)**: `background: transparent; border: none; cursor: pointer; color: var(--color-text-muted); padding: 0; font-size: inherit; line-height: 1; transition: color 0.15s ease-out;`
+- **Remove hover**: `color: var(--color-danger);`
+- **Remove focus-visible**: outline ring.
+- **Disabled** (during API call): `opacity: 0.5; pointer-events: none;`
 
-- `display: flex; justify-content: flex-end; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-md);`
-- 평상시: `📋 배치 편집` 버튼 한 개 노출 (§4.2 Inline small button 패턴, `.btn-sm`)
-- 편집 중: `.batch-edit-btn`은 `hidden`, `.batch-action-bar` 노출
+#### 4.12 Page Notification (`.page-notification`)
 
-**액션 바 (`.batch-action-bar`)**
+Scoped success/error messages shown at the top of a page's content area. Auto-dismiss after 3 seconds. NOT a global toast system.
 
-- `display: flex; gap: var(--space-sm); align-items: center;`
-- `취소` 버튼: §4.3 Ghost 패턴 (`.btn.btn-sm`, transparent bg → bg-secondary hover)
-- `저장` 버튼: §4.1 Global `.btn-primary` 패턴 (gradient + warm shadow)
-- 저장 중에는 `disabled` + `저장 중...` 라벨
-
-**상태 전이 요약**
-
-| 전이 | 트리거 | 동작 |
-|------|--------|------|
-| normal → editing | `📋 배치 편집` 클릭 | 원래 순서 snapshot, SortableJS lazy-load·초기화, 툴바·링크 비활성화 |
-| editing → normal (저장) | `저장` 클릭 | `PUT /api/playlists/{id}/items/reorder` → 성공 시 reload |
-| editing → normal (취소) | `취소` 클릭 | snapshot으로 DOM 복원, SortableJS destroy |],op:
+- **Container**: `position: sticky;` (or fixed at top of content); `max-width: var(--max-width, 1200px); margin: 0 auto var(--space-md); padding: var(--space-sm) var(--space-md); border-radius: var(--radius-sm); background: var(--color-bg-secondary); font-size: 0.9375rem;`
+- **Success variant (`.page-notification--success`)**: `border-left: 3px solid var(--color-success); color: var(--color-text);`
+- **Error variant (`.page-notification--error`)**: `border-left: 3px solid var(--color-danger); color: var(--color-text);`
+- **Enter animation**: `transform: translateY(-100%) -> translateY(0); opacity: 0 -> 1; 0.2s ease-out;`
+- **Exit animation**: `opacity: 1 -> 0; 0.2s ease-out;` then removed from DOM.
+- **Usage note**: Create via JS, append to page, auto-remove via setTimeout. Keep DOM lean — at most 1 visible at a time; new notifications replace the previous.
 
 ### Card (`.card`) — `styles/global.css`
 
@@ -825,12 +860,13 @@ body with rationale.
 - [`src/pages/articles/[...slug].astro`](./src/pages/articles/[...slug].astro) — `.article-detail-title`
 - [`src/pages/influencers.astro`](./src/pages/influencers.astro) — `.platform-title`
 
-## 변경 이력
-
-| 날짜 | 변경 내용 |
-|------|----------|
-| 2026-04-21 | 최초 작성 — 9개 섹션 초판 (global.css + 주요 컴포넌트 기반). |
-| 2026-04-21 | Oracle 검증 피드백 반영 — (1) §1에서 "gradient는 브랜드 포인트만" 문구를 "Energetic CTAs"로 교정해 `.btn-primary`/`.like-button` 실 사용 반영, (2) §3 Hierarchy에 `.hero-headline`/`.home-section-title`/`.article-detail-title`/`.platform-title`/`.comments-title` 추가, (3) §4에 전역 `.btn`/`.btn-primary`/`.btn-secondary` 실패턴과 `.form-control`/`.search-input`/`.article-search-input` 3종 input을 실제 코드 기준으로 기술, (4) §6에 warm shadow rgba 공식화, (5) §7에 파란색 focus ring 금지 + gradient 남용 금지 추가, (6) AGENTS.md에서 "항상 DESIGN.md를 먼저 편집"을 리터럴 조항으로 강제하는 방향으로 동기화. |
+#ZQ|## 변경 이력
+#MZ|
+#TT|| 날짜 | 변경 내용 |
+#YB||------|----------|
+| 2026-04-21 | 기사 관리 페이지(/my/articles) 신설에 따른 플레이리스트 배지 패턴, 인페이지 알림 패턴 추가. 탭 패턴 기존 정의 확인/보강. |
+#VK|| 2026-04-21 | 최초 작성 — 9개 섹션 초판 (global.css + 주요 컴포넌트 기반). |
+#YS|| 2026-04-21 | Oracle 검증 피드백 반영 — (1) §1에서 "gradient는 브랜드 포인트만" 문구를 "Energetic CTAs"로 교정해 `.btn-primary`/`.like-button` 실 사용 반영, (2) §3 Hierarchy에 `.hero-headline`/`.home-section-title`/`.article-detail-title`/`.platform-title`/`.comments-title` 추가, (3) §4에 전역 `.btn`/`.btn-primary`/`.btn-secondary` 실패턴과 `.form-control`/`.search-input`/`.article-search-input` 3종 input을 실제 코드 기준으로 기술, (4) §6에 warm shadow rgba 공식화, (5) §7에 파란색 focus ring 금지 + gradient 남용 금지 추가, (6) AGENTS.md에서 "항상 DESIGN.md를 먼저 편집"을 리터럴 조항으로 강제하는 방향으로 동기화. |
 | 2026-04-21 | Oracle 2차 검증 피드백 반영 — (a) `.like-button.is-liked`가 primary→accent 그라데이션이 아닌 별도 Like 토큰(`--color-like-*`, `--shadow-like`)을 쓴다는 실제 코드를 반영해 §1/§2/§4/§6/§7 전반에서 오보 제거. (b) §2에 Like Family 전용 토큰 도표 추가. (c) §4.6 Like Button + §4.7 기타 전용 버튼 패밀리(bookmark/itp/playlist-item/article-search-clear/auth) 추가. (d) §3 "현행 코드에서 실제 정의된 모든" 문구를 "주요 텍스트 계층"으로 완화하고 `.playlist-title`/`.influencer-name`/`.pending-title`/`.itp-section-title`/`.guide-card h3`/`.write-form h2` 추가. (e) §6 L7/L8 계층 추가 (Like 전용 shadow, pink rgba 231,76,111). (f) §7 Gradient 남용 조항에 like-family 명시. (g) AGENTS.md 리터럴 규칙을 "항상 DESIGN.md를 열고 검토, 변경 없어도 변경 이력에 작업 것질장 남김"으로 강화. |
 | 2026-04-21 | Oracle 3차 검증 피드백 반영 — §3 타이포그래피 테이블의 '체크 필요' 플레이스홀더 4개를 실제 코드에서 추출한 값으로 교체. §1/§7 Gradient 조항을 (a)~(f) 6군 실제 그라데이션 패턴으로 정리. '남용 금지' → '남용 지양, 신규 그룹 도입은 문서 먼저'로 소프닝. |
 | 2026-04-21 | Oracle 4차 검증 피드백 반영 — §3 'Button (small) | `.btn` (forms)' 행의 잘못된 추출값을 실제 코드 값으로 교체(pages/p/new.astro:425-437, admin/must-read.astro:565-579). |
