@@ -59,6 +59,38 @@ export function looksLikeKoreanStructuredSummary(text: string): boolean {
   return /##\s*주요\s*내용|##\s*시사점/.test(text);
 }
 
+const SELF_REFERENTIAL_PATTERN = /^\s*(이|본|해당)\s*(콘텐츠|기사|글|아티클|포스트|영상|문서|뉴스|내용|자료|텍스트)\s*(은|는|이|가|을|를|의|에서)/;
+
+/**
+ * Detects self-referential openings like "이 콘텐츠는", "본 기사는", "해당 글은".
+ *
+ * Uses a regex pattern (not a brittle phrase list) to catch the article-like
+ * noun family: 이/본/해당 + 콘텐츠/기사/글/아티클/포스트/영상/문서/뉴스/내용/자료/텍스트 + 조사.
+ *
+ * Scans prose lines only — markdown headings (##) and bullet items (-) are
+ * ignored because they describe structure/sub-points, not the article itself.
+ *
+ * The user explicitly marked these openings as unwanted filler. The Gemini
+ * prompt already instructs the model to avoid them, but this validator acts
+ * as defense-in-depth: regressed prompt outputs are rejected at runtime and
+ * the article is re-queued for summarization on the next run.
+ *
+ * Related: docs/troubleshooting/rss-summary-self-referential-opening.md
+ */
+export function hasSelfReferentialOpening(text: string): boolean {
+  const lines = text.split(/\r?\n/);
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    if (/^#+\s/.test(trimmed)) continue; // skip markdown headings
+    if (/^[-*]\s/.test(trimmed)) continue; // skip bullet items
+    if (SELF_REFERENTIAL_PATTERN.test(trimmed)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 const SUMMARIZE_PROMPT = `당신은 기술 콘텐츠 요약 전문가입니다. 아래 기사/영상의 핵심 내용을 한국어로 구조화된 요약을 작성해주세요.
 
 규칙:
@@ -66,11 +98,14 @@ const SUMMARIZE_PROMPT = `당신은 기술 콘텐츠 요약 전문가입니다. 
 - 전문 용어는 원문 그대로 유지 (예: API, SDK, LLM, React 등)
 - 주관적 평가 없이 사실만 전달
 - 최대 ${MAX_DESCRIPTION_LENGTH}자 이내
+- **자기 지시적 서두 절대 금지.** 각 섹션의 첫 문장을 "이 콘텐츠는", "본 콘텐츠는", "이 기사는", "본 기사는", "해당 기사는", "이 글은", "본 글은", "해당 글은", "이 아티클은", "본 아티클은", "이 영상은", "본 영상은", "이 포스트는", "본 포스트는", "이 내용은", "본 내용은" 등 자기 지시적 표현으로 시작하지 마시오. 기사·영상이 다루는 **주제·대상(주어)**으로 바로 시작하시오.
+  - ✅ 올바른 예: "Vercel이 발표한 새 실험은 ...", "OpenAI의 o1 모델은 ...", "AGENTS.md 문서는 ..."
+  - ❌ 잘못된 예: "이 기사는 Vercel 실험을 다룬다", "본 콘텐츠는 o1 모델을 소개한다"
 
 형식:
 ## 개요
 
-(1~2문장으로 이 콘텐츠가 무엇인지 설명)
+(1~2문장. 주제·대상을 주어로 하여 핵심 내용을 요약. 주제로 바로 시작하고, 자기 지시적 서두 사용 금지.)
 
 ## 주요 내용
 
@@ -81,7 +116,7 @@ const SUMMARIZE_PROMPT = `당신은 기술 콘텐츠 요약 전문가입니다. 
 
 ## 시사점
 
-(이 콘텐츠의 의의, 결론, 또는 실무 적용 가능성을 1~2문장으로 정리)
+(1~2문장. 주제·대상이 갖는 의의, 결론, 또는 실무 적용 가능성. 주어로 바로 시작하고, 자기 지시적 서두 사용 금지.)
 
 기사 제목: {title}
 
@@ -291,6 +326,19 @@ export async function summarizeArticles(options: SummarizeOptions = {}): Promise
         console.error(`  ${message}`);
         // Same fallback as the fetch-failure branch: clear stale description so it
         // does not linger in the UI between summarize runs.
+        if (!dryRun) {
+          await clearStaleDescription(filePath, data);
+        }
+        errors.push(message);
+        continue;
+      }
+
+      // Step 2.5: Validate no self-referential openings (user preference).
+      // Even though the prompt explicitly forbids them, Gemini sometimes regresses.
+      // Reject and re-queue for re-summarization on next run.
+      if (hasSelfReferentialOpening(summary)) {
+        const message = `Rejected self-referential opening for: ${title}`;
+        console.warn(`  ⚠️  ${message}`);
         if (!dryRun) {
           await clearStaleDescription(filePath, data);
         }
