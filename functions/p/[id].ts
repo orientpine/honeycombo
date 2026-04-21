@@ -406,10 +406,10 @@ const PAGE_STYLES = `
         height: 16px;
         color: var(--color-like-default-icon);
         transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+      }
       /* On hover the button color shifts to hover-text; the icon joins in. */
       .like-btn:hover:not(:disabled) .like-icon {
         color: inherit;
-      }
       }
       .like-icon svg {
         width: 100%;
