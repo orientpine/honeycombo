@@ -61,7 +61,7 @@
 |------|------|
 | `api/auth.ts` | GitHub OAuth (Decap CMS 인증) |
 | `api/auth/github/login.ts` | 사용자 GitHub OAuth 로그인 (return_to 쿠키 지원) |
-| `api/auth/github/callback.ts` | OAuth 콜백, 세션 생성, auto-playlist catch-up 후 원래 페이지로 리디렉션 |
+| `api/auth/github/callback.ts` | OAuth 콜백, 사용자 upsert 및 세션 생성 후 `return_to` URL로 리디렉션 (자동 플레이리스트 catch-up 사이클는 2026-04-21에 제거됨; [ADR 0006](../decisions/0006-remove-auto-playlist-add.md)) |
 | `api/auth/me.ts` | 현재 로그인 사용자 정보 |
 | `api/auth/logout.ts` | 로그아웃 |
 | `api/playlists/index.ts` | GET(목록)/POST(생성), contains_item 포함 여부 지원 |
@@ -87,7 +87,7 @@
 | `lib/playlist-items.ts` | 아이템 추가/수정/삭제, 중복 방지 (DuplicateItemError) |
 | `lib/types.ts` | TypeScript 타입 정의 |
 | `lib/validate.ts` | URL/제목/source_id 검증 |
-| `webhooks/submission-approved.ts` | 기사 승인 시 플레이리스트 자동 추가 webhook |
+| `webhooks/submission-approved.ts` | 기사 승인 시 `submissions` 테이블 upsert webhook (자동 플레이리스트 추가는 [ADR 0006](../decisions/0006-remove-auto-playlist-add.md)에 따라 2026-04-21 제거) |
 | `webhooks/submission-removed.ts` | 기사 삭제/거부 시 플레이리스트 자동 정리 webhook |
 | `api/my/articles/index.ts` | GET 기사 목록 (status=unassigned/assigned/all) |
 | `api/my/articles/[articleId]/playlists/index.ts` | POST 기사를 플레이리스트에 추가 |

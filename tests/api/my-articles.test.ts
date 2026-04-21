@@ -34,12 +34,12 @@ function makeSubmissionRow(articleId: string, userId: string, overrides: Record<
 function makeAssignedArticleRow(
   articleId: string,
   userId: string,
-  playlistInfo = 'playlist_1::Favorites',
+  playlists: Array<{ id: string; title: string }> = [{ id: 'playlist_1', title: 'Favorites' }],
   overrides: Record<string, unknown> = {},
 ) {
   return {
     ...makeSubmissionRow(articleId, userId),
-    playlist_info: playlistInfo,
+    playlists_json: JSON.stringify(playlists),
     ...overrides,
   };
 }
@@ -189,7 +189,10 @@ describe('GET /api/my/articles', () => {
         makeAssignedArticleRow(
           'article_1',
           'user_1',
-          'playlist_1::Favorites,playlist_2::Reading List',
+          [
+            { id: 'playlist_1', title: 'Favorites' },
+            { id: 'playlist_2', title: 'Reading List' },
+          ],
         ),
       ],
     ]);
@@ -225,7 +228,7 @@ describe('GET /api/my/articles', () => {
       { total: 1 },
       { total: 1 },
       [makeSubmissionRow('article_1', 'user_1')],
-      [makeAssignedArticleRow('article_2', 'user_1', 'playlist_9::Deep Dives')],
+      [makeAssignedArticleRow('article_2', 'user_1', [{ id: 'playlist_9', title: 'Deep Dives' }])],
     ]);
 
     const response = await listMyArticles(
@@ -262,7 +265,7 @@ describe('GET /api/my/articles', () => {
     controller.setResults([
       { total: 1 },
       { total: 2 },
-      [makeAssignedArticleRow('article_3', 'user_1', 'playlist_3::Page Three')],
+      [makeAssignedArticleRow('article_3', 'user_1', [{ id: 'playlist_3', title: 'Page Three' }])],
     ]);
 
     const response = await listMyArticles(

@@ -63,17 +63,22 @@ document.addEventListener('astro:page-load', () => {
         return;
       }
       
-      const [articlesRes, playlistsRes] = await Promise.all([
-        fetch('/api/my/articles?status=all&limit=100'),
+      const [unassignedRes, assignedRes, playlistsRes] = await Promise.all([
+        fetch('/api/my/articles?status=unassigned&limit=100'),
+        fetch('/api/my/articles?status=assigned&limit=100'),
         fetch('/api/playlists?mine=true')
       ]);
 
-      if (!articlesRes.ok || !playlistsRes.ok) throw new Error('데이터를 불러오는데 실패했습니다.');
+      if (!unassignedRes.ok || !assignedRes.ok || !playlistsRes.ok) throw new Error('데이터를 불러오는데 실패했습니다.');
 
-      const articlesData = await articlesRes.json();
+      const unassignedData = await unassignedRes.json();
+      const assignedData = await assignedRes.json();
       const playlistsData = await playlistsRes.json();
 
-      articles = articlesData.articles || [];
+      articles = [
+        ...(unassignedData.articles || []),
+        ...(assignedData.articles || []),
+      ];
       playlists = playlistsData.playlists || [];
 
       loadingEl!.hidden = true;
