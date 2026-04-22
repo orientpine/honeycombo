@@ -12,5 +12,6 @@
     "facial recognition"
   ],
   "published_at": "2026-04-21T17:11:01.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nAI 플랫폼 Clarifai는 OkCupid로부터 받은 3백만 장의 사진 데이터를 삭제했으며, 해당 데이터로 학습된 안면 인식 AI 모델도 제거했다고 로이터 통신이 보도했습니다.\n\n## 주요 내용\n\n*   Clarifai는 2014년, 당시 투자 관계에 있던 OkCupid에게 안면 인식 AI 학습을 위한 데이터 공유를 요청했습니다.\n*   OkCupid는 사용자 동의 없이 해당 사진 데이터와 인구 통계 및 위치 정보를 Clarifai에 제공했으며, 이는 OkCupid 자체 개인정보 처리 방침 위반에 해당합니다.\n*   Clarifai 창립자 겸 CEO Matthew Zeiler는 OkCupid의 방대한 데이터를 활용할 수 있다는 점에 주목하여 데이터 수집을 요청한 것으로 알려졌습니다.\n*   이 사건은 2019년 뉴욕 타임스 기사를 통해 Clarifai가 OkCupid 이미지를 사용하여 나이, 성별, 인종 추정 AI를 개발했다는 내용이 보도된 후에야 FTC(미국 연방거래위원회)의 조사가 시작되었습니다.\n*   FTC는 OkCupid 및 모회사인 Match Group을 대상으로 조사를 진행했으며, 최근 OkCupid와 Match Group은 소송에서 합의했습니다.\n*   OkCupid와 Match Group은 사용자 기만 및 개인정보 처리 방침 위반 혐의에 대해 인정하지 않았으나, Clarifai의 데이터 삭제 사실은 해당 사진에 대한 접근 권한이 있었음을 시사합니다.\n*   FTC는 Match Group과 OkCupid가 2014년부터 이러한 행위를 은폐하고 조사 방해를 시도했다고 주장했습니다.\n*   FTC는 최초 위반에 대해 금전적 벌금을 부과할 수 없으나, OkCupid 및 Match Group이 데이터 수집 및 공유의 성격을 잘못 표현하거나 이를 돕는 행위를 영구적으로 금지한다고 결정했습니다.\n\n## 시사점\n\n본 사건은 AI 학습 데이터 수집 및 활용 과정에서의 개인정보 보호 및 규정 준수의 중요성을 재확인하며, 데이터 제공 기업과 AI 개발 기업 모두에게 투명한 데이터 관리와 명확한 동의 절차 준수의 필요성을 강조합니다."
 }
