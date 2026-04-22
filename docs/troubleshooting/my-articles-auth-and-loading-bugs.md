@@ -76,8 +76,35 @@ showNotification(err.message || '오류가 발생했습니다.', 'error');
 - [플레이리스트 시스템](../features/playlists.md)
 - [자동 플레이리스트 추가 제거 (ADR)](../decisions/0006-remove-auto-playlist-add.md)
 
+## 후속 회귀: trailing slash 경로 가드 (PR #174 회귀 → PR #175 에서 수정)
+
+### 증상
+
+PR #174 배포 직후 사용자 보고: 실제 프로덕션에서 **여전히 "데이터를 불러오는 중입니다..." 만 노출**. 새 코드에 있어야 할 에러 상태 / 로그인 게이트 / 본문 어느 것도 나타나지 않음.
+
+### 원인
+
+PR #174 에서 `astro:page-load` 중복 실행 방어용으로 추가했던 경로 가드:
+
+```ts
+if (window.location.pathname !== '/my/articles') return;
+```
+
+이 조건이 Astro 의 기본 trailing slash 동작과 충돌. 프로덕션 빌드 결과물은 `/my/articles/index.html` 로 서빙되며, 서버는 `/my/articles` 요청을 `308 Permanent Redirect → /my/articles/` 로 리다이렉트한다. 즉 브라우저의 `window.location.pathname` 은 항상 `'/my/articles/'` (끝 슬래시 포함) 이므로 가드가 매번 `true` 로 판정해 **`init()` 이 한 번도 실행되지 않음**. `#page-loading` 이 초기 DOM 상태 그대로 영구히 남아 로딩 메시지만 보이는 현상이 발생.
+
+### 해결
+
+경로 가드 제거. 이미 존재하던 DOM 엘리먼트 존재 체크 (`if (!loadingEl || !authGateEl || !errorStateEl || !mainContentEl) return;`) 가 자연스러운 가드 역할을 한다 — 해당 ID 들은 `/my/articles` 페이지에만 있으므로 다른 페이지로의 ClientRouter 전환에서는 DOM 존재 체크에서 early-return 된다.
+
+### 재발 방지 교훈
+
+- Astro + Cloudflare Pages 조합에서 **`window.location.pathname` 정확 비교는 항상 trailing slash 양쪽을 허용해야 한다.** (`p === '/x' || p === '/x/'` 또는 `p.replace(/\/$/, '') === '/x'`.)
+- 애초에 이번 경우는 DOM 존재 체크로 충분했고 경로 가드는 **불필요한 오버엔지니어링**이었다. 방어 코드를 추가할 때는 "이미 있는 안전장치가 충분한가" 를 먼저 확인.
+- 푸시/배포 전 **프로덕션 형태에 가까운 `bun run preview`** 로 실제 라우팅 동작을 확인하자 (dev server 는 trailing slash 동작이 다를 수 있음).
+
 ## 변경 이력
 
 | 날짜 | 변경 내용 |
 |------|----------|
 | 2026-04-22 | 최초 작성 — `/my/articles` 의 (1) 네트워크 오류를 인증 실패로 간주하지 않음, (2) 데이터 fetch 실패 시 본문 영구 숨김, (3) 플레이리스트 fetch 실패가 기사까지 차단 하는 3가지 버그 진단과 해결 기록. |
+| 2026-04-22 | 후속 회귀 문서화 — PR #174 의 경로 가드가 trailing slash 와 충돌해 `init()` 가 실행되지 않던 회귀를 PR #175 에서 수정. DOM 존재 체크만으로 충분하므로 경로 가드 제거. |
