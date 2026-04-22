@@ -1939,10 +1939,22 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
                 ghostClass: 'sortable-ghost',
                 chosenClass: 'sortable-chosen',
                 dragClass: 'sortable-drag',
+                // forceFallback: use SortableJS's clone-based simulated drag
+                // instead of the HTML5 native drag API. This is REQUIRED for
+                // our custom auto-scroll: with HTML5 native drag, browsers
+                // suppress pointermove/touchmove events on the window during
+                // the drag (only dragover/drag fire, and those don't reliably
+                // give a global cursor position). The fallback drag fires
+                // normal mouse/touch events, so our window-level pointermove
+                // and touchmove listeners in startAutoScroll() can track the
+                // cursor and drive the rAF-based scroller symmetrically in
+                // both directions.
+                forceFallback: true,
+                fallbackTolerance: 3,
                 // Disable SortableJS's built-in auto-scroll. Its algorithm
                 // applies scrollSpeed as a binary on/off (no gradient), and
                 // the sticky site nav makes the top edge unreachable for
-                // the browser's native drag-scroll fallback — producing a
+                // the browser's native drag-scroll fallback, producing a
                 // visibly slower UP-direction scroll. We implement our own
                 // symmetric rAF-based gradient scroller in
                 // startAutoScroll() / autoScrollTick() above.
