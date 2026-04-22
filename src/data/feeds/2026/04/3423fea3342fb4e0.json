@@ -12,5 +12,6 @@
     "exclusive"
   ],
   "published_at": "2026-04-22T12:00:00.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nGoogle Cloud Next 2026에서 Google은 AI 스타트업을 자사 클라우드 생태계로 유치하기 위한 대규모 투자와 파트너십을 발표했습니다.\n\n## 주요 내용\n\n*   **AI 스타트업 지원을 위한 7억 5천만 달러 예산 확보:** Google은 파트너들이 기업에 AI 에이전트를 더 많이 판매할 수 있도록 지원하기 위해 새로운 7억 5천만 달러의 예산을 책정했으며, 이는 Gemini PoC 프로젝트, Google 엔지니어 파견, 클라우드 크레딧, 배포 리베이트 등에 사용될 수 있습니다.\n*   **주요 스타트업들의 Google Cloud 활용 사례:**\n    *   **Lovable:** Google의 기업용 앱 마켓플레이스를 통해 새로운 코딩 에이전트를 출시하며 Google Cloud 사용을 확대하고 있습니다.\n    *   **Notion:** 110억 달러의 가치를 지닌 Notion은 텍스트 및 이미지 생성 기능에 Gemini 모델을 활용하고 있습니다.\n    *   **Gamma:** 21억 달러의 가치를 지닌 Gamma는 Google의 최신 이미지 모델 Nano Banana 2 및 기타 Google Cloud 기능을 사용합니다.\n    *   **Inferact:** vLLM 프로젝트 개발자들이 만든 Inferact는 Google Cloud의 AI 스택을 활용하며 Nvidia GPU에 접근합니다.\n    *   **ComfyUI:** AI 이미지 및 멀티미디어 생성 도구인 ComfyUI도 Nano Banana 2 및 기타 Google Cloud 기능을 제공합니다.\n*   **Google Cloud가 지원하는 다양한 스타트업:** Chorus(AI 스마트 태그), Emergent AI(바이브 코딩 플랫폼), ExaCare AI(의료 AI 소프트웨어), Insilica(AI 화학 안전 보고서), Optii(AI 호텔 운영 소프트웨어), Parallel AI(AI 에이전트용 검색 API), Proximal Health(보험 청구 자동화), Reducto(AI 문서 파싱), Stord(전자상거래 풀필먼트), Stylitics(AI 이미지 생성), Temporal(개발자 클라우드 환경), Vapi(대화형 음성 에이전트 개발 도구), Vurvey Labs(AI 합성 시장 조사), Wand(PC 게임용 AI 도우미), Watershed(지속 가능성 관리 소프트웨어), ZenBusiness(소상공인용 AI 챗 어시스턴트) 등이 Google Cloud를 활용하거나 확장하고 있습니다.\n\n## 시사점\n\nGoogle은 AI 스타트업과의 협력을 강화하며 자사 클라우드 플랫폼을 AI 혁신의 중심지로 구축하려는 전략을 추진하고 있습니다. 이는 AI 기술 발전과 기업의 디지털 전환 가속화에 기여할 것으로 예상됩니다."
 }
