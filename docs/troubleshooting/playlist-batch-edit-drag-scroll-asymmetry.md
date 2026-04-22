@@ -67,11 +67,15 @@ let scrollOffsetY = autoScrolls[this.layer].vy ? autoScrolls[this.layer].vy * sp
 +   ghostClass: 'sortable-ghost',
 +   chosenClass: 'sortable-chosen',
 +   dragClass: 'sortable-drag',
++   forceFallback: true,            // HTML5 native drag 끄고 클론 기반 드래그 사용
++   fallbackTolerance: 3,           // 터치 오작동 방지
 +   scroll: false,                  // 내장 auto-scroll 비활성화
 +   onStart: function() { startAutoScroll(); },
 +   onEnd:   function() { stopAutoScroll(); }
 + });
 ```
+
+> **주의**: `forceFallback: true` 가 빠지면 SortableJS가 HTML5 native drag API를 쓰고, native drag 중에는 브라우저가 `pointermove` · `touchmove`를 window 레벨에서 사실상 발화시키지 않는다. 그 상태에서는 아래 `startAutoScroll()`의 `onDragPointerMove` 가 이벤트를 전혀 받지 못해 `autoScrollPointerY = -1` 에 머물고, `computeAutoScrollVelocity(-1)` 가 항상 0을 반환해 **자동 스크롤이 양방향 모두 작동하지 않는다**. 초기 수정(PR #175)에서 `forceFallback` 을 빠뜨려 위 방향 스크롤이 완전히 멈추는 회귀를 일으켰고, 이 항목을 반드시 함께 지정해야 한다.
 
 ### 커스텀 오토스크롤 알고리즘 (요약)
 
@@ -102,7 +106,9 @@ let scrollOffsetY = autoScrolls[this.layer].vy ? autoScrolls[this.layer].vy * sp
 - **Sticky/fixed 헤더가 있는 레이아웃**에서 브라우저의 drag-at-edge fast-scroll에 의존하지 말 것. 헤더 높이를 명시적으로 보정한 effective edge를 사용하자.
 - **SortableJS의 `scrollSpeed`는 gradient가 아니다**. 부드러운 가속감을 원하면 커스텀 스크롤러가 필요하다. `#1907` 이슈가 해결되기 전까지는 동일하다.
 - 커스텀 rAF 스크롤러를 쓸 때는 반드시 (1) 문서 경계 clamp, (2) 드래그 종료/배치 모드 종료에서의 확실한 `cancelAnimationFrame` + 리스너 해제를 보장할 것(메모리 누수/멈춤 방지).
+- **SortableJS를 커스텀 pointer 기반 auto-scroll과 함께 쓸 때는 반드시 `forceFallback: true`를 함께 켤 것**. 이 옵션이 없으면 SortableJS는 HTML5 native drag API(`dragstart`/`dragover`/`drop`)를 사용하는데, **native drag 중에는 브라우저가 `pointermove` · `touchmove`를 window 레벨에서 사실상 발화시키지 않는다**(크롬 데스크톱에서 확인, 브라우저 · OS별 상이). 따라서 `window.addEventListener('pointermove', ...)`로 커서 위치를 추적하는 커스텀 스크롤러는 `clientY`를 전혀 받지 못해 속도가 항상 0이 된다. `forceFallback: true`는 native drag 대신 클론 기반 시뮬레이션 드래그를 사용하며, 일반 mousemove/touchmove가 정상 발화하므로 커스텀 스크롤러가 제대로 동작한다. `fallbackTolerance: 3`을 같이 지정하면 터치 오작동을 방지한다.
 - **`functions/p/[id].ts`의 SSR 스크립트 블록은 TypeScript template literal 안에 렌더링된다**. 이 안에 추가하는 **주석/문자열에 백틱(`` ` ``)을 쓰면 template literal이 중간에 종료되어 wrangler 배포 시점에 `Expected ":" but found ...` 형태의 파싱 에러가 난다**. 로컬 `bun run build`(Astro)는 이 파일을 건드리지 않고 Cloudflare Pages 배포 단계(`wrangler pages deploy`)에서만 파싱하므로 PR CI에서는 잡히지 않는다. 해결: (a) 주석에서 백틱을 떼고 평문으로 쓰거나, (b) 반드시 써야 하면 `\`` 로 이스케이프. 푸시 전 `npx wrangler pages functions build --outdir=.wrangler-dry` 로 한 번 더 파싱 검증하면 재발 방지된다.
+- **Cloudflare Pages Functions는 로컬 `bun run build`·`bun run test`로 기능 검증이 불가능**하다(pure SSR 런타임). 따라서 실제 사용자 조작이 필요한 로직(드래그, 폼, 이벤트 등)을 이 파일에서 수정한 경우 **반드시 배포 후 브라우저에서 수동 QA**를 거쳐야 한다. 로컬에서는 `wrangler pages dev` 로 에뮬레이션 가능하지만 드래그 UX 같은 실제 브라우저 동작을 완전히 재현하지는 않으므로, 프로덕션 배포가 가장 확실한 검증 수단이다.
 
 ---
 
@@ -116,3 +122,4 @@ let scrollOffsetY = autoScrolls[this.layer].vy ? autoScrolls[this.layer].vy * sp
 | 날짜 | 변경 내용 |
 |------|----------|
 | 2026-04-22 | 최초 작성 — 위/아래 비대칭 원인 규명(SortableJS binary speed + sticky nav) 및 커스텀 rAF gradient 오토스크롤로 교체 기록 |
+| 2026-04-22 | 후속 수정 — 초기 수정(PR #175)에서 `forceFallback: true` 누락으로 HTML5 native drag가 켜진 채 pointermove가 전혀 발화하지 않아 **위 방향 자동 스크롤이 완전히 멈추는 회귀** 발생. `forceFallback: true` + `fallbackTolerance: 3`을 Sortable 옵션에 추가하여 클론 기반 드래그로 전환하고 해결 기록. 예방 조치 섹션에 "SortableJS + 커스텀 pointer 기반 auto-scroll 쓸 때는 forceFallback 필수" 항목 추가. |
