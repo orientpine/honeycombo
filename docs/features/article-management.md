@@ -43,6 +43,19 @@
 - 한 번에 최대 100개 기사까지 로드(`limit=100`). 그 이상은 pagination 필요 (V2).
 - 플레이리스트 "변경"은 독립 API가 아니라 client-side에서 `DELETE` + `POST`의 조합.
 
+## 상태 전이 (프런트엔드 UI)
+
+초기 로드 시 페이지는 다음 상태 중 **정확히 하나**만 노출한다. 상태 전환은 `hideAllStates()` + `showState(el)` 헬퍼로만 수행한다.
+
+| 상태 ID | 트리거 | 표시 내용 |
+|---|---|---|
+| `#page-loading` | 초기 진입, 재시도 시작 | "데이터를 불러오는 중입니다..." |
+| `#auth-gate` | `/api/auth/me` 가 `!ok` 또는 네트워크 에러 | "GitHub 로 로그인" CTA |
+| `#error-state` | `/api/my/articles?status=...` 응답 중 하나라도 실패 | 오류 메시지 + "다시 시도" 버튼 |
+| `#main-content` | 기사 fetch 성공 | 탭(미배정/배정) + 기사 카드 + 본문 |
+
+`#main-content` 내부에는 `#playlists-warning` 인라인 경고가 따로 존재한다. `/api/playlists?mine=true` 가 실패했을 때만 나타나며, "플레이리스트에 추가" 버튼을 `disabled` 로 만들고 "다시 불러오기" 액션을 제공한다. 기사 목록 표시 자체는 플레이리스트 fetch 결과와 무관하게 진행된다 — 이것이 V1 의 회복력(resilience) 전략이다.
+
 ## 관련 문서
 
 - [0006. 자동 플레이리스트 추가 제거 (ADR)](../decisions/0006-remove-auto-playlist-add.md)
@@ -54,3 +67,4 @@
 | 날짜 | 변경 내용 |
 |------|----------|
 | 2026-04-21 | 최초 작성 |
+| 2026-04-22 | 프런트엔드 상태 전이(로딩/인증/에러/본문) 명시화, `/api/playlists?mine=true` 실패 시 기사 목록은 정상 노출하는 회복력 전략 문서화. 관련 버그 진단은 `docs/troubleshooting/my-articles-auth-and-loading-bugs.md` 참조. |
