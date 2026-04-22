@@ -47,9 +47,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
 <script>
 document.addEventListener('astro:page-load', () => {
-  // Only initialize on /my/articles; astro:page-load fires on every view transition.
-  if (window.location.pathname !== '/my/articles') return;
-
+  // astro:page-load fires on every ClientRouter transition. We don't gate on the
+  // pathname here (Astro may serve this page at '/my/articles' OR '/my/articles/'
+  // depending on trailingSlash config) — the DOM element checks below serve as
+  // the natural guard: if the required elements aren't on the page, we simply
+  // early-return. This avoids the trailing-slash regression that caused a stuck
+  // "데이터를 불러오는 중입니다..." state.
   const loadingEl = document.getElementById('page-loading');
   const authGateEl = document.getElementById('auth-gate');
   const errorStateEl = document.getElementById('error-state');
