@@ -12,13 +12,23 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     <p>데이터를 불러오는 중입니다...</p>
   </div>
 
-  <div id="auth-gate" class="state-message" hidden>
+  <div id="auth-gate" class="state-message" style="display: none;">
     <p>기사를 관리하려면 로그인이 필요합니다.</p>
     <a href="/api/auth/github/login?return_to=/my/articles" class="btn btn-primary">GitHub로 로그인</a>
   </div>
 
-  <div id="main-content" hidden>
+  <div id="error-state" class="state-message error-message" style="display: none;">
+    <p id="error-text">데이터를 불러오는데 실패했습니다.</p>
+    <button id="retry-btn" type="button" class="btn">다시 시도</button>
+  </div>
+
+  <div id="main-content" style="display: none;">
     <div id="page-notification" role="status" aria-live="polite" hidden></div>
+
+    <div id="playlists-warning" class="inline-warning" role="status" aria-live="polite" style="display: none;">
+      <p>플레이리스트 목록을 불러오지 못했습니다. 추가/이동 기능이 제한됩니다.</p>
+      <button id="reload-playlists-btn" type="button" class="btn btn-secondary btn-sm">플레이리스트 다시 불러오기</button>
+    </div>
 
     <div class="tab-header" role="tablist">
       <button class="tab-btn active" role="tab" data-tab="unassigned" aria-selected="true">미배정 기사 <span class="tab-count" data-count="unassigned">(0)</span></button>
@@ -29,7 +39,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       <div class="articles-grid" id="unassigned-grid"></div>
     </div>
 
-    <div class="tab-panel" role="tabpanel" data-panel="assigned" hidden>
+    <div class="tab-panel" role="tabpanel" data-panel="assigned" style="display: none;">
       <div class="articles-grid" id="assigned-grid"></div>
     </div>
   </div>
@@ -37,10 +47,18 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
 <script>
 document.addEventListener('astro:page-load', () => {
+  // Only initialize on /my/articles; astro:page-load fires on every view transition.
+  if (window.location.pathname !== '/my/articles') return;
+
   const loadingEl = document.getElementById('page-loading');
   const authGateEl = document.getElementById('auth-gate');
+  const errorStateEl = document.getElementById('error-state');
+  const errorTextEl = document.getElementById('error-text');
+  const retryBtn = document.getElementById('retry-btn');
   const mainContentEl = document.getElementById('main-content');
   const notificationEl = document.getElementById('page-notification');
+  const playlistsWarningEl = document.getElementById('playlists-warning');
+  const reloadPlaylistsBtn = document.getElementById('reload-playlists-btn');
   const unassignedGrid = document.getElementById('unassigned-grid');
   const assignedGrid = document.getElementById('assigned-grid');
   const tabBtns = document.querySelectorAll('.tab-btn');
@@ -48,51 +66,110 @@ document.addEventListener('astro:page-load', () => {
   const countUnassigned = document.querySelector('[data-count="unassigned"]');
   const countAssigned = document.querySelector('[data-count="assigned"]');
 
-  if (!loadingEl || !authGateEl || !mainContentEl) return;
+  if (!loadingEl || !authGateEl || !errorStateEl || !mainContentEl) return;
 
   let articles: any[] = [];
   let playlists: any[] = [];
   let activeDropdown: HTMLElement | null = null;
+  let tabsBound = false;
+
+  function hideAllStates() {
+    loadingEl!.style.display = 'none';
+    authGateEl!.style.display = 'none';
+    errorStateEl!.style.display = 'none';
+    mainContentEl!.style.display = 'none';
+  }
+
+  function showState(el: HTMLElement | null, display = 'flex') {
+    hideAllStates();
+    if (el) el.style.display = display;
+  }
 
   async function init() {
+    showState(loadingEl);
+
+    // Step 1: Auth check. Network errors OR non-2xx responses both mean "not authed"
+    // — matches the behaviour of /my/playlists.astro for consistency and avoids a
+    // blank page when /api/auth/me errors transiently.
+    let authed = false;
     try {
-      const authRes = await fetch('/api/auth/me');
-      if (!authRes.ok) {
-        loadingEl!.hidden = true;
-        authGateEl!.hidden = false;
-        return;
-      }
-      
+      const authRes = await fetch('/api/auth/me', { credentials: 'same-origin' });
+      authed = authRes.ok;
+    } catch {
+      authed = false;
+    }
+
+    if (!authed) {
+      showState(authGateEl);
+      return;
+    }
+
+    // Step 2: Load articles (required) and playlists (optional). Articles failure
+    // blocks the page; playlists failure only disables add/move UI with a warning.
+    try {
       const [unassignedRes, assignedRes, playlistsRes] = await Promise.all([
         fetch('/api/my/articles?status=unassigned&limit=100'),
         fetch('/api/my/articles?status=assigned&limit=100'),
-        fetch('/api/playlists?mine=true')
+        fetch('/api/playlists?mine=true'),
       ]);
 
-      if (!unassignedRes.ok || !assignedRes.ok || !playlistsRes.ok) throw new Error('데이터를 불러오는데 실패했습니다.');
+      if (!unassignedRes.ok || !assignedRes.ok) {
+        throw new Error('기사를 불러오는데 실패했습니다.');
+      }
 
       const unassignedData = await unassignedRes.json();
       const assignedData = await assignedRes.json();
-      const playlistsData = await playlistsRes.json();
 
       articles = [
         ...(unassignedData.articles || []),
         ...(assignedData.articles || []),
       ];
-      playlists = playlistsData.playlists || [];
 
-      loadingEl!.hidden = true;
-      mainContentEl!.hidden = false;
+      if (playlistsRes.ok) {
+        const playlistsData = await playlistsRes.json();
+        playlists = playlistsData.playlists || [];
+        if (playlistsWarningEl) playlistsWarningEl.style.display = 'none';
+      } else {
+        playlists = [];
+        if (playlistsWarningEl) playlistsWarningEl.style.display = 'flex';
+      }
 
+      showState(mainContentEl, 'block');
       setupTabs();
       renderAll();
     } catch (err: any) {
-      loadingEl!.hidden = true;
-      showNotification(err.message || '오류가 발생했습니다.', 'error');
+      if (errorTextEl) {
+        errorTextEl.textContent = err?.message || '데이터를 불러오는데 실패했습니다.';
+      }
+      showState(errorStateEl);
+    }
+  }
+
+  async function reloadPlaylists() {
+    if (!reloadPlaylistsBtn) return;
+    (reloadPlaylistsBtn as HTMLButtonElement).disabled = true;
+
+    try {
+      const res = await fetch('/api/playlists?mine=true');
+      if (!res.ok) throw new Error('플레이리스트를 불러오지 못했습니다.');
+      const data = await res.json();
+      playlists = data.playlists || [];
+      if (playlistsWarningEl) playlistsWarningEl.style.display = 'none';
+      showNotification('플레이리스트를 불러왔습니다.', 'success');
+    } catch (err: any) {
+      showNotification(err?.message || '플레이리스트를 불러오지 못했습니다.', 'error');
+    } finally {
+      (reloadPlaylistsBtn as HTMLButtonElement).disabled = false;
     }
   }
 
   function setupTabs() {
+    if (tabsBound) {
+      switchTab(window.location.hash.replace('#', '') || 'unassigned');
+      return;
+    }
+    tabsBound = true;
+
     const hash = window.location.hash.replace('#', '') || 'unassigned';
     switchTab(hash);
 
@@ -108,14 +185,18 @@ document.addEventListener('astro:page-load', () => {
   }
 
   function switchTab(tabId: string) {
+    const valid = tabId === 'unassigned' || tabId === 'assigned';
+    const resolvedTab = valid ? tabId : 'unassigned';
+
     tabBtns.forEach(btn => {
-      const isSelected = btn.getAttribute('data-tab') === tabId;
+      const isSelected = btn.getAttribute('data-tab') === resolvedTab;
       btn.classList.toggle('active', isSelected);
       btn.setAttribute('aria-selected', isSelected.toString());
     });
 
     tabPanels.forEach(panel => {
-      (panel as HTMLElement).hidden = panel.getAttribute('data-panel') !== tabId;
+      const match = panel.getAttribute('data-panel') === resolvedTab;
+      (panel as HTMLElement).style.display = match ? 'block' : 'none';
     });
   }
 
@@ -137,12 +218,13 @@ document.addEventListener('astro:page-load', () => {
       return;
     }
 
+    const canAdd = playlists.length > 0;
     unassignedGrid.innerHTML = items.map(article => `
-      <article class="article-card card" data-article-id="${article.article_id}">
+      <article class="article-card card" data-article-id="${escapeHtml(article.article_id)}">
         <a class="article-title" href="${escapeHtml(article.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(article.title)}</a>
         <div class="article-meta">제출일 ${formatDate(article.submitted_at)}</div>
         <div class="article-actions">
-          <button class="btn btn-secondary btn-add-to-playlist" type="button">플레이리스트에 추가</button>
+          <button class="btn btn-secondary btn-add-to-playlist" type="button"${canAdd ? '' : ' disabled'}>플레이리스트에 추가</button>
         </div>
       </article>
     `).join('');
@@ -155,20 +237,21 @@ document.addEventListener('astro:page-load', () => {
       return;
     }
 
+    const canAdd = playlists.length > 0;
     assignedGrid.innerHTML = items.map(article => `
-      <article class="article-card card" data-article-id="${article.article_id}">
+      <article class="article-card card" data-article-id="${escapeHtml(article.article_id)}">
         <a class="article-title" href="${escapeHtml(article.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(article.title)}</a>
         <div class="article-meta">제출일 ${formatDate(article.submitted_at)}</div>
         <div class="playlist-badges">
           ${(article.playlists || []).map((p: any) => `
-            <span class="playlist-badge" data-playlist-id="${p.id}">
+            <span class="playlist-badge" data-playlist-id="${escapeHtml(p.id)}">
               <span class="playlist-badge-title">${escapeHtml(p.title)}</span>
               <button class="playlist-badge-remove" type="button" aria-label="${escapeHtml(p.title)} 플레이리스트에서 제거">✕</button>
             </span>
           `).join('')}
         </div>
         <div class="article-actions">
-          <button class="btn btn-secondary btn-add-to-playlist" type="button">다른 플레이리스트에 추가</button>
+          <button class="btn btn-secondary btn-add-to-playlist" type="button"${canAdd ? '' : ' disabled'}>다른 플레이리스트에 추가</button>
         </div>
       </article>
     `).join('');
@@ -189,19 +272,23 @@ document.addEventListener('astro:page-load', () => {
       const badge = target.closest('.playlist-badge');
       const card = target.closest('.article-card');
       if (!badge || !card) return;
-      
+
       const articleId = card.getAttribute('data-article-id');
       const playlistId = badge.getAttribute('data-playlist-id');
+      if (!articleId || !playlistId) return;
 
       try {
         (target as HTMLButtonElement).disabled = true;
-        const res = await fetch(`/api/my/articles/${articleId}/playlists/${playlistId}`, { method: 'DELETE' });
+        const res = await fetch(`/api/my/articles/${encodeURIComponent(articleId)}/playlists/${encodeURIComponent(playlistId)}`, {
+          method: 'DELETE',
+          credentials: 'same-origin',
+        });
         if (!res.ok) throw new Error('제거 실패');
 
         // Update state
         const article = articles.find(a => a.article_id === articleId);
         if (article) {
-          article.playlists = article.playlists.filter((p: any) => p.id !== playlistId);
+          article.playlists = (article.playlists || []).filter((p: any) => p.id !== playlistId);
         }
         renderAll();
         showNotification('플레이리스트에서 제거되었습니다.', 'success');
@@ -214,33 +301,35 @@ document.addEventListener('astro:page-load', () => {
 
     // Open dropdown
     if (target.classList.contains('btn-add-to-playlist')) {
+      if ((target as HTMLButtonElement).disabled) return;
       e.stopPropagation();
+
+      const wasOpen = activeDropdown && activeDropdown.previousElementSibling === target;
       if (activeDropdown) {
         activeDropdown.remove();
-        if (activeDropdown.previousElementSibling === target) {
-          activeDropdown = null;
-          return; // Toggle off
-        }
+        activeDropdown = null;
       }
+      if (wasOpen) return; // Toggle off
 
       const card = target.closest('.article-card');
       if (!card) return;
-      
+
       const articleId = card.getAttribute('data-article-id');
       const article = articles.find(a => a.article_id === articleId);
+      if (!article) return;
       const existingPlaylistIds = new Set((article.playlists || []).map((p: any) => p.id));
 
       const availablePlaylists = playlists.filter(p => !existingPlaylistIds.has(p.id));
 
       const dropdown = document.createElement('div');
       dropdown.className = 'playlist-dropdown dropdown-container';
-      
+
       if (availablePlaylists.length === 0) {
         dropdown.innerHTML = `<div class="dropdown-empty">추가할 수 있는 플레이리스트가 없습니다.</div>`;
       } else {
         dropdown.innerHTML = `<ul class="dropdown-list">
           ${availablePlaylists.map(p => `
-            <li><button class="dropdown-item" data-playlist-id="${p.id}">${escapeHtml(p.title)}</button></li>
+            <li><button class="dropdown-item" data-playlist-id="${escapeHtml(p.id)}">${escapeHtml(p.title)}</button></li>
           `).join('')}
         </ul>`;
       }
@@ -254,16 +343,19 @@ document.addEventListener('astro:page-load', () => {
     if (target.classList.contains('dropdown-item')) {
       const playlistId = target.getAttribute('data-playlist-id');
       const card = target.closest('.article-card');
-      if (!card) return;
-      
+      if (!card || !playlistId) return;
+
       const articleId = card.getAttribute('data-article-id');
+      if (!articleId) return;
       const playlist = playlists.find(p => p.id === playlistId);
+      if (!playlist) return;
 
       try {
         (target as HTMLButtonElement).disabled = true;
-        const res = await fetch(`/api/my/articles/${articleId}/playlists`, {
+        const res = await fetch(`/api/my/articles/${encodeURIComponent(articleId)}/playlists`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
           body: JSON.stringify({ playlist_id: playlistId })
         });
 
@@ -281,12 +373,12 @@ document.addEventListener('astro:page-load', () => {
           if (!article.playlists) article.playlists = [];
           article.playlists.push({ id: playlist.id, title: playlist.title });
         }
-        
+
         if (activeDropdown) {
           activeDropdown.remove();
           activeDropdown = null;
         }
-        
+
         renderAll();
         showNotification('플레이리스트에 추가되었습니다.', 'success');
       } catch (err) {
@@ -297,9 +389,9 @@ document.addEventListener('astro:page-load', () => {
   });
 
   let notificationTimeout: ReturnType<typeof setTimeout>;
-  function showNotification(message: string, type = 'success') {
+  function showNotification(message: string, type: 'success' | 'error' = 'success') {
     if (!notificationEl) return;
-    
+
     clearTimeout(notificationTimeout);
     notificationEl.className = `page-notification page-notification--${type}`;
     notificationEl.textContent = message;
@@ -315,20 +407,33 @@ document.addEventListener('astro:page-load', () => {
     }, 3000);
   }
 
-  function escapeHtml(unsafe: string) {
-    if (!unsafe) return '';
-    return unsafe
-         .replace(/&/g, "&amp;")
-         .replace(/</g, "&lt;")
-         .replace(/>/g, "&gt;")
-         .replace(/"/g, "&quot;")
-         .replace(/'/g, "&#039;");
+  function escapeHtml(unsafe: unknown) {
+    if (unsafe === null || unsafe === undefined) return '';
+    return String(unsafe)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
   }
 
   function formatDate(iso: string) {
     if (!iso) return '';
     const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return '';
     return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
+  }
+
+  if (retryBtn) {
+    retryBtn.addEventListener('click', () => {
+      init();
+    });
+  }
+
+  if (reloadPlaylistsBtn) {
+    reloadPlaylistsBtn.addEventListener('click', () => {
+      reloadPlaylists();
+    });
   }
 
   init();
@@ -360,6 +465,40 @@ document.addEventListener('astro:page-load', () => {
   flex-direction: column;
   align-items: center;
   gap: var(--space-md);
+}
+
+.state-message p {
+  color: var(--color-text-muted);
+  font-size: 1.05rem;
+}
+
+.error-message {
+  background: rgba(239, 68, 68, 0.05);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.error-message p {
+  color: var(--color-danger);
+}
+
+.inline-warning {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  margin-bottom: var(--space-md);
+  background: rgba(239, 68, 68, 0.05);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font-size: 0.9375rem;
+}
+
+.inline-warning p {
+  margin: 0;
+  color: var(--color-text);
 }
 
 .btn {
@@ -411,6 +550,11 @@ document.addEventListener('astro:page-load', () => {
 
 .btn-secondary:hover:not(:disabled) {
   background: var(--color-border);
+}
+
+.btn-sm {
+  padding: var(--space-xs) var(--space-md);
+  font-size: 0.875rem;
 }
 
 /* 4.10 Content Tabs */
@@ -633,7 +777,7 @@ document.addEventListener('astro:page-load', () => {
     border-bottom: none;
     gap: 0;
   }
-  
+
   .tab-btn {
     width: 100%;
     text-align: left;
@@ -641,10 +785,15 @@ document.addEventListener('astro:page-load', () => {
     padding: var(--space-sm) var(--space-md);
     margin-bottom: 0;
   }
-  
+
   .tab-btn.active {
     border-bottom-color: var(--color-primary);
     background: var(--color-bg-secondary);
+  }
+
+  .inline-warning {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 </style>
