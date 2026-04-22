@@ -1793,6 +1793,120 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
           var sortableInstance = null;
           var originalOrder = [];
 
+          // ---- Custom auto-scroll during drag ------------------------------
+          // WHY CUSTOM: SortableJS's built-in auto-scroll is binary
+          // (scrollSpeed is applied as-is regardless of edge distance; see
+          // AutoScroll.js vy = (...) - (...) line 225 in v1.15.2). Combined
+          // with the sticky `.nav` header (position: sticky, top: 0, height
+          // var(--nav-height) = 60px), the top edge zone is visually
+          // unreachable by the pointer, so the browser's native
+          // drag-at-edge fast-scroll never fires when dragging UP, while it
+          // fires normally when dragging DOWN. The observable symptom was
+          // "downward scroll = slow+very-fast, upward scroll = slow+2x".
+          //
+          // This implementation replaces SortableJS's scroll plugin with a
+          // symmetric gradient using requestAnimationFrame. The effective
+          // top edge is measured from `.nav`'s bounding rect at drag start,
+          // so the sticky header no longer blocks the fast-scroll zone.
+          var AUTO_SCROLL_ZONE = 120;        // px from (effective) edge that triggers scroll
+          var AUTO_SCROLL_MAX_SPEED = 32;    // px/frame at deepest edge (~1920 px/s @ 60fps)
+          var AUTO_SCROLL_MIN_SPEED = 4;     // px/frame at the outer boundary of the zone
+          var autoScrollRaf = 0;
+          var autoScrollPointerY = -1;
+          var autoScrollEffectiveTop = 0;
+          var autoScrollEffectiveBottom = 0;
+
+          function readAutoScrollBounds() {
+            var nav = document.querySelector('.nav');
+            var navBottom = 0;
+            if (nav) {
+              var r = nav.getBoundingClientRect();
+              // getBoundingClientRect gives the current visual rect; for
+              // position:sticky top:0 this is effectively the nav's height
+              // while the header is pinned at the top of the viewport.
+              navBottom = Math.max(0, r.bottom);
+            }
+            autoScrollEffectiveTop = navBottom;
+            autoScrollEffectiveBottom = window.innerHeight;
+          }
+
+          function computeAutoScrollVelocity(pointerY) {
+            if (pointerY < 0) return 0;
+            var zone = AUTO_SCROLL_ZONE;
+            var distFromTop = pointerY - autoScrollEffectiveTop;
+            var distFromBottom = autoScrollEffectiveBottom - pointerY;
+
+            // Upward scroll: pointer within `zone` px of (or above) the
+            // effective top edge. distFromTop can be negative if the
+            // pointer is above the nav bottom — still treat as max speed.
+            if (distFromTop < zone) {
+              var t = distFromTop <= 0 ? 1 : 1 - (distFromTop / zone);
+              // t === 1 at the edge, 0 at the outer boundary.
+              var speed = AUTO_SCROLL_MIN_SPEED + (AUTO_SCROLL_MAX_SPEED - AUTO_SCROLL_MIN_SPEED) * t;
+              return -speed;
+            }
+            // Downward scroll: pointer within `zone` px of (or below) the
+            // effective bottom edge. Symmetric formula.
+            if (distFromBottom < zone) {
+              var b = distFromBottom <= 0 ? 1 : 1 - (distFromBottom / zone);
+              var speedDown = AUTO_SCROLL_MIN_SPEED + (AUTO_SCROLL_MAX_SPEED - AUTO_SCROLL_MIN_SPEED) * b;
+              return speedDown;
+            }
+            return 0;
+          }
+
+          function autoScrollTick() {
+            if (autoScrollRaf === 0) return;
+            // Re-read bounds every frame so that the calculation stays
+            // correct even if the nav collapses/expands mid-drag (mobile).
+            readAutoScrollBounds();
+            var v = computeAutoScrollVelocity(autoScrollPointerY);
+            if (v !== 0) {
+              // Clamp so we don't over-shoot past document boundaries.
+              var maxUp = -window.scrollY;
+              var maxDown = (document.documentElement.scrollHeight - window.innerHeight) - window.scrollY;
+              if (v < maxUp) v = maxUp;
+              if (v > maxDown) v = maxDown;
+              if (v !== 0) window.scrollBy(0, v);
+            }
+            autoScrollRaf = window.requestAnimationFrame(autoScrollTick);
+          }
+
+          function onDragPointerMove(ev) {
+            // pointermove + touchmove both fire during SortableJS fallback
+            // drag (it uses its own fallback clone, so we don't rely on
+            // native HTML5 dragover). Grab clientY from whichever event.
+            var y = -1;
+            if (ev.touches && ev.touches.length > 0) {
+              y = ev.touches[0].clientY;
+            } else if (typeof ev.clientY === 'number') {
+              y = ev.clientY;
+            }
+            if (y >= 0) autoScrollPointerY = y;
+          }
+
+          function startAutoScroll() {
+            if (autoScrollRaf !== 0) return;
+            autoScrollPointerY = -1;
+            readAutoScrollBounds();
+            // passive:true — we never preventDefault; we only observe the
+            // pointer position for scroll velocity computation.
+            window.addEventListener('pointermove', onDragPointerMove, { passive: true });
+            window.addEventListener('touchmove', onDragPointerMove, { passive: true });
+            autoScrollRaf = window.requestAnimationFrame(autoScrollTick);
+          }
+
+          function stopAutoScroll() {
+            if (autoScrollRaf !== 0) {
+              window.cancelAnimationFrame(autoScrollRaf);
+              autoScrollRaf = 0;
+            }
+            window.removeEventListener('pointermove', onDragPointerMove);
+            window.removeEventListener('touchmove', onDragPointerMove);
+            autoScrollPointerY = -1;
+          }
+          // ---- End custom auto-scroll --------------------------------------
+
           function loadSortableJS() {
             if (window.Sortable) return Promise.resolve();
             return new Promise(function(resolve, reject) {
@@ -1825,15 +1939,16 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
                 ghostClass: 'sortable-ghost',
                 chosenClass: 'sortable-chosen',
                 dragClass: 'sortable-drag',
-                // Auto-scroll while dragging near viewport edges. bubbleScroll
-                // propagates to window/body because the page scrolls, not the
-                // .items container. forceAutoScrollFallback ensures consistent
-                // behavior across browsers and touch devices.
-                scroll: true,
-                scrollSensitivity: 80,
-                scrollSpeed: 40,
-                bubbleScroll: true,
-                forceAutoScrollFallback: true
+                // Disable SortableJS's built-in auto-scroll. Its algorithm
+                // applies scrollSpeed as a binary on/off (no gradient), and
+                // the sticky site nav makes the top edge unreachable for
+                // the browser's native drag-scroll fallback — producing a
+                // visibly slower UP-direction scroll. We implement our own
+                // symmetric rAF-based gradient scroller in
+                // startAutoScroll() / autoScrollTick() above.
+                scroll: false,
+                onStart: function() { startAutoScroll(); },
+                onEnd: function() { stopAutoScroll(); }
               });
             }).catch(function() {
               window.alert('드래그 기능을 불러오지 못했습니다. 페이지를 새로고침해주세요.');
@@ -1842,6 +1957,7 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
           }
 
           function exitBatchMode() {
+            stopAutoScroll();
             if (sortableInstance) {
               sortableInstance.destroy();
               sortableInstance = null;

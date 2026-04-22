@@ -98,7 +98,7 @@
   - `.items` 컨테이너에 `.batch-edit-mode` 클래스가 붙어 점선 테두리 + `--color-bg-secondary` 배경 + 단일 열 그리드로 전환된다.
   - `.drag-handle`(`⋮⋮` grip)이 각 카드 좌측에 표시되며, 이 영역에서만 드래그를 개시할 수 있어 스크롤·읽기 중 오동작을 방지한다.
   - 편집 중에는 기사 링크(`.item-title a`)에 `pointer-events: none`이 적용되어 페이지 이탈을 차단하고, `.item-controls`(삭제·메모 버튼)는 숨겨진다.
-- **드래그 자동 스크롤**: 드래그 중 카드를 뷰포트 상/하단 80px 이내로 가져가면 페이지가 자동으로 위/아래로 스크롤된다. SortableJS 옵션 `scroll: true`, `scrollSensitivity: 80`, `scrollSpeed: 20`, `bubbleScroll: true`(window/body에 스크롤 이벤트 전파), `forceAutoScrollFallback: true`(브라우저·터치 일관성)로 활성화된다. 긴 플레이리스트에서도 드래그를 유지한 채 원하는 위치까지 자연스럽게 이동할 수 있으며, 데스크톱 마우스·모바일 터치 모두 동일하게 동작한다.
+- **드래그 자동 스크롤**: 드래그 중 카드를 뷰포트 상/하단 **120px** 이내로 가져가면 페이지가 자동으로 위/아래로 스크롤된다. SortableJS의 내장 `scroll` 플러그인은 **비활성화**(`scroll: false`)하고, `requestAnimationFrame` 기반의 커스텀 오토스크롤러를 `onStart`/`onEnd` 라이프사이클에 연결하여 직접 구현한다. 이유는 (1) SortableJS는 `scrollSpeed`를 **binary(고정 속도 on/off)**로만 적용해 edge에 가까워져도 속도가 증가하지 않고, (2) 사이트 공통 `position: sticky` 네비게이션(`height: var(--nav-height)` = 60px)이 viewport 상단을 가려서 브라우저 네이티브 drag-at-edge fast-scroll이 **위 방향**에서 발동하지 않아 위/아래 스크롤 속도가 비대칭으로 느껴지는 문제가 있었기 때문이다. 커스텀 구현은 드래그 시작 시 `.nav`의 `getBoundingClientRect().bottom`을 **effective top edge**로 사용하여 sticky 헤더 offset을 자동 보정하며, edge와의 거리에 비례한 gradient 속도(`AUTO_SCROLL_MIN_SPEED = 4px/frame` → `AUTO_SCROLL_MAX_SPEED = 32px/frame`)를 적용해 위/아래 모두 **동일하게** 부드럽고 빠르게 스크롤한다. 문서 맨 상단/하단에서는 `window.scrollBy` 전에 `scrollHeight` 기준으로 clamp하여 over-shoot을 방지한다. 긴 플레이리스트에서도 드래그를 유지한 채 원하는 위치까지 자연스럽게 이동할 수 있으며, 데스크톱 마우스·모바일 터치(`pointermove`+`touchmove`) 모두 동일하게 동작한다.
 - **저장 흐름**: `저장` 버튼 → 현재 DOM 순서의 `item_ids` 배열을 `PUT /reorder`로 전송 → 성공 시 `window.location.reload()`로 서버 상태 재동기화.
 - **취소 흐름**: `취소` 버튼 → 진입 시점에 저장한 `originalOrder` 배열대로 DOM 재배치 → SortableJS 인스턴스 destroy → 편집 모드 종료 (API 호출 없음).
 - **실패 처리**: CDN 로드 실패 시 alert + 배치 모드 자동 종료. 저장 API 실패 시 버튼 복구 + alert, 편집 모드 유지하여 재시도 가능.
@@ -289,6 +289,7 @@
 - [플레이리스트 데이터 미스매치 트러블슈팅](../troubleshooting/playlist-data-mismatch.md)
 - [플레이리스트 검색 렌더링·순서 변경 트러블슈팅](../troubleshooting/playlist-detail-search-and-reorder.md)
 - [플레이리스트 기사 링크 홈 리다이렉트 트러블슈팅](../troubleshooting/playlist-article-links-redirect-to-home.md)
+- [배치 편집 드래그 위/아래 스크롤 비대칭 트러블슈팅](../troubleshooting/playlist-batch-edit-drag-scroll-asymmetry.md)
 - [최신순 정렬 및 드래그 재정렬 (ADR 0005)](../decisions/0005-playlist-newest-first-and-drag-reorder.md)
 
 ## 변경 이력
@@ -313,3 +314,4 @@
 | 2026-04-21 | **최신순 정렬 + 드래그 재정렬 전환** — `ORDER BY position DESC`로 정렬 방향 역전, `↑`/`↓` 버튼 전면 제거, `📋 배치 편집` 토글 모드 + SortableJS 드래그 도입, 새 API `PUT /api/playlists/{id}/items/reorder`와 `reorderItems()` 함수 추가 (D1 `batch()`로 원자 position 재할당). DESIGN.md §4.8 Drag Handle, §4.9 Batch Edit Mode, §6 L9 Dragging Elevation 패턴 참조. |
 | 2026-04-21 | 배치 편집 드래그 **자동 스크롤 활성화** — SortableJS `scroll`/`scrollSensitivity: 80`/`scrollSpeed: 20`/`bubbleScroll: true`/`forceAutoScrollFallback: true` 옵션 추가. 드래그 중 뷰포트 가장자리 근처에서 페이지 자동 스크롤되어 긴 플레이리스트의 먼 위치로 드래그 가능. 신규 토큰·UI 변경 없음. |
 | 2026-04-21 | 배치 편집 드래그 자동 스크롤 속도 **2배 가속** — SortableJS `scrollSpeed: 20 → 40` (프레임당 40px, 60fps 기준 약 2,400px/s). 더 높은 속도로 드래그 중 스크롤할 수 있어 긴 플레이리스트 탐색이 더 경쯠해짐. `scrollSensitivity: 80`은 유지 — 감지 영역은 동일, 스크롤 개시 후 만 빠르게 이동.
+| 2026-04-22 | 배치 편집 드래그 자동 스크롤 **위/아래 비대칭 버그 수정 + 커스텀 rAF 구현으로 교체** — SortableJS 내장 `scroll` 플러그인 비활성화(`scroll: false`)하고 `requestAnimationFrame` 기반 gradient 오토스크롤을 `onStart`/`onEnd`에 직접 연결. sticky `.nav` 헤더(60px)가 가리던 위쪽 edge 영역을 `.nav.getBoundingClientRect().bottom`으로 측정한 effective top edge로 보정. zone 120px, 속도 `4 → 32 px/frame` gradient (edge에 가까울수록 빠름). 이전 binary 속도로 인해 위 방향이 느리고 2단 계단식으로 느껴지던 현상 해소, 위/아래 모두 부드럽고 대칭적으로 스크롤됨. 참조: [troubleshooting/playlist-batch-edit-drag-scroll-asymmetry.md](../troubleshooting/playlist-batch-edit-drag-scroll-asymmetry.md).
