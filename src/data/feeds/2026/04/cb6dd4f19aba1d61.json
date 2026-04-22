@@ -12,5 +12,6 @@
     "apple"
   ],
   "published_at": "2026-04-22T04:56:34.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nGUI Agent 분야는 1년 만에 연구실 수준에서 실제 사용 가능한 온디바이스 솔루션으로 발전했으며, Mano-P 프로젝트는 이러한 기술적 진화를 보여주는 구체적인 예시입니다.\n\n## 주요 내용\n\n*   **GUI Agent의 정의 및 접근 방식:** GUI Agent는 AI가 인간처럼 컴퓨터 그래픽 인터페이스를 조작하도록 하는 것을 목표로 하며, API/DOM 기반 방식과 순수 비전 방식의 두 가지 주요 기술 접근 방식이 존재합니다.\n*   **Mano-P 프로젝트:** Mac용 온디바이스 GUI Agent로, 사용자 데이터가 기기 외부로 유출되지 않는 완전한 로컬 실행을 지원합니다.\n*   **Mano-P 학습 파이프라인:** SFT(Supervised Fine-Tuning)로 기본 역량을 구축하고, 오프라인 RL(Reinforcement Learning)로 과거 데이터에서 전략을 최적화하며, 온라인 RL로 실환경 상호작용을 통해 지속적으로 개선하는 3단계 프레임워크를 따릅니다.\n*   **Mano-P 추론 메커니즘:** '생각-실행-검증(Think-Act-Verify)' 루프를 통해 화면 분석, 다음 행동 계획, GUI 조작 실행, 결과 검증 및 자체 수정을 수행하여 오류 발생을 방지합니다.\n*   **핵심 기능:** 복잡한 GUI 자동화, 크로스 시스템 데이터 통합, 장기 작업 계획 및 실행, 지능형 보고서 생성 등의 기능을 제공합니다.\n*   **벤치마크 성능:** OSWorld 벤치마크에서 72B 모델이 58.2%의 성공률로 1위를 차지했으며, WebRetriever Protocol I NavEval에서는 Gemini 2.5 Pro와 Claude 4.5보다 높은 점수를 기록했습니다.\n*   **Edge Deployment:** 4B 양자화 모델(w4a16)은 M4 Pro에서 높은 성능(Prefill Speed 476 tokens/s, Decode Speed 76 tokens/s, Peak Memory 4.3 GB)을 보이며, Apple M4 칩과 32GB RAM 사양으로 완전한 로컬 실행이 가능합니다.\n*   **오픈 소스 공개:** Mano-P는 Apache 2.0 라이선스로 오픈 소스화되어 GitHub에서 접근 및 사용이 가능합니다.\n\n## 시사점\n\nGUI Agent 기술은 매우 빠른 속도로 발전하여 1년 만에 실질적인 온디바이스 솔루션으로 구현되었으며, Mano-P와 같은 오픈 소스 프로젝트는 개발자들이 이 분야를 탐색하고 실험할 수 있는 실질적인 출발점을 제공합니다."
 }
