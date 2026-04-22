@@ -482,11 +482,40 @@ const PAGE_STYLES = `
         align-items: center;
         gap: var(--space-sm);
         margin-bottom: var(--space-md);
+        min-height: 2.25rem; /* prevent layout shift when switching modes */
+      }
+      /* Restore [hidden] behavior: .batch-edit-btn uses .btn's
+         display: inline-flex, and .batch-action-bar sets display: flex,
+         both of which override the user-agent [hidden] rule. We re-apply
+         display: none when the attribute is present so that clicking 배치
+         편집 actually hides it and reveals the action bar (and vice versa). */
+      .batch-edit-btn[hidden],
+      .batch-action-bar[hidden] {
+        display: none !important;
       }
       .batch-action-bar {
         display: flex;
         gap: var(--space-sm);
         align-items: center;
+        /* Subtle entrance when the action bar appears after clicking 배치
+           편집. The button that hides is replaced without layout jump thanks
+           to .items-toolbar min-height. */
+        animation: batch-action-bar-in 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      @keyframes batch-action-bar-in {
+        from {
+          opacity: 0;
+          transform: translateX(6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .batch-action-bar {
+          animation: none;
+        }
       }
       .batch-edit-btn,
       .batch-cancel-btn,
