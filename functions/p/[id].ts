@@ -1797,7 +1797,7 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
           // WHY CUSTOM: SortableJS's built-in auto-scroll is binary
           // (scrollSpeed is applied as-is regardless of edge distance; see
           // AutoScroll.js vy = (...) - (...) line 225 in v1.15.2). Combined
-          // with the sticky `.nav` header (position: sticky, top: 0, height
+          // with the sticky .nav header (position: sticky, top: 0, height
           // var(--nav-height) = 60px), the top edge zone is visually
           // unreachable by the pointer, so the browser's native
           // drag-at-edge fast-scroll never fires when dragging UP, while it
@@ -1806,7 +1806,7 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
           //
           // This implementation replaces SortableJS's scroll plugin with a
           // symmetric gradient using requestAnimationFrame. The effective
-          // top edge is measured from `.nav`'s bounding rect at drag start,
+          // top edge is measured from .nav's bounding rect at drag start,
           // so the sticky header no longer blocks the fast-scroll zone.
           var AUTO_SCROLL_ZONE = 120;        // px from (effective) edge that triggers scroll
           var AUTO_SCROLL_MAX_SPEED = 32;    // px/frame at deepest edge (~1920 px/s @ 60fps)
@@ -1836,7 +1836,7 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
             var distFromTop = pointerY - autoScrollEffectiveTop;
             var distFromBottom = autoScrollEffectiveBottom - pointerY;
 
-            // Upward scroll: pointer within `zone` px of (or above) the
+            // Upward scroll: pointer within zone px of (or above) the
             // effective top edge. distFromTop can be negative if the
             // pointer is above the nav bottom — still treat as max speed.
             if (distFromTop < zone) {
@@ -1845,7 +1845,7 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
               var speed = AUTO_SCROLL_MIN_SPEED + (AUTO_SCROLL_MAX_SPEED - AUTO_SCROLL_MIN_SPEED) * t;
               return -speed;
             }
-            // Downward scroll: pointer within `zone` px of (or below) the
+            // Downward scroll: pointer within zone px of (or below) the
             // effective bottom edge. Symmetric formula.
             if (distFromBottom < zone) {
               var b = distFromBottom <= 0 ? 1 : 1 - (distFromBottom / zone);
