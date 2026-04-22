@@ -12,5 +12,6 @@
     "street view"
   ],
   "published_at": "2026-04-22T12:00:00.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nGoogle이 Cloud Next에서 발표한 새로운 생성형 AI 기능은 기업 사용자를 대상으로 Google 지도 및 지리 공간 앱의 시각적 및 데이터 분석 능력을 강화한다.\n\n## 주요 내용\n\n- **Maps Imagery Grounding**: 사용자가 Gemini Enterprise Agent Platform에 프롬프트를 입력하면, Google Street View 내에 사실적인 장면을 생성하여 영화 세트나 건설 예정지와 같은 프로젝트의 시각화를 돕는다. Veo를 사용하여 장면 애니메이션화도 가능하다.\n- **Aerial and Satellite Insights**: Google Earth의 위성 이미지를 Google Cloud의 BigQuery에서 분석할 수 있게 하여, 기존에 수 주가 소요되던 작업을 몇 분 안에 완료할 수 있도록 한다.\n- **Earth AI Imagery 모델**: 다리를 비롯한 특정 객체를 이미지에서 식별하도록 훈련된 두 개의 새로운 AI 모델을 출시하여, 기업이 자체 AI 시스템 구축에 드는 수개월의 시간과 노력을 절감할 수 있게 한다.\n\n## 시사점\n\n새로운 AI 기능들은 기업, 데이터 분석가, 도시 계획가에게 지리 공간 분석 및 시각화에 대한 새로운 가능성을 열어주며, 기존에는 복잡하고 시간이 많이 소요되었던 작업을 효율화한다."
 }
