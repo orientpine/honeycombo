@@ -425,8 +425,10 @@ transition: background 0.15s, color 0.15s;
 #VM|**툴바 (`.items-toolbar`)**
 #XT|
 #YR|- `display: flex; justify-content: flex-end; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-md);`
+#YR|- `min-height: 2.25rem` 로 모드 전환 시 레이아웃 점프 방지.
 #ZJ|- 평상시: `📋 배치 편집` 버튼 한 개 노출 (§4.2 Inline small button 패턴, `.btn-sm`)
 #YJ|- 편집 중: `.batch-edit-btn`은 `hidden`, `.batch-action-bar` 노출
+#YJ|- **필수**: `.btn` 의 `display: inline-flex` 와 `.batch-action-bar` 의 `display: flex` 가 user-agent 의 `[hidden] { display: none }` 규칙을 덮어쓰므로, `.batch-edit-btn[hidden], .batch-action-bar[hidden] { display: none !important; }` 를 함께 선언해야 HTML `hidden` 속성이 실제로 동작한다. 이 규칙이 빠지면 모드와 관계없이 세 버튼(배치 편집/취소/저장)이 동시에 보인다.
 #WZ|
 #TW|**액션 바 (`.batch-action-bar`)**
 #WS|
@@ -434,6 +436,7 @@ transition: background 0.15s, color 0.15s;
 #BW|- `취소` 버튼: §4.3 Ghost 패턴 (`.btn.btn-sm`, transparent bg → bg-secondary hover)
 #HH|- `저장` 버튼: §4.1 Global `.btn-primary` 패턴 (gradient + warm shadow)
 #VV|- 저장 중에는 `disabled` + `저장 중...` 라벨
+#VV|- **Entrance animation**: 배치 편집 진입 시 `0.18s` spring easing(`cubic-bezier(0.34, 1.56, 0.64, 1)`)으로 opacity 0→1 + `translateX(6px → 0)` 전환. `prefers-reduced-motion: reduce` 에서는 애니메이션 비활성화.
 #YY|
 #ZZ|**상태 전이 요약**
 #ST|
@@ -878,3 +881,4 @@ body with rationale.
 | 2026-04-22 | `/my/articles` 로그인/로딩/에러 상태 버그 수정 — 기존 패턴만 재사용(§4.10 Content Tabs, §4.11 Playlist Badge, §4.12 Page Notification, §4.1/§4.5 Button, §4 Card). 에러 전용 `.state-message.error-message` 변형은 `/my/playlists.astro` 에 이미 존재하던 빨간 tinted 표면 패턴을 동일하게 사용(rgba(239, 68, 68, 0.05) 배경 + 0.2 border). 본문 내 `.inline-warning` 배너는 §4.12 Page Notification 변형으로, 플레이리스트 옵셔널 로드 실패 시에만 노출되고 action 버튼을 포함한다. **신규 토큰 없음.** |
 | 2026-04-22 | 배치 편집 드래그 자동 스크롤 **위/아래 비대칭 버그 수정** — SortableJS 내장 `scroll` 플러그인 비활성화(`scroll: false`)하고 `requestAnimationFrame` 기반 커스텀 gradient 오토스크롤로 교체. sticky `.nav` 헤더(height: `var(--nav-height)` = 60px)가 가리던 위쪽 edge zone을 `.nav.getBoundingClientRect().bottom` 기준 effective top edge로 보정, zone 120px · 속도 `4 → 32 px/frame` 범위의 edge 거리 기반 gradient를 위/아래 동일하게 적용. 신규 CSS 토큰·UI 패턴 없음 — §4.9 Batch Edit Mode의 동작 구현 교체만에 해당. 자세한 원인/설계는 `docs/troubleshooting/playlist-batch-edit-drag-scroll-asymmetry.md` 참조. |
 | 2026-04-22 | 배치 편집 드래그 자동 스크롤 **후속 수정** — 앞 PR에서 `forceFallback: true` 누락으로 HTML5 native drag가 사용되어 브라우저가 드래그 중 `pointermove`를 window로 발화시키지 않아 커스텀 rAF 스크롤러가 `clientY`를 전혀 받지 못하고 **위 방향 자동 스크롤이 완전히 멈추는 회귀**를 일으켰다. Sortable 옵션에 `forceFallback: true` + `fallbackTolerance: 3` 추가(클론 기반 시뮬레이션 드래그로 전환)로 해결. §4.9 동작 수치 유지, 신규 토큰·UI 패턴 없음. |
+| 2026-04-22 | 배치 편집 툴바 **버튼 가시성 버그 수정 + entrance animation 추가** — `.btn { display: inline-flex }` 와 `.batch-action-bar { display: flex }` 가 user-agent의 `[hidden] { display: none }` 규칙을 덮어써서, 배치 편집 진입 전에도 `📋 배치 편집`·`취소`·`저장` 세 버튼이 동시에 보이던 문제. `.batch-edit-btn[hidden], .batch-action-bar[hidden] { display: none !important; }` 명시적으로 override하여 정상 토글로 복구. 추가로 action bar 등장 시 `0.18s` spring easing(`cubic-bezier(0.34, 1.56, 0.64, 1)`) opacity+translateX 전환으로 자연스러운 UX 제공, `prefers-reduced-motion: reduce` 존중. `.items-toolbar { min-height: 2.25rem }` 로 레이아웃 점프 방지. §4.9 Batch Edit Mode 툴바/액션 바 세부 규칙 업데이트, 신규 토큰 없음. |
