@@ -102,6 +102,7 @@ let scrollOffsetY = autoScrolls[this.layer].vy ? autoScrolls[this.layer].vy * sp
 - **Sticky/fixed 헤더가 있는 레이아웃**에서 브라우저의 drag-at-edge fast-scroll에 의존하지 말 것. 헤더 높이를 명시적으로 보정한 effective edge를 사용하자.
 - **SortableJS의 `scrollSpeed`는 gradient가 아니다**. 부드러운 가속감을 원하면 커스텀 스크롤러가 필요하다. `#1907` 이슈가 해결되기 전까지는 동일하다.
 - 커스텀 rAF 스크롤러를 쓸 때는 반드시 (1) 문서 경계 clamp, (2) 드래그 종료/배치 모드 종료에서의 확실한 `cancelAnimationFrame` + 리스너 해제를 보장할 것(메모리 누수/멈춤 방지).
+- **`functions/p/[id].ts`의 SSR 스크립트 블록은 TypeScript template literal 안에 렌더링된다**. 이 안에 추가하는 **주석/문자열에 백틱(`` ` ``)을 쓰면 template literal이 중간에 종료되어 wrangler 배포 시점에 `Expected ":" but found ...` 형태의 파싱 에러가 난다**. 로컬 `bun run build`(Astro)는 이 파일을 건드리지 않고 Cloudflare Pages 배포 단계(`wrangler pages deploy`)에서만 파싱하므로 PR CI에서는 잡히지 않는다. 해결: (a) 주석에서 백틱을 떼고 평문으로 쓰거나, (b) 반드시 써야 하면 `\`` 로 이스케이프. 푸시 전 `npx wrangler pages functions build --outdir=.wrangler-dry` 로 한 번 더 파싱 검증하면 재발 방지된다.
 
 ---
 
