@@ -51,6 +51,26 @@ document.addEventListener('astro:page-load', () => {
 
   let isAuthed = false;
 
+  interface PlaylistListItem {
+    id: string;
+    title: string;
+    description?: string | null;
+    tags?: unknown;
+    item_count?: number;
+    created_at?: string;
+    updated_at?: string;
+    playlist_type?: 'community' | 'editor' | string;
+    visibility?: 'public' | 'unlisted';
+    status?: 'draft' | 'pending' | 'approved' | 'rejected';
+    is_auto_created?: number | boolean | null;
+    playlist_category?: string | null;
+  }
+
+  function isReadLaterPlaylist(playlist: PlaylistListItem) {
+    return playlist.playlist_category === 'read_later'
+      || (Number(playlist.is_auto_created ?? 0) === 1 && playlist.playlist_category === 'read_later');
+  }
+
   async function checkAuthAndLoad() {
     hideAllStates();
     if (loadingEl) loadingEl.style.display = 'block';
@@ -91,7 +111,7 @@ document.addEventListener('astro:page-load', () => {
       }
 
       const data = await res.json();
-      const playlists = data.playlists || [];
+      const playlists: PlaylistListItem[] = Array.isArray(data.playlists) ? data.playlists : [];
 
       hideAllStates();
 
@@ -110,14 +130,15 @@ document.addEventListener('astro:page-load', () => {
     }
   }
 
-  function renderPlaylists(playlists: any[]) {
+  function renderPlaylists(playlists: PlaylistListItem[]) {
     if (!gridEl) return;
     
     gridEl.innerHTML = '';
     
     playlists.forEach(playlist => {
+      const isReadLater = isReadLaterPlaylist(playlist);
       const card = document.createElement('div');
-      card.className = 'card playlist-card';
+      card.className = `card playlist-card${isReadLater ? ' playlist-card-read-later' : ''}`;
       
       const formattedDate = new Date(playlist.updated_at || playlist.created_at).toLocaleDateString('ko-KR', { 
         year: 'numeric', 
@@ -125,15 +146,16 @@ document.addEventListener('astro:page-load', () => {
         day: 'numeric' 
       });
 
-      // Visibility badge
       const isEditor = playlist.playlist_type === 'editor';
       const isPublic = playlist.visibility === 'public' || isEditor;
       const visibilityIcon = isPublic ? '🌐' : '🔒';
       const visibilityText = isPublic ? '공개' : '비공개';
       const visibilityClass = isPublic ? 'badge-public' : 'badge-unlisted';
-      // Status badge (only relevant for public)
+      const safeId = escapeHtml(playlist.id);
+      const safeTitle = escapeHtml(playlist.title || '제목 없음');
+      const safeDescription = typeof playlist.description === 'string' ? playlist.description : '';
       let statusBadgeHtml = '';
-      if (isPublic) {
+      if (isPublic && !isReadLater) {
         const status = playlist.status || 'draft';
         let statusText = '';
         let statusClass = '';
@@ -151,42 +173,49 @@ document.addEventListener('astro:page-load', () => {
           statusText = '반려';
           statusClass = 'badge-rejected';
         }
-        
+
         statusBadgeHtml = `<span class="badge ${statusClass}">${statusText}</span>`;
       }
 
-      // Visibility action button
       let visibilityActionHtml = '';
-      if (!isEditor) {
+      if (!isEditor && !isReadLater) {
         if (!isPublic || playlist.status === 'draft') {
-          visibilityActionHtml = `<button class="btn btn-sm visibility-btn visibility-btn-public" data-id="${playlist.id}" data-visibility="public">🌐 공개 신청</button>`;
+          visibilityActionHtml = `<button class="btn btn-sm visibility-btn visibility-btn-public" data-id="${safeId}" data-visibility="public">🌐 공개 신청</button>`;
         } else if (playlist.status === 'approved') {
-          visibilityActionHtml = `<button class="btn btn-sm visibility-btn visibility-btn-unlisted" data-id="${playlist.id}" data-visibility="unlisted">🔒 비공개로 전환</button>`;
+          visibilityActionHtml = `<button class="btn btn-sm visibility-btn visibility-btn-unlisted" data-id="${safeId}" data-visibility="unlisted">🔒 비공개로 전환</button>`;
         } else if (playlist.status === 'rejected') {
-          visibilityActionHtml = `<button class="btn btn-sm visibility-btn visibility-btn-public" data-id="${playlist.id}" data-visibility="public">🔄 재신청</button>`;
+          visibilityActionHtml = `<button class="btn btn-sm visibility-btn visibility-btn-public" data-id="${safeId}" data-visibility="public">🔄 재신청</button>`;
         }
       }
-      // pending: no action button needed
+
+      const badgesHtml = isReadLater
+        ? '<span class="badge badge-read-later">🔖 나중에 볼 기사</span>'
+        : `
+            <span class="badge ${visibilityClass}">${visibilityIcon} ${visibilityText}</span>
+            ${statusBadgeHtml}
+          `;
+      const deleteActionHtml = isReadLater
+        ? ''
+        : `<button class="btn-icon delete-btn" data-id="${safeId}" aria-label="삭제" title="삭제">🗑️</button>`;
 
       card.innerHTML = `
         <div class="playlist-header">
           <h3 class="playlist-title">
-            <a href="/p/${playlist.id}">${escapeHtml(playlist.title)}</a>
+            <a href="/p/${encodeURIComponent(playlist.id)}">${safeTitle}</a>
             ${isEditor ? '<span class="badge badge-editor">🏷️ 에디터</span>' : ''}
           </h3>
           <div class="playlist-actions">
-            <button class="btn-icon delete-btn" data-id="${playlist.id}" aria-label="삭제" title="삭제">🗑️</button>
+            ${deleteActionHtml}
           </div>
         </div>
         
-        ${playlist.description ? `<p class="playlist-description">${escapeHtml(playlist.description)}</p>` : ''}
+        ${safeDescription ? `<p class="playlist-description">${escapeHtml(safeDescription)}</p>` : ''}
         
         ${renderTags(playlist.tags)}
         
         <div class="playlist-meta">
           <div class="badges">
-            <span class="badge ${visibilityClass}">${visibilityIcon} ${visibilityText}</span>
-            ${statusBadgeHtml}
+            ${badgesHtml}
           </div>
           <span class="playlist-count">${playlist.item_count || 0}개 항목</span>
         </div>
@@ -287,7 +316,7 @@ document.addEventListener('astro:page-load', () => {
          .replace(/'/g, "&#039;");
   }
 
-  function renderTags(tagsData: any) {
+  function renderTags(tagsData: unknown) {
     if (!tagsData) return '';
     let tags: string[] = [];
     if (typeof tagsData === 'string') {
@@ -367,7 +396,12 @@ document.addEventListener('astro:page-load', () => {
   border-radius: var(--radius-md);
   font-weight: 600;
   font-size: 0.95rem;
-  transition: all 0.15s;
+  transition:
+    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    background 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   text-decoration: none;
   border: 1px solid var(--color-border);
   background: var(--color-bg);
@@ -378,6 +412,17 @@ document.addEventListener('astro:page-load', () => {
 .my-playlists-content :global(.btn:hover),
 .header-actions :global(.btn:hover) {
   background: var(--color-bg-secondary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.my-playlists-content :global(.btn:focus-visible),
+.header-actions :global(.btn:focus-visible) {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow:
+    0 0 0 2px var(--color-bg),
+    0 0 0 4px var(--color-primary);
 }
 
 .my-playlists-content :global(.btn-primary),
@@ -409,6 +454,12 @@ document.addEventListener('astro:page-load', () => {
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
+}
+
+.my-playlists-content :global(.playlist-card-read-later) {
+  border-left: 3px solid var(--color-primary);
+  background: linear-gradient(135deg, var(--color-bg-secondary), var(--color-bg));
+  box-shadow: var(--shadow-sm);
 }
 
 .my-playlists-content :global(.playlist-header) {
@@ -504,6 +555,14 @@ document.addEventListener('astro:page-load', () => {
   border-color: rgba(245, 158, 11, 0.2);
 }
 
+.my-playlists-content :global(.badge-read-later) {
+  background: var(--color-bg-secondary);
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
 .my-playlists-content :global(.playlist-tags) {
   display: flex;
   flex-wrap: wrap;
@@ -551,7 +610,11 @@ document.addEventListener('astro:page-load', () => {
   cursor: pointer;
   padding: var(--space-xs);
   border-radius: var(--radius-sm);
-  transition: background 0.2s;
+  transition:
+    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    background 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -561,6 +624,15 @@ document.addEventListener('astro:page-load', () => {
 .my-playlists-content :global(.btn-icon:hover) {
   background: var(--color-bg-secondary);
   opacity: 1;
+  transform: translateY(-1px);
+}
+
+.my-playlists-content :global(.btn-icon:focus-visible) {
+  outline: none;
+  opacity: 1;
+  box-shadow:
+    0 0 0 2px var(--color-bg),
+    0 0 0 4px var(--color-primary);
 }
 
 .my-playlists-content :global(.delete-btn:hover) {
@@ -573,7 +645,12 @@ document.addEventListener('astro:page-load', () => {
   font-weight: 500;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all 0.15s;
+  transition:
+    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    background 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid var(--color-border);
   background: var(--color-bg);
   color: var(--color-text);
@@ -587,6 +664,8 @@ document.addEventListener('astro:page-load', () => {
 
 .my-playlists-content :global(.visibility-btn-public:hover:not(:disabled)) {
   background: rgba(37, 99, 235, 0.2);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
 }
 
 .my-playlists-content :global(.visibility-btn-unlisted) {
@@ -597,6 +676,16 @@ document.addEventListener('astro:page-load', () => {
 .my-playlists-content :global(.visibility-btn-unlisted:hover:not(:disabled)) {
   background: var(--color-bg-secondary);
   border-color: var(--color-text-muted);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.my-playlists-content :global(.visibility-btn:focus-visible) {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow:
+    0 0 0 2px var(--color-bg),
+    0 0 0 4px var(--color-primary);
 }
 
 .my-playlists-content :global(.visibility-btn:disabled) {

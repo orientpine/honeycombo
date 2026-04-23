@@ -1,4 +1,4 @@
-import { deletePlaylist, getPlaylist, updatePlaylist } from '../../../lib/playlists';
+import { deletePlaylist, getPlaylist, ReadLaterProtectedError, updatePlaylist } from '../../../lib/playlists';
 import { validatePlaylistDescription, validatePlaylistTitle } from '../../../lib/validate';
 import type { AppPagesFunction, UpdatePlaylistInput } from '../../../lib/types';
 
@@ -116,7 +116,17 @@ export const onRequest: AppPagesFunction[] = [
         return parsed;
       }
 
-      const playlist = await updatePlaylist(env.DB, playlistId, data.user.id, parsed);
+      let playlist;
+
+      try {
+        playlist = await updatePlaylist(env.DB, playlistId, data.user.id, parsed);
+      } catch (error) {
+        if (error instanceof ReadLaterProtectedError) {
+          return json({ error: '나중에 볼 기사 플레이리스트는 수정할 수 없습니다' }, 403);
+        }
+
+        throw error;
+      }
 
       if (!playlist) {
         return json({ error: 'Forbidden' }, 403);
@@ -130,7 +140,17 @@ export const onRequest: AppPagesFunction[] = [
         return json({ error: 'Unauthorized' }, 401);
       }
 
-      const deleted = await deletePlaylist(env.DB, playlistId, data.user.id);
+      let deleted;
+
+      try {
+        deleted = await deletePlaylist(env.DB, playlistId, data.user.id);
+      } catch (error) {
+        if (error instanceof ReadLaterProtectedError) {
+          return json({ error: '나중에 볼 기사 플레이리스트는 삭제할 수 없습니다' }, 403);
+        }
+
+        throw error;
+      }
 
       if (!deleted) {
         return json({ error: 'Forbidden' }, 403);
