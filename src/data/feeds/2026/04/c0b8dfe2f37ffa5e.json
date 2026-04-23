@@ -12,5 +12,6 @@
     "claude"
   ],
   "published_at": "2026-04-22T18:34:16.000Z",
-  "feed_id": "arstechnica"
+  "feed_id": "arstechnica",
+  "description": "## 개요\n\nAnthropic이 Claude Pro 요금제에서 Claude Code의 접근성을 변경하는 테스트를 진행했으나, 사용자들의 혼란과 불만에 따라 이전 상태로 복구했다.\n\n## 주요 내용\n\n*   Claude Pro 구독자들 사이에서 Claude Code가 더 이상 제공되지 않을 것이라는 인식이 확산되었다.\n*   Anthropic의 가격 페이지는 Claude Code가 Pro 요금제에서 지원되지 않는다고 명시했고, 일부 신규 Pro 사용자들은 Claude Code에 접근할 수 없었다.\n*   Anthropic의 성장 책임자인 Amol Avasare는 이것이 신규 Prosumer 가입자의 약 2%를 대상으로 한 '작은 테스트'였다고 해명했다.\n*   Avasare는 Max 요금제 출시 이후 Claude Code, Cowork, 그리고 장시간 실행되는 에이전트 등 사용자들의 Claude 구독 활용 방식이 근본적으로 변화했기 때문에 요금제 조정을 검토하게 되었다고 설명했다.\n*   테스트 기간 동안 가격 페이지가 변경되었으나, 곧 Claude Code가 Pro 요금제의 일부로 다시 제공된다고 업데이트되었다.\n\n## 시사점\n\nAnthropic의 Claude Code 접근성 테스트는 사용자 경험 변화에 따른 요금제 조정의 필요성을 보여주었으나, 소규모 테스트임에도 불구하고 명확하지 않은 소통 방식은 사용자들의 혼란과 불만을 야기했다."
 }

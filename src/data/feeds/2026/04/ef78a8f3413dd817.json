@@ -12,5 +12,6 @@
     "gemini"
   ],
   "published_at": "2026-04-22T16:46:10.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nGoogle Workspace가 Gmail에 AI Overviews 기능을 추가하여 사용자가 자연어로 질문하고 여러 이메일에서 종합된 답변을 받을 수 있게 되었다.\n\n## 주요 내용\n\n- Gmail에 추가되는 AI Overviews 기능은 Google 검색 결과 요약에 사용되는 AI를 활용하여 Gmail 내에서 이메일 내용을 요약해준다.\n- 사용자는 자연어를 사용하여 업무 관련 질문 (성능 개선, 프로젝트 마일스톤, 송장, 댓글, 여행 정보 등)을 하면, 여러 이메일과 대화에서 종합된 간결한 답변을 즉시 얻을 수 있다.\n- 이 기능은 Gemini for Workspace가 Gmail에서 활성화되어 있고 Workspace Intelligence에 대한 Gmail 접근이 허용된 경우 기본 설정으로 제공된다.\n- 최종 사용자는 \"Gmail, Chat, Meet의 스마트 기능\" 및 \"Google Workspace 스마트 기능\"을 활성화해야 한다.\n- 해당 기능은 이전에 Google AI Pro 및 Ultra 구독자에게 제공되었으며, 이제 비즈니스, 기업 및 교육 고객에게도 확대된다.\n- AI Overviews는 Drive에서도 eligible Workspace 및 Google AI 요금제를 대상으로 광범위하게 제공되며, 이전에는 베타로 운영되었다.\n\n## 시사점\n\nGmail에 AI Overviews가 통합됨으로써 사용자는 이메일 검색 및 정보 습득에 소요되는 시간을 단축하고 업무 효율성을 향상시킬 수 있다."
 }
