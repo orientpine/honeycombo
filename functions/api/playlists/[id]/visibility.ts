@@ -1,4 +1,4 @@
-import { setVisibility } from '../../../lib/playlists';
+import { ReadLaterProtectedError, setVisibility } from '../../../lib/playlists';
 import type { AppPagesFunction } from '../../../lib/types';
 
 function json(data: unknown, status = 200): Response {
@@ -42,7 +42,17 @@ export const onRequest: AppPagesFunction[] = [
         return visibility;
       }
 
-      const playlist = await setVisibility(env.DB, params.id, data.user.id, visibility);
+      let playlist;
+
+      try {
+        playlist = await setVisibility(env.DB, params.id, data.user.id, visibility);
+      } catch (error) {
+        if (error instanceof ReadLaterProtectedError) {
+          return json({ error: '나중에 볼 기사 플레이리스트는 공개 설정을 변경할 수 없습니다' }, 403);
+        }
+
+        throw error;
+      }
 
       if (!playlist) {
         return json({ error: 'Forbidden' }, 403);

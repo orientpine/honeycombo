@@ -1,9 +1,28 @@
 import { generateId } from './id';
-import type { PlaylistDetail, PlaylistItemRow, PlaylistListResponse, PlaylistRow, UserPlaylistWithCount, UserRow } from './types';
+import type {
+  PlaylistCategory,
+  PlaylistDetail,
+  PlaylistItemRow,
+  PlaylistListResponse,
+  PlaylistRow,
+  UserPlaylistWithCount,
+  UserRow,
+} from './types';
 
 type PlaylistWithUserRow = PlaylistRow & Pick<UserRow, 'username' | 'display_name' | 'avatar_url'>;
 
 export type PendingPlaylistRow = PlaylistRow & Pick<UserRow, 'username' | 'avatar_url'>;
+
+/**
+ * Error thrown when attempting to modify or delete a protected auto-playlist.
+ * Currently applies to the 'read_later' category (backs the Bookmark feature).
+ */
+export class ReadLaterProtectedError extends Error {
+  constructor(message = '나중에 볼 기사 플레이리스트는 수정/삭제할 수 없습니다.') {
+    super(message);
+    this.name = 'ReadLaterProtectedError';
+  }
+}
 
 function normalizePage(page: number): number {
   return Number.isFinite(page) && page > 0 ? Math.floor(page) : 1;
@@ -28,10 +47,14 @@ function serializeTags(tags?: string[]): string | null {
   return JSON.stringify(tags.slice(0, 5));
 }
 
+// All SELECT queries that hydrate a full PlaylistRow must project these columns.
+const PLAYLIST_ROW_COLUMNS =
+  'id, user_id, title, description, visibility, status, playlist_type, tags, is_auto_created, playlist_category, created_at, updated_at';
+
 async function getPlaylistRow(db: D1Database, playlistId: string): Promise<PlaylistRow | null> {
   return db
     .prepare(
-      `SELECT id, user_id, title, description, visibility, status, playlist_type, tags, created_at, updated_at
+      `SELECT ${PLAYLIST_ROW_COLUMNS}
        FROM user_playlists
        WHERE id = ?`,
     )
@@ -42,7 +65,8 @@ async function getPlaylistRow(db: D1Database, playlistId: string): Promise<Playl
 export async function listPendingPlaylists(db: D1Database): Promise<PendingPlaylistRow[]> {
   const result = await db
     .prepare(
-      `SELECT p.id, p.user_id, p.title, p.description, p.visibility, p.status, p.playlist_type, p.tags, p.created_at, p.updated_at,
+      `SELECT p.id, p.user_id, p.title, p.description, p.visibility, p.status, p.playlist_type, p.tags,
+              p.is_auto_created, p.playlist_category, p.created_at, p.updated_at,
               u.username, u.avatar_url
        FROM user_playlists p
        JOIN users u ON p.user_id = u.id
@@ -95,8 +119,9 @@ export async function createPlaylist(
 
   await db
     .prepare(
-      `INSERT INTO user_playlists (id, user_id, title, description, visibility, status, playlist_type, tags)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO user_playlists
+         (id, user_id, title, description, visibility, status, playlist_type, tags, is_auto_created, playlist_category)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, NULL)`,
     )
     .bind(id, userId, input.title, input.description ?? null, visibility, status, playlistType, tags)
     .run();
@@ -110,40 +135,90 @@ export async function createPlaylist(
   return playlist;
 }
 
-export async function getOrCreateAutoPlaylist(db: D1Database, userId: string): Promise<PlaylistRow> {
-  const existingPlaylist = await db
-    .prepare('SELECT * FROM user_playlists WHERE user_id = ? ORDER BY updated_at DESC LIMIT 1')
-    .bind(userId)
+/**
+ * Shared helper: find-or-create an auto-playlist with a specific category.
+ * Safe under concurrency thanks to the partial unique index
+ * `uq_user_playlist_category (user_id, playlist_category) WHERE playlist_category IS NOT NULL`.
+ */
+async function getOrCreateCategoryPlaylist(
+  db: D1Database,
+  userId: string,
+  category: PlaylistCategory,
+  title: string,
+): Promise<PlaylistRow> {
+  const existing = await db
+    .prepare(
+      `SELECT ${PLAYLIST_ROW_COLUMNS}
+       FROM user_playlists
+       WHERE user_id = ? AND playlist_category = ?
+       LIMIT 1`,
+    )
+    .bind(userId, category)
     .first<PlaylistRow>();
 
-  if (existingPlaylist) {
-    return existingPlaylist;
-  }
+  if (existing) return existing;
 
   const id = generateId();
-
-  await db
-    .prepare(
-      `INSERT INTO user_playlists (id, user_id, title, visibility, status, playlist_type, is_auto_created)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    )
-    .bind(id, userId, '내 제출 기사', 'unlisted', 'draft', 'community', 1)
-    .run();
-
-  const playlist = await getPlaylistRow(db, id);
-
-  if (!playlist) {
-    throw new Error('Failed to create auto playlist');
+  try {
+    await db
+      .prepare(
+        `INSERT INTO user_playlists
+           (id, user_id, title, visibility, status, playlist_type, is_auto_created, playlist_category)
+         VALUES (?, ?, ?, 'unlisted', 'draft', 'community', 1, ?)`,
+      )
+      .bind(id, userId, title, category)
+      .run();
+  } catch (err) {
+    // Concurrent insert raced us and won the unique index.
+    // Re-fetch the winning row.
+    const winner = await db
+      .prepare(
+        `SELECT ${PLAYLIST_ROW_COLUMNS}
+         FROM user_playlists
+         WHERE user_id = ? AND playlist_category = ?
+         LIMIT 1`,
+      )
+      .bind(userId, category)
+      .first<PlaylistRow>();
+    if (winner) return winner;
+    throw err;
   }
 
+  const playlist = await getPlaylistRow(db, id);
+  if (!playlist) {
+    throw new Error(`Failed to create ${category} auto-playlist`);
+  }
   return playlist;
+}
+
+/**
+ * Get or create the 'submissions' auto-playlist for a user.
+ * Used by the submission-approved webhook to sync approved articles.
+ *
+ * FIXED: previously returned any arbitrary most-recent playlist,
+ * now correctly filters by `playlist_category='submissions'`.
+ */
+export async function getOrCreateAutoPlaylist(db: D1Database, userId: string): Promise<PlaylistRow> {
+  return getOrCreateCategoryPlaylist(db, userId, 'submissions', '내 제출 기사');
+}
+
+/**
+ * Get or create the 'read_later' auto-playlist that backs the Bookmark feature.
+ * Lazily created on first bookmark click.
+ */
+export async function getOrCreateReadLaterPlaylist(db: D1Database, userId: string): Promise<PlaylistRow> {
+  return getOrCreateCategoryPlaylist(db, userId, 'read_later', '나중에 볼 기사');
+}
+
+export function isReadLaterPlaylist(playlist: Pick<PlaylistRow, 'playlist_category'>): boolean {
+  return playlist.playlist_category === 'read_later';
 }
 
 export async function getPlaylist(db: D1Database, playlistId: string): Promise<PlaylistDetail | null> {
   const playlist = await db
     .prepare(
       `SELECT p.id, p.title, p.description, p.visibility, p.status, p.playlist_type, p.tags,
-              p.created_at, p.updated_at,
+              p.is_auto_created, p.playlist_category, p.created_at, p.updated_at,
               u.id AS user_id, u.username, u.display_name, u.avatar_url
        FROM user_playlists p
        INNER JOIN users u ON u.id = p.user_id
@@ -151,7 +226,20 @@ export async function getPlaylist(db: D1Database, playlistId: string): Promise<P
     )
     .bind(playlistId)
     .first<
-      Pick<PlaylistRow, 'id' | 'title' | 'description' | 'visibility' | 'status' | 'playlist_type' | 'tags' | 'created_at' | 'updated_at'> & {
+      Pick<
+        PlaylistRow,
+        | 'id'
+        | 'title'
+        | 'description'
+        | 'visibility'
+        | 'status'
+        | 'playlist_type'
+        | 'tags'
+        | 'is_auto_created'
+        | 'playlist_category'
+        | 'created_at'
+        | 'updated_at'
+      > & {
         user_id: string;
       } & Pick<UserRow, 'username' | 'display_name' | 'avatar_url'>
     >();
@@ -178,6 +266,8 @@ export async function getPlaylist(db: D1Database, playlistId: string): Promise<P
     visibility: playlist.visibility,
     status: playlist.status,
     playlist_type: playlist.playlist_type,
+    playlist_category: playlist.playlist_category,
+    is_auto_created: playlist.is_auto_created,
     tags: parseTags(playlist.tags),
     created_at: playlist.created_at,
     updated_at: playlist.updated_at,
@@ -216,7 +306,7 @@ export async function listPublicPlaylists(
   const result = await db
     .prepare(
       `SELECT p.id, p.user_id, p.title, p.description, p.visibility, p.status, p.playlist_type, p.tags,
-              p.created_at, p.updated_at,
+              p.is_auto_created, p.playlist_category, p.created_at, p.updated_at,
               u.username, u.display_name, u.avatar_url,
               (
                 SELECT COUNT(*)
@@ -242,6 +332,8 @@ export async function listPublicPlaylists(
       status: playlist.status,
       playlist_type: playlist.playlist_type,
       tags: playlist.tags,
+      is_auto_created: playlist.is_auto_created,
+      playlist_category: playlist.playlist_category,
       created_at: playlist.created_at,
       updated_at: playlist.updated_at,
       user: {
@@ -261,6 +353,7 @@ export async function listUserPlaylists(
   db: D1Database,
   userId: string,
   containment?: { source_id: string; item_type: string },
+  excludeCategory?: PlaylistCategory,
 ): Promise<UserPlaylistWithCount[]> {
   const containsItemSelect = containment
     ? `,
@@ -272,20 +365,30 @@ export async function listUserPlaylists(
               ) AS contains_item`
     : '';
 
+  const excludeClause = excludeCategory
+    ? ' AND (p.playlist_category IS NULL OR p.playlist_category != ?)'
+    : '';
+
+  // Pin 'read_later' playlists to the top of the list so the Bookmark
+  // playlist always appears first in /my/playlists.
   const result = await db
     .prepare(
       `SELECT p.id, p.user_id, p.title, p.description, p.visibility, p.status, p.playlist_type, p.tags,
-              p.created_at, p.updated_at,
+              p.is_auto_created, p.playlist_category, p.created_at, p.updated_at,
               (
                 SELECT COUNT(*)
                 FROM playlist_items pi
                 WHERE pi.playlist_id = p.id
               ) AS item_count${containsItemSelect}
        FROM user_playlists p
-       WHERE p.user_id = ?
-       ORDER BY p.updated_at DESC`,
+       WHERE p.user_id = ?${excludeClause}
+       ORDER BY (p.playlist_category = 'read_later') DESC, p.updated_at DESC`,
     )
-    .bind(...(containment ? [containment.item_type, containment.source_id, userId] : [userId]))
+    .bind(
+      ...(containment ? [containment.item_type, containment.source_id] : []),
+      userId,
+      ...(excludeCategory ? [excludeCategory] : []),
+    )
     .all<PlaylistRow & { item_count: number | string; contains_item?: number | boolean }>();
 
   return result.results.map((row): UserPlaylistWithCount => {
@@ -309,6 +412,15 @@ export async function updatePlaylist(
 
   if (ownerId !== userId) {
     return null;
+  }
+
+  // Read Later playlists have a system-managed title and are not user-editable.
+  const row = await db
+    .prepare('SELECT playlist_category FROM user_playlists WHERE id = ?')
+    .bind(playlistId)
+    .first<Pick<PlaylistRow, 'playlist_category'>>();
+  if (row?.playlist_category === 'read_later') {
+    throw new ReadLaterProtectedError();
   }
 
   const updates: string[] = [];
@@ -352,6 +464,15 @@ export async function deletePlaylist(db: D1Database, playlistId: string, userId:
     return false;
   }
 
+  // Guard: protected auto-playlists (read_later) cannot be deleted.
+  const row = await db
+    .prepare('SELECT playlist_category FROM user_playlists WHERE id = ?')
+    .bind(playlistId)
+    .first<Pick<PlaylistRow, 'playlist_category'>>();
+  if (row?.playlist_category === 'read_later') {
+    throw new ReadLaterProtectedError();
+  }
+
   await db.prepare('DELETE FROM user_playlists WHERE id = ?').bind(playlistId).run();
 
   return true;
@@ -369,11 +490,15 @@ export async function setVisibility(
     return null;
   }
 
-  // Check if this is an editor playlist — editor playlists auto-approve
+  // Check playlist type and category: read_later is locked, editor auto-approves.
   const row = await db
-    .prepare('SELECT playlist_type FROM user_playlists WHERE id = ?')
+    .prepare('SELECT playlist_type, playlist_category FROM user_playlists WHERE id = ?')
     .bind(playlistId)
-    .first<Pick<PlaylistRow, 'playlist_type'>>();
+    .first<Pick<PlaylistRow, 'playlist_type' | 'playlist_category'>>();
+
+  if (row?.playlist_category === 'read_later') {
+    throw new ReadLaterProtectedError();
+  }
 
   const isEditor = row?.playlist_type === 'editor';
   const status = visibility === 'public'

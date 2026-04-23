@@ -3,9 +3,13 @@ import { createMockD1 } from '../helpers/d1-mock';
 import {
   createPlaylist,
   deletePlaylist,
+  getOrCreateAutoPlaylist,
+  getOrCreateReadLaterPlaylist,
   getPlaylist,
+  isReadLaterPlaylist,
   listPublicPlaylists,
   listUserPlaylists,
+  ReadLaterProtectedError,
   setVisibility,
   updatePlaylist,
 } from '../../functions/lib/playlists';
@@ -21,6 +25,10 @@ const basePlaylist = {
   description: 'Great links',
   visibility: 'unlisted' as const,
   status: 'draft' as const,
+  playlist_type: 'community' as const,
+  tags: null,
+  is_auto_created: 0,
+  playlist_category: null,
   created_at: '2026-04-12T00:00:00.000Z',
   updated_at: '2026-04-12T00:00:00.000Z',
 };
@@ -64,6 +72,8 @@ describe('playlists repository', () => {
         status: 'approved',
         playlist_type: 'community',
         tags: null,
+        is_auto_created: 0,
+        playlist_category: null,
         created_at: '2026-04-12T00:00:00.000Z',
         updated_at: '2026-04-12T00:00:00.000Z',
         user_id: 'user_1',
@@ -110,6 +120,8 @@ describe('playlists repository', () => {
       visibility: 'public',
       status: 'approved',
       playlist_type: 'community',
+      playlist_category: null,
+      is_auto_created: 0,
       tags: [],
       created_at: '2026-04-12T00:00:00.000Z',
       updated_at: '2026-04-12T00:00:00.000Z',
@@ -220,13 +232,112 @@ describe('playlists repository', () => {
 
     const queries = controller.getQueries();
     expect(queries[0]?.params).toEqual(['user_1']);
-    expect(queries[0]?.sql).toContain('ORDER BY p.updated_at DESC');
+    expect(queries[0]?.sql).toContain("ORDER BY (p.playlist_category = 'read_later') DESC, p.updated_at DESC");
     expect(queries[0]?.sql).toContain('SELECT COUNT(*)');
+  });
+
+  it('listUserPlaylists excludes a category when requested', async () => {
+    controller.setResults([[]]);
+
+    const playlists = await listUserPlaylists(controller.db, 'user_1', undefined, 'read_later');
+
+    expect(playlists).toEqual([]);
+
+    const queries = controller.getQueries();
+    expect(queries[0]?.sql).toContain('AND (p.playlist_category IS NULL OR p.playlist_category != ?)');
+    expect(queries[0]?.params).toEqual(['user_1', 'read_later']);
+  });
+
+  it('getOrCreateReadLaterPlaylist creates a new playlist when missing', async () => {
+    controller.setResults([
+      null,
+      [],
+      {
+        ...basePlaylist,
+        id: 'pl_testid123',
+        title: '나중에 볼 기사',
+        visibility: 'unlisted',
+        status: 'draft',
+        playlist_type: 'community',
+        is_auto_created: 1,
+        playlist_category: 'read_later',
+      },
+    ]);
+
+    const playlist = await getOrCreateReadLaterPlaylist(controller.db, 'user_1');
+
+    expect(playlist).toMatchObject({
+      id: 'pl_testid123',
+      title: '나중에 볼 기사',
+      visibility: 'unlisted',
+      status: 'draft',
+      playlist_type: 'community',
+      is_auto_created: 1,
+      playlist_category: 'read_later',
+    });
+
+    const queries = controller.getQueries();
+    expect(queries[0]?.sql).toContain('WHERE user_id = ? AND playlist_category = ?');
+    expect(queries[0]?.params).toEqual(['user_1', 'read_later']);
+    expect(queries[1]?.sql).toContain('INSERT INTO user_playlists');
+    expect(queries[1]?.params).toEqual(['pl_testid123', 'user_1', '나중에 볼 기사', 'read_later']);
+    expect(queries[2]?.sql).toContain('FROM user_playlists');
+    expect(queries[2]?.params).toEqual(['pl_testid123']);
+  });
+
+  it('getOrCreateReadLaterPlaylist returns existing playlist', async () => {
+    controller.setResults([
+      {
+        ...basePlaylist,
+        id: 'pl_read_later',
+        title: '나중에 볼 기사',
+        is_auto_created: 1,
+        playlist_category: 'read_later',
+      },
+    ]);
+
+    const playlist = await getOrCreateReadLaterPlaylist(controller.db, 'user_1');
+
+    expect(playlist).toMatchObject({
+      id: 'pl_read_later',
+      playlist_category: 'read_later',
+    });
+    expect(controller.getQueries()).toHaveLength(1);
+  });
+
+  it('getOrCreateAutoPlaylist filters by submissions category', async () => {
+    controller.setResults([
+      {
+        ...basePlaylist,
+        id: 'pl_submissions',
+        title: '내 제출 기사',
+        is_auto_created: 1,
+        playlist_category: 'submissions',
+      },
+    ]);
+
+    const playlist = await getOrCreateAutoPlaylist(controller.db, 'user_1');
+
+    expect(playlist).toMatchObject({
+      id: 'pl_submissions',
+      playlist_category: 'submissions',
+    });
+
+    const queries = controller.getQueries();
+    expect(queries[0]?.sql).toContain('WHERE user_id = ? AND playlist_category = ?');
+    expect(queries[0]?.params).toEqual(['user_1', 'submissions']);
+  });
+
+  it('isReadLaterPlaylist detects read_later category only', () => {
+    expect(isReadLaterPlaylist({ playlist_category: 'read_later' })).toBe(true);
+    expect(isReadLaterPlaylist({ playlist_category: null })).toBe(false);
+    expect(isReadLaterPlaylist({ playlist_category: 'submissions' })).toBe(false);
   });
 
   it('updatePlaylist returns updated row for owner', async () => {
     controller.setResults([
       { user_id: 'user_1' },
+      { playlist_category: null },
       [],
       { ...basePlaylist, title: 'Updated title', description: 'Updated description' },
     ]);
@@ -243,8 +354,8 @@ describe('playlists repository', () => {
     });
 
     const queries = controller.getQueries();
-    expect(queries[1]?.sql).toContain('SET title = ?, description = ?, updated_at = CURRENT_TIMESTAMP');
-    expect(queries[1]?.params).toEqual(['Updated title', 'Updated description', 'pl_1']);
+    expect(queries[2]?.sql).toContain('SET title = ?, description = ?, updated_at = CURRENT_TIMESTAMP');
+    expect(queries[2]?.params).toEqual(['Updated title', 'Updated description', 'pl_1']);
   });
 
   it('updatePlaylist returns null for non-owner', async () => {
@@ -258,13 +369,23 @@ describe('playlists repository', () => {
     expect(controller.getQueries()).toHaveLength(1);
   });
 
+  it('updatePlaylist throws for read later playlist', async () => {
+    controller.setResults([{ user_id: 'user_1' }, { playlist_category: 'read_later' }]);
+
+    await expect(
+      updatePlaylist(controller.db, 'pl_1', 'user_1', {
+        title: 'Updated title',
+      }),
+    ).rejects.toBeInstanceOf(ReadLaterProtectedError);
+  });
+
   it('deletePlaylist cascades, returns true for owner, false for non-owner', async () => {
-    controller.setResults([{ user_id: 'user_1' }, []]);
+    controller.setResults([{ user_id: 'user_1' }, { playlist_category: null }, []]);
 
     const deleted = await deletePlaylist(controller.db, 'pl_1', 'user_1');
 
     expect(deleted).toBe(true);
-    expect(controller.getQueries()[1]?.sql).toContain('DELETE FROM user_playlists');
+    expect(controller.getQueries()[2]?.sql).toContain('DELETE FROM user_playlists');
 
     controller.setResults([{ user_id: 'other_user' }]);
 
@@ -273,10 +394,16 @@ describe('playlists repository', () => {
     expect(notDeleted).toBe(false);
   });
 
+  it('deletePlaylist throws for read later playlist', async () => {
+    controller.setResults([{ user_id: 'user_1' }, { playlist_category: 'read_later' }]);
+
+    await expect(deletePlaylist(controller.db, 'pl_1', 'user_1')).rejects.toBeInstanceOf(ReadLaterProtectedError);
+  });
+
   it('setVisibility auto-sets status pending when changing to public', async () => {
     controller.setResults([
       { user_id: 'user_1' },
-      { playlist_type: 'community' },
+      { playlist_type: 'community', playlist_category: null },
       [],
       { ...basePlaylist, visibility: 'public', status: 'pending' },
     ]);
@@ -296,7 +423,7 @@ describe('playlists repository', () => {
   it('setVisibility resets status to draft when changing to unlisted', async () => {
     controller.setResults([
       { user_id: 'user_1' },
-      { playlist_type: 'community' },
+      { playlist_type: 'community', playlist_category: null },
       [],
       { ...basePlaylist, visibility: 'unlisted', status: 'draft' },
     ]);
@@ -308,5 +435,16 @@ describe('playlists repository', () => {
       status: 'draft',
     });
     expect(controller.getQueries()[2]?.params).toEqual(['unlisted', 'draft', 'pl_1']);
+  });
+
+  it('setVisibility throws for read later playlist', async () => {
+    controller.setResults([
+      { user_id: 'user_1' },
+      { playlist_type: 'community', playlist_category: 'read_later' },
+    ]);
+
+    await expect(setVisibility(controller.db, 'pl_1', 'user_1', 'public')).rejects.toBeInstanceOf(
+      ReadLaterProtectedError,
+    );
   });
 });

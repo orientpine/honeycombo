@@ -43,6 +43,8 @@ export interface SessionRow {
   created_at: string;
 }
 
+export type PlaylistCategory = 'read_later' | 'submissions';
+
 export interface PlaylistRow {
   id: string;
   user_id: string;
@@ -52,6 +54,8 @@ export interface PlaylistRow {
   status: 'draft' | 'pending' | 'approved' | 'rejected';
   playlist_type: 'community' | 'editor';
   tags: string | null;
+  is_auto_created: number;
+  playlist_category: PlaylistCategory | null;
   created_at: string;
   updated_at: string;
 }
@@ -132,6 +136,19 @@ export interface UpdateItemInput {
   position?: number;
 }
 
+// Bookmark (Read Later) feature — wraps AddItemInput for toggle semantics
+export interface ToggleBookmarkInput {
+  source_id: string;
+  item_type: 'curated' | 'feed';
+  title_snapshot: string;
+  url_snapshot: string;
+  description_snapshot?: string;
+}
+
+export interface MigrateBookmarksInput {
+  items: ToggleBookmarkInput[];
+}
+
 // ---------------------------------------------------------------------------
 // API response DTOs
 // ---------------------------------------------------------------------------
@@ -142,6 +159,8 @@ export interface PlaylistDetail {
   visibility: 'unlisted' | 'public';
   status: 'draft' | 'pending' | 'approved' | 'rejected';
   playlist_type: 'community' | 'editor';
+  playlist_category: PlaylistCategory | null;
+  is_auto_created: number;
   tags: string[];
   created_at: string;
   updated_at: string;
@@ -167,6 +186,22 @@ export interface PlaylistListResponse {
 export interface LikeStatusResponse {
   liked: boolean;
   like_count: number;
+}
+
+export interface ToggleBookmarkResponse {
+  bookmarked: boolean;
+  playlist_id: string;
+}
+
+export interface BookmarkStatusResponse {
+  bookmarked_ids: string[];
+  playlist_id: string | null;
+}
+
+export interface MigrateBookmarksResponse {
+  imported: number;
+  skipped: number;
+  playlist_id: string;
 }
 
 export interface TrendingPlaylistItem {

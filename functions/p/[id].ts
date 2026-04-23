@@ -1,6 +1,6 @@
 import { getSession } from '../lib/auth';
 import { parseCookies } from '../lib/cookies';
-import { escapeAttr, escapeHtml, stripMd } from '../lib/escape';
+import { escapeAttr, escapeHtml } from '../lib/escape';
 import { renderDocument } from '../lib/layout';
 import { getLikeStatus } from '../lib/likes';
 import { getPlaylist } from '../lib/playlists';
@@ -21,6 +21,10 @@ function canViewPlaylist(playlist: PlaylistDetail, userId?: string): boolean {
   }
 
   return playlist.user.id === userId;
+}
+
+function isReadLaterPlaylist(playlist: PlaylistDetail): boolean {
+  return playlist.playlist_category === 'read_later';
 }
 
 function formatDate(value: string): string {
@@ -173,6 +177,7 @@ function renderItems(items: PlaylistItemRow[], isOwner: boolean, playlistId: str
 }
 
 function renderOwnerControls(playlist: PlaylistDetail): string {
+  const isReadLater = isReadLaterPlaylist(playlist);
   const isUnlisted = playlist.visibility === 'unlisted';
   const isPublicDraft = playlist.visibility === 'public' && playlist.status === 'draft';
   const isPending = playlist.visibility === 'public' && playlist.status === 'pending';
@@ -185,7 +190,9 @@ function renderOwnerControls(playlist: PlaylistDetail): string {
   let visibilityBtnAction = '';
   let visibilityBtnClass = 'btn';
 
-  if (playlist.playlist_type === 'editor') {
+  if (isReadLater) {
+    visibilityTitle = '';
+  } else if (playlist.playlist_type === 'editor') {
     // Editor playlists are always public and approved, no visibility controls needed
     visibilityTitle = '';
   } else if (isUnlisted || isPublicDraft) {
@@ -211,16 +218,24 @@ function renderOwnerControls(playlist: PlaylistDetail): string {
     visibilityBtnAction = 'public';
     visibilityBtnClass = 'btn btn-visibility';
   }
+
+  const ownerDescription = isReadLater
+    ? '북마크한 기사를 정리하고 메모를 남길 수 있습니다.'
+    : '플레이리스트를 계속 편집하거나 삭제할 수 있습니다.';
+  const deleteButton = isReadLater
+    ? ''
+    : '<button type="button" class="btn btn-danger" onclick="deletePlaylist()">삭제</button>';
+
   return `
     <section class="owner-controls card">
       <div>
         <h2>내 플레이리스트 관리</h2>
-        <p>플레이리스트를 계속 편집하거나 삭제할 수 있습니다.</p>
+        <p>${ownerDescription}</p>
       </div>
       <div class="owner-actions">
         <a href="/my/playlists" class="btn">관리 페이지</a>
         <a href="/p/new" class="btn">새 플레이리스트</a>
-        <button type="button" class="btn btn-danger" onclick="deletePlaylist()">삭제</button>
+        ${deleteButton}
       </div>
     </section>
     ${visibilityTitle ? `
@@ -308,6 +323,21 @@ const PAGE_STYLES = `
         margin-bottom: var(--space-xl);
       }
 
+      .playlist-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-xs);
+        margin-bottom: var(--space-sm);
+        padding: 4px 10px;
+        border: 1px solid var(--color-primary);
+        border-radius: 999px;
+        background: var(--color-bg-secondary);
+        color: var(--color-primary);
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+      }
+
       .playlist-title {
         font-size: clamp(2rem, 4vw, 2.75rem);
         line-height: 1.2;
@@ -319,6 +349,11 @@ const PAGE_STYLES = `
         color: var(--color-text-muted);
         font-size: 1.05rem;
         margin-bottom: var(--space-md);
+      }
+
+      .playlist-description-system {
+        color: var(--color-primary);
+        font-weight: 600;
       }
 
       .playlist-meta {
@@ -776,18 +811,19 @@ const PAGE_STYLES = `
       }
 
       .btn-visibility {
-        background: rgba(245, 124, 34, 0.1);
+        background: var(--color-bg-secondary);
         color: var(--color-primary);
-        border-color: rgba(245, 124, 34, 0.2);
+        border-color: var(--color-primary);
         white-space: nowrap;
       }
 
       .btn-visibility:hover {
-        background: rgba(245, 124, 34, 0.2);
+        background: var(--color-bg);
+        box-shadow: var(--shadow-sm);
       }
 
       .btn-danger {
-        border-color: rgba(239, 68, 68, 0.35);
+        border-color: var(--color-danger);
         color: var(--color-danger);
       }
 
@@ -943,6 +979,12 @@ const PAGE_STYLES = `
       .tag-editor-hint {
         font-size: 0.8rem;
         color: var(--color-text-muted);
+      }
+
+      .badge-read-later {
+        background: var(--color-bg-secondary);
+        color: var(--color-primary);
+        border-color: var(--color-primary);
       }
 
       .article-search-section {
@@ -1112,7 +1154,11 @@ function renderStatusPage(status: number, title: string, message: string, canoni
 }
 
 export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
-  const playlistId = params.id;
+  const playlistId = Array.isArray(params.id) ? params.id[0] : params.id;
+
+  if (!playlistId) {
+    return renderStatusPage(404, '플레이리스트를 찾을 수 없습니다', '요청하신 플레이리스트가 존재하지 않거나 삭제되었습니다.', getCanonicalUrl(request.url, ''));
+  }
 
   // /p/new is a static Astro page — delegate to static asset serving
   if (playlistId === 'new') {
@@ -1143,6 +1189,7 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
 
   const description = getDescription(playlist);
   const ownerName = getOwnerName(playlist);
+  const isReadLater = isReadLaterPlaylist(playlist);
   const visibleName = playlist.user.display_name?.trim()
     ? `${playlist.user.display_name} (@${playlist.user.username})`
     : `@${playlist.user.username}`;
@@ -1159,12 +1206,17 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
     body: `
       <article class="playlist-detail">
         <header class="playlist-header">
+          ${isReadLater ? '<span class="playlist-kicker">🔖 나중에 볼 기사</span>' : ''}
           <h1 class="playlist-title">${escapeHtml(playlist.title)}</h1>
-          ${playlist.description ? `<p class="playlist-description">${escapeHtml(playlist.description)}</p>` : ''}
+          ${isReadLater
+            ? '<p class="playlist-description playlist-description-system">북마크한 기사가 자동으로 모입니다.</p>'
+            : playlist.description ? `<p class="playlist-description">${escapeHtml(playlist.description)}</p>` : ''}
           <div class="playlist-meta">
             <span class="playlist-owner">${renderAvatar(playlist)}<span>by ${escapeHtml(visibleName)}</span></span>
             <span class="meta-text">${playlist.items.length}개 기사</span>
-            <span class="badge">${escapeHtml(getVisibilityLabel(playlist))}</span>
+            ${isReadLater
+              ? '<span class="badge badge-read-later">🔖 나중에 볼 기사</span>'
+              : `<span class="badge">${escapeHtml(getVisibilityLabel(playlist))}</span>`}
             ${playlist.playlist_type === 'editor' ? '<span class="badge badge-editor">🏷️ 에디터 큐레이션</span>' : ''}
             <time class="updated-at">최종 업데이트: ${escapeHtml(formatDate(playlist.updated_at))}</time>
           </div>
@@ -1188,7 +1240,7 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
             </div>
           ` : ''}
           ${playlist.tags && playlist.tags.length > 0 ? `<div class="playlist-tags">${playlist.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
-          <p class="meta-text">${escapeHtml(ownerName)}가 모은 기술 콘텐츠를 한 번에 확인해보세요.</p>
+          <p class="meta-text">${isReadLater ? '북마크 버튼으로 저장한 기사가 이곳에 자동으로 추가됩니다.' : `${escapeHtml(ownerName)}가 모은 기술 콘텐츠를 한 번에 확인해보세요.`}</p>
         </header>
         ${isOwner && playlist.items.length > 1 ? `
           <div class="items-toolbar">

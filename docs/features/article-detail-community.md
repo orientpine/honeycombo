@@ -11,12 +11,12 @@
 ```
 기사 상세페이지 로드
   → astro:page-load 이벤트 발생
-  → BookmarkButton: localStorage에서 북마크 상태 복원
+  → BookmarkButton: sessionStorage 또는 API에서 북마크 상태 복원 (미로그인 시 localStorage 마이그레이션 체크)
   → Giscus: 동적으로 script 요소 생성 → iframe 렌더링
   → ShareButtons: 클릭 시 clipboard/window.open/navigator.share
 
 기사 목록 페이지 로드
-  → BookmarkButton: localStorage에서 전체 북마크 상태 복원
+  → BookmarkButton: sessionStorage 또는 API에서 전체 북마크 상태 복원
   → IntersectionObserver: 뷰포트 진입 카드에 대해 Giscus API fetch
   → sessionStorage 캐시 확인 → 없으면 API 호출 → 댓글 수 표시
 ```
@@ -32,10 +32,12 @@
 
 ### 2. 북마크 (BookmarkButton)
 
-- **localStorage 기반**: `honeycombo:bookmarks` 키에 기사 ID 배열 저장
-- **하트 아이콘 토글**: outline ↔ filled, 핑크 컬러 (#e74c6f)
+- **D1 플레이리스트 기반**: 북마크는 로그인 사용자의 '나중에 볼 기사' private 플레이리스트에 저장된다.
+- **책갈피 아이콘 토글**: outline ↔ filled, primary 컬러 (`var(--color-primary)`)
 - **동기화**: 같은 페이지 내 동일 기사의 북마크 버튼 자동 동기화
+- **로그인 필수**: 미로그인 시 클릭하면 로그인 페이지로 리다이렉트된다.
 - 상세페이지: `size="md"` (액션 바), 목록 카드: `size="sm"` (아이콘만)
+- 상세 내용은 [북마크 — 나중에 볼 기사](./bookmark-read-later.md) 참조.
 
 ### 3. 관련 기사 개선 (RelatedArticles)
 
@@ -81,18 +83,15 @@
 
 | 이름 | 위치 | 기본값 | 설명 |
 |------|------|--------|------|
-| `honeycombo:bookmarks` | localStorage | `[]` | 북마크된 기사 ID 배열 |
+| `honeycombo:bookmark-ids` | sessionStorage | `[]` | 북마크 상태 캐시 (API 응답 캐시) |
+| `honeycombo:bookmarks` | localStorage (legacy) | — | 구버전 북마크, 첫 로그인 시 자동 마이그레이션 후 제거 |
 | `honeycombo:comment-counts` | sessionStorage | `{}` | 댓글 수 캐시 (path → count) |
 | `REPO_ID` | `Comments.astro` | `R_kgDOR_fpgQ` | GitHub repo ID (Giscus) |
 | `CATEGORY_ID` | `Comments.astro` | `DIC_kwDOR_fpgc4C6lgR` | GitHub Discussions category ID |
 
-- **북마크를 localStorage로 구현**: 서버 비용 없이 즉시 동작. 크로스 디바이스는 기존 플레이리스트 기능으로 대체 가능.
-- **댓글 수를 클라이언트에서 fetch**: SSG 빌드 시점에 GitHub API 토큰 불필요. IntersectionObserver + sessionStorage로 성능 최적화.
-- **Giscus를 `astro:page-load`로 초기화**: View Transitions(ClientRouter) 호환. 기존 `is:inline` + 외부 스크립트 방식은 페이지 전환 시 재초기화 실패.
-
 ## 제약 사항
 
-- 북마크는 디바이스별 저장 (localStorage). 로그인 연동 미구현.
+- 북마크는 로그인 사용자의 '나중에 볼 기사' private 플레이리스트에 저장된다. 미로그인 시 클릭하면 로그인 페이지로 리다이렉트된다. (D1 기반 동기화 지원)
 - 댓글 수는 Giscus API 응답 속도에 의존 (보통 100~300ms).
 - Giscus Discussion이 아직 생성되지 않은 기사는 댓글 수 0 표시.
 
@@ -101,6 +100,7 @@
 ## 관련 문서
 
 - [아키텍처 개요](../architecture/overview.md)
+- [북마크 — 나중에 볼 기사](./bookmark-read-later.md)
 
 ## 변경 이력
 
@@ -108,3 +108,4 @@
 |------|----------|
 | 2026-04-14 | 최초 작성 |
 | 2026-04-14 | 에디터 추천 뱃지 추가 (ArticleCard, TagFilter), 댓글 UI 개선 (Comments) |
+| 2026-04-23 | 북마크를 localStorage에서 D1 기반 '나중에 볼 기사' 플레이리스트로 마이그레이션 |

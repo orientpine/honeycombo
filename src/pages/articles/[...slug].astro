@@ -77,7 +77,13 @@ const pageUrl = new URL(canonicalPath, 'https://honeycombo.pages.dev').href;
 
     <div class="article-actions">
       <div class="actions-left">
-        <BookmarkButton articleId={entry.id} />
+        <BookmarkButton
+          articleId={entry.id}
+          title={article.title}
+          url={article.url}
+          description={article.description}
+          sourceType={sourceType}
+        />
         <ShareButtons title={article.title} url={pageUrl} />
       </div>
       <AddToPlaylist 

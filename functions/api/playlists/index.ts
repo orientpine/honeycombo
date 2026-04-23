@@ -1,7 +1,9 @@
 import { isAdmin } from '../../lib/admin';
 import { createPlaylist, listPublicPlaylists, listUserPlaylists } from '../../lib/playlists';
 import { validatePlaylistDescription, validatePlaylistTitle } from '../../lib/validate';
-import type { AppPagesFunction, CreatePlaylistInput } from '../../lib/types';
+import type { AppPagesFunction, CreatePlaylistInput, PlaylistCategory } from '../../lib/types';
+
+const PLAYLIST_CATEGORIES: PlaylistCategory[] = ['read_later', 'submissions'];
 
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
@@ -110,6 +112,7 @@ export const onRequest: AppPagesFunction[] = [
       const sourceId = url.searchParams.get('source_id');
       const itemType = url.searchParams.get('item_type');
       const typeParam = url.searchParams.get('type');
+      const excludeCategoryParam = url.searchParams.get('exclude_category');
 
       if (mine) {
         if (!data.user) {
@@ -117,7 +120,8 @@ export const onRequest: AppPagesFunction[] = [
         }
 
         const containment = sourceId && itemType ? { source_id: sourceId, item_type: itemType } : undefined;
-        const playlists = await listUserPlaylists(env.DB, data.user.id, containment);
+        const excludeCategory = PLAYLIST_CATEGORIES.find((category) => category === excludeCategoryParam);
+        const playlists = await listUserPlaylists(env.DB, data.user.id, containment, excludeCategory);
         return json({ playlists });
       }
 
