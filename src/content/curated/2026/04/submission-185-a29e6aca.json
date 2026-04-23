@@ -1,0 +1,19 @@
+{
+  "id": "submission-185-a29e6aca",
+  "title": "NVIDIA·Technion·IBM Research가 TMLR 2025에 발표한 Deep Neural Lesion(DNL) 논문.",
+  "url": "https://mkimhi.github.io/DNL/",
+  "source": "User Submission",
+  "type": "article",
+  "description": "## 개요\n\nNVIDIA·Technion·IBM Research가 TMLR 2025에 발표한 Deep Neural Lesion(DNL) 논문. 학습 데이터도, 최적화도 없이 모델 가중치의 부호 비트(sign bit)만 1~2개 뒤집어도 신경망이 catastrophically 무력화됨을 입증. Featured Certification 수상.\n\n## 주요 내용\n\n- **공격 모델**: 가중치 저장소에 대한 write 권한만 필요. Rowhammer, DMA 공격, 펌웨어 익스플로잇 등 현실 위협 시나리오 가정.\n- **두 가지 변형**: Pass-Free DNL(연산 0)과 Enhanced 1-Pass DNL(랜덤 입력으로 1회 forward+backward).\n- **비전 모델**: ResNet-50은 2 flips로 76.1% → 0.0% 붕괴. Mask R-CNN/YOLOv8-seg는 backbone에 1~2 flips로 detection·segmentation 완전 실패.\n- **언어 모델**: Qwen3-30B-A3B(MoE)는 2 flips(다른 expert)로 78% → 0% reasoning. Nemotron 8B는 32 flips로 완전 붕괴. 결과는 graceful degradation이 아닌 반복적 무의미 텍스트 생성.\n- **핵심 패턴**: 초기 레이어의 고-크기(high-magnitude) 가중치가 보편적으로 치명적. CNN/Transformer/MoE 모두 동일.\n- **방어**: 상위 0.1~1% 가중치만 선택적으로 강화하면 회복력 확보. 양자화·프루닝·단순 체크섬은 무력화됨.\n\n## 시사점\n\nAI 인프라 보안의 새 패러다임이 필요. 모델 가중치 저장소 자체가 공격 표면이며, 단순 SHA256 체크섬으로는 개별 sign bit 변조를 막기 어렵다. MoE 아키텍처는 expert 라우팅이 단일 실패점(SPOF)이 되어 효율성과 보안성의 트레이드오프 재검토 필요. 클라우드 GPU 멀티테넌트 환경에서 모델 위탁 운영의 신뢰 모델을 재검토해야 하며, 상위 0.1% 핵심 가중치를 ROM/TEE에 격리하는 하드웨어 통합 방어와 Merkle tree 기반 가중치별 서명이 새로운 표준이 될 가능성이 있다. 공격은 0% 데이터로, 방어는 1% 가중치만 지키면 되는 비대칭 구조는 흥미로운 방어 경제학을 시사한다.",
+  "tags": [
+    "ai-security",
+    "neural-networks",
+    "adversarial-attack",
+    "bit-flip-attack",
+    "llm"
+  ],
+  "submitted_by": "orientpine",
+  "submitted_by_id": "32758428",
+  "submitted_at": "2026-04-23T01:03:20.161Z",
+  "status": "approved"
+}
