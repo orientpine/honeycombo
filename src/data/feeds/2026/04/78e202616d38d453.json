@@ -12,5 +12,6 @@
     "context ai"
   ],
   "published_at": "2026-04-23T14:00:00.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\n보안 인증 스타트업 Delve는 고객사인 Context AI의 보안 인증을 담당했으며, Context AI는 Delve를 통해 Vercel의 데이터 유출 사고에 간접적으로 연루되었다.\n\n## 주요 내용\n\n*   **Delve의 고객사 Context AI, Vercel 데이터 유출 사고와 연관:** Delve는 AI 에이전트 훈련 스타트업인 Context AI의 보안 인증을 수행했다. Context AI는 최근 Vercel의 데이터 유출 사고에 연루되었는데, Context AI가 만든 앱을 Vercel 직원이 다운로드하여 연동한 것이 해킹의 발단이 되었다.\n*   **Context AI, Delve와의 관계 종료 및 재인증 절차 진행:** Vercel 사고 이후 Context AI는 Delve를 더 이상 고객으로 유지하지 않고 Vanta와 Insight Assurance로 전환하여 재인증 절차를 진행 중임을 확인했다.\n*   **Delve의 과거 논란 및 다른 고객사의 보안 사고:** Delve는 익명의 내부 고발자에 의해 고객 데이터 위조 및 형식적인 감사 진행 의혹을 받은 바 있으며, 이는 Y Combinator와의 관계 단절로 이어졌다. 또한, Delve 고객사인 LiteLLM은 악성코드 감염 사고 이후 Delve와의 관계를 끊고 재인증을 진행하고 있다.\n*   **또 다른 Delve 고객사 Lovable의 보안 사고:** Lovable은 Delve를 고객으로 두었으나, Delve의 의혹 제기 후 Delve와의 관계를 종료하고 재인증을 진행했다. 그럼에도 불구하고 Lovable은 최근 고객 채팅 데이터에 대한 접근 권한을 공개적으로 노출시키는 보안 사고를 겪었으며, 이는 구성 오류로 인한 것이라고 밝혔다.\n*   **Delve 관련 추가 의혹 제기:** Delve는 고객에게 환불을 거부하면서도 하와이 오프사이트 회의를 진행했다는 의혹이 익명의 내부 고발자에 의해 추가로 제기되었다.\n\n## 시사점\n\nDelve와 관련된 일련의 보안 사고와 의혹은 보안 인증 자체가 보안 문제 발생을 완전히 막아주지 못하며, 고객사의 보안 관리 및 위협 대응 능력 또한 중요함을 시사한다."
 }
