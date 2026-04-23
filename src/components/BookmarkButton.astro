@@ -1,71 +1,354 @@
 ---
 interface Props {
   articleId: string;
+  title: string;
+  url: string;
+  description?: string;
+  sourceType: 'curated' | 'feed';
   size?: 'sm' | 'md';
 }
-const { articleId, size = 'md' } = Astro.props;
+
+const { articleId, title, url, description, sourceType, size = 'md' } = Astro.props;
 const iconSize = size === 'sm' ? 14 : 18;
 ---
 
 <button
   class:list={['bookmark-btn', `bookmark-${size}`]}
   data-bookmark-id={articleId}
+  data-bookmark-title={title}
+  data-bookmark-url={url}
+  data-bookmark-description={description ?? ''}
+  data-bookmark-source-type={sourceType}
   title="북마크"
   aria-label="북마크"
+  aria-pressed="false"
 >
   <svg class="bookmark-icon-outline" width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
   </svg>
   <svg class="bookmark-icon-filled" width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
   </svg>
 </button>
 
 <script>
-  const STORAGE_KEY = 'honeycombo:bookmarks';
+  const SESSION_CACHE_KEY = 'honeycombo:bookmark-ids';
+  const LEGACY_STORAGE_KEY = 'honeycombo:bookmarks';
 
-  function getBookmarks(): string[] {
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
-    catch { return []; }
+  type BookmarkSourceType = 'curated' | 'feed';
+
+  interface BookmarkIdsResponse {
+    bookmarked_ids?: unknown;
+    playlist_id?: string | null;
   }
 
-  function setBookmarks(ids: string[]) {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(ids)); }
-    catch { /* storage full or unavailable */ }
+  interface MigrateBookmarksResponse {
+    imported?: unknown;
+    skipped?: unknown;
+    playlist_id?: string;
   }
 
-  function initBookmarkButtons() {
-    const bookmarks = getBookmarks();
-    document.querySelectorAll<HTMLButtonElement>('[data-bookmark-id]').forEach(btn => {
-      const id = btn.dataset.bookmarkId!;
-      btn.classList.toggle('bookmarked', bookmarks.includes(id));
+  interface LegacyArticle {
+    _id?: unknown;
+    origin?: unknown;
+    title?: unknown;
+    url?: unknown;
+    description?: unknown;
+  }
 
-      // Avoid duplicate listeners by checking init flag
-      if (btn.dataset.bookmarkInit) return;
-      btn.dataset.bookmarkInit = 'true';
+  interface BookmarkTogglePayload {
+    source_id: string;
+    item_type: BookmarkSourceType;
+    title_snapshot: string;
+    url_snapshot: string;
+    description_snapshot?: string;
+  }
 
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const current = getBookmarks();
-        const idx = current.indexOf(id);
-        if (idx >= 0) {
-          current.splice(idx, 1);
-        } else {
-          current.push(id);
+  interface BookmarkButtonWindow extends Window {
+    __initBookmarkButtons?: () => Promise<void>;
+  }
+
+  let cachedIds: Set<string> | null = null;
+  let pendingStatusFetch: Promise<Set<string> | null> | null = null;
+  const toastTimers = new WeakMap<HTMLDivElement, number>();
+
+  async function fetchBookmarkIds(): Promise<Set<string> | null> {
+    if (cachedIds) return cachedIds;
+    if (pendingStatusFetch) return pendingStatusFetch;
+
+    pendingStatusFetch = (async () => {
+      try {
+        try {
+          const raw = sessionStorage.getItem(SESSION_CACHE_KEY);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed)) {
+              cachedIds = new Set(parsed.map((value) => String(value)));
+              return cachedIds;
+            }
+          }
+        } catch {
+          // Ignore storage parse errors.
         }
-        setBookmarks(current);
-        btn.classList.toggle('bookmarked', current.includes(id));
 
-        // Sync all bookmark buttons with the same ID on the page
-        document.querySelectorAll<HTMLButtonElement>(`[data-bookmark-id="${id}"]`).forEach(other => {
-          if (other !== btn) other.classList.toggle('bookmarked', current.includes(id));
+        try {
+          const res = await fetch('/api/bookmarks/ids', { credentials: 'same-origin' });
+
+          if (res.status === 401) {
+            cachedIds = new Set();
+            return null;
+          }
+
+          if (!res.ok) {
+            cachedIds = new Set();
+            return cachedIds;
+          }
+
+          const data: BookmarkIdsResponse = await res.json();
+          const ids = new Set<string>(
+            Array.isArray(data.bookmarked_ids)
+              ? data.bookmarked_ids.map((value) => String(value))
+              : [],
+          );
+
+          cachedIds = ids;
+
+          try {
+            sessionStorage.setItem(SESSION_CACHE_KEY, JSON.stringify([...ids]));
+          } catch {
+            // Ignore storage write errors.
+          }
+
+          void maybeMigrateLegacyBookmarks();
+
+          return ids;
+        } catch {
+          cachedIds = new Set();
+          return cachedIds;
+        }
+      } finally {
+        pendingStatusFetch = null;
+      }
+    })();
+
+    return pendingStatusFetch;
+  }
+
+  function invalidateBookmarkCache(updatedIds: Set<string>) {
+    cachedIds = updatedIds;
+    pendingStatusFetch = null;
+
+    try {
+      sessionStorage.setItem(SESSION_CACHE_KEY, JSON.stringify([...updatedIds]));
+    } catch {
+      // Ignore storage write errors.
+    }
+  }
+
+  async function maybeMigrateLegacyBookmarks() {
+    try {
+      const raw = localStorage.getItem(LEGACY_STORAGE_KEY);
+      if (!raw) return;
+
+      const legacy = JSON.parse(raw);
+      if (!Array.isArray(legacy) || legacy.length === 0) {
+        localStorage.removeItem(LEGACY_STORAGE_KEY);
+        return;
+      }
+
+      const items: BookmarkTogglePayload[] = [];
+      const dataEl = document.getElementById('all-articles-data');
+      const allArticles: LegacyArticle[] = dataEl
+        ? (() => {
+            try {
+              const parsed = JSON.parse(dataEl.textContent || '[]');
+              return Array.isArray(parsed) ? parsed : [];
+            } catch {
+              return [];
+            }
+          })()
+        : [];
+      const lookup = new Map<string, LegacyArticle>();
+
+      for (const article of allArticles) {
+        if (article && article._id) {
+          lookup.set(String(article._id), article);
+        }
+      }
+
+      for (const id of legacy.slice(0, 200)) {
+        const article = lookup.get(String(id));
+        if (!article) continue;
+
+        const itemType: BookmarkSourceType = article.origin === 'feed' ? 'feed' : 'curated';
+        items.push({
+          source_id: String(id),
+          item_type: itemType,
+          title_snapshot: String(article.title ?? 'Untitled'),
+          url_snapshot: String(article.url ?? ''),
+          description_snapshot: article.description ? String(article.description) : undefined,
         });
+      }
+
+      if (items.length === 0) {
+        localStorage.removeItem(LEGACY_STORAGE_KEY);
+        return;
+      }
+
+      const res = await fetch('/api/bookmarks/migrate', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items }),
+      });
+
+      if (!res.ok) return;
+
+      const result: MigrateBookmarksResponse = await res.json();
+      const imported = Number(result.imported ?? 0);
+
+      if (imported > 0) {
+        showBookmarkToast(`${imported}개의 북마크를 '나중에 볼 기사'로 옮겼습니다.`);
+        cachedIds = null;
+        pendingStatusFetch = null;
+        sessionStorage.removeItem(SESSION_CACHE_KEY);
+        await fetchBookmarkIds();
+        syncAllButtons();
+      }
+
+      localStorage.removeItem(LEGACY_STORAGE_KEY);
+    } catch (err) {
+      console.warn('bookmark migration failed', err);
+    }
+  }
+
+  function showBookmarkToast(message: string, isError = false) {
+    let toast = document.getElementById('bookmark-toast') as HTMLDivElement | null;
+
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'bookmark-toast';
+      toast.className = 'bookmark-toast';
+      document.body.appendChild(toast);
+    }
+
+    toast.textContent = message;
+    toast.classList.toggle('error', isError);
+    toast.classList.add('visible');
+
+    const previousTimer = toastTimers.get(toast);
+    if (previousTimer !== undefined) {
+      window.clearTimeout(previousTimer);
+    }
+
+    const nextTimer = window.setTimeout(() => {
+      toast?.classList.remove('visible');
+    }, 3000);
+
+    toastTimers.set(toast, nextTimer);
+  }
+
+  function syncAllButtons() {
+    const ids = cachedIds ?? new Set<string>();
+
+    document.querySelectorAll<HTMLButtonElement>('[data-bookmark-id]').forEach((btn) => {
+      const id = btn.dataset.bookmarkId;
+      if (!id) return;
+
+      const isBookmarked = ids.has(id);
+      btn.classList.toggle('bookmarked', isBookmarked);
+      btn.setAttribute('aria-pressed', isBookmarked ? 'true' : 'false');
+    });
+  }
+
+  async function handleBookmarkClick(btn: HTMLButtonElement, ev: MouseEvent) {
+    ev.preventDefault();
+    ev.stopPropagation();
+
+    const id = btn.dataset.bookmarkId;
+    if (!id) return;
+
+    const title = btn.dataset.bookmarkTitle || '';
+    const url = btn.dataset.bookmarkUrl || '';
+    const description = btn.dataset.bookmarkDescription || undefined;
+    const sourceType = (btn.dataset.bookmarkSourceType as BookmarkSourceType | undefined) || 'curated';
+
+    const currentlyOn = btn.classList.contains('bookmarked');
+    const nextState = !currentlyOn;
+
+    btn.classList.toggle('bookmarked', nextState);
+    btn.setAttribute('aria-pressed', nextState ? 'true' : 'false');
+    btn.disabled = true;
+
+    try {
+      const res = await fetch('/api/bookmarks/toggle', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          source_id: id,
+          item_type: sourceType,
+          title_snapshot: title,
+          url_snapshot: url,
+          description_snapshot: description,
+        }),
+      });
+
+      if (res.status === 401) {
+        btn.classList.toggle('bookmarked', currentlyOn);
+        btn.setAttribute('aria-pressed', currentlyOn ? 'true' : 'false');
+
+        const returnTo = encodeURIComponent(window.location.pathname + window.location.search);
+        window.location.href = `/api/auth/github/login?return_to=${returnTo}`;
+        return;
+      }
+
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
+
+      const data = await res.json() as { bookmarked?: unknown };
+      const bookmarked = Boolean(data.bookmarked);
+      const nextSet = new Set(cachedIds ?? []);
+
+      if (bookmarked) {
+        nextSet.add(id);
+      } else {
+        nextSet.delete(id);
+      }
+
+      invalidateBookmarkCache(nextSet);
+
+      document.querySelectorAll<HTMLButtonElement>('[data-bookmark-id]').forEach((other) => {
+        if (other.dataset.bookmarkId !== id) return;
+        other.classList.toggle('bookmarked', bookmarked);
+        other.setAttribute('aria-pressed', bookmarked ? 'true' : 'false');
+      });
+    } catch (err) {
+      console.error('bookmark toggle failed', err);
+      btn.classList.toggle('bookmarked', currentlyOn);
+      btn.setAttribute('aria-pressed', currentlyOn ? 'true' : 'false');
+      showBookmarkToast('북마크 처리에 실패했습니다.', true);
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  async function initBookmarkButtons() {
+    await fetchBookmarkIds();
+    syncAllButtons();
+
+    document.querySelectorAll<HTMLButtonElement>('[data-bookmark-id]').forEach((btn) => {
+      if (btn.dataset.bookmarkInit) return;
+
+      btn.dataset.bookmarkInit = 'true';
+      btn.addEventListener('click', (event) => {
+        void handleBookmarkClick(btn, event);
       });
     });
   }
 
-  (window as any).__initBookmarkButtons = initBookmarkButtons;
+  (window as BookmarkButtonWindow).__initBookmarkButtons = initBookmarkButtons;
   document.addEventListener('astro:page-load', initBookmarkButtons);
 </script>
 
@@ -74,13 +357,24 @@ const iconSize = size === 'sm' ? 14 : 18;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: var(--space-xs);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
     background: var(--color-bg);
     color: var(--color-text-muted);
     cursor: pointer;
-    transition: all 0.2s;
     line-height: 1;
+    box-shadow: none;
+    transition:
+      color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+      border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+      background 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+      transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .bookmark-btn svg {
+    flex-shrink: 0;
   }
 
   .bookmark-md {
@@ -93,32 +387,97 @@ const iconSize = size === 'sm' ? 14 : 18;
     background: none;
   }
 
-  .bookmark-icon-filled { display: none; }
+  .bookmark-icon-filled {
+    display: none;
+  }
 
   .bookmark-btn:hover {
-    color: #e74c6f;
-    border-color: #e74c6f;
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .bookmark-btn:focus-visible {
+    outline: none;
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+    box-shadow:
+      0 0 0 2px var(--color-bg),
+      0 0 0 4px var(--color-primary);
   }
 
   .bookmark-btn.bookmarked {
-    color: #e74c6f;
-    border-color: #e74c6f;
+    color: var(--color-primary);
+    border-color: var(--color-primary);
   }
 
-  .bookmark-btn.bookmarked .bookmark-icon-outline { display: none; }
-  .bookmark-btn.bookmarked .bookmark-icon-filled { display: inline-block; }
+  .bookmark-md.bookmarked {
+    background: var(--color-bg-secondary);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .bookmark-btn.bookmarked .bookmark-icon-outline {
+    display: none;
+  }
+
+  .bookmark-btn.bookmarked .bookmark-icon-filled {
+    display: inline-block;
+  }
 
   .bookmark-sm:hover {
+    color: var(--color-primary-hover);
     transform: scale(1.15);
+    box-shadow: none;
   }
 
   .bookmark-sm.bookmarked {
-    animation: bookmark-pop 0.3s ease;
+    animation: bookmark-pop 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .bookmark-btn:disabled {
+    opacity: 0.6;
+    cursor: wait;
+  }
+
+  .bookmark-toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translate(-50%, 20px);
+    background: var(--color-text);
+    color: var(--color-bg);
+    padding: 12px 20px;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    font-size: 14px;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity 0.25s,
+      transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+  }
+
+  .bookmark-toast.visible {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  .bookmark-toast.error {
+    background: var(--color-danger);
   }
 
   @keyframes bookmark-pop {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.3); }
-    100% { transform: scale(1); }
+    0% {
+      transform: scale(1);
+    }
+
+    50% {
+      transform: scale(1.3);
+    }
+
+    100% {
+      transform: scale(1);
+    }
   }
 </style>

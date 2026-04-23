@@ -84,7 +84,7 @@ function initAddToPlaylistContainer(container: Element) {
       }
 
       const playlistsRes = await fetch(
-        `/api/playlists?mine=true&source_id=${encodeURIComponent(articleId!)}&item_type=${encodeURIComponent(sourceType!)}`
+        `/api/playlists?mine=true&source_id=${encodeURIComponent(articleId!)}&item_type=${encodeURIComponent(sourceType!)}&exclude_category=read_later`
       );
       if (!playlistsRes.ok) throw new Error('Failed to fetch playlists');
       

@@ -25,7 +25,7 @@
 ┌─────────────────────────────────────────────────────┐
 │  Cloudflare Pages                                    │
 │  정적 파일 서빙 + functions/ (SSR & API)             │
-│  (D1 데이터베이스 연동)                               │
+│  (D1 데이터베이스 연동: users, playlists, bookmarks)         │
 └─────────────────────────────────────────────────────┘
 ```
 ## 디렉토리 구조
@@ -69,13 +69,16 @@
 | `api/playlists/[id]/items/index.ts` | POST (기사 추가, 중복 시 409) |
 | `api/playlists/[id]/items/[itemId].ts` | PUT/DELETE (기사 수정/삭제) |
 | `api/playlists/[id]/visibility.ts` | PUT (공개 범위 변경) |
-`api/admin/playlists/[id]/reject.ts` | PUT (관리자: 반려) |
-`api/playlists/[id]/like.ts` | GET/POST 좋아요 API |
-`api/discussions/index.ts` | GET(목록)/POST(작성) Discussions API |
-`api/discussions/[number].ts` | GET 단건 Discussion API |
-`lib/github-graphql.ts` | GitHub GraphQL API 클라이언트 (queryDiscussions, getDiscussion, createDiscussion) |
-`api/trending.ts` | GET 트렌딩 API (JSON) |
-`trending.ts` | 트렌딩 페이지 SSR 렌더링 |
+| `api/admin/playlists/[id]/reject.ts` | PUT (관리자: 반려) |
+| `api/playlists/[id]/like.ts` | GET/POST 좋아요 API |
+| `api/bookmarks/toggle.ts` | POST 북마크 토글 |
+| `api/bookmarks/ids.ts` | GET 북마크 ID 목록 조회 |
+| `api/bookmarks/migrate.ts` | POST localStorage 북마크 마이그레이션 |
+| `api/discussions/index.ts` | GET(목록)/POST(작성) Discussions API |
+| `api/discussions/[number].ts` | GET 단건 Discussion API |
+| `lib/github-graphql.ts` | GitHub GraphQL API 클라이언트 (queryDiscussions, getDiscussion, createDiscussion) |
+| `api/trending.ts` | GET 트렌딩 API (JSON) |
+| `trending.ts` | 트렌딩 페이지 SSR 렌더링 |
 | `must-read.ts` | Must-read 페이지 SSR 렌더링 (D1 에디터 관리) |
 | `api/admin/must-read/index.ts` | GET/POST Must-read 관리 API |
 | `api/admin/must-read/[id].ts` | DELETE Must-read 항목 삭제 |
@@ -83,7 +86,7 @@
 | `lib/must-read.ts` | Must-read D1 CRUD 연산 |
 | `p/[id].ts` | 유저 플레이리스트 SSR (아이템 관리, 기사 검색, 외부 URL 추가) |
 | `lib/auth.ts` | 세션 관리 (upsertUser, createSession, getSession) |
-| `lib/playlists.ts` | 플레이리스트 CRUD, 자동 플레이리스트 생성/조회, 포함 여부 확인 |
+| `lib/playlists.ts` | 플레이리스트 CRUD, 카테고리별 자동 생성, 보호 로직 |
 | `lib/playlist-items.ts` | 아이템 추가/수정/삭제, 중복 방지 (DuplicateItemError) |
 | `lib/types.ts` | TypeScript 타입 정의 |
 | `lib/validate.ts` | URL/제목/source_id 검증 |
@@ -154,14 +157,21 @@ GitHub Issue (single/bulk) → scripts/process-submission.ts → PR (src/content
 ```
 
 - 제출 시 GitHub Issue 작성자의 numeric user id(`submitted_by_id`)도 함께 저장해 승인 webhook에서 D1 사용자와 매칭한다.
+
 ### 4. 기사 승인 시 플레이리스트 자동 추가
 
 PR merge (새 파일 감지) → git push master → on-article-approved.yml → POST /webhooks/submission-approved → D1 (플레이리스트 자동 추가)
 
 미로그인 제출자 → submissions 적재 → `/api/auth/github/callback` 로그인 시 catch-up → 자동 플레이리스트 반영
 
+### 5. 북마크 데이터 흐름
 
-### 5. 빌드
+```
+사용자 클릭 → /api/bookmarks/toggle → D1 user_playlists (category='read_later')
+                                  └─ sessionStorage 캐시 업데이트
+```
+
+### 6. 빌드
 
 ```
 src/ (pages + components + data + content) → astro build → dist/
@@ -199,6 +209,7 @@ src/ (pages + components + data + content) → astro build → dist/
 - [트렌딩 플레이리스트](../features/trending-playlists.md)
 - [Must-read 에디터 관리](../features/must-read-management.md)
 - [기사 승인 시 플레이리스트 자동 추가](../features/auto-playlist-add.md)
+- [북마크 — 나중에 볼 기사](../features/bookmark-read-later.md)
 
 ## 변경 이력
 
@@ -222,3 +233,4 @@ src/ (pages + components + data + content) → astro build → dist/
 | 2026-04-14 | 커뮤니티 자유 발제 기능 추가 (GitHub Discussions 기반, /community 페이지, api/discussions/* API) |
 | 2026-04-16 | CI 파이프라인에 wrangler 직접 배포 추가 (Cloudflare GitHub App 이벤트 누락 근본 해결) |
 | 2026-04-17 | 메인 페이지 콘텐츠 허브화 — 소개 섹션·최근 기사·트렌딩·추천 인플루언서 추가, `color-scheme: light` 메타/CSS로 라이트 모드 고정 |
+| 2026-04-23 | 북마크 기능을 D1 Read Later 플레이리스트로 통합 |

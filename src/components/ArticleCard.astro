@@ -48,7 +48,14 @@ const formattedDate = new Date(date).toLocaleDateString('ko-KR', { year: 'numeri
     </div>
     <div class="article-footer">
       <div class="article-stats">
-        <BookmarkButton articleId={slug || id} size="sm" />
+        <BookmarkButton
+          articleId={slug || id}
+          title={title}
+          url={url}
+          description={description}
+          sourceType={sourceType}
+          size="sm"
+        />
         <a href={`/articles/${slug || id}/#comments`} class="comment-indicator" data-comment-path={articlePath}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>

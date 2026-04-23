@@ -13,6 +13,7 @@
 - `playlist_type`: 'community' (일반 유저) 또는 'editor' (공식 에디터)
 - `tags`: 플레이리스트 분류를 위한 태그 (쉼표로 구분된 문자열)
 - `status`: 'draft', 'pending', 'approved', 'rejected' (에디터 타입은 생성 시 즉시 'approved' 상태가 됨)
+- `playlist_category`: 자동 생성된 플레이리스트의 용도를 구분 ('read_later', 'submissions' 또는 NULL)
 
 ## 동작 흐름
 
@@ -93,8 +94,8 @@
 - 관리자 승인 UI는 `/admin/playlists` 정적 페이지(`src/pages/admin/playlists.astro`)에서 클라이언트 사이드 렌더링으로 동작한다.
 - 로그인 상태 + 관리자 권한 검증 후 대기 목록을 표시한다.
 - 각 카드에서 승인/반려/미리보기 버튼을 제공하며, 처리 완료 시 카드가 페이드아웃 후 제거된다.
-
 - 에디터 플레이리스트(`playlist_type: 'editor'`)는 승인 절차를 거치지 않고 생성 즉시 `approved` 상태가 되어 목록에 노출된다. (Auto-approve)
+
 ### 좋아요 기능
 
 ```
@@ -112,7 +113,7 @@
 ```text
 승인 webhook → functions/webhooks/submission-approved.ts
             → users.id = submitted_by_id 조회
-            → 최근 플레이리스트 재사용 또는 `내 제출 기사` 자동 생성
+            → `playlist_category = 'submissions'` 필터로 기존 플레이리스트 재사용 또는 자동 생성
             → curated 아이템 추가
 미가입 사용자 → submissions 테이블에 deferred 저장
 삭제 webhook  → functions/webhooks/submission-removed.ts → playlist_items/submissions 정리
@@ -121,6 +122,23 @@
 - 자동 생성 플레이리스트는 `visibility: 'unlisted'`, `status: 'draft'`, `playlist_type: 'community'`, `is_auto_created = 1` 로 생성된다.
 - 이미 같은 curated 기사가 존재하면 `DuplicateItemError`를 `already_exists` 응답으로 변환해 중복 삽입을 막는다.
 - 제출 파이프라인(`scripts/process-submission.ts`)은 GitHub Issue 작성자의 numeric user id를 `submitted_by_id`로 함께 저장한다.
+
+### 자동 생성 카테고리 플레이리스트 (auto-playlist categories)
+
+특정 용도를 위해 시스템이 자동으로 생성하는 플레이리스트는 `playlist_category` 값을 가진다. partial unique index를 통해 사용자당 카테고리별로 단 하나만 존재하도록 보장한다.
+
+- `'submissions'`: 사용자가 제출한 기사가 승인되었을 때 자동으로 모이는 플레이리스트.
+- `'read_later'`: 사용자가 북마크한 기사가 저장되는 플레이리스트. 첫 북마크 시점에 생성된다. 상세 내용은 [북마크 — 나중에 볼 기사](./bookmark-read-later.md) 참조.
+
+### 보호된 플레이리스트 (Protected auto-playlists)
+
+`read_later` 카테고리의 플레이리스트는 시스템 무결성을 위해 다음과 같은 변경이 제한된다.
+
+- 삭제 불가: API 호출 시 403 응답 (`'나중에 볼 기사 플레이리스트는 삭제할 수 없습니다'`)
+- 공개 설정 변경 불가: API 호출 시 403 응답 (`'나중에 볼 기사 플레이리스트는 공개 설정을 변경할 수 없습니다'`)
+- 제목 및 설명 수정 불가: API 호출 시 403 응답 (`'나중에 볼 기사 플레이리스트는 수정할 수 없습니다'`)
+
+이 가드는 `functions/lib/playlists.ts`의 `ReadLaterProtectedError` 클래스를 통해 구현되어 있다.
 
 ## 관련 파일
 
@@ -131,7 +149,7 @@
 | `src/pages/p/new.astro` | 플레이리스트 생성 폼 (인증 필요) |
 | `src/pages/my/playlists.astro` | 내 플레이리스트 관리 페이지 |
 | `src/pages/search-index.json.ts` | 빌드 시 기사 검색용 정적 JSON 인덱스 생성 |
- `src/pages/playlists/index.astro` | 에디터+커뮤니티 플레이리스트 목록 (D1 API 기반) |
+| `src/pages/playlists/index.astro` | 에디터+커뮤니티 플레이리스트 목록 (D1 API 기반) |
 | `src/components/AddToPlaylist.astro` | 기사에 "플레이리스트에 추가" 드롭다운 |
 | `src/pages/admin/playlists.astro` | 관리자 플레이리스트 승인/반려 UI 페이지 |
 | `src/components/ArticleCard.astro` | 기사 카드 (각 기사에 AddToPlaylist 버튼 포함) |
@@ -150,6 +168,9 @@
 | `functions/api/admin/playlists/[id]/approve.ts` | PUT (관리자: 승인) |
 | `functions/api/admin/playlists/[id]/reject.ts` | PUT (관리자: 반려) |
 | `functions/api/playlists/[id]/like.ts` | GET/POST 좋아요 API |
+| `functions/api/bookmarks/toggle.ts` | 북마크 토글 API |
+| `functions/api/bookmarks/ids.ts` | 북마크 ID 목록 조회 API |
+| `functions/api/bookmarks/migrate.ts` | localStorage 북마크 마이그레이션 API |
 | `functions/webhooks/submission-approved.ts` | 승인 기사 auto-playlist webhook |
 | `functions/webhooks/submission-removed.ts` | 승인 취소/삭제 정리 webhook |
 
@@ -168,10 +189,11 @@
 
 | 파일 | 역할 |
 |------|------|
- `migrations/0001_user_playlists.sql` | D1 테이블 스키마 (users, sessions, user_playlists, playlist_items) |
- `migrations/0002_playlist_type.sql` | `playlist_type`, `tags` 컬럼 추가 마이그레이션 |
+| `migrations/0001_user_playlists.sql` | D1 테이블 스키마 (users, sessions, user_playlists, playlist_items) |
+| `migrations/0002_playlist_type.sql` | `playlist_type`, `tags` 컬럼 추가 마이그레이션 |
 | `migrations/0002_playlist_likes.sql` | playlist_likes 테이블 스키마 |
 | `migrations/0004_auto_playlist.sql` | auto-created playlist / deferred submissions 스키마 |
+| `migrations/0005_playlist_category.sql` | `playlist_category` 컬럼 및 유니크 인덱스 추가 |
 
 ## API 응답 형태
 
@@ -235,6 +257,7 @@
 
 - [아키텍처 개요](../architecture/overview.md)
 - [기사 승인 시 플레이리스트 자동 추가](./auto-playlist-add.md)
+- [북마크 — 나중에 볼 기사](./bookmark-read-later.md)
 - [플레이리스트 데이터 미스매치 트러블슈팅](../troubleshooting/playlist-data-mismatch.md)
 - [플레이리스트 검색 렌더링·순서 변경 트러블슈팅](../troubleshooting/playlist-detail-search-and-reorder.md)
 - [플레이리스트 기사 링크 홈 리다이렉트 트러블슈팅](../troubleshooting/playlist-article-links-redirect-to-home.md)
@@ -256,3 +279,4 @@
 | 2026-04-13 | 승인 기사 auto-playlist webhook, auto-created playlist 생성 규칙, deferred submissions 흐름 문서화 |
 | 2026-04-13 | GitHub Actions 승인 감지와 OAuth catch-up 기반 auto-playlist 동기화 반영 |
 | 2026-04-17 | YouTube 썸네일 표시, 2열 가로형 카드 레이아웃(좌측 썸네일), 기사 내부 링크 수정(source_id 기반), alias 페이지 canonical/Giscus 정규화, BaseLayout canonicalPath 프롭 추가, Comments 컨포넌트 data-giscus-term 지원 |
+| 2026-04-23 | `playlist_category` 컬럼 도입 (read_later/submissions/NULL). Read Later 자동 플레이리스트 통합, getOrCreateAutoPlaylist 버그 수정, 삭제/공개 가드 추가 |
