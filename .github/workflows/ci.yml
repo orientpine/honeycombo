@@ -45,6 +45,58 @@ jobs:
       - name: Test
         run: bun run test
 
+      # -------------------------------------------------------------------
+      # D1 migration advisory (PR-only)
+      #
+      # When a PR touches migrations/, remind the reviewer that the remote
+      # D1 database must be migrated *before* master is merged, because the
+      # code in `functions/lib/playlists.ts` (and others) references columns
+      # that only exist after `wrangler d1 migrations apply ... --remote`.
+      # Missing this step causes runtime "no such column" errors on the
+      # deployed Pages worker. See:
+      #   docs/troubleshooting/d1-migration-deployment.md
+      #
+      # This step does NOT fail the CI: the runner intentionally has no D1
+      # write credentials. It writes a GitHub Actions job summary and emits
+      # a ::warning:: annotation so it shows up on the PR "Files changed"
+      # tab and in the check summary.
+      # -------------------------------------------------------------------
+      - name: Detect pending D1 migrations (advisory)
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+        run: |
+          set -euo pipefail
+          BASE="origin/${BASE_REF}"
+          # origin/master is fetched via fetch-depth: 0 at checkout
+          CHANGED_MIGRATIONS=$(git diff --name-only --diff-filter=A "${BASE}...HEAD" -- 'migrations/*.sql' || true)
+          if [ -z "${CHANGED_MIGRATIONS}" ]; then
+            echo "No new D1 migrations in this PR."
+            exit 0
+          fi
+          {
+            echo '### ⚠️ New D1 migrations detected'
+            echo ''
+            echo 'The following migration files were added in this PR:'
+            echo ''
+            echo '```'
+            echo "${CHANGED_MIGRATIONS}"
+            echo '```'
+            echo ''
+            echo 'Before merging to `master`, a maintainer must apply these migrations to the remote D1:'
+            echo ''
+            echo '```bash'
+            echo 'npx wrangler d1 migrations list honeycombo-db --remote'
+            echo 'npx wrangler d1 migrations apply honeycombo-db --remote'
+            echo '```'
+            echo ''
+            echo 'Cloudflare Pages auto-deploys code but does **not** run D1 migrations.'
+            echo 'Skipping this step causes runtime "no such column / table" errors.'
+            echo ''
+            echo 'See [`docs/troubleshooting/d1-migration-deployment.md`](../blob/HEAD/docs/troubleshooting/d1-migration-deployment.md).'
+          } >> "${GITHUB_STEP_SUMMARY}"
+          echo "::warning title=Pending D1 migrations::This PR adds migration files. Apply them to the remote D1 before merging to master (see job summary)."
+
       - name: Deploy to Cloudflare Pages
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         env:
