@@ -157,7 +157,7 @@ function renderItems(items: PlaylistItemRow[], isOwner: boolean, playlistId: str
         : '';
 
       return `
-        <article class="item-card card" data-item-id="${escapeAttr(item.id)}" data-position="${item.position}">
+        <article class="item-card card" data-item-id="${escapeAttr(item.id)}" data-position="${item.position}"${item.source_id ? ` data-source-id="${escapeAttr(item.source_id)}"` : ''} data-item-type="${escapeAttr(item.item_type)}">
           ${isOwner ? `<div class="drag-handle" aria-label="드래그하여 순서 변경"></div>` : ''}
           ${thumbnail ? `<div class="item-thumbnail"><img src="${escapeAttr(thumbnail)}" alt="" loading="lazy" width="160" height="90" /></div>` : ''}
           <div class="item-body">
@@ -1310,6 +1310,41 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
         </script>` : '',
       isOwner ? `<script>
           const playlistId = '${encodeURIComponent(playlist.id)}';
+          const playlistIsReadLater = ${isReadLater ? 'true' : 'false'};
+
+          // Keep the bookmark UI in sync when items are removed from the
+          // Read Later playlist. The <BookmarkButton> script caches
+          // bookmarked source_ids in sessionStorage so article pages can
+          // render the correct state without an extra request. If we delete
+          // an item here without updating that cache, the bookmark button
+          // on the article page keeps showing 'bookmarked' until the next
+          // sessionStorage refresh (new tab / hard reload). Fix: remove the
+          // source_id from the cache and re-sync any in-page bookmark
+          // buttons for that article.
+          const BOOKMARK_CACHE_KEY = 'honeycombo:bookmark-ids';
+
+          function syncBookmarkRemoval(sourceId) {
+            if (!playlistIsReadLater || !sourceId) return;
+
+            try {
+              const raw = sessionStorage.getItem(BOOKMARK_CACHE_KEY);
+              if (raw) {
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed)) {
+                  const next = parsed.filter(function(id) { return String(id) !== String(sourceId); });
+                  sessionStorage.setItem(BOOKMARK_CACHE_KEY, JSON.stringify(next));
+                }
+              }
+            } catch (_err) {
+              // Storage errors are non-fatal — BookmarkButton will refetch
+              // /api/bookmarks/ids on next load.
+            }
+
+            document.querySelectorAll('[data-bookmark-id="' + (window.CSS && CSS.escape ? CSS.escape(sourceId) : sourceId) + '"]').forEach(function(button) {
+              button.classList.remove('bookmarked');
+              button.setAttribute('aria-pressed', 'false');
+            });
+          }
 
           async function deletePlaylist() {
             if (!window.confirm('이 플레이리스트를 삭제할까요?')) {
@@ -1568,6 +1603,10 @@ export const onRequest: AppPagesFunction = async ({ env, request, params }) => {
                 if (!card) {
                   return;
                 }
+
+                // Keep bookmark UI in sync before the card is removed so
+                // the dataset is still readable.
+                syncBookmarkRemoval(card.dataset.sourceId);
 
                 card.classList.add('removing');
                 window.setTimeout(() => {

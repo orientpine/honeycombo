@@ -41,6 +41,15 @@
        → 항목 확인, 메모 추가, 순서 변경 등 수행
 ```
 
+### 5. 상세 페이지에서 삭제 시 북마크 UI 동기화
+
+Read Later 플레이리스트 상세 페이지(`/p/{id}`)에서 기사 카드의 “삭제” 버튼을 누르면 해당 기사가 플레이리스트에서 제거되는 동시에 북마크 상태 또한 해제되어야 한다. `functions/p/[id].ts`는 Read Later 플레이리스트일 때 삽입되는 `syncBookmarkRemoval()` 헬퍼를 사용해 다음을 수행한다.
+
+1. `sessionStorage['honeycombo:bookmark-ids']` 목록에서 해당 `source_id`를 제거.
+2. 현재 로드된 DOM 내의 `[data-bookmark-id="{source_id}"]` 버튼에서 `bookmarked` 클래스와 `aria-pressed`를 해제.
+
+이 동기화는 `item-card` 태그에 서버가 렌더링한 `data-source-id`/`data-item-type` 속성을 읽어 동작하므로, 외부 URL 항목처럼 `source_id`가 없는 항목은 북마크 개념과 무관하므로 아무 작업도 하지 않는다.
+
 ## 관련 파일
 
 | 파일 | 역할 |
@@ -84,3 +93,4 @@
 | 날짜 | 변경 내용 |
 |------|----------|
 | 2026-04-23 | 최초 작성. 북마크를 D1 기반 Read Later 플레이리스트로 통합 |
+| 2026-04-24 | 상세 페이지에서 기사 삭제 시 북마크 UI 미동기화 버그 수정. `syncBookmarkRemoval()` 헬퍼 추가 및 `item-card` 태그에 `data-source-id`/`data-item-type` 속성 렌더링. |
