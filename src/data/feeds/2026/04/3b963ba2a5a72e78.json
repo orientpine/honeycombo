@@ -12,5 +12,6 @@
     "productivity"
   ],
   "published_at": "2026-04-24T04:50:27.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nOpenAI는 Workspace Agents라는 이름으로 Slack 내에서 작동하며 일정에 따라 실행되고 조직의 권한 범위 내에서 운영되는 공유 팀 에이전트를 출시했습니다.\n\n## 주요 내용\n\n*   **Workspace Agents 출시:** OpenAI는 Business, Enterprise, Edu 플랜을 대상으로 Workspace Agents를 출시했으며, 이는 Slack에서 팀원들과 공유되어 일정에 따라 실행되고 조직의 권한 범위 내에서 작동하는 에이전트입니다.\n*   **Custom GPTs의 한계:** 기존 Custom GPTs는 별도의 GPT Store에 접속해야 하는 유통 방식의 문제로 인해 실제 기업 환경에서의 활용도가 낮았습니다.\n*   **유통 방식의 중요성:** 작업이 이루어지는 Slack, 티켓 시스템, CRM 등 기존 업무 도구에 에이전트가 통합되는 것이 중요하며, Slack에서 바로 요청하는 에이전트가 별도 UI에 있는 에이전트보다 훨씬 유용합니다.\n*   **Upswing의 사례:** Upswing은 호텔 운영 에이전트를 자체 메시징 도구 내에 통합하여 대시보드 뒤에 숨기는 대신, Slack DM 형태로 제공함으로써 활용도를 20배 이상 높였습니다.\n*   **기업 채택 형태:** Workspace Agents는 공유되고, 예약되며, 역할 범위가 지정되고, 권한이 부여되는 형태로, 기업이 실제로 채택할 수 있는 형태입니다.\n*   **미래 전망:** Workspace Agents가 6개월 안에 내부 자동화의 기본 단위가 될 것이며, GPT Store는 부차적인 존재가 될 것이라는 전망입니다.\n\n## 시사점\n\nWorkspace Agents의 출시는 AI 에이전트가 별도의 플랫폼이 아닌 사용자의 일상적인 업무 흐름에 통합될 때 실제적인 가치를 제공할 수 있음을 보여주며, 기업용 AI 솔루션의 미래 방향성을 제시합니다."
 }
