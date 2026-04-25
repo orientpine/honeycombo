@@ -9,5 +9,6 @@
     "science"
   ],
   "published_at": "2026-04-24T17:17:36.000Z",
-  "feed_id": "wired"
+  "feed_id": "wired",
+  "description": "## 개요\n\nIsomorphic Labs는 Google DeepMind의 AlphaFold AI 기술을 활용하여 설계된 신약의 인간 대상 임상 시험을 곧 시작할 예정이다.\n\n## 주요 내용\n\n*   Isomorphic Labs는 2021년 Google DeepMind의 스핀오프 기업으로 설립되었으며, 단백질 구조 예측 AI 플랫폼인 AlphaFold를 신약 개발에 활용한다.\n*   AlphaFold 3는 단백질뿐만 아니라 DNA, RNA 및 이들 분자와의 상호작용을 예측하는 능력을 갖추어 신약 발견에 필수적인 정보를 제공한다.\n*   Isomorphic Labs는 AlphaFold 3보다 2배 이상의 정확도를 자랑하는 자체 약물 설계 엔진 IsoDDE를 개발했다.\n*   이 회사는 Eli Lilly, Novartis와 파트너십을 맺고 AI 신약 개발을 진행 중이며, 종양학 및 면역학 분야에서 자체 신약 파이프라인을 발전시키고 있다.\n*   AI로 설계된 분자는 효능이 높고 부작용이 적을 것으로 기대되며, 이는 저용량 투여를 가능하게 한다.\n*   Isomorphic Labs는 임상 시험 준비를 위해 6억 달러의 1차 펀딩을 완료하고 임상 개발 팀을 구축했으며, '모든 질병을 해결하는 것'을 목표로 한다.\n\n## 시사점\n\nIsomorphic Labs의 AI 기반 신약 개발은 질병 치료에 대한 접근 방식을 혁신하고, 더 효과적이고 안전한 치료법 개발을 가속화할 잠재력을 가진다."
 }
