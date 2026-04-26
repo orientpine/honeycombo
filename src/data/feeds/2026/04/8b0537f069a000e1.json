@@ -1,0 +1,16 @@
+{
+  "id": "8b0537f069a000e1",
+  "title": "How to Benchmark LLM Inference Performance: TTFT, ITL, and Throughput Metrics",
+  "url": "https://dev.to/wheynelau/how-to-benchmark-llm-inference-performance-ttft-itl-and-throughput-metrics-416p",
+  "source": "Dev.to",
+  "type": "article",
+  "tags": [
+    "dev",
+    "llm",
+    "benchmarking",
+    "rust",
+    "performance"
+  ],
+  "published_at": "2026-04-26T05:05:46.000Z",
+  "feed_id": "devto"
+}
