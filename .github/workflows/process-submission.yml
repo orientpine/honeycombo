@@ -195,14 +195,36 @@ jobs:
           fi
 
           git commit -m "feat: add submission from issue #$ISSUE_NUM"
-          git push origin "$BRANCH"
 
-          gh pr create \
-            --title "$PR_TITLE" \
-            --body "Closes #$ISSUE_NUM. Auto-generated submission." \
-            --base master \
-            --head "$BRANCH" \
-            --label "submission"
+          # stale 원격 브랜치 방어:
+          #   이전 run이 같은 issue에 대해 submission/$ISSUE_NUM 브랜치를 만들고
+          #   PR이 이미 닫힌(merged/closed) 상태라면 origin 브랜치를 정리한다.
+          #   열린 PR이 있으면 브랜치를 건드리지 않는다 (PR이 사라지면 안 됨).
+          # 경쟁 상태는 --force-with-lease가 감지한다.
+          OPEN_PR=$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number // ""')
+          if [ -z "$OPEN_PR" ]; then
+            if git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null 2>&1; then
+              echo "Removing stale remote branch $BRANCH (no open PR)"
+              git push origin --delete "$BRANCH" || true
+            fi
+          fi
+
+          # 이번 run에서 아직 원격 브랜치를 fetch한 적이 없으면 --force-with-lease가
+          # 비어 있는 expected value로 실패할 수 있다. 현 원격 tip을 먼저 가져와서
+          # --force-with-lease가 "내가 방금 본 상태" 대비 비교하도록 한다.
+          git fetch origin "$BRANCH" || true
+          git push --force-with-lease origin "$BRANCH"
+
+          if [ -n "$OPEN_PR" ]; then
+            echo "Reusing existing open PR #$OPEN_PR on branch $BRANCH"
+          else
+            gh pr create \
+              --title "$PR_TITLE" \
+              --body "Closes #$ISSUE_NUM. Auto-generated submission." \
+              --base master \
+              --head "$BRANCH" \
+              --label "submission"
+          fi
 
       - name: Auto-merge if editor
         env:
