@@ -12,5 +12,6 @@
     "programming"
   ],
   "published_at": "2026-04-28T15:53:42.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nFlutter GoRouter는 Navigator 2.0의 복잡성을 해소하는 라우팅 솔루션으로, 중첩 라우트, 리디렉션, 딥 링크 설정을 위한 세 가지 실용적인 패턴을 제공합니다.\n\n## 주요 내용\n\n*   **기본 라우트 설정**: `GoRouter` 객체에 `GoRoute`를 사용하여 기본 경로 (`/`)와 중첩된 경로 (`/tasks/:id`)를 정의하고, `MaterialApp.router`의 `routerConfig`에 이를 전달하여 라우팅을 설정합니다.\n*   **중첩 라우트 (Nested Routes)**: `ShellRoute`를 사용하여 하단 탐색 메뉴(`BottomNavigationBar`)와 같이 유지되는 UI 구조를 구현할 수 있으며, `ScaffoldWithNavBar` 위젯을 통해 `child` 위젯을 래핑하여 각 페이지에 동일한 네비게이션 바를 표시합니다.\n*   **리디렉션 (Redirects)**: `redirect` 콜백 함수를 사용하여 사용자 인증 상태에 따라 특정 경로로 이동을 제어할 수 있습니다. `GoRouterRefreshStream`과 같은 `refreshListenable`을 `supabase.auth.onAuthStateChange` 스트림에 연결하여 인증 상태 변경 시 라우팅을 동적으로 업데이트합니다.\n*   **딥 링크 (Deep Links)**: 쿼리 파라미터 (`state.uri.queryParameters`)를 사용하여 URL을 통해 특정 필터(`?filter=done`)를 전달하거나, `extra` 파라미터를 사용하여 타입 안전하게 객체(`Task`)를 전달하여 특정 상세 페이지로 이동할 수 있습니다. 웹 환경에서는 `<base href=\"/\" />` 설정이 필요할 수 있습니다.\n\n## 시사점\n\nGoRouter는 Flutter 3.x의 표준 라우팅 솔루션이며, `ShellRoute`를 시작점으로 하여 Navigator.push()에서 마이그레이션하는 데 있어 낮은 위험으로 도입할 수 있습니다."
 }
