@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-04-28T16:07:58.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nAnthropic이 Blender Development Fund의 Corporate Patron으로 합류하여 Blender 코어 개발, 특히 Blender Python API와 같은 핵심 기능 유지 및 개선에 기여합니다.\n\n## 주요 내용\n\n*   Anthropic은 Blender Development Fund에 Corporate Patron으로 참여하며, 이는 Blender 코어 개발을 지원하는 데 사용될 예정입니다.\n*   이 지원은 Blender Python API와 같이 개발자와 아티스트가 소프트웨어를 확장하고 맞춤형 워크플로우를 개선할 수 있도록 하는 파운데이션 기능들을 유지하고 지속적으로 발전시키는 데 할당됩니다.\n*   Blender Foundation은 Anthropic의 후원을 통해 독립적으로 프로젝트를 추진하고 아티스트 및 크리에이터를 위한 도구 구축에 집중할 수 있게 됩니다.\n*   Blender Foundation은 무료/오픈소스 기술과 도구로 아티스트에게 힘을 실어주는 것을 목표로 하며, GNU GPL 라이선스 하에 Blender의 확장성을 위한 API를 제공합니다.\n*   Anthropic은 신뢰할 수 있고 해석 가능하며 제어 가능한 AI 시스템을 만드는 AI 연구 개발 회사로, 주요 제품은 Claude LLM입니다.\n*   Blender는 모델링, 애니메이션, VFX 등을 위한 무료 오픈소스 3D 크리에이션 소프트웨어로, Blender Foundation이 유지보수합니다.\n\n## 시사점\n\nAnthropic의 후원은 오픈소스 3D 제작 소프트웨어인 Blender의 지속적인 발전과 코어 기능 개선을 가속화하는 데 중요한 동력이 될 것으로 기대됩니다."
 }
