@@ -12,5 +12,6 @@
     "microsoft"
   ],
   "published_at": "2026-04-27T17:40:38.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nMicrosoft와 OpenAI는 최근 파트너십 계약을 재협상하여, OpenAI의 Amazon과의 계약으로 인해 발생했던 법적 분쟁 가능성을 해소했습니다. 새로운 계약은 Microsoft의 OpenAI IP에 대한 독점적 접근 권한에 명확한 종료 시점을 설정했습니다.\n\n## 주요 내용\n\n*   **Microsoft와 OpenAI의 재협상:** 새로운 계약으로 Microsoft는 2032년까지 OpenAI 모델 및 제품에 대한 비독점적 라이선스를 확보했습니다.\n*   **OpenAI의 클라우드 파트너십:** Microsoft는 여전히 OpenAI의 \"주요 클라우드 파트너\"로서, 계약 기간 동안 OpenAI의 클라우드 수요 대부분을 Azure가 담당할 것으로 예상됩니다. OpenAI는 자체 데이터센터 구축도 병행하고 있습니다.\n*   **Amazon과의 계약 문제 해결:** 기존 계약은 OpenAI가 Microsoft의 동의 없이 Amazon (AWS)과 독점적인 기술 개발 및 호스팅 계약을 맺는 것을 제한했습니다. 특히 AI 에이전트 관련 기술인 \"stateful runtime technology\"와 Frontier 모델에 대한 AWS의 독점적 접근 권한이 문제였습니다.\n*   **Microsoft의 법적 위협 해소:** 새로운 계약은 Microsoft의 독점적 권한을 없애고, OpenAI가 Amazon과 맺은 계약으로 인해 발생할 수 있었던 Microsoft의 법적 소송 가능성을 제거했습니다.\n*   **양측의 이익:** Microsoft는 OpenAI로부터 더 이상 수익 공유를 지불할 필요가 없으며, OpenAI는 모든 클라우드 제공업체에서 제품을 서비스할 수 있게 되었습니다. OpenAI는 2030년까지 Microsoft에 수익 공유를 계속하지만, 상한선이 적용됩니다.\n*   **Microsoft의 지속적 이익:** Microsoft는 OpenAI의 주요 주주로서 OpenAI의 성장에 따른 이익을 계속 얻으며, AWS에서의 판매 외에도 Amazon 등 경쟁사에서의 OpenAI 판매로도 이익을 공유받습니다.\n*   **기업 고객의 이점:** 이번 합의를 통해 기업 고객들은 더 많은 선택권을 가지게 되며, OpenAI 모델과 클라우드 제공업체를 자유롭게 선택할 수 있습니다.\n\n## 시사점\n\n이번 재협상은 OpenAI가 Amazon과의 파트너십을 확장하고 Microsoft의 독점적 제약에서 벗어나면서도, Microsoft는 OpenAI와의 관계를 유지하며 지속적인 재정적 이익을 확보하게 된 상호 이익적인 결과입니다. 결과적으로 AI 시장 내에서 경쟁이 심화되고 기업 고객의 선택권이 확대될 것으로 보입니다."
 }

@@ -12,5 +12,6 @@
     "productivity"
   ],
   "published_at": "2026-04-28T05:12:23.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nUseTheseTools.com은 광고 없이 100% 클라이언트 측에서 작동하는 개발자 도구 모음으로, JSON 형식 지정, JWT 디코딩, SQL 쿼리 정리 등 개발자에게 필요한 33가지 웹 유틸리티를 제공합니다.\n\n## 주요 내용\n\n- **클라이언트 측 처리**: 모든 데이터 처리가 브라우저 내에서 로컬로 이루어져 코드 및 토큰이 서버에 전송되지 않아 개인 정보 보호 및 즉각적인 응답 속도를 보장합니다.\n- **개발자 특화 도구**: JSON Formatter & Validator, SQL Formatter & Beautifier, JWT Debugger, Base64 & URL Encoders, Random Password Generator & Strength Checker 등 개발 워크플로우에 유용한 기능들을 포함합니다.\n- **광고 및 추적 없는 환경**: 회원가입, 유료 계층, 사용자 추적이 전혀 없어 깔끔하고 방해 없는 사용 경험을 제공합니다.\n\n## 시사점\n\nUseTheseTools.com은 개발자들이 민감한 데이터를 서버에 노출하지 않고 즉각적으로 사용할 수 있는 실용적이고 안전한 솔루션을 제공하며, 지속적인 피드백을 통해 기능 확장이 기대됩니다."
 }
