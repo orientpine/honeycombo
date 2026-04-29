@@ -12,5 +12,6 @@
     "aws"
   ],
   "published_at": "2026-04-28T19:48:02.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nAmazon Web Services (AWS)가 OpenAI의 최신 모델, 코드 작성 서비스 Codex, 그리고 새로운 AI 에이전트 생성 제품을 Bedrock 서비스를 통해 제공하기 시작했습니다.\n\n## 주요 내용\n\n- OpenAI와 Microsoft의 기존 독점 계약이 완화된 직후, Amazon은 AWS Bedrock에서 OpenAI의 제품을 제공한다고 발표했습니다.\n- AWS Bedrock은 이제 OpenAI의 최신 모델, 코드 생성 서비스인 Codex, 그리고 OpenAI 기반 AI 에이전트 생성을 위한 신제품을 지원합니다.\n- 새로 도입된 Bedrock Managed Agents 서비스는 OpenAI의 추론 모델을 활용하며, 에이전트 제어 및 보안과 같은 기능을 제공합니다.\n- AWS는 이번 협력이 AWS와 OpenAI 간의 더 깊은 협력의 시작이라고 언급했습니다.\n- OpenAI는 AWS 및 Oracle과도 협력하고 있으며, Microsoft는 Anthropic의 Claude를 활용한 새로운 에이전트 서비스를 개발 중입니다.\n\n## 시사점\n\nAWS가 OpenAI의 주요 제품들을 자사 플랫폼에 통합함으로써, 고객들은 더 다양한 AI 모델과 도구에 접근할 수 있게 되었으며, 이는 클라우드 기반 AI 서비스 경쟁의 심화를 예고합니다."
 }
