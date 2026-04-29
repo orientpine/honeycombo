@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-04-28T23:54:14.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nChatGPT 광고는 서버 측에서 대화 스트림에 광고 객체를 삽입하고, 클라이언트 측에서는 OAIQ라는 추적 SDK를 통해 제품 조회 정보를 OpenAI로 보고하는 방식으로 작동한다.\n\n## 주요 내용\n\n-   **광고 삽입 방식**: ChatGPT 백엔드는 사용자와의 SSE(Server-Sent Events) 스트림에 `single_advertiser_ad_unit` 객체를 포함시켜 광고를 전달한다. 모델 응답과 동시에 광고가 삽입될 수 있다.\n-   **추적 SDK (OAIQ)**: 방문자의 브라우저에서 실행되는 OAIQ(OpenAI Impression Quality) SDK는 광고 클릭 및 제품 조회 데이터를 수집하여 OpenAI로 전송한다.\n-   **클릭 토큰**: 광고 클릭 추적을 위해 Fernet으로 암호화된 네 가지 토큰이 사용된다. 이 토큰들은 `ads_spam_integrity_payload`, `oppref`, `olref`, `ad_data_token`으로 구성되며, 각각 서버 측 무결성 검증, 최초 클릭 정보 전달, 노출 정보 기록, 추가 데이터 전달 등의 역할을 수행한다.\n-   **광고 선택**: 광고 타겟팅은 현재 대화의 문맥에 따라 이루어지며, 사용자의 이전 대화 기록이 활용되는지에 대한 명확한 증거는 발견되지 않았다.\n-   **데이터 흐름**: 사용자가 광고 카드를 클릭하면, 해당 URL에 `oppref`와 `olref` 토큰이 포함된다. 브라우저는 해당 페이지를 로드하면서 OAIQ SDK를 실행시키고, SDK는 URL에서 `oppref`를 추출하여 `__oppref` 쿠키에 저장한다. 이후 발생하는 모든 이벤트는 이 쿠키를 참조하여 추적된다.\n-   **OpenAI 호스팅**: 광고 이미지와 브랜드 아이콘은 OpenAI의 CDN(`bzrcdn.openai.com`)에서 호스팅되며, 이는 OpenAI가 광고 크리에이티브를 관리함을 시사한다.\n-   **인앱 웹뷰**: `target.open_externally: false` 설정은 광고 링크를 ChatGPT 자체 웹뷰 내에서 열도록 하여, OpenAI가 클릭 후 탐색을 직접 관찰할 수 있게 한다.\n-   **추적 도메인**: 광고 이벤트 추적을 위한 도메인으로는 `bzrcdn.openai.com`과 `bzr.openai.com`이 사용된다.\n\n## 시사점\n\nChatGPT의 광고 시스템은 대화 흐름에 광고를 자연스럽게 통합하고, SDK 및 암호화된 토큰을 통해 사용자 행동을 추적함으로써 정교한 광고 생태계를 구축하고 있음을 보여준다."
 }
