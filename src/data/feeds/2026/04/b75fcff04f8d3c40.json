@@ -1,0 +1,16 @@
+{
+  "id": "b75fcff04f8d3c40",
+  "title": "Your AI summarizer is leaking its own chain-of-thought. Here's the 30-line fix.",
+  "url": "https://dev.to/tiamatenity/your-ai-summarizer-is-leaking-its-own-chain-of-thought-heres-the-30-line-fix-4g7p",
+  "source": "Dev.to",
+  "type": "article",
+  "tags": [
+    "dev",
+    "ai",
+    "llm",
+    "python",
+    "debugging"
+  ],
+  "published_at": "2026-04-30T15:35:24.000Z",
+  "feed_id": "devto"
+}
