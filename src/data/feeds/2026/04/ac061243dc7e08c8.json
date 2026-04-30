@@ -11,5 +11,6 @@
     "microsoft"
   ],
   "published_at": "2026-04-29T23:02:23.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nMicrosoft 365 Copilot의 유료 사용자 수가 2,000만 명을 돌파했으며, 사용자들은 AI 도구를 적극적으로 활용하고 있습니다.\n\n## 주요 내용\n\n*   M365 Copilot은 현재 2,000만 개의 유료 기업용 좌석을 확보했으며, 50,000개 이상의 좌석을 유료로 구매하는 기업 수는 4배 증가했습니다.\n*   Bayer, Johnson & Johnson, Mercedes, Roche와 같은 대규모 고객사들은 90,000개 이상의 좌석을 사용하고 있으며, Accenture는 740,000개 이상의 좌석을 확보하여 역대 최대 규모의 Copilot 계약을 체결했습니다.\n*   Copilot의 사용자당 쿼리 수는 분기별로 약 20% 증가했으며, 주간 사용률은 Outlook과 동일한 수준으로 집계되어 높은 활용도를 보여줍니다.\n*   Copilot은 OpenAI 모델뿐만 아니라 Anthropic의 Claude와 같은 다양한 모델을 기본적으로 지원하며, 에이전트 기능을 통해 여러 모델을 결합하여 최적의 응답을 생성할 수 있습니다.\n*   에이전트 모드는 Copilot, Word, Excel, PowerPoint 전반에서 기본 경험으로 제공되며, 사용자가 여러 단계의 작업을 Copilot을 통해 위임하고 완료할 수 있도록 지원합니다.\n\n## 시사점\n\nMicrosoft 365 Copilot의 급증하는 유료 사용자 수와 높은 활용도는 엔터프라이즈 AI 시장에서 Copilot의 성공적인 안착과 빠른 성장을 시사합니다."
 }

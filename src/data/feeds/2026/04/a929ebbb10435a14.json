@@ -12,5 +12,6 @@
     "google"
   ],
   "published_at": "2026-04-29T16:40:49.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nGoogle TV에 Gemini AI 기반의 새로운 기능들이 도입되어, 생성형 AI 도구를 활용한 이미지 및 비디오 클립 제작, Google Photos 검색 및 편집 기능 향상, 그리고 YouTube Shorts와 같은 짧은 형식의 비디오 콘텐츠를 홈 화면에서 바로 이용할 수 있게 된다.\n\n## 주요 내용\n\n- **Gemini 기반 생성형 AI 기능:** Gemini 탭 내 \"Create\" 버튼을 통해 Nano Banana와 Veo 기능을 사용할 수 있다.\n    - **Nano Banana:** 음성 프롬프트로 사용자의 사진을 생성 및 편집하는 이미지 생성 모델로, 의상 변경, 배경 교체, 새로운 장면 생성 등이 가능하다.\n    - **Veo:** 텍스트 설명을 통해 비디오 클립을 처음부터 만들거나 정지 이미지를 애니메이션화할 수 있다.\n- **Google Photos 기능 향상:** Gemini 기반 검색을 통해 휴가나 생일 파티 등 특정 기억과 관련된 사진을 쉽게 찾을 수 있으며, 결과는 탐색 가능한 형식으로 표시된다.\n    - **Remix 기능:** 수채화나 유화 같은 예술적 스타일을 사진에 적용할 수 있다.\n    - **Dynamic Slideshows:** 애니메이션 레이아웃, 프레임, 색상 처리를 통해 Google Photos 컬렉션을 생동감 있는 TV용 슬라이드쇼로 변환할 수 있다.\n- **짧은 형식 비디오 피드 도입:** Google TV 홈 화면에 \"Short videos for you\"라는 새로운 섹션이 추가되어 YouTube Shorts 콘텐츠를 제공한다.\n- **출시 및 지원:** Gemini 기능은 우선 미국 내 Gemini 지원 TCL TV에 우선 적용되며, 점차 더 많은 기기로 확대될 예정이다.\n\n## 시사점\n\nGemini AI 기능의 Google TV 통합은 사용자가 TV를 통해 보다 창의적이고 개인화된 콘텐츠 경험을 할 수 있도록 하며, 짧은 형식 비디오의 대중화에 발맞춰 새로운 시청 방식을 제공한다."
 }
