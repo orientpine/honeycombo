@@ -12,5 +12,6 @@
     "business / artificial intelligence"
   ],
   "published_at": "2026-04-30T17:30:39.000Z",
-  "feed_id": "wired"
+  "feed_id": "wired",
+  "description": "## 개요\n\nOpenAI가 계정 탈취 공격을 방지하기 위해 ChatGPT 및 Codex 사용자에게 'Advanced Account Security'라는 강화된 보안 모드를 도입했습니다.\n\n## 주요 내용\n\n*   **강화된 접근 제어:** 'Advanced Account Security'는 계정 탈취 시도를 어렵게 만드는 엄격한 접근 제어를 시행합니다.\n*   **암호 대신 물리적 보안 키/Passkey 강제:** 일반 비밀번호 사용을 중단하고, 두 개의 물리적 보안 키(Security Keys) 또는 Passkey를 등록해야 계정 접근이 가능합니다.\n*   **피싱 공격 위험 감소:** 물리적 보안 키/Passkey 사용은 성공적인 피싱 공격의 위험을 크게 줄여줍니다.\n*   **복구 절차 변경:** 계정 복구 시 이메일, SMS 방식 대신 복구 키, 백업 Passkey, 물리적 보안 키만을 사용하도록 변경됩니다.\n*   **OpenAI 지원팀의 복구 접근 제한:** 사용자가 'Advanced Account Security'를 활성화하면, OpenAI 지원팀도 계정 복구에 대한 접근 권한이 없어 사회 공학적 공격으로부터 지원 포털을 통한 계정 탈취 시도를 원천 차단합니다.\n*   **짧은 로그인 창 및 세션 시간:** 기기에 로그인한 후 다시 로그인해야 하는 시간을 단축합니다.\n*   **로그인 알림 및 세션 검토:** 계정에 로그인할 때마다 알림을 생성하고, 활성 ChatGPT 및 Codex 세션을 대시보드에서 검토할 수 있습니다.\n*   **모델 학습 데이터 사용 기본 제외:** 'Advanced Account Security' 사용자는 대화 내용이 모델 학습에 사용되지 않도록 기본 설정됩니다.\n*   **Trusted Access for Cyber 프로그램 의무화:** OpenAI의 Trusted Access for Cyber 프로그램 참여자는 2024년 6월 1일부터 이 보안 모드를 의무적으로 활성화하거나, 피싱 방지 인증을 구현했음을 입증해야 합니다.\n\n## 시사점\n\nOpenAI의 'Advanced Account Security'는 민감한 정보가 포함될 수 있는 AI 서비스 계정에 대한 보안 수준을 대폭 강화하여, 개인 및 전문가 사용자를 대상으로 하는 잠재적인 사이버 위협에 대응하고 사용자 신뢰를 높이는 데 기여할 것입니다."
 }
