@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-05-01T17:43:53.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nAdam CAD Harness는 Autodesk Fusion 360을 위한 AI 기반 CAD 코파일럿으로, 네이티브 에이전트 기능을 통해 CAD 작업을 지원합니다.\n\n## 주요 내용\n\n*   **설치:**\n    *   `curl` 또는 `irm` 명령어를 이용한 원라인 설치를 통해 약 10초 안에 macOS 및 Windows 환경에서 설치 가능합니다.\n    *   Fusion 360의 표준 AddIns 폴더에 드롭하는 수동 설치 방식도 제공됩니다.\n    *   설치 후 Fusion 360을 재시작하고, Shift+S를 눌러 Add-Ins 탭에서 AdamFusion을 찾아 Run을 클릭하고 Run on Startup을 선택해야 합니다.\n*   **기능:**\n    *   Adam 팔레트는 Fusion 360 오른쪽에 도킹됩니다.\n    *   Autodesk 계정으로 로그인하여 AI와 채팅하며 CAD 작업을 진행할 수 있습니다.\n*   **호환성:** Autodesk Fusion 360 네이티브에서 작동합니다.\n\n## 시사점\n\nAdam CAD Harness는 Fusion 360 사용자들에게 AI 기반의 직관적인 CAD 작업 경험을 제공하며, 복잡한 설계를 지원하는 새로운 도구가 될 수 있습니다."
 }
