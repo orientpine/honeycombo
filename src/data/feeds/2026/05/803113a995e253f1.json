@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-05-03T06:33:38.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nAI 기반 개발 환경에서 발생하는 'AI psychosis' 현상을 극복하고, YAML 형식의 명세(spec) 작성을 통해 개발 효율성과 정확성을 높이는 방법을 제시합니다.\n\n## 주요 내용\n\n*   **AI Psychosis 및 Peak Slop:** AI 사용 시 발생하는 과도한 의존성, 요구사항 누락, 컨텍스트 창의 한계 등의 문제점을 'AI psychosis' 및 'Peak Slop'으로 정의하며, 이에 대한 해결책으로 문서화 및 명세 작성이 중요함을 강조합니다.\n*   **명세(Spec) 작성의 중요성:** README.md, AGENTS.md 등 다양한 형태의 문서화가 AI 기반 개발에서 프롬프트만으로는 얻을 수 없는 깊이와 정확성을 제공하며, 소프트웨어 엔지니어링의 핵심 작업임을 설명합니다.\n*   **Acceptance Criteria for AI (ACAI):** AI가 코드와 명세를 자동으로 연결하고 추적하는 'Acceptance Criteria IDs (ACIDs)' 시스템을 제안하며, 이를 통해 요구사항 구현 및 테스트 추적의 효율성을 높입니다.\n*   **Acai.sh 오픈소스 툴킷:** ACAI 시스템을 지원하기 위해 `feature.yaml` 형식의 명세 템플릿, CLI 도구, 웹 대시보드 및 REST API를 제공하는 오픈소스 툴킷 `Acai.sh`를 소개합니다.\n*   **Acai.sh 사용법:** `feature.yaml`로 명세를 작성하고, CLI 도구를 통해 코드를 생성 및 추적하며, 웹 대시보드로 검토 및 협업하는 4단계 프로세스를 설명합니다.\n*   **향후 발전 방향:** 명세 작성 중심에서 테스트 자동화, 반응형 소프트웨어 공장으로의 전환 가능성을 제시하며, LLM이 테스트 실패나 알림에 반응하여 스스로 수정하는 미래를 전망합니다.\n*   **다른 도구와의 비교:** GitHub SpecKit, OpenSpec, Kiro, Traycer.ai 등 다른 명세 기반 개발 도구들과 Acai.sh의 차별점을 설명하며, Acai.sh는 acceptance coverage 및 여러 구현체에 걸친 명세 일치 추적에 집중하는 점을 강조합니다.\n*   **Acai.sh의 장단점:** Acai.sh의 명확한 명세 형식, 요구사항 추적 용이성 등의 장점과 함께, 명세 작성 의무, ACID의 안정적 번호 유지 필요성, 디자인적 요소 제외 등의 단점도 함께 언급합니다.\n\n## 시사점\n\nAcai.sh는 YAML 기반의 구조화된 명세 작성과 ACIDs 시스템을 통해 AI 기반 개발의 복잡성을 관리하고, 코드의 정확성과 검증 가능성을 높이며, 개발팀 간의 협업을 촉진하는 실질적인 솔루션을 제공합니다."
 }
