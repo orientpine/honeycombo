@@ -1,0 +1,15 @@
+{
+  "id": "f96b8da9a7f6ff6a",
+  "title": "I wrote a custom CUDA inference engine to run Qwen3.5-27B on $130 mining cards",
+  "url": "https://dev.to/haru-neo/i-wrote-a-custom-cuda-inference-engine-to-run-qwen35-27b-on-130-mining-cards-732",
+  "source": "Dev.to",
+  "type": "article",
+  "tags": [
+    "dev",
+    "ai",
+    "llm",
+    "opensource"
+  ],
+  "published_at": "2026-05-03T04:42:30.000Z",
+  "feed_id": "devto"
+}
