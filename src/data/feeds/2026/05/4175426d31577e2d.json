@@ -10,5 +10,6 @@
     "open source"
   ],
   "published_at": "2026-05-04T15:00:00.000Z",
-  "feed_id": "githublog"
+  "feed_id": "githublog",
+  "description": "## 개요\n\nOpenClaw는 에이전트 시스템 구축 및 실행을 위한 오픈소스 프레임워크로, 개발자가 에이전트의 작업 실행 방식을 실질적으로 제어할 수 있도록 지원하며, Microsoft Build 2026 기간 중 GitHub HQ에서 관련 행사가 개최된다.\n\n## 주요 내용\n\n*   **OpenClaw: After Hours @ GitHub 행사 개최:** 2026년 6월 3일, Microsoft Build 2026 기간 동안 GitHub HQ(샌프란시스코)에서 OpenClaw 커뮤니티를 위한 행사가 열린다.\n*   **행사 내용:** OpenClaw 창시자인 Peter Steinberger와의 대화, OpenClaw 유지보수 담당자 및 생태계 구축자들의 패널 토론, 라이트닝 토크, 네트워킹 세션(해피 아워)으로 구성된다.\n*   **OpenClaw 소개:** OpenClaw는 도구 오케스트레이션, 상태 관리, 장기 실행 워크플로우 처리를 위한 핵심 기능을 제공하여 실제 작동하는 에이전트 시스템 개발을 지원하는 오픈소스 프레임워크이다.\n*   **참여 방법:** GitHub HQ 현장 참여 또는 Twitch 라이브스트림 시청이 가능하다.\n*   **등록 안내:** 현장 참여는 등록이 필요하며, 등록한다고 자동 참석이 보장되는 것은 아니고 별도의 확인 절차가 있다.\n\n## 시사점\n\nOpenClaw: After Hours @ GitHub 행사는 OpenClaw 프로젝트 참여자 및 개발자들이 실제 구축 사례를 공유하고 교류하며 프로젝트에 대한 이해를 높일 수 있는 기회를 제공한다."
 }
