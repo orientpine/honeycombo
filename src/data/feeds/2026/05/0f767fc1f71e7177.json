@@ -12,5 +12,6 @@
     "notepad"
   ],
   "published_at": "2026-05-04T21:38:37.000Z",
-  "feed_id": "arstechnica"
+  "feed_id": "arstechnica",
+  "description": "## 개요\n\n\"Notepad++ for Mac\"으로 알려진 macOS용 텍스트 에디터는 원래 Notepad++의 개발자인 Don Ho가 공식적으로 릴리스한 것이 아니며, 개발자는 상표권 무단 사용을 지적했습니다.\n\n## 주요 내용\n\n*   Notepad++는 2003년 Don Ho에 의해 개발된 Windows 전용 텍스트 에디터로, macOS 버전은 공식적으로 존재하지 않습니다.\n*   Andrey Letov가 개발한 \"Notepad++ for Mac\"은 Notepad++의 공식 버전으로 오인될 수 있으며, Don Ho는 Letov가 Notepad++ 상표와 로고를 허가 없이 사용하고 있다고 주장했습니다.\n*   Letov는 자신의 포트가 \"Notepad++ 브랜드를 Mac으로 확장\"한다고 주장하며 이름을 계속 사용하기를 희망했으나, Don Ho는 상표권 침해를 이유로 즉각적인 중단을 요구했습니다.\n*   현재 \"Notepad++ for Mac\"은 \"NextPad++\"로 이름이 변경되었고, 아이콘도 리자드에서 개구리로 변경되었으나, 이전 버전(1.0.5)은 여전히 Notepad++ 로고와 브랜딩을 사용하고 있습니다.\n*   \"Notepad++ for Mac\" 앱은 macOS 11.0 Big Sur 이상에서 Intel 및 Apple Silicon 프로세서를 모두 지원하며, 네이티브 macOS 앱으로 개발되었고 Cocoa UI를 사용했습니다.\n*   Letov는 \"Notepad++ for Mac\" 앱과 웹사이트 개발에 Anthropic의 Claude CLI와 같은 AI 도구를 사용했다고 밝혔습니다.\n*   Don Ho는 AI로 생성된 비공식 포트의 지속적인 업데이트 및 지원 부족, 그리고 악성코드 감염 위험에 대한 우려를 표명했습니다.\n\n## 시사점\n\n\"Notepad++ for Mac\" 사례는 오픈 소스 프로젝트의 상표권 및 지적 재산권 보호의 중요성과 함께, AI 도구를 활용한 소프트웨어 개발의 가능성과 동시에 발생할 수 있는 지원 및 보안 관련 우려를 보여줍니다."
 }
