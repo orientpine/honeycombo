@@ -12,5 +12,6 @@
     "blazor"
   ],
   "published_at": "2026-05-05T04:30:52.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nBlazorMemory 라이브러리는 v0.3.0 버전 업데이트를 통해 사용자가 브라우저 데이터를 삭제하거나 기기를 전환할 때 발생하던 메모리 유실 문제를 해결하기 위해 메모리 내보내기(ExportAsync) 및 가져오기(ImportAsync) 기능을 추가했습니다.\n\n## 주요 내용\n\n*   **ExportAsync:** 사용자의 모든 메모리를 JSON 형식으로 직렬화하여 반환합니다. 이 JSON 데이터에는 사용자 ID, 내보내기 시점, 버전 정보 및 메모리 목록이 포함됩니다.\n*   **내보내기 제외 항목:** 임베딩(embeddings)은 파일 크기가 크고 모델에 종속적이므로 내보내기에서 제외됩니다.\n*   **ImportAsync:** 제공된 JSON 데이터를 읽어와 중복을 방지하며 메모리를 저장합니다. 이미 존재하는 메모리 내용은 건너뜁니다.\n*   **임베딩 재생성:** 메모리를 가져올 때 임베딩은 다시 생성됩니다. 이는 다양한 임베딩 모델과의 호환성을 유지하고 유사성 검색 오류를 방지하기 위함입니다.\n*   **BlazorMemory.Components 통합:** MemoryPanel 컴포넌트는 별도의 추가 코드 없이 Export 및 Import 버튼을 제공합니다. 이 버튼들은 파라미터를 통해 숨길 수도 있습니다.\n*   **Export 기능:** 브라우저 파일 다운로드 기능을 통해 JSON 파일을 내보냅니다.\n*   **Import 기능:** .json 파일을 선택할 수 있는 파일 선택기를 통해 메모리를 가져옵니다.\n*   **개발 시작 방법:** `BlazorMemory`, `BlazorMemory.Storage.IndexedDb`, `BlazorMemory.Embeddings.OpenAi`, `BlazorMemory.Extractor.OpenAi`, `BlazorMemory.Components` NuGet 패키지를 설치하고, `AddBlazorMemory()`와 필요한 스토리지, 임베딩, 추출기 설정을 통해 라이브러리를 구성할 수 있습니다.\n\n## 시사점\n\nBlazorMemory 라이브러리에 추가된 메모리 내보내기 및 가져오기 기능은 사용자의 데이터 지속성을 강화하여 브라우저 데이터 관리의 불편함을 해소하고, 다양한 환경에서의 라이브러리 사용 편의성을 높입니다."
 }
