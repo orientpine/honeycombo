@@ -12,5 +12,6 @@
     "apple"
   ],
   "published_at": "2026-05-05T20:56:41.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\niOS 27 출시 시, 사용자는 온디바이스 AI 모델 선택에 있어 상당한 선택권을 가지게 될 예정이다. Apple은 서드파티 대규모 언어 모델(LLM)을 선택하여 아이폰 운영체제 전반의 기능을 지원하도록 하는 계획을 가지고 있다.\n\n## 주요 내용\n\n*   **\"Extensions\" 기능 도입:** 내부적으로 \"Extensions\"라고 불리는 이 기능은 사용자가 설치된 앱의 생성형 AI 기능을 필요에 따라 접근할 수 있도록 지원한다. 이는 Siri, Writing Tools, Image Playground와 같은 Apple Intelligence 기능들을 통해 이루어진다.\n*   **크로스 플랫폼 지원:** 해당 기능은 iPadOS 27 및 macOS 27에서도 제공될 예정이다.\n*   **타사 모델 통합 테스트:** 현재 Google 및 Anthropic의 모델이 통합 테스트 단계에 있으며, ChatGPT의 포함 여부는 불분명하나 현재 사용자에게 제공되는 모델이므로 선택지로 남을 가능성이 있다.\n*   **AI 전략 방향:** Apple은 AI 인프라 및 서비스 구축에 막대한 투자를 하기보다는, 기존 하드웨어를 AI 중심 경험으로 전환하는 데 주력하고 있다.\n\n## 시사점\n\niOS 27의 \"Extensions\" 기능은 사용자에게 AI 모델 선택의 유연성을 제공함으로써 개인화된 AI 경험을 강화하고, Apple이 AI 경쟁에서 기존 하드웨어 강점을 활용하려는 전략을 보여준다."
 }
