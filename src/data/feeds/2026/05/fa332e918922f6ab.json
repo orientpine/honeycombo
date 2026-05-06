@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-05-05T19:45:30.000Z",
-  "feed_id": "theverge"
+  "feed_id": "theverge",
+  "description": "## 개요\n\nApple의 차기 운영체제 업데이트는 사용자가 Apple Intelligence를 구동하는 데 선호하는 AI 모델을 선택할 수 있도록 허용할 계획이다.\n\n## 주요 내용\n\n*   iOS 27, iPadOS 27, macOS 27에는 서드파티 챗봇이 시스템 전반의 AI 기능을 지원할 수 있도록 하는 \"Extensions\" 기능이 포함될 예정이다.\n*   호환되는 서드파티 AI 모델은 Siri 뿐만 아니라 Writing Tools, Image Playground와 같은 Apple Intelligence 기능도 구동할 수 있다.\n*   사용자는 다른 AI 모델에 대해 서로 다른 Siri 음성을 선택할 수 있으며, 예를 들어 Apple의 AI 모델에 대한 Siri 응답은 특정 음성을, ChatGPT 기반 Siri는 다른 음성을 사용할 수 있다.\n*   사용자는 App Store 앱을 통해 지원을 추가하는 AI 모델 제공업체 중에서 선택할 수 있으며, 호환되는 앱 설치 후 설정 앱에서 기본 AI로 지정할 수 있다.\n*   Apple은 현재 Google 및 Anthropic의 AI 모델 통합을 내부적으로 테스트 중이며, Google의 모델은 Siri 개편의 기반이 되고 있다.\n\n## 시사점\n\nApple의 이러한 변화는 사용자가 AI 경험을 개인화하고, 향후 더욱 다양한 서드파티 AI 모델과의 통합을 통해 Apple 기기의 AI 기능을 확장할 수 있는 가능성을 제시한다."
 }
