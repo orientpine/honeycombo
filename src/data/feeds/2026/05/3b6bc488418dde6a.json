@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-05-07T14:15:40.000Z",
-  "feed_id": "theverge"
+  "feed_id": "theverge",
+  "description": "## 개요\n\nSave to Spotify는 AI 에이전트가 생성한 오디오 콘텐츠를 Spotify의 개인 팟캐스트 피드에 저장하고 재생할 수 있게 해주는 새로운 커맨드라인 도구입니다.\n\n## 주요 내용\n\n- Save to Spotify CLI는 OpenClaw, Claude Code, OpenAI Codex와 같은 AI 에이전트를 위해 설계되었습니다.\n- 사용자는 GitHub에서 Save to Spotify CLI를 다운로드 및 설치할 수 있습니다.\n- AI 에이전트에게 일반적인 프롬프트를 주고 마지막에 \"and save to Spotify\"를 추가하면, 생성된 오디오가 Spotify 개인 팟캐스트 피드에 저장됩니다.\n- 이 기능은 AI 에이전트가 생성한 일일 브리핑과 같은 개인적인 오디오 콘텐츠를 사용자의 Spotify 라이브러리에 통합하여 다른 팟캐스트와 함께 제공합니다.\n- Spotify는 이 기능이 사용자가 사용하는 여러 기기에서 원활하게 통합된다고 밝혔습니다.\n\n## 시사점\n\nSave to Spotify는 AI가 생성한 오디오 콘텐츠를 기존 팟캐스트 경험에 seamless하게 통합하여 개인화된 청취 경험을 확장할 수 있는 가능성을 제공합니다."
 }
