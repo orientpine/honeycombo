@@ -12,5 +12,6 @@
     "claude code"
   ],
   "published_at": "2026-05-06T22:09:14.000Z",
-  "feed_id": "arstechnica"
+  "feed_id": "arstechnica",
+  "description": "## 개요\n\nAnthropic은 SpaceX와의 데이터 센터 컴퓨팅 용량 확보 계약을 통해 Claude Code의 사용 한도를 확대하고 API 접근성을 개선했습니다.\n\n## 주요 내용\n\n*   **SpaceX와의 계약:** Anthropic은 SpaceX가 테네시주 멤피스에 보유한 데이터 센터의 전체 컴퓨팅 용량을 활용하는 계약을 체결했습니다.\n*   **Claude Code 사용 한도 증가:** Pro 및 Max 플랜 구독자를 대상으로 Claude Code의 5시간 사용 창 제한이 두 배로 늘어났으며, 최대 부하 시간(peak hours) 동안 발생했던 사용량 감소 제한이 해제되었습니다.\n*   **Opus 모델 API 한도 상향:** Anthropic의 Opus 모델에 대한 API 사용 한도가 상향 조정되었습니다.\n*   **SpaceX의 Colossus 1 슈퍼컴퓨터:** SpaceX는 이 계약의 핵심인 Colossus 1 슈퍼컴퓨터의 사양을 공개했으며, 여기에는 220,000개 이상의 NVIDIA GPU(H100, H200, GB200 포함)가 탑재되어 있습니다.\n*   **궤도 컴퓨팅 용량 협력 가능성:** Anthropic은 SpaceX와 함께 수 기가와트(gigawatts) 규모의 궤도 컴퓨팅 용량을 구축하는 데 관심을 표명했습니다. 이는 차세대 AI 시스템 훈련 및 운영에 필요한 컴퓨팅 파워가 지상 기반 전력, 토지, 냉각 능력의 한계를 넘어서고 있다는 문제에 대한 잠재적 해결책으로 제시되었습니다.\n*   **Elon Musk의 과거 비판:** 이번 계약은 이전까지 Anthropic에 대해 비판적인 입장을 보였던 Elon Musk의 최근 행보와는 대조적입니다.\n\n## 시사점\n\n이번 계약은 Anthropic이 AI 모델 개발 및 운영에 필요한 컴퓨팅 자원을 대규모로 확보하고, 이에 따른 서비스 접근성을 개선하여 기술 경쟁력을 강화할 수 있는 발판을 마련했습니다."
 }
