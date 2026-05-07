@@ -12,5 +12,6 @@
     "fitbit"
   ],
   "published_at": "2026-05-07T14:00:50.000Z",
-  "feed_id": "arstechnica"
+  "feed_id": "arstechnica",
+  "description": "## 개요\n\nGoogle이 화면 없는 웨어러블 기기인 Fitbit Air와 Fitbit 앱을 대체할 Google Health 앱을 공개하며, 개인 건강 관리 분야에서의 변화를 예고하고 있습니다.\n\n## 주요 내용\n\n*   **Fitbit Air**:\n    *   $99.99 가격으로 5월 26일 출시 예정이며, 기본 Performance Loop 밴드와 함께 제공됩니다.\n    *   심박수, 가속도계/자이로스코프, 적외선 SpO2, 피부 온도 등 표준 웨어러블 건강 센서를 탑재합니다.\n    *   픽셀 워치에 탑재된 것보다 고급 기능은 아니지만, 심박수 모니터링 기능을 제공합니다.\n    *   알람 용도의 진동 모터가 있지만, 스마트워치처럼 휴대폰 알림을 진동으로 받지는 못합니다.\n    *   다양한 색상의 Performance Loop 및 Elevated Modern Band 옵션이 있으며, 밴드는 $34.99부터 시작합니다.\n    *   Fitbit Air 구매 시 3개월간 Google Health Premium (기존 Fitbit Premium 대체) 구독이 포함됩니다.\n*   **Google Health 앱**:\n    *   기존 Fitbit 앱은 몇 주 내로 Google Health로 업데이트될 예정이며, Material Expressive 디자인과 개선된 메뉴/탭을 특징으로 합니다.\n    *   Fitbit 브랜딩이 점차 줄어들고, Fitbit Premium은 Google Health Premium으로 변경됩니다.\n    *   구독 없이도 건강 통계 추적, 운동 자동 기록, 대시보드 표시 등 기본적인 기능을 사용할 수 있습니다.\n    *   **Google Health Premium**:\n        *   기존 Fitbit Premium 기능에 더해 새로운 AI Health Coach가 제공됩니다.\n        *   AI Health Coach는 사용자의 건강 데이터를 기반으로 건강 및 웰니스 관련 질문에 답변하는 챗봇입니다.\n        *   맞춤형 운동 루틴 추천, 건강 관련 질문 탐색, 운동, 영양, 수면 등의 데이터를 활용한 개선된 제안 제공이 가능합니다.\n        *   음식 사진을 업로드하여 앱에 자동으로 기록하는 기능도 지원합니다.\n\n## 시사점\n\nGoogle Health 앱과 Fitbit Air의 출시는 개인 건강 데이터 기반의 AI 코칭을 강화하고, 기존 Fitbit 브랜드를 Google 생태계로 통합하려는 Google의 전략을 보여줍니다."
 }
