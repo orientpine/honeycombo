@@ -12,5 +12,6 @@
     "deepseek"
   ],
   "published_at": "2026-05-08T15:34:14.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\ndsk++는 기존의 동기식 DeepSeek 라이브러리 deepseek4free를 완전히 비동기식으로 재작성하고 기능을 확장한 라이브러리입니다.\n\n## 주요 내용\n\n*   **완전 비동기 지원**: `curl_cffi`의 비동기 세션, 스트리밍을 위한 `async for`, WASM PoW 처리를 위한 `asyncio.to_thread()`를 사용하여 이벤트 루프 차단을 방지합니다.\n*   **동시 파일 업로드**: `asyncio.gather()`를 활용하여 여러 파일을 동시에 업로드할 수 있습니다.\n*   **세션 관리 기능 추가**: `api.delete_chat_session(session_id)`를 통한 세션 삭제 기능과 `api.get_history(session_id)`를 통한 대화 기록 조회 기능을 제공합니다.\n*   **정교한 에러 처리**: `AuthenticationError`, `RateLimitError`, `NetworkError`, `CloudflareError`, `UploadFilesUnavailable`, `APIError` 등 세분화된 에러 계층 구조를 구현했습니다.\n*   **Cloudflare 자동 감지 및 쿠키 갱신**: Cloudflare 보호를 자동으로 감지하고 쿠키를 갱신하는 기능을 탑재했습니다.\n*   **Docker 지원**: `DOCKERMODE=true` 설정을 통해 Docker 환경에서의 사용을 지원합니다.\n*   **계층별 아키텍처**: API 계층(세션 관리, SSE 파싱, 파일 업로드, Cloudflare 차단 시 자동 재시도), 바이패스 계층(FastAPI + Chromium 기반 Cloudflare 챌린지 해결 및 쿠키 추출), PoW 계층(WASM 기반 PoW 솔버를 비동기 처리)으로 구성됩니다.\n*   **쿠키 생성 및 자동 갱신**: 초기 쿠키 생성을 위한 `run_and_get_cookies.py` 스크립트를 제공하며, 이후에는 클라이언트가 쿠키 갱신을 자동 처리합니다.\n*   **토큰 획득 방법 안내**: chat.deepseek.com에서 개발자 도구를 통해 `USER_TOKEN`을 얻는 방법을 설명합니다.\n\n## 시사점\n\ndsk++는 DeepSeek의 웹 인터페이스 엔드포인트를 자동화하려는 Python 개발자들에게 비동기 환경에서 발생했던 제약을 해결하고, 라이브러리 유지보수 및 기능 확장의 필요성을 보여줍니다."
 }
