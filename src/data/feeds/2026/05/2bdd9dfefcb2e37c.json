@@ -12,5 +12,6 @@
     "perplexity computer"
   ],
   "published_at": "2026-05-07T19:57:59.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nPerplexity의 Personal Computer는 이제 Mac 사용자를 대상으로 무료로 제공되며, 로컬 파일, 앱, 웹 접근을 통해 개인별 다단계 워크플로우를 처리할 수 있는 AI 에이전트 기능을 제공한다.\n\n## 주요 내용\n\n- Perplexity의 Personal Computer는 OpenClaw와 같은 로컬 AI 에이전트의 대안으로, Perplexity Computer의 확장 기능으로 로컬 장치에서 실행되도록 설계되었다.\n- 사용자의 로컬 파일, 애플리케이션, 커넥터 및 웹에 AI 에이전트가 접근하도록 허용하여 개인별 다단계 워크플로우를 처리한다.\n- 클라우드 중심에서 벗어나 사용자의 작업이 주로 이루어지는 장치로 AI 기능을 가져오는 것을 목표로 한다.\n- OpenClaw와 달리 보안 위험을 줄이고 안전한 AI 기반 컴퓨팅 환경을 제공하는 것을 목표로 한다.\n- 초기에는 Perplexity Max 구독자에게 제한적으로 제공되었으나, 이제 Mac 사용자는 Perplexity Mac 앱을 통해 이용할 수 있다. (Personal Computer 기능은 Pro 또는 Max 구독 필요)\n- 로컬 파일, 네이티브 Mac 앱과 연동되며 웹에서도 작동하고, 400개 이상의 커넥터를 활용하여 개인화된 맥락 정보를 처리할 수 있다.\n- Perplexity의 AI 기반 Comet 웹 브라우저와 연동 시, 직접적인 커넥터 없이 웹 기반 도구를 작동시킬 수 있다.\n- Mac Mini와 같은 상시 구동 장치에서 자율 에이전트를 실행하도록 설계되었으며, iPhone에서 원격으로 접속하여 작업을 시작하거나 요청을 승인할 수 있다.\n- 스프레드시트, 문서, 다양한 자료를 포함하는 프로젝트 등 광범위한 작업에 활용될 수 있으며, 여러 앱에 걸쳐 작동하여 다른 앱의 파일 비교나 한 앱의 노트를 다른 앱의 초안 작성에 활용하는 등의 작업이 가능하다.\n- 일반 사용자에게 공개됨에 따라 기존 Mac 앱은 곧 지원이 중단되고 Personal Computer 앱에 집중할 예정이다.\n- 새로운 Mac 앱은 현재 직접 다운로드 방식으로 제공되며 Mac App Store에는 입점하지 않았다.\n\n## 시사점\n\nPerplexity의 Personal Computer는 사용자의 로컬 환경에 AI 기능을 통합하여 개인화된 워크플로우 자동화를 가능하게 하며, 로컬 AI 에이전트의 안전성과 접근성을 향상시키는 중요한 변화를 나타낸다."
 }
