@@ -12,5 +12,6 @@
     "webdev"
   ],
   "published_at": "2026-05-10T05:35:41.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nCloudflare Workers를 사용하여 Claude AI에 월 $0 비용으로 지속적인 메모리 기능을 구현하는 시스템이 개발되었습니다.\n\n## 주요 내용\n\n*   **Claude의 한계점:** Claude는 대화 세션이 종료되면 이전 정보를 모두 잊어버리며, 공식 메모리 기능은 사용자가 제어하거나 검색하기 어렵습니다.\n*   **구현 내용:** 자체 호스팅되는 MCP(Memory/Context/Prompt) 서버를 Cloudflare Workers 위에서 실행합니다. 'remember', 'recall', 'list_recent', 'forget' 네 가지 기능을 제공하며, Claude가 자동으로 호출하도록 설정됩니다.\n*   **의미 기반 검색 (Recall):** 'recall' 기능은 단순 키워드 검색이 아닌, `bge-small-en-v1.5` 임베딩 모델을 사용하여 384차원 벡터로 변환된 메모리를 의미 기반으로 검색합니다. 이를 통해 정확한 단어 일치가 없어도 관련된 정보를 찾을 수 있습니다.\n*   **Cloudflare 활용 이유:**\n    *   **비용:** Workers, D1 (SQLite), Vectorize, Workers AI 등 전체 스택이 Cloudflare의 무료 티어에서 개인 규모로 운영되어 비용이 발생하지 않습니다.\n    *   **배포 용이성:** 원클릭 배포 버튼을 통해 3분 내에 Claude Desktop과 연동되는 '세컨드 브레인' 환경 구축이 가능합니다.\n*   **설정 방법:** GitHub 리포지토리의 원클릭 배포 버튼을 사용하거나, D1 스키마 실행, wrangler를 통한 인증 토큰 설정, Claude Desktop 설정 JSON에 MCP 서버 정보 추가 등의 단계를 거칩니다.\n*   **실제 활용 예시:** 매 대화 시작 시 'onboarding work from last week'과 같은 이전 맥락을 Claude가 인지하도록 설정합니다. 또한, 브라우저 북마클릿과 iOS 단축키를 통해 텍스트나 음성으로 메모를 저장할 수 있습니다.\n*   **향후 개발 계획:** 현재 메모리 조회를 위한 UI가 없으나, 메모리를 시각적으로 보여주고 편집/삭제 기능을 제공하는 대시보드 구축을 계획 중입니다. 로컬 개발 환경에서 Vectorize 및 Workers AI 실행의 제약도 언급되었습니다.\n*   **오픈 소스:** 전체 코드는 MIT 라이선스로 GitHub(github.com/rahilp/second-brain-cloudflare)에서 공개되어 있습니다.\n\n## 시사점\n\nCloudflare의 무료 티어를 활용한 이 시스템은 Claude와 같은 LLM의 정보 유지 한계를 극복하고, 비용 부담 없이 개인 맞춤형 지식 관리 시스템을 구축할 수 있는 실용적인 방법을 제시합니다."
 }
