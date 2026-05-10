@@ -12,5 +12,6 @@
     "machinelearning"
   ],
   "published_at": "2026-05-10T15:04:58.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nClaude Sonnet 4.5 모델을 사용하여 5가지 프롬프트 엔지니어링 패턴을 비교 실험한 결과, 단순한 Zero-Shot 방식이 가장 효과적인 것으로 나타났으며 복잡한 Chain-of-Thought 방식은 성능을 저하시켰다.\n\n## 주요 내용\n\n*   **실험 설계:** 5가지 프롬프트 패턴(Zero-Shot, Few-Shot (k=3), Chain-of-Thought, Role Prompting, Structured Output)을 Claude Sonnet 4.5 모델과 50개의 영화 리뷰 데이터셋(SST-2)을 활용하여 정확도, 지연 시간, 토큰 비용을 측정했다.\n*   **결과:** Zero-Shot, Few-Shot, Role Prompting, Structured Output 패턴은 98%의 높은 정확도를 보인 반면, Chain-of-Thought 패턴은 64%로 정확도가 현저히 낮았으며 지연 시간과 토큰 비용은 4.6배 증가했다.\n*   **Zero-Shot의 우수성:** 50개의 영화 리뷰 분류 작업에서 Zero-Shot 방식은 98.0%의 정확도를 기록했으며, 평균 지연 시간 1.58초, 평균 토큰 사용량 50개로 가장 효율적이었다.\n*   **Chain-of-Thought의 문제점:** \"torture\"와 같이 모호할 수 있는 단어가 포함된 리뷰에서 Chain-of-Thought 방식은 과도한 추론 과정으로 인해 오답을 도출했으며, 이는 모델이 이미 잘 수행하는 작업에 복잡한 사고 과정을 요구할 때 혼란을 야기할 수 있음을 시사한다.\n*   **복잡한 패턴의 비효율성:** Few-Shot (1.7배 토큰), Role Prompting (1.4배 토큰), Structured Output (1.3배 토큰) 패턴은 Zero-Shot과 동일한 정확도를 보이면서도 더 많은 리소스를 소비했다.\n*   **패턴 선택 가이드:** 작업의 난이도를 기준으로 프롬프트 패턴을 선택해야 하며, 모델이 충분히 역량이 있다면 Zero-Shot으로 시작하고, 필요에 따라 Few-Shot(출력 형식 조정), Chain-of-Thought(다단계 추론), Role Prompting(특정 톤/관점), Structured Output(기계 가독성), Self-Consistency(고위험 결정) 등을 고려할 수 있다.\n\n## 시사점\n\n프롬프트 엔지니어링에서는 복잡한 패턴을 맹목적으로 사용하기보다, 모델의 능력과 작업의 난이도를 고려하여 가장 단순하고 효율적인 패턴을 우선적으로 적용하는 것이 비용과 성능 측면에서 유리하며, Chain-of-Thought와 같은 복잡한 패턴은 특정 추론 작업에만 제한적으로 사용하는 것이 좋다."
 }
