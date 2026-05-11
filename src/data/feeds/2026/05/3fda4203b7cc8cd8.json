@@ -12,5 +12,6 @@
     "showdev"
   ],
   "published_at": "2026-05-11T05:47:47.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\n개발자가 HTTP 상태 코드 402 \"Payment Required\"를 활용하는 x402 프로토콜 기반의 MCP(Micro-Client-Protocol) 서버를 구축하여, AI 에이전트가 URL에서 제품 데이터를 추출하는 데 건당 0.01 USDC를 자동으로 부과하는 시스템을 선보였습니다.\n\n## 주요 내용\n\n*   **x402 프로토콜 기반 결제:** HTTP 상태 코드 402를 사용하여 API 키나 계정 없이도 온체인 USDC로 결제가 이루어집니다.\n*   **AI 에이전트 친화적 설계:** AI 에이전트가 겪는 가입, API 키 관리, 결제 정보 입력 등의 마찰을 제거하여 자율적인 데이터 추출을 가능하게 합니다.\n*   **x402-extract-mcp 기능:** 특정 URL에서 제품 이름, 브랜드, 가격, 가용성 등 구조화된 JSON 형태의 제품 데이터를 추출합니다.\n*   **간편한 통합:** Claude Desktop, Cursor, Windsurf와 같은 MCP 클라이언트에서 설정 블록 하나로 쉽게 설치 및 사용 가능합니다.\n*   **비용 효율적인 모델:** 구독 기반이 아닌, 실제 사용량에 따라 비용을 지불하는 종량제 모델을 채택하여 불필요한 비용 낭비를 막습니다.\n*   **기술 스택:** Claude Desktop, x402-extract-mcp, x402-fetch, Railway, Hono, x402.org facilitator, Playwright, Claude Haiku 등이 사용되었습니다.\n*   **향후 계획:** 더 강력한 봇 우회 기능(주거용 프록시 추가) 및 검색 후 추출 기능이 v2에 추가될 예정입니다.\n\n## 시사점\n\nx402 프로토콜과 MCP를 활용한 이 시스템은 AI 에이전트가 인터넷 리소스에 접근하고 결제하는 새로운 방식을 제시하며, 향후 유료 API 엔드포인트 시장의 성장을 촉진할 잠재력을 지닙니다."
 }

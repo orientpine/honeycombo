@@ -12,5 +12,6 @@
     "showdev"
   ],
   "published_at": "2026-05-11T05:47:46.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nAI 에이전트가 URL에서 구조화된 상품 데이터를 추출하고, 각 호출당 0.01 USDC를 자동으로 결제하는 MCP(Multi-Client Protocol) 서버가 개발되었다.\n\n## 주요 내용\n\n*   **x402 프로토콜 기반의 자동 결제 시스템:** HTTP 상태 코드 402(Payment Required)를 활용하여 API 키나 계정 없이도 실시간으로 결제가 이루어진다.\n*   **작동 방식:** 클라이언트(AI 에이전트)가 요청 시 서버는 402 응답으로 결제 정보를 제공하고, 클라이언트는 EIP-3009 USDC 전송 인증서에 서명하여 재요청한다. 서버는 이를 검증하고 데이터를 제공하며, 결제는 Base Sepolia 네트워크의 온체인 USDC로 정산된다.\n*   **AI 에이전트에게 적합한 frictionless 모델:** 기존의 계정 생성, API 키 관리, 빌링 설정 등의 복잡한 과정을 제거하여 AI 에이전트가 직접 사용할 수 있도록 설계되었다.\n*   **x402-extract-mcp의 기능:** URL을 입력받아 headless Chromium으로 렌더링하고, Claude Haiku를 이용해 schema.org/Product 형식에 맞춰 상품명, 브랜드, 가격, 재고 등의 정보를 JSON으로 추출한다.\n*   **MCP-native 배포 및 경제성:** 별도의 SDK나 통합 코드 없이 MCP 클라이언트에 간단한 설정으로 설치 가능하며, 사용량 기반의 pay-per-call 방식으로 구독 모델의 비효율성을 해결한다.\n*   **향후 계획:** 강력한 봇 차단 사이트(Amazon, Walmart 등) 대응을 위한 리서치 프록시 추가, 검색 및 이미지 추출 기능 개발이 로드맵에 포함되어 있다.\n\n## 시사점\n\n이 MCP 서버는 AI 에이전트가 온체인 결제를 통해 유료 API를 직접 이용할 수 있는 새로운 가능성을 제시하며, frictionless한 데이터 접근 방식으로 AI 생태계의 확장과 새로운 비즈니스 모델 창출에 기여할 것으로 기대된다."
 }
