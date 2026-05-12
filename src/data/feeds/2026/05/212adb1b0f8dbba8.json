@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-05-11T23:05:01.000Z",
-  "feed_id": "theverge"
+  "feed_id": "theverge",
+  "description": "## 개요\n\nOpenAI는 공격자가 발견하기 전에 취약점을 탐지하고 패치하는 데 초점을 맞춘 AI 이니셔티브인 Daybreak를 출시했습니다. 이 솔루션은 위협 모델링, 취약점 검증 및 자동 탐지를 위해 Codex Security AI 에이전트와 최신 AI 모델을 통합합니다.\n\n## 주요 내용\n\n- Daybreak는 3월에 출시된 Codex Security AI 에이전트를 활용하여 조직의 코드 기반으로 위협 모델을 생성하고 가능한 공격 경로에 집중합니다.\n- 생성된 위협 모델을 바탕으로 Daybreak는 잠재적 취약점을 검증하고 위험도가 높은 취약점을 자동 탐지합니다.\n- Daybreak는 Anthropic의 Claude Mythos와 경쟁하며, Claude Mythos는 공개적으로 공개하기에는 너무 위험하다고 여겨졌던 보안 중심 AI 모델입니다.\n- Daybreak는 단일 AI 모델에 의존하지 않고, OpenAI의 최신 모델, Codex, 그리고 보안 파트너들의 협력을 통해 구축되었습니다.\n- GPT-5.5 with Trusted Access for Cyber 및 GPT-5.5-Cyber와 같은 전문화된 사이버 보안 모델이 Daybreak에 포함되며, 이는 지난주부터 배포되기 시작했습니다.\n- OpenAI는 업계 및 정부 파트너들과 협력하여 사이버 보안 역량이 강화된 모델을 지속적으로 배포할 계획입니다.\n\n## 시사점\n\nDaybreak의 출시는 OpenAI가 자체적인 보안 중심 AI 솔루션을 개발했음을 보여주며, 사이버 공격 방어 분야에서 AI 기술의 발전과 적용 가능성을 시사합니다. 이는 기업들이 잠재적인 보안 위협에 선제적으로 대응할 수 있는 새로운 도구를 제공할 것으로 기대됩니다."
 }

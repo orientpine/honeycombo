@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-05-11T22:19:15.000Z",
-  "feed_id": "theverge"
+  "feed_id": "theverge",
+  "description": "## 개요\n\nMira Murati가 설립한 Thinking Machines이 실시간으로 사용자와 상호작용하며 오디오, 비디오, 텍스트를 인지하고 응답하는 AI 'interaction models'을 개발 중이다.\n\n## 주요 내용\n\n-   **Interaction Models의 개념:** 기존 AI 모델이 단일 스레드로 작동하며 사용자의 입력이 완료될 때까지 기다리는 방식과 달리, Interaction Models은 실시간으로 다중 모달리티(audio, video, text)를 인지하고 즉각적으로 생각하고 응답하며 행동하는 것을 목표로 한다.\n-   **기존 모델의 한계:** 현재 AI 모델은 사용자가 입력을 마치거나 모델의 생성이 완료될 때까지 새로운 정보를 받지 못하는 단일 스레드 방식으로 작동하여, 인간과 AI 간의 협업에서 정보 전달의 병목 현상을 유발한다. 이는 사용자의 지식, 의도, 판단력이 AI에 전달되는 것을 제한하며, AI 작업의 이해도를 낮춘다.\n-   **Interaction Models의 장점:** 이러한 대역폭 병목 현상을 해결하여 AI 인터페이스가 사용자를 중심으로 작동하게 함으로써, 사용자가 AI 인터페이스에 맞춰 자신을 수정할 필요 없이 자연스럽게 협업할 수 있도록 한다.\n-   **구체적인 시연 사례:**\n    *   이야기 속 동물을 언급하는 내용을 실시간으로 감지.\n    *   음성을 실시간으로 번역.\n    *   사용자가 자세가 좋지 않을 때(slouching) 인지하여 알림.\n-   **출시 계획:** Interaction Models은 현재 'limited research preview' 형태로 몇 달 안에 공개될 예정이며, 올해 하반기에는 더 넓은 범위의 출시를 목표로 하고 있다.\n-   **Thinking Machines의 배경:** Mira Murati는 2025년 2월 OpenAI를 떠난 후 Thinking Machines을 설립했으며, 이 AI 연구소는 설립 이후 Meta 및 OpenAI로 이직하는 핵심 멤버들의 이탈을 겪었다.\n\n## 시사점\n\nThinking Machines의 interaction models은 AI와의 협업 방식을 근본적으로 변화시켜, 인간과 AI 간의 소통 및 작업 효율성을 크게 향상시킬 잠재력을 가지고 있다."
 }

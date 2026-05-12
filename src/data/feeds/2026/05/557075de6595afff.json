@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-05-12T01:24:29.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nClaude Platform on AWS가 일반에 공개되어 AWS 고객들이 AWS 인증, 청구, 약정 소멸 등의 기능을 활용하여 Claude Platform의 모든 기능을 이용할 수 있게 되었다.\n\n## 주요 내용\n\n- **AWS 통합 접근성**: Claude Platform on AWS를 통해 AWS 고객은 AWS IAM을 통한 인증, CloudTrail을 통한 감사 로깅, 단일 AWS 청구서를 통한 비용 관리 등 기존 AWS 인프라 내에서 Claude Platform 기능을 활용할 수 있다.\n- **확장 가능한 에이전트 배포**: Claude Managed Agents를 사용하여 에이전트를 대규모로 배포하고, 코드 실행, 스킬, 어드바이저 전략 등 다양한 도구를 활용할 수 있다.\n- **최신 Claude API 기능 제공**: 새로운 기능과 베타 기능은 네이티브 Claude API 출시와 동일한 날짜에 Claude Platform on AWS에서도 제공된다.\n- **Claude Console 접근**: 개발자는 Claude Console에서 프롬프트 개선, 생성, 평가 도구를 사용하여 Claude 기반 애플리케이션을 구축하고 테스트할 수 있다.\n- **다양한 Claude 모델 지원**: Claude Opus 4.7, Sonnet 4.6, Haiku 4.5를 포함한 최신 Claude 모델들이 지원되며, 신규 모델 출시 시 함께 제공된다.\n- **Claude Platform on AWS vs. Claude on Amazon Bedrock**: Claude Platform on AWS는 Anthropic이 서비스를 운영하며 AWS 외부에서 데이터를 처리하는 반면, Claude on Amazon Bedrock은 AWS가 데이터 처리 주체이며 AWS 인프라 내에서 운영된다. 전자는 Claude Platform의 모든 경험을 원하는 기업에, 후자는 엄격한 데이터 상주 요건이나 AWS 인프라 내 데이터 처리만 필요한 기업에 적합하다.\n\n## 시사점\n\nClaude Platform on AWS의 등장은 AWS 고객에게 기존 클라우드 운영 모델 내에서 최첨단 AI 기능을 통합하고 에이전트를 확장 가능하게 배포할 수 있는 새로운 길을 열어주며, 개발자에게는 네이티브 Claude API의 모든 기능을 AWS의 통합된 관리 환경에서 사용할 수 있는 유연성을 제공한다."
 }
