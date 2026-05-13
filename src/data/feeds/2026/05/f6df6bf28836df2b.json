@@ -12,5 +12,6 @@
     "sara hooker"
   ],
   "published_at": "2026-05-13T12:11:33.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nAdaption이 공개한 AutoScientist는 AI 모델이 스스로 특정 역량을 빠르게 학습하도록 돕는 자동화된 파인튜닝 도구이다.\n\n## 주요 내용\n\n- AutoScientist는 데이터와 모델을 동시에 최적화하여 어떠한 역량이든 학습하는 최적의 방법을 스스로 찾아낸다.\n- 이 도구는 기존의 Adaptive Data 제품군을 기반으로 하며, 지속적으로 개선되는 데이터셋을 지속적으로 개선되는 AI 모델로 전환하는 것을 목표로 한다.\n- Adaption은 AutoScientist가 다양한 모델에서 승률을 두 배 이상 높였다고 주장하며, 기존 벤치마크로는 측정이 어렵지만 실제 사용 시 차이를 확인할 수 있다고 강조한다.\n- AutoScientist는 출시 후 30일 동안 무료로 제공될 예정이다.\n- Adaption의 공동 창립자이자 CEO인 Sara Hooker는 AutoScientist가 코드 생성 도구가 많은 작업을 가능하게 했던 것처럼, 다양한 분야의 최전선에서 혁신을 촉진할 것이라고 언급했다.\n\n## 시사점\n\nAutoScientist는 AI 모델의 훈련 및 파인튜닝 과정을 가속화하고 간소화하여, 연구실 외부에서도 최첨단 AI 모델 훈련이 가능하도록 하는 데 기여할 수 있다."
 }
