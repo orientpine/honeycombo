@@ -12,5 +12,6 @@
     "business / big tech"
   ],
   "published_at": "2026-05-13T14:00:00.000Z",
-  "feed_id": "wired"
+  "feed_id": "wired",
+  "description": "## 개요\n\nWhatsApp이 출시한 Incognito Chat은 Meta AI와의 대화 내용을 Meta도 접근할 수 없도록 설계된 프라이빗 AI 챗 기능이다.\n\n## 주요 내용\n\n*   Incognito Chat은 WhatsApp의 Private Processing 스킴을 기반으로 하며, 이는 종단간 암호화와 충돌 없이 AI 챗 통합을 제공하기 위해 설계되었다.\n*   기존의 대부분 AI 챗 \"시크릿 모드\"와 달리, Incognito Chat은 사용자와 질문/답변을 분리하는 것을 넘어 질문과 답변 자체를 제공업체로부터 완전히 차단하는 메커니즘을 포함한다.\n*   Meta는 Incognito Chat이 Trusted Execution Environment에서 AI 추론을 처리하여 메시지에 대한 접근을 차단하며, 대화가 종료되면 휴대폰에서 사라진다고 밝혔다.\n*   사용자가 원할 경우 대화 기록을 보존할 수 있는 옵션이 Private Processing 내에 개발될 수 있으며, 현재는 텍스트만 지원하지만 이미지 처리 및 음성 인식 지원이 개발 중이다.\n*   Incognito Chat은 기본적으로 웹 검색을 익명으로 허용하는 기능을 포함하며, 이는 최신 정보 검색에 사용될 수 있다.\n*   \"Side Chat with Meta AI\" 기능은 사용자가 다른 사람과의 텍스트 대화에 대한 Meta AI의 도움을 받을 수 있도록 통합된다.\n*   Private Processing은 제3자 감사를 받으며, Incognito Chat 코드의 견고성을 검증하기 위해 전문가 감독이 이루어질 예정이다.\n\n## 시사점\n\nIncognito Chat은 30억 명 이상의 WhatsApp 사용자가 AI 챗봇과 상호 작용할 수 있는 프라이버시 중심의 첫 기회를 제공하며, AI의 프라이버시 보존 측면에서 중요한 의미를 갖는다."
 }
