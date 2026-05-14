@@ -11,5 +11,6 @@
     "copilotkit"
   ],
   "published_at": "2026-05-14T05:09:37.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nGenerative UI Global Hackathon: Agentic Interfaces에 참가한 Nahual.AI 팀은 사용자의 의도에 맞춰 실시간으로 인터페이스를 생성하는 '에이전트 인터페이스'를 6시간 만에 개발했습니다.\n\n## 주요 내용\n\n*   **Nahual.AI의 철학**: Nahual.AI는 고정된 텍스트 응답 대신, 사용자의 의도에 따라 실시간으로 최적의 인터페이스를 생성하는 '에이전트 인터페이스'를 지향합니다.\n*   **개발 환경 및 아키텍처**:\n    *   프로덕션 등급의 Server Driven UI (SDUI) 플랫폼을 멀티-에이전트 아키텍처 기반으로 구축했습니다.\n    *   AIOps, Clean Architecture, SOLID 원칙을 적용했습니다.\n    *   **LangGraph 파이프라인**: 5개 노드로 구성되며, 로컬 Gemma 2b 라우터(Ollama 사용, <300ms GPU)와 Google DeepMind의 Gemini 2.0 Flash(JSON 모드)를 활용한 하이브리드 추론 방식을 사용합니다.\n    *   **메모리 시스템**: 4계층으로 구성되며, VectorRAG (Qdrant), GraphRAG (Neo4j), 파이프라인 상태 관리를 위한 Redis, 영구적인 대화 메모리를 위한 PostgreSQL + LangGraph checkpointer를 포함합니다.\n    *   **동적 도구 디스커버리**: Manufact (YC S25)의 MCP(Multi-Source Composition Protocol)를 통해 하드코딩된 통합 없이 런타임에 여러 소스의 도구를 조합합니다.\n    *   **UI 렌더링**: Next.js 16, React 19, CopilotKit (AG-UI)을 사용하여 AST Pydantic에서 SSE 스트리밍을 통해 인터랙티브한 인터페이스를 실시간으로 생성합니다.\n*   **관찰 가능성(Observability)**: Langfuse, Prometheus, Grafana, NVIDIA DCGM을 활용했으며, 총 16개의 컨테이너와 4개의 Docker 네트워크를 사용했습니다.\n*   **성능**: End-to-End(E2E) 지연 시간은 2.5초 미만입니다.\n*   **예상치 못한 상황**: 해커톤 종료 직전, 개발에 사용된 머신의 SSD가 고장 났지만, 프로젝트 완료 및 제출까지는 정상적으로 작동했습니다.\n\n## 시사점\n\nNahual.AI의 접근 방식은 사용자의 복잡한 요구사항에 동적으로 적응하는 인터페이스의 가능성을 보여주며, 멀티-에이전트 아키텍처와 다양한 기술 스택의 효과적인 통합 사례를 제시합니다."
 }
