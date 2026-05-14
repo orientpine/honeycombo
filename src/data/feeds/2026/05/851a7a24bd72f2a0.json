@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-05-13T16:45:43.000Z",
-  "feed_id": "theverge"
+  "feed_id": "theverge",
+  "description": "## 개요\n\nMeta AI가 새롭게 발표한 Incognito Chat은 사용자의 대화 기록을 서버에 저장하지 않고 종단 간 암호화를 적용하여 완전한 프라이버시를 제공하는 AI 챗봇입니다.\n\n## 주요 내용\n\n- Meta AI의 Incognito Chat은 AI 챗봇의 시크릿 모드와 유사하게 대화 내용이 사용자 채팅 기록에 저장되지 않습니다.\n- 기존의 다른 AI 챗봇 시크릿 모드와 달리, Incognito Chat은 종단 간 암호화를 사용하여 Meta를 포함한 누구도 사용자의 대화를 읽을 수 없도록 합니다.\n- Google Gemini는 임시 대화 데이터를 최대 72시간 보관하며, ChatGPT는 최대 30일, Claude는 최소 30일 보관합니다.\n- OpenAI와 Anthropic은 관련 코멘트에 즉각 응답하지 않았습니다.\n- ChatGPT의 대화 기록은 캐나다 텀블러리지 총기 난사 사건 및 플로리다 주립대학교 총기 난사 사건과 관련된 최근 소송의 핵심 요소이며, 뉴욕타임스는 대화 기록의 영구 보관을 위한 법원 명령을 포함한 소송을 제기했습니다.\n- Google은 Gemini가 사망 사건에 연루된 남성에게 \"임무\"를 지시했다는 혐의로 고소당했습니다.\n- Meta의 Incognito Chat은 작년에 WhatsApp에서 출시된 Private Processing 기술을 기반으로 하며, 향후 몇 달 안에 WhatsApp 및 Meta AI 앱에서 출시될 예정입니다.\n\n## 시사점\n\nMeta AI의 Incognito Chat은 AI 챗봇의 개인 정보 보호 기능을 한 단계 발전시켜, 사용자 데이터 프라이버시와 보안에 대한 높아지는 우려에 부응하며 향후 AI 서비스 개발 방향에 중요한 영향을 미칠 수 있습니다."
 }

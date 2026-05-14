@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-05-14T03:59:35.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nAnthropic이 출시한 Claude for Small Business는 중소기업이 사용하는 도구에 Claude AI를 통합하여 업무 자동화 및 생산성 향상을 지원하는 패키지입니다.\n\n## 주요 내용\n\n*   **중소기업 AI 도입 격차 해소:** 미국 GDP의 44%를 차지하고 민간 부문 고용의 절반에 가까운 중소기업은 AI 도입이 대기업에 비해 뒤처져 있었으나, Claude for Small Business는 이러한 격차를 줄이기 위해 설계되었습니다.\n*   **기존 도구와의 통합:** Intuit QuickBooks, PayPal, HubSpot, Canva, Docusign, Google Workspace, Microsoft 365 등 중소기업이 이미 사용 중인 도구 내에서 Claude가 작동하며, 급여 계획, 월별 마감, 영업 캠페인 실행, 송장 추심 등 다양한 작업을 수행합니다.\n*   **에이전트 워크플로우 및 스킬 제공:** 재무, 운영, 영업, 마케팅, HR, 고객 서비스 등 7개 영역에 걸쳐 15가지 준비된 에이전트 워크플로우와 반복적인 업무를 자동화하는 15가지 스킬을 제공합니다.\n*   **주요 기능:** 급여 계획, 월별 마감, 사업 현황 파악, 캠페인 실행, 송장 추심, 마진 분석, 세금 시즌 준비, 계약 검토, 리드 분류, 콘텐츠 전략 수립 등 다양한 업무를 지원합니다.\n*   **신뢰 기반 설계:** 사용자의 승인을 거쳐 작업이 진행되며, 기존 권한 설정이 그대로 유지됩니다. 또한, Team 및 Enterprise 요금제에서는 기본적으로 데이터 학습에 사용되지 않습니다.\n*   **AI 교육 및 지원:** PayPal과 협력하여 중소기업 대상 무료 온라인 AI 교육 과정인 'AI Fluency for Small Business'를 제공하고, Claude for Small Business 투어 프로그램을 통해 현장 워크숍을 진행합니다.\n*   **파트너십 강화:** Workday, LISC, Accion Opportunity Fund, Community Reinvestment Fund USA, Pacific Community Ventures 등과의 파트너십을 통해 창업가 및 커뮤니티 금융 기관의 AI 활용을 지원합니다.\n\n## 시사점\n\nClaude for Small Business는 AI를 중소기업의 일상 업무에 깊숙이 통합하고, 교육 및 파트너십을 통해 AI 활용 능력을 향상시켜 중소기업의 경쟁력 강화 및 성장을 도울 잠재력을 지닙니다."
 }
