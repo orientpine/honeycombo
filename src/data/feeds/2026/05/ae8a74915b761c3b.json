@@ -12,5 +12,6 @@
     "softwaredevelopment"
   ],
   "published_at": "2026-05-15T05:11:00.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nMiMo를 활용한 10개의 전문 AI 에이전트가 코드를 병렬로 검토하여 30초 내에 GitHub PR에 인라인 주석을 포함한 위험 보고서를 생성하는 시스템 아키텍처와 학습된 내용을 공유한다.\n\n## 주요 내용\n\n*   **문제점:** 수동 코드 검토는 시간이 오래 걸리고(1-2시간), 피로에 의해 실수가 발생하며, \"LGTM\"이 형식적인 승인이 되는 경향이 있다.\n*   **시스템 아키텍처:** LangGraph를 사용하여 9개의 병렬 검토 에이전트를 오케스트레이션하고, CoordinatorAgent가 결과를 종합한다.\n*   **CoordinatorAgent 기능:**\n    *   **의미론적 중복 제거:** Jaccard 유사도를 사용하여 여러 에이전트가 보고한 동일한 이슈를 병합한다.\n    *   **충돌 해결:** 서로 다른 심각도 평가 시 LLM을 사용하여 올바른 심각도를 결정한다.\n    *   **위험 점수 계산:** 심각도에 따른 가중치 합계를 통해 0-100점의 위험 점수를 산출한다.\n*   **10가지 에이전트:** SecurityAgent, LogicAgent, PerformanceAgent, StyleAgent, TestAgent, DocAgent, FixAgent, RefactorAgent, RepoAgent, CoordinatorAgent.\n*   **지원 LLM 백엔드:** MiMo, DeepSeek, Qwen, GLM, Kimi, OpenAI, Anthropic 등 7가지 LLM 백엔드를 지원한다.\n*   **사용 방법:** CLI 도구 (`revhive review`) 및 GitHub App을 통한 자동 PR 검토 기능을 제공한다. Docker 이미지로도 제공된다.\n*   **학습 내용:**\n    *   **병렬 에이전트의 우수성:** 병렬 처리는 단순히 빠를 뿐만 아니라, 각 에이전트가 도메인에 깊이 집중할 수 있어 더 나은 결과를 생성한다.\n    *   **의미론적 중복 제거의 중요성:** Jaccard 유사도를 통한 키워드 기반 중복 제거는 효율적이다.\n    *   **LLM 기반 충돌 해결:** 서로 다른 심각도 평가 시 LLM을 활용하는 것이 더 미묘한 결과를 제공한다.\n    *   **중국 LLM 시장의 기회:** 국내 LLM 지원 도구의 필요성이 존재한다.\n    *   **데모 모드의 필수성:** API 키 없이 작동하는 데모 모드는 평가 장벽을 낮춘다.\n\n## 시사점\n\n이 시스템은 AI 에이전트를 활용하여 코드 검토 프로세스의 효율성과 정확성을 크게 향상시키고, 특히 국내 LLM 지원을 통해 개발자들의 접근성을 높이는 실무적 적용 가능성을 보여준다."
 }

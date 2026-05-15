@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-05-14T23:37:21.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nRust 컴파일러에 LLM(Large Language Model) 사용에 관한 정책을 수립하여, `rust-lang/rust` 저장소 기여 과정에서의 LLM 활용 방안을 명확히 하고 저품질 PR을 효과적으로 관리하고자 합니다.\n\n## 주요 내용\n\n- **정책 적용 범위**: 본 정책은 `rust-lang/rust` 저장소에 적용되며, 해당 저장소의 서브트리, 서브모듈, crates.io 의존성 및 `rust-lang` 조직 내 다른 저장소는 적용 범위에서 제외됩니다.\n- **모더레이션 및 피드백 지침**: LLM의 장기적 사회/경제적 영향, 환경 영향, LLM 생성 결과물의 저작권 상태, LLM 사용자들에 대한 도덕적 판단 등 특정 주제는 논의에서 배제하며, 구체적이고 실현 가능한 개선안을 중심으로 피드백을 요청합니다.\n- **정책 도입 동기**: LLM 생성 코드 및 글이 가독성과 리뷰에 부정적인 영향을 미치고, 저품질 PR이 증가하는 상황에서 일관된 기준을 마련하여 개별 PR 심사 부담을 줄이기 위함입니다.\n- **정책의 단점**: 일부 유효한 LLM 사용을 금지하게 될 수 있으며, LLM의 도덕적, 사회적, 환경적 영향이나 프로젝트 전체에 대한 정책 수립은 다루지 않습니다.\n- **구현 방안 및 대안**: `rust-lang/rust` 저장소에 국한된 정책을 채택했으며, 프로젝트 전반에 적용하거나 더 엄격한 금지 정책을 도입하는 방안에 대한 논의가 있었습니다.\n- **선행 사례**: Rust 프로젝트의 스팸 정책, 컴파일러 팀의 부담스러운 PR 정책 외에도 postmarketOS, zig, servo, qemu, scipy, llvm, blender, linux kernel, mesa, forgejo, firefox, ghostty, fedora, curl, linux foundation 등의 다양한 조직에서 LLM 사용에 대한 정책을 수립하고 있음을 제시합니다.\n\n## 시사점\n\n`rust-lang/rust` 저장소는 LLM을 활용한 코드 기여의 품질을 관리하고 일관된 개발 프로세스를 유지하기 위한 구체적인 정책을 마련했으며, 이는 향후 LLM을 통합하는 개발 프로젝트에 대한 참고 자료로 활용될 수 있습니다."
 }
