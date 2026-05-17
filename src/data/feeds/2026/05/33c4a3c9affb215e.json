@@ -12,5 +12,6 @@
     "openai"
   ],
   "published_at": "2026-05-16T15:33:33.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nOpenAI 공동 창립자이자 사장인 Greg Brockman이 회사의 제품 전략을 공식적으로 총괄하게 되었다.\n\n## 주요 내용\n\n*   Greg Brockman은 CEO인 Fidji Simo의 의료 휴가 기간 동안 임시로 OpenAI 제품을 총괄해왔으며, 이제 공식적으로 제품 전략을 맡게 되었다.\n*   Brockman은 직원 메모를 통해 ChatGPT와 프로그래밍 제품 Codex를 단일화된 경험으로 통합할 계획을 밝혔다.\n*   이 통합은 \"에이전트 미래(agentic future)\"를 향해 최대 집중력을 발휘하여 소비자 및 엔터프라이즈 시장 모두에서 승리하기 위한 노력의 일환으로 설명되었다.\n*   OpenAI는 ChatGPT, Codex, 그리고 API를 단일 플랫폼으로 통합하고 하나의 핵심 제품 팀을 구성하는 계획을 이미 논의해왔다.\n*   이러한 결정은 작년 말 Sam Altman CEO가 \"코드 레드(code red)\"를 선언하며 핵심 ChatGPT 경험에 대한 재집중 필요성을 강조한 이후 이루어졌다.\n*   이에 따라 OpenAI는 비디오 생성기 Sora와 OpenAI for Science와 같은 \"사이드 퀘스트(side quests)\"를 중단했다.\n\n## 시사점\n\n이번 Greg Brockman의 제품 전략 총괄은 OpenAI가 핵심 제품 경험 강화와 통합에 집중하여 경쟁 우위를 확보하려는 의지를 보여준다."
 }
