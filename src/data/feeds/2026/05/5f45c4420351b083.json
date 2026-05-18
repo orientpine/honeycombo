@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-05-18T15:55:25.000Z",
-  "feed_id": "theverge"
+  "feed_id": "theverge",
+  "description": "## 개요\n\nAmazon Alexa Plus는 이제 사용자가 제공한 주제를 바탕으로 AI가 생성한 팟캐스트를 제작할 수 있는 기능을 제공한다.\n\n## 주요 내용\n\n*   Alexa Plus 업데이트를 통해 사용자는 특정 주제를 입력하면 AI 호스트들이 다룰 내용을 개괄적으로 제시받고, 대화의 흐름과 길이 조절이 가능하다.\n*   AI가 생성한 팟캐스트는 로마 제국 역사, 신규 음악, 월드컵 전망 등 다양한 주제와 오디오 학습 콘텐츠, 새로운 취미 관련 에피소드 제작에 활용될 수 있다.\n*   이 기능은 Microsoft Edge의 NotebookLM과 유사하게 AI 기반 팟캐스트 제작 기능을 제공한다.\n*   생성된 팟캐스트 에피소드는 Reuters, Associated Press, Washington Post 등 Amazon이 제휴를 맺은 200여 개의 뉴스 매체에서 정보를 가져와 활용한다.\n*   Alexa Plus는 2월 미국 사용자에게 출시되었으며, Echo Show 기기와 Alexa 앱을 통해 생성된 팟캐스트를 알림으로 확인하고 재생할 수 있다.\n\n## 시사점\n\nAlexa Plus의 AI 팟캐스트 생성 기능은 개인 맞춤형 오디오 콘텐츠 제작의 접근성을 높이며, 정보 습득 및 엔터테인먼트 방식에 새로운 가능성을 제시한다."
 }
