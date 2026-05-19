@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-05-19T15:07:45.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nAI 연구원인 Jared Kaplan이 Anthropic에 합류하여 AI 연구 및 개발 분야에서 새로운 행보를 시작한다.\n\n## 주요 내용\n\n- Jared Kaplan은 OpenAI에서 근무하며 Transformer 모델 개발 초기 단계에 기여하고, OpenAI의 논문 \"Scaling Laws for Neural Language Models\"를 공동 집필했다.\n- OpenAI에서의 경험을 통해 그는 LLM의 스케일링 법칙에 대한 깊은 이해를 쌓았으며, 이는 AI 모델의 성능 향상 및 발전 방향 설정에 중요한 역할을 했다.\n- Anthropic 합류 후, Kaplan은 OpenAI에서의 경험과 지식을 바탕으로 AI의 안전하고 책임감 있는 개발을 포함한 연구에 집중할 것으로 보인다.\n\n## 시사점\n\nJared Kaplan의 Anthropic 합류는 AI 연구 분야, 특히 LLM의 스케일링 법칙과 안전한 AI 개발에 대한 기여를 확대할 잠재력을 가지며, AI 업계의 인재 이동과 경쟁 구도에 영향을 미칠 수 있다."
 }

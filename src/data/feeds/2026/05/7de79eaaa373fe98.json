@@ -12,5 +12,6 @@
     "development"
   ],
   "published_at": "2026-05-19T17:04:56.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nLangGraph와 AWS Bedrock AgentCore를 사용하여 메모리 기능을 갖춘 Agentic Conversational FAQ Assistant가 개발되었습니다. 이 시스템은 데이터셋에 대한 컨텍스트 인식 및 메모리 유지 기능을 제공하며, FAISS 벡터 인덱스를 활용하여 정보를 검색하고 AWS Bedrock AgentCore의 메모리 레이어를 통해 다중 턴 대화의 컨텍스트를 관리합니다.\n\n## 주요 내용\n\n- **Agentic Conversational FAQ Assistant의 기능:** 사용자의 질문에 대해 컨텍스트 인식 및 메모리를 유지하며 답변합니다.\n- **정보 검색 방식:** FAISS 벡터 인덱스를 데이터셋 위에 구축하여 정보를 검색합니다.\n- **아키텍처 설계:** 지식 계층(knowledge layer)과 LLM 계층(LLM layer)을 분리하여 모델 변경 없이 인덱스를 독립적으로 업데이트할 수 있도록 설계되었습니다.\n- **메모리 관리의 중요성:** 다중 턴 대화에서 이전 메시지를 기억하지 못하면 의미가 없어지지만, 매 호출마다 전체 대화 기록을 전송할 수 없는 문제가 있습니다.\n- **AWS Bedrock AgentCore의 활용:** Actor 및 Session별로 컨텍스트를 범위 지정(scope)하는 메모리 레이어를 사용하여 에이전트가 모든 것을 다시 로드하지 않고도 대화를 지속할 수 있게 합니다.\n- **LangGraph를 이용한 오케스트레이션:** 검색 결과에 따라 에이전트가 동적으로 다른 툴 경로를 선택할 수 있으므로, 비선형적인 로직 관리에 LangGraph가 사용되었습니다.\n- **Streamlit 기반 인터페이스:** 에이전트와 상호 작용하고 다중 턴 대화 동작을 테스트하기 위한 Streamlit 기반 인터페이스가 구축되었습니다.\n- **지식 베이스 구축:** Jio 공식 웹사이트에서 데이터셋을 추출하고 준비하여 지식 베이스로 활용했습니다.\n\n## 시사점\n\n이 Agentic Conversational FAQ Assistant는 복잡한 다중 턴 대화에서 컨텍스트 유지 및 정보 검색의 효율성을 높이며, LangGraph와 AWS Bedrock AgentCore를 활용하여 유연하고 확장 가능한 대화형 AI 시스템 구축 가능성을 보여줍니다."
 }

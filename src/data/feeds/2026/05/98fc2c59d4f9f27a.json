@@ -10,5 +10,6 @@
     "gear / gear news and events"
   ],
   "published_at": "2026-05-19T10:00:00.000Z",
-  "feed_id": "wired"
+  "feed_id": "wired",
+  "description": "## 개요\n\nGoogle I/O 2026에서 Google은 Gemini AI 에이전트 기능의 확장과 스마트 안경 출시를 포함한 다양한 AI 및 기기 업데이트를 발표했습니다.\n\n## 주요 내용\n\n*   **Gemini 및 AI 에이전트 강화:**\n    *   Gemini Spark라는 새로운 AI 에이전트가 발표되었으며, 노트북, Android, iOS에서 실행됩니다.\n    *   Gemini Spark는 OpenClaw에 대한 Google의 대응으로, 노트북 화면이 닫혀 있을 때도 항상 작동합니다.\n    *   Gemini Spark의 쇼핑 기능은 사용자 정의 가능한 지출 한도 및 선호 상점 설정으로 확장될 예정이지만, 사용 시 주의가 요구됩니다.\n    *   \"에이전트\"는 Google I/O 2026의 주요 주제였으며, AI 도구가 사용자의 속도에 맞춰 작동하는 것에 대한 강조가 있었습니다.\n*   **AI 기반 검색 기능:**\n    *   Google의 검색 책임자인 Liz Reid는 기존 검색에 생성형 AI 기능을 통합하려는 노력을 설명했습니다.\n    *   \"Google 검색은 AI 검색입니다.\"라는 점을 강조했습니다.\n*   **Android 및 기기 업데이트:**\n    *   Android 17에는 AI 에이전트를 위한 전용 허브인 Android Halo가 올해 말 출시될 예정입니다.\n    *   Google의 스마트 안경이 올가을 출시될 예정입니다.\n*   **개발자 도구 및 모델:**\n    *   Google AI 모델 3.5 Flash는 토큰 사용량으로 인한 개발자 비용을 절감하기 위해 Antigravity 환경에서 이전 모델보다 12배 더 빠르게 설계되었습니다.\n    *   Antigravity 2.0 업데이트는 개발자에게 더 강력한 도구와 에이전트에 대한 더 나은 제어 기능을 제공하며, Doom을 실행할 수 있습니다.\n    *   Antigravity는 Claude Code 및 Codex와 같은 경쟁 제품에 대한 Google의 응답으로, \"무조건, 에이전트 우선\"으로 설계되었으며 새로운 Antigravity SDK, 네이티브 음성 지원, Firebase 및 Android 통합을 포함합니다.\n*   **가격 정책:**\n    *   Gemini Spark와 같은 Google의 최신 기능을 출시 즉시 사용할 수 있는 AI Ultra 요금제가 월 100달러로 책정되었습니다.\n\n## 시사점\n\nGoogle은 AI 에이전트와 음성 인터페이스의 발전을 통해 검색, 모바일 경험, 개발자 도구를 혁신하고 있으며, 이는 사용자 상호 작용 및 AI 기술 통합의 미래를 보여줍니다."
 }
