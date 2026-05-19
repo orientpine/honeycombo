@@ -11,5 +11,6 @@
     "stainless"
   ],
   "published_at": "2026-05-18T19:27:52.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nAnthropic이 OpenAI, Google 등 다수의 AI 연구소에서 사용하던 개발 도구 스타트업 Stainless를 인수했습니다.\n\n## 주요 내용\n\n*   Stainless는 Alex Rattray가 설립한 회사로, API 사양을 여러 프로그래밍 언어(Python, TypeScript, Kotlin, Go, Java)에 걸쳐 프로덕션 레디 SDK로 자동 생성 및 유지보수하는 소프트웨어를 개발했습니다.\n*   API 변경 시 SDK를 자동으로 업데이트하고 수동 유지보수 시간을 절약해주어, 특히 AI 에이전트가 외부 소프트웨어와 연동하고 사용자 대신 작업을 완료하는 데 필수적인 도구로 주목받았습니다.\n*   Anthropic은 Stainless 인수를 통해 경쟁사의 주요 인프라 공급원을 확보했으며, Stainless의 호스팅 제품 및 SDK 생성기 서비스는 종료될 예정입니다.\n*   기존 Stainless 고객들은 생성된 SDK에 대한 소유권을 유지하며 수정 및 확장할 권한을 가지게 됩니다.\n*   Stainless는 2022년에 설립되었으며, Sequoia Capital과 Andreessen Horowitz의 투자를 받았습니다.\n*   The Information은 인수 금액을 3억 달러 이상으로 보도했습니다.\n\n## 시사점\n\nStainless 인수는 Anthropic이 AI 개발 생태계에서 경쟁 우위를 확보하고, AI 에이전트 개발의 핵심 인프라를 통제하려는 전략적 움직임을 보여줍니다."
 }
