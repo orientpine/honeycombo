@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-05-18T17:01:21.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nAnthropic이 SDK 및 MCP 서버 툴링 분야의 선두주자인 Stainless를 인수하여 AI 에이전트의 연결성과 개발자 경험을 강화한다.\n\n## 주요 내용\n\n- Stainless는 2022년 설립 이후 Anthropic의 모든 공식 SDK 생성에 기여했으며, 수백 개의 기업에서 API 스펙을 TypeScript, Python, Go, Java, Kotlin 등 다양한 언어의 SDK, CLI, MCP 서버로 변환하는 데 사용하고 있다.\n- 이번 인수를 통해 Stainless 팀은 Anthropic에 합류하여 Claude API의 개발자 경험을 개선하고, Claude가 데이터 및 도구에 연결되는 능력을 향상시킬 예정이다.\n- Stainless 창립자 Alex Rattray는 SDK도 API만큼 중요한 영역이라고 언급하며, Anthropic과의 파트너십이 자연스러운 결정이었음을 밝혔다.\n- Anthropic은 에이전트 연결성을 지원하기 위해 MCP를 개발했으며, Stainless 팀과의 통합으로 Claude 플랫폼의 개발자 경험 및 에이전트 연결성 확대를 가속화할 것이다.\n\n## 시사점\n\n이번 인수는 AI 에이전트가 단순한 응답을 넘어 실제 행동을 수행하는 데 있어 외부 시스템과의 연결성이 중요해지고 있다는 AI 기술의 최전선 변화를 반영하며, 개발자가 AI 모델을 더 쉽게 활용하고 다양한 도구와 통합할 수 있도록 지원하는 Anthropic의 전략적 행보를 보여준다."
 }
