@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-05-19T18:03:10.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nGemini CLI는 2026년 6월 18일부터 지원이 중단되며, Google Antigravity의 Antigravity CLI로 대체됩니다.\n\n## 주요 내용\n\n*   **Gemini CLI 지원 중단:** 2026년 6월 18일부터 Gemini CLI와 Gemini Code Assist IDE 확장 프로그램은 Google AI Pro 및 Ultra 모델, 그리고 개인 사용자를 위한 무료 Gemini Code Assist 사용 요청을 더 이상 처리하지 않습니다.\n*   **Antigravity CLI로의 전환:** Google은 Gemini CLI의 기능을 통합하고 멀티 에이전트 환경을 지원하는 새로운 터미널 경험인 Antigravity CLI를 출시합니다.\n*   **Antigravity CLI의 주요 기능:** Gemini CLI의 핵심 기능인 Agent Skills, Hooks, Subagents, Extensions(Antigravity 플러그인으로 변경)를 포함하며, 더 빠른 실행(Go 언어로 개발), 비동기 워크플로우, 통합된 아키텍처를 제공합니다.\n*   **사용자별 적용 시점:**\n    *   **일반 사용자:** Antigravity CLI는 즉시 사용 가능하며, 2026년 6월 18일부터 Gemini CLI 지원이 중단됩니다.\n    *   **Gemini Code Assist for GitHub 사용자:** 2026년 6월 18일부터 GitHub 조직에 대한 신규 설치가 중단되고, 이후 요청 처리가 중단됩니다.\n    *   **기업 고객:** Gemini Code Assist Standard 또는 Enterprise 라이선스, 또는 Google Cloud를 통해 Gemini Code Assist for GitHub를 사용하는 경우, Gemini CLI 및 IDE 확장에 대한 액세스는 변경되지 않으며 유료 Gemini 및 Gemini Enterprise Agent Platform API 키를 통해 계속 접근 가능합니다.\n*   **향후 지원:** Google은 Antigravity CLI 및 Antigravity 2.0으로의 전환을 지원하기 위한 기술 문서와 비디오 가이드라인을 제공할 예정입니다.\n\n## 시사점\n\nGemini CLI의 지원 중단은 개발자 커뮤니티가 더 복잡하고 통합된 멀티 에이전트 시스템을 요구함에 따라, Google이 에이전트 기반 개발 플랫폼에 집중하려는 전략의 일환입니다. 기업 고객은 기존 라이선스를 통해 Gemini CLI를 계속 사용할 수 있지만, 신규 사용자와 일반 사용자는 Antigravity CLI로의 전환이 필요합니다."
 }
