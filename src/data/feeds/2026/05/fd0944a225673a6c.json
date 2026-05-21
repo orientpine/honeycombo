@@ -12,5 +12,6 @@
     "music"
   ],
   "published_at": "2026-05-20T15:00:00.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nStability AI가 6분 이상의 고품질 음악 생성이 가능한 새로운 오디오 모델 제품군인 Stability Audio 3.0을 출시했습니다.\n\n## 주요 내용\n\n- Stability Audio 3.0은 small SFX(459M 파라미터), small(459M 파라미터), medium(1.4B 파라미터), large(2.7B 파라미터)의 네 가지 모델로 구성됩니다.\n- small SFX와 small 모델은 최대 2분 길이의 온디바이스 사운드 및 음악 생성을 지원합니다.\n- medium 및 large 모델은 최대 6분 20초 길이의 전체 음악 작곡이 가능하며, 음악적 구조와 멜로디 톤을 유지할 수 있습니다.\n- 이는 2024년에 출시된 Stable Audio 2.0의 생성 가능 길이보다 두 배 이상 증가한 수치입니다.\n- small SFX, small, medium 모델은 오픈 웨이트(open weights)로 제공되어 누구나 사용 및 수정이 가능합니다.\n- large 모델은 API 및 유료 셀프 호스팅 서비스를 통해서만 이용할 수 있으며, 연 매출 100만 달러 이상의 기업은 엔터프라이즈 라이선스가 필요합니다.\n- Stability AI는 Warner Music Group 및 Universal Music Group과 음악 생성 모델 및 도구 개발을 위한 계약을 체결했으며, 최신 오디오 모델은 라이선스가 확보된 데이터를 기반으로 구축되었습니다.\n- 회사는 전문 음악가를 위한 새로운 제품군을 개발 중이며, Ethan Kaplan이 이끄는 이 사업에 대한 자세한 내용은 추후 공개될 예정입니다.\n\n## 시사점\n\nStability Audio 3.0의 등장은 AI 기반 음악 생성 기술의 발전 수준을 보여주며, 특히 생성 가능 길이와 품질의 향상은 전문 음악가 및 관련 산업에 새로운 가능성을 제시합니다. 또한, 라이선스 확보된 데이터 사용은 AI 음악 생성 서비스의 합법성과 지속 가능성에 대한 중요한 고려 사항임을 시사합니다."
 }
