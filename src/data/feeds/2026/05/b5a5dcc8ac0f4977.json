@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-05-21T15:47:29.000Z",
-  "feed_id": "theverge"
+  "feed_id": "theverge",
+  "description": "## 개요\n\nSpotify Studio는 사용자 맞춤형 일일 브리핑, 팟캐스트, 플레이리스트를 생성하는 새로운 독립형 AI 앱으로, PC에서 챗봇 프롬프트를 통해 작동합니다.\n\n## 주요 내용\n\n- Spotify Studio는 사용자의 Spotify 청취 기록과 연동된 이메일, 캘린더, 노트 등 외부 앱 정보를 활용하여 AI 콘텐츠를 생성합니다.\n- 이 AI는 \"주제 조사, 웹 브라우저 사용, 정보 정리, 작업 완료 지원\" 등 사용자를 대신하여 행동할 수 있습니다.\n- Studio에서 생성된 모든 콘텐츠(예: 일일 브리핑 팟캐스트)는 Spotify 라이브러리에 저장될 수 있습니다.\n- Studio는 18세 이상 사용자를 대상으로 향후 몇 주 내에 연구 프리뷰 형태로 출시될 예정입니다.\n- Spotify는 또한 Premium 사용자를 위한 팟캐스트 관련 질문에 답해주는 챗봇과 사용자의 프롬프트를 기반으로 AI 에피소드를 생성하는 Personal Podcasts 기능을 선보입니다.\n- Google의 NotebookLM, Amazon의 Alexa Plus, Microsoft의 Edge 브라우저 등 경쟁사들도 유사한 AI 팟캐스트 기능을 출시했습니다.\n- Spotify는 사용자들이 이미 오디오 콘텐츠를 소비하기 위해 Spotify를 사용하고 있다는 점에서 차별점을 가집니다.\n- Studio 앱은 음악이 아닌 일일 브리핑, 팟캐스트, 플레이리스트 생성에 초점을 맞춥니다.\n\n## 시사점\n\nSpotify Studio는 사용자가 개인화된 오디오 콘텐츠를 생성하고 소비하는 방식을 혁신하며, AI 기반의 맞춤형 오디오 경험을 Spotify 플랫폼 내에서 통합하려는 Spotify의 전략을 보여줍니다."
 }
