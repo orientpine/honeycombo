@@ -12,5 +12,6 @@
     "agents"
   ],
   "published_at": "2026-05-22T16:12:02.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nPerceptron의 Akshat Shrivastava가 5월 27일에 개최되는 워크샵에서 최첨단 비디오 기반 멀티모달 AI와 컴퓨터 비전 워크플로우 통합 방안을 소개합니다.\n\n## 주요 내용\n\n- Perceptron의 최신 비디오 네이티브 멀티모달 모델은 기존 모델 대비 낮은 추론 비용으로 동등한 성능을 제공합니다.\n- Harpreet Sahota는 FiftyOne 내에서 Perceptron AI를 시작하는 방법을 시연합니다.\n- Voxel51 팀은 사용 사례, 기술 스택, 데이터에 맞춰 Annotation QA, 대규모 데이터셋 큐레이션, 모델 평가 워크플로우를 진행할 예정입니다.\n- 이 워크샵은 FiftyOne 전문가가 진행하며, 가상 및 대면 형식으로 제공됩니다.\n\n## 시사점\n\n본 워크샵은 비디오 이해 모델을 컴퓨터 비전 워크플로우에 효과적으로 통합하고 싶은 개발자들에게 실질적인 기술과 도구 사용법을 제공합니다."
 }
