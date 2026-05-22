@@ -12,5 +12,6 @@
     "spotify"
   ],
   "published_at": "2026-05-21T19:45:00.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nSpotify는 Universal Music Group(UMG)과 제휴하여 팬들이 생성형 AI 기술을 이용해 좋아하는 곡의 커버와 리믹스를 만들 수 있도록 허용하는 새로운 도구를 출시할 예정입니다.\n\n## 주요 내용\n\n*   Spotify와 UMG는 팬들이 AI를 사용하여 음악을 만들 수 있도록 하는 라이선스 계약을 체결했습니다.\n*   이 도구는 Spotify Premium 구독자에게 유료 부가 기능으로 제공될 예정이며, AI로 생성된 음악에 대한 수익을 참여 아티스트와 공유할 것입니다.\n*   Spotify는 작년에 UMG, Sony Music Group, Warner Music Group 등과 협력하여 아티스트 중심의 AI 제품을 개발할 계획을 예고한 바 있습니다.\n*   Spotify는 아티스트와 권리 소유자가 AI 도구 참여 여부와 방식을 선택할 수 있어야 하며, 참여 시 공정한 보상을 받아야 한다는 원칙을 강조했습니다.\n*   UMG는 이 개발이 아티스트가 팬과의 관계를 심화시키고 추가 수익 기회를 창출하는 방법이 될 것이라고 언급했습니다.\n*   Suno와 Udio와 같은 AI 음악 제작 도구는 라이선스 문제로 인해 주요 음반사들과의 법적 분쟁을 겪었으며, Suno는 Warner Music Group과, Udio는 Warner Music 및 UMG와 합의를 마친 바 있습니다.\n*   Spotify는 이러한 활동에 대한 소비자 수요를 인지하고 음반사들과 직접적인 계약을 추진했습니다.\n*   이번 UMG와의 파트너십 외에도 Spotify는 AI 기반 오디오북 제작 도구, 팟캐스터를 위한 AI 기능, 개인 팟캐스트 제작용 데스크톱 앱, 상위 팬을 위한 예약 콘서트 티켓 등 여러 신규 발표를 했습니다.\n\n## 시사점\n\nSpotify와 UMG의 이번 계약은 AI 기술을 활용한 음악 제작 및 수익 공유 모델에 대한 새로운 가능성을 제시하며, 아티스트의 동의와 보상을 기반으로 하는 AI 음악 생태계 구축에 기여할 것으로 보입니다."
 }
