@@ -11,5 +11,6 @@
     "ai summaries"
   ],
   "published_at": "2026-05-22T16:16:48.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nGoogle 검색이 AI 요약을 전면에 내세우며 새로운 경험을 선보였으나, 'disregard'와 같은 단어를 검색했을 때 발생하는 빈 공간과 불필요한 AI 응답으로 인해 사용자 경험에 문제가 발생하고 있다.\n\n## 주요 내용\n\n- Google 검색의 새로운 방식은 AI 요약을 상단에 배치하고 기존의 'ten blue links'를 하단으로 이동시켰다.\n- 'disregard'라는 단어를 검색했을 때, Merriam-Webster 사전 링크는 존재하지만 상당한 양의 빈 공간을 지나야 나타난다.\n- 대부분의 사용자에게 보이는 유일한 결과는 불필요한 AI 응답이며, 이는 'disregard'라는 단어 검색 의도에 부합하지 않는 기능적 결함이다.\n- Bing 검색 결과는 Google에 비해 AI 요약 적용이 덜 공격적이어서, 'disregard' 검색 시 더 유용한 정보를 제공한다.\n- 15년간의 기술 저널리즘 경험 중 처음으로 Bing 검색 결과가 Google 검색 결과보다 유용하게 느껴지는 사례가 발생했다.\n\n## 시사점\n\nGoogle의 AI 중심 검색 전환이 예상치 못한 'edge case'를 발생시키며 사용자 경험에 부정적인 영향을 미치고 있으며, 이는 AI 통합 과정에서 발생할 수 있는 문제점을 보여준다."
 }
