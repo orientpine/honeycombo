@@ -12,5 +12,6 @@
     "programming"
   ],
   "published_at": "2026-05-26T06:00:44.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nSpring AI와 Server-Sent Events(SSE)를 활용한 AI 챗봇 응답 스트리밍 기법은 사용자 경험을 혁신적으로 개선하며, LLM 응답 속도 저하 문제를 해결합니다.\n\n## 주요 내용\n\n-   **기존 방식의 비효율성**: 대부분의 애플리케이션은 사용자의 쿼리, LLM 요청, 전체 응답 반환까지 5-10초의 대기 시간을 필요로 하여 사용자 경험을 저해합니다.\n-   **개선된 아키텍처**: Spring AI의 스트리밍 지원 기능을 Server-Sent Events(SSE)와 결합하여, 사용자의 쿼리가 입력되면 Spring AI는 스트리밍 토큰을 생성하고, SSE 엔드포인트를 통해 브라우저는 UI를 즉각적으로 업데이트합니다.\n-   **Spring AI 스트리밍 예시**: `@RestController`와 `@RequiredArgsConstructor`를 사용한 `ChatController`에서 `chatClient.prompt().user(message).stream().content()`를 통해 스트리밍 응답을 반환하는 Java 코드를 제공합니다.\n-   **프론트엔드 통합**: JavaScript에서 `EventSource` API를 사용하여 SSE 엔드포인트에 연결하고, `onmessage` 이벤트를 통해 받은 데이터를 실시간으로 UI에 추가하는 예시 코드를 제시합니다.\n-   **성능상의 이점**:\n    -   **빠른 인지 응답 시간**: LLM의 총 생성 시간은 동일하더라도, 스트리밍 방식을 사용하면 첫 번째 토큰이 200-500ms 내에 사용자에게 전달되어 체감 속도가 현저히 향상됩니다.\n    -   **이탈률 감소**: 사용자가 진행 상황을 즉각적으로 확인할 수 있어 기다리는 동안 애플리케이션을 떠날 가능성이 줄어듭니다.\n    -   **향상된 AI UX**: 스트리밍은 로컬 Ollama 모델과 같은 경우에도 응답성이 뛰어난 사용자 경험을 제공합니다.\n\n## 시사점\n\nSpring AI와 SSE를 활용한 응답 스트리밍은 AI 챗봇의 사용자 경험을 획기적으로 개선하여, 느린 응답 시간으로 인한 사용자 이탈을 줄이고 실시간 상호작용의 몰입도를 높이는 효과적인 기술적 접근 방식입니다."
 }

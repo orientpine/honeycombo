@@ -12,5 +12,6 @@
     "ai"
   ],
   "published_at": "2026-05-26T05:47:36.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nFairLens AI는 AI 기반 편향 감사(bias auditing)를 위한 SaaS 플랫폼으로, 데이터 과학자와 연구자가 머신러닝 모델 학습에 사용되기 전 데이터셋 내 숨겨진 편향을 식별, 정량화 및 완화할 수 있도록 지원한다.\n\n## 주요 내용\n\n-   **FairLens AI의 기능**: CSV 데이터셋을 업로드하면 보호 속성(protected attributes) 전반의 공정성 지표(fairness metrics)에 대한 즉각적인 통찰력을 제공하며, 상호작용이 가능한 Glassmorphism 스타일의 대시보드를 통해 시각화된다.\n-   **핵심 지표 계산**: Demographic Parity Ratio 및 Disparate Impact과 같은 복잡한 지표를 계산하고, 전반적인 공정성 점수(fairness score)를 할당하며, 실행 가능한 완화 권장 사항을 제공한다.\n-   **개발 과정의 전환**: 초기에 수동 통계 엔진 구현에 어려움을 겪었으나, Finish-Up-A-Thon의 지원을 받아 AI-agentic 아키텍처로 전환하여 프로젝트를 완성했다.\n-   **AI-agentic 아키텍처 구성**:\n    -   **Supabase Edge Functions**: Deno를 사용하여 서버리스 백엔드를 구현, API를 통해 데이터셋 통계를 안전하게 처리한다.\n    -   **Google Gemini 3 Integration**: AI 게이트웨이를 통해 Google Gemini 3 Flash Preview 모델과 연동하며, CSV 교차 표를 LLM에 입력하고 \"Fairness Expert\" 역할을 수행하도록 구체적인 시스템 프롬프트를 엔지니어링했다.\n    -   **Structured JSON Insights**: AI가 단순히 텍스트가 아닌, 엄격하게 유형화된 JSON 도구 호출(tool calls)을 반환하도록 구성하여 공정성 지표, 0-100점의 공정성 점수, 구체적인 완화 단계를 포함한다.\n    -   **Dynamic Frontend Wiring**: AuditDashboard가 실시간 AI 데이터를 Recharts 시각화 및 메트릭 게이지에 동적으로 매핑하여 UI를 지능형 감사 도구로 전환한다.\n-   **GitHub Copilot 활용**: 프론트엔드와 Supabase Edge Functions 간의 복잡한 타이핑 요구사항 처리, Zod 스키마 및 TypeScript 인터페이스 예측, 반복적인 Tailwind CSS 클래스 제안, 데이터 구문 분석 로직 지원 등 프로젝트 완료에 크게 기여했다.\n\n## 시사점\n\nFairLens AI는 AI 편향 감사 과정을 자동화하고 접근성을 높임으로써 기술 분야의 책임성을 강화하고, 데이터 과학자와 연구자가 보다 공정한 AI 모델을 개발하는 데 실질적인 도움을 줄 수 있는 도구이다."
 }
