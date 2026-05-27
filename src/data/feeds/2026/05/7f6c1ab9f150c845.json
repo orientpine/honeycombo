@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-05-27T16:28:41.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nGoogle의 AI 모드 도입 이후, 개인 정보 보호 및 사용자 선택권을 강조하는 DuckDuckGo 검색 이용량이 증가했습니다.\n\n## 주요 내용\n\n*   Google 검색의 AI 개요(AI Overview)와 같은 기능이 사용자의 경험을 방해하면서 대안 검색 엔진을 찾는 이용자가 늘었습니다.\n*   5월 20일부터 25일까지 DuckDuckGo의 AI 없는 검색 페이지(noai.duckduckgo.com) 방문량이 전주 대비 평균 22.7% 증가했으며, 24일에는 27.7%까지 치솟았습니다.\n*   DuckDuckGo 모바일 앱 설치 건수는 미국에서 전주 대비 평균 18.1% 증가했으며, 25일에는 30.5%까지 상승했습니다. 특히 iOS 사용자의 설치 증가율이 두드러져 평균 33%, 최대 69.9%에 달했습니다.\n*   이러한 증가는 Google CEO Sundar Pichai가 \"사람들은 [검색의 AI 모드]를 좋아한다\"고 발언한 이후에 발생했습니다.\n*   DuckDuckGo CEO Gabriel Weinberg는 Google의 AI 강제 주입 방식이 결과의 질을 저하시킨다고 비판하며, 사용자가 AI 활용 정도를 선택할 수 있는 환경을 제공하겠다고 밝혔습니다.\n*   Google은 여전히 검색 시장의 약 85%를 차지하며 선두를 유지하고 있으나, DuckDuckGo는 사용자 선택과 개인 정보 보호를 최우선으로 합니다.\n*   DuckDuckGo는 duck.ai와 같은 AI 서비스도 제공하며, GPT-5 mini, Claude Haiku 4.5와 같은 LLM과의 비공개 채팅을 지원합니다.\n*   DuckDuckGo는 모든 검색 및 채팅 기록을 수집하지 않으며, AI 훈련에 사용하지 않아 개인 정보 보호를 보장합니다.\n*   DuckDuckGo의 자체 AI 개요 기능도 인기가 있지만, AI 생성 이미지 필터링 옵션 또한 선호되는 것으로 나타나 '선택권'의 중요성이 강조됩니다.\n\n## 시사점\n\nGoogle의 AI 중심 검색 전략이 사용자 이탈을 야기하며, DuckDuckGo와 같이 사용자 선택권과 개인 정보 보호를 중시하는 대안 검색 엔진의 성장을 견인하고 있습니다."
 }

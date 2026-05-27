@@ -10,5 +10,6 @@
     "business / artificial intelligence"
   ],
   "published_at": "2026-05-27T14:00:00.000Z",
-  "feed_id": "wired"
+  "feed_id": "wired",
+  "description": "## 개요\n\nGoogle DeepMind, Apple, OpenAI, Meta Superintelligence Labs 출신 연구원들이 설립한 스타트업 Trajectory는 실제 사용자 상호작용 데이터를 활용하여 AI 제품을 지속적으로 개선하는 플랫폼을 구축하고자 합니다.\n\n## 주요 내용\n\n*   **지속적인 학습의 중요성**: 현재 대부분의 AI 모델은 훈련이 완료되면 더 이상 학습하지 않아 오류를 반복하는 한계가 있습니다. 지속적인 학습 능력은 AI 발전의 주요 장벽으로 여겨져 왔으며, 특히 초지능 에이전트 개발에 필수적이라는 주장이 있습니다.\n*   **Trajectory의 목표**: Trajectory는 AI가 실시간으로 오류로부터 배우고 지속적으로 개선될 수 있는 플랫폼을 제공하여, 기업들이 AI 제품의 성능을 꾸준히 향상시킬 수 있도록 지원합니다.\n*   **$15 million 시드 라운드 투자 유치**: Conviction 주도하에 Bessemer Venture Partners, Radical VC, BoxGroup 등이 참여했으며, Google DeepMind의 제프 딘, 페이페이 리 등 유명 인사들도 개인 투자자로 참여했습니다.\n*   **코드 생성 AI의 성공 사례**: Cursor와 같은 AI 코딩 제품들은 사용자 상호작용 데이터를 활용한 지속적인 모델 개선을 통해 빠르게 발전했으며, Trajectory는 이러한 방식을 코딩 외 다른 도메인으로 확장하려 합니다.\n*   **맞춤형 AI 모델 구축**: Trajectory는 고객사들이 OpenAI, Anthropic 등의 기성 모델 대신 오픈소스 모델을 기반으로 시작하여, 특정 비즈니스 요구사항에 맞게 AI 모델을 최적화하도록 돕습니다. Decagon의 경우, AI 고객 지원 에이전트가 실패한 사례를 바탕으로 매주 모델을 재훈련시켜 성능을 개선합니다.\n*   **Forward Deployed Engineer 의존도 감소**: Trajectory의 플랫폼은 AI 스택의 지속적인 문제를 해결하기 위해 사내 엔지니어가 필요 없도록 자체적으로 개선되는 AI 제품을 목표로 합니다. Clay, Harvey와 같은 기업들이 이미 고객이며, 향후 Fortune 500대 기업으로 확장할 계획입니다.\n*   **향후 발전 방향**: 현재는 주 1회 모델 업데이트를 제공하지만, 궁극적으로는 매일, 매시간, 혹은 각 상호작용마다 AI 모델을 업데이트하고, 나아가 개인별 AI 학습 시스템까지 구축하는 것을 목표로 합니다.\n\n## 시사점\n\nTrajectory의 지속적인 학습 플랫폼은 기존의 정적인 AI 모델의 한계를 극복하고, AI 제품의 빠른 개선과 맞춤화를 가능하게 하여 기업들의 AI 도입 및 활용 방식을 혁신할 잠재력을 지닙니다."
 }
