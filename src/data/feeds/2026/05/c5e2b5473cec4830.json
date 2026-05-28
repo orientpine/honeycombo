@@ -12,5 +12,6 @@
     "amazon"
   ],
   "published_at": "2026-05-27T20:10:00.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nSnowflake가 Amazon Web Services(AWS)와 5년간 60억 달러 규모의 계약을 체결했으며, 이는 Snowflake가 AI 관련 컴퓨팅 수요 증가로 인해 AWS의 자체 ARM 기반 CPU 칩인 Graviton 사용을 늘리면서 이루어졌습니다.\n\n## 주요 내용\n\n- Snowflake는 AWS와 5년간 60억 달러 규모의 새로운 계약을 체결했습니다.\n- 이는 Snowflake가 2012년 창립 이래 AWS Marketplace를 통해 총 70억 달러 상당의 서비스를 판매한 것과 비교할 때 매우 큰 규모의 계약입니다.\n- Snowflake의 고객 지출이 AWS에서 가속화되고 있으며, 2025년에는 해당 연도에만 20억 달러에 이를 것으로 예상됩니다.\n- 이러한 성장의 주요 동인은 AI이며, Snowflake는 자체 AI 빌딩 도구인 Cortex AI를 제공하고 있습니다.\n- Cortex AI는 텍스트 기반 데이터베이스 쿼리, 요약 보고서 등 AI 기능을 제공합니다.\n- Snowflake는 특히 AWS의 자체 ARM 기반 CPU 칩인 Graviton에 대한 접근 확대를 위해 이번 계약을 체결했습니다.\n- AI의 사용이 훈련에서 일상 사용, 에이전트를 통한 자동화로 이동함에 따라 CPU 사용량이 급증하고 있으며, CPU는 에이전트와 관련된 대부분의 AI 작업을 처리합니다.\n- Amazon CEO Andy Jassy는 Amazon의 자체 AI 칩이 Nvidia의 제품보다 \"더 나은 가격 대비 성능\"을 제공한다고 언급했습니다.\n- AWS는 AI 처리 수요가 매우 높아 칩을 최대한 빠르게 배포하고 있습니다.\n- 대부분의 주요 AI 모델 제작사는 Nvidia 칩에 맞춰 애플리케이션을 설계했지만, Amazon의 자체 칩은 클라우드 서비스 제공업체에게 더 저렴한 옵션입니다.\n- 이러한 칩은 새로운 수십억 달러 규모의 계약을 유치하고 있으며, 최근 AWS는 Meta와 AI 컴퓨팅 수요 충족을 위한 수백만 개의 Graviton 칩 공급 계약을 체결했습니다.\n- 또한, Google과 Microsoft도 자체 AI 칩을 개발하며 Nvidia와 경쟁하고 있습니다.\n\n## 시사점\n\n이번 Snowflake와 AWS의 대규모 계약은 AI 시대에 클라우드 제공업체들이 자체 개발 칩을 통해 경쟁력을 강화하고 있으며, AI 기술 발전이 클라우드 시장의 성장을 견인하고 있음을 보여줍니다."
 }
