@@ -12,5 +12,6 @@
     "automation"
   ],
   "published_at": "2026-05-28T20:06:07.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nAsana가 $75 million에 workflow automation 회사 StackAI를 인수하며 AI-native workplace platform으로의 전환을 가속화한다.\n\n## 주요 내용\n\n*   Asana는 StackAI 인수를 통해 \"human-agent teams의 운영체제\" 구축이라는 AI 중심 전략을 강화한다.\n*   StackAI는 Salesforce, Slack, Gsuite 등 기존 비즈니스 시스템 내에서 작동하는 AI workflow-automation 시스템을 구축했으며, Y Combinator Winter ’23 출신 기업이다.\n*   StackAI는 Zapier, OpenAI, Anthropic 등 경쟁사들과 경쟁해 왔으며, 총 $20 million 미만의 자금을 조달했다.\n*   Asana는 이미 AI Studio agent builder와 AI Teammates 시리즈 등 AI 관련 제품을 출시했으며, StackAI 인수로 복잡한 비즈니스 프로세스를 end-to-end로 자동화할 수 있게 되었다.\n*   Asana CEO Dan Rogers는 이번 인수가 로드맵을 가속화하고 human-agent work의 다음 단계로 나아가게 할 것이라고 밝혔다.\n\n## 시사점\n\n이번 StackAI 인수는 Asana가 AI 기술을 활용하여 기존 워크플로우 통합의 강점을 바탕으로 경쟁력을 높이고, 시장에서의 입지를 재건하려는 전략의 중요한 발걸음이다."
 }
