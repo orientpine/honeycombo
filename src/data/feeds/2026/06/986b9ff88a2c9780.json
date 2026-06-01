@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-06-01T14:39:03.000Z",
-  "feed_id": "theverge"
+  "feed_id": "theverge",
+  "description": "## 개요\n\nMicrosoft는 개발자 컨퍼런스인 Build에서 새로운 AI 모델, Windows 개선 사항, Copilot 슈퍼 앱 등에 대한 발표를 통해 개발자들의 신뢰를 회복하고 AI 시대의 미래를 제시할 예정이다.\n\n## 주요 내용\n\n*   **Windows 11 개발자 최적화 경험:** Microsoft는 이번 Build에서 개발자를 위한 새로운 Windows 11 환경을 공개하며, 사전 설치된 앱, 도구, 스크립트 등을 포함한 방해 없는 개발 환경을 제공한다.\n*   **Windows 11 성능 및 경험 개선:** Windows 11의 성능 향상 및 전반적인 경험 개선을 위한 재작업에 대한 추가 정보가 공개될 예정이다.\n*   **차세대 AI 모델 발표:** Microsoft AI는 추론 모델인 MAI-Thinking-1을 비롯하여 MAI-Image-2.5 및 MAI-Image-2.5-Flash와 같은 새로운 AI 모델들을 발표한다. MAI-Thinking-1은 기업용으로 타겟팅될 가능성이 높다.\n*   **Windows on Arm 및 새로운 실리콘 지원:** Nvidia의 RTX Spark와 같은 새로운 실리콘에 대한 Windows의 적응과 Qualcomm과의 협력을 통한 Windows on Arm 생태계 확장에 대한 소식이 있을 예정이다.\n*   **로컬 AI 모델 강화:** 클라우드 기반 모델 의존도를 줄이고 로컬 컴퓨팅 리소스를 활용할 수 있도록 Windows에서 로컬 AI 모델 실행에 대한 초점이 강화될 것이다.\n*   **Copilot \"슈퍼 앱\" 공개:** 여러 Copilot AI 어시스턴트를 단일 인터페이스로 통합하는 Copilot 슈퍼 앱에 대한 논의가 이루어지며, Microsoft Scout라는 새로운 AI 에이전트에 대한 초기 모습도 공개될 수 있다.\n*   **GitHub 신뢰 회복 노력:** 최근 보안 사고 및 개발자 이탈 문제에 직면한 GitHub의 신뢰를 회복하기 위한 Microsoft의 노력이 Build에서 강조될 것으로 예상된다.\n\n## 시사점\n\nMicrosoft Build는 AI 중심 전략을 강화하고 개발자 커뮤니티와의 관계를 재정립하며, Windows 및 관련 생태계의 미래를 위한 기술적 진보를 공유하는 중요한 행사가 될 것이다."
 }

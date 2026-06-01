@@ -12,5 +12,6 @@
     "duckduckgo"
   ],
   "published_at": "2026-06-01T14:49:10.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nDuckDuckGo는 AI 없는 검색 경험을 기본값으로 설정할 수 있는 새로운 브라우저 확장 프로그램을 출시하여 AI에 대한 반감을 이용하고 있으며, 검색 엔진으로의 트래픽이 급증하고 있습니다.\n\n## 주요 내용\n\n*   DuckDuckGo는 사용자가 AI 없는 검색 페이지(noai.duckduckgo.com)를 기본 검색 엔진으로 설정할 수 있는 브라우저 확장 프로그램을 출시했습니다.\n*   이 확장 프로그램이 활성화되면 사용자는 AI 지원 답변, 채팅 프롬프트, AI 이미지 없이 검색 결과를 제공하는 DuckDuckGo의 AI 프리 검색 페이지로 이동하게 됩니다.\n*   현재 Chrome 및 Firefox 사용자를 위해 확장 프로그램이 제공되며, DuckDuckGo 웹 브라우저 사용자는 브라우저 기록을 삭제해도 AI 설정이 유지됩니다.\n*   Google의 AI 중심 검색 엔진 개편 발표 이후 DuckDuckGo로의 트래픽이 크게 증가했으며, AI 없는 검색 페이지 방문은 주간 30% 가까이 증가했습니다.\n*   DuckDuckGo는 AI 챗봇과 최신 AI 모델, VPN, 신원 도용 복구 등의 서비스를 포함하는 구독 플랜도 제공하며, AI 반대 기업이 아님을 명확히 했습니다.\n*   향후 DuckDuckGo Privacy Essentials 확장 프로그램도 Chrome, Firefox, Edge, Opera에서 AI 검색 설정 제어를 제공하도록 업데이트될 예정입니다.\n\n## 시사점\n\nDuckDuckGo의 AI 없는 검색 경험 강화는 AI 기반 검색에 대한 우려가 커지는 가운데 사용자가 개인 정보 보호와 통제에 중점을 둔 대안을 모색하고 있음을 보여주며, 이는 검색 시장의 변화 가능성을 시사합니다."
 }
