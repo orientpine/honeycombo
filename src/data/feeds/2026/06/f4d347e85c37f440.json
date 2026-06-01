@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-06-01T16:33:59.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nDuckDuckGo는 AI 없는 검색 경험을 기본 설정으로 간편하게 설정할 수 있는 새로운 브라우저 확장 프로그램을 출시하며 AI 반대 정서를 강화하고 있으며, 이는 트래픽 급증과 함께 이루어지고 있습니다.\n\n## 주요 내용\n\n- DuckDuckGo는 사용자가 noai.duckduckgo.com을 기본 검색 엔진으로 설정할 수 있는 Chrome 및 Firefox용 브라우저 확장 프로그램을 출시했습니다.\n- 이 확장 프로그램이 활성화되면 사용자는 AI 기반 답변, 채팅 프롬프트, AI 이미지 수가 줄어든 DuckDuckGo의 AI 없는 검색 페이지로 이동됩니다.\n- Google이 개발자 컨퍼런스에서 AI 우선 검색 엔진 개편을 발표한 이후 DuckDuckGo의 트래픽이 급증했습니다.\n- 최근 일주일 동안 AI 없는 검색 페이지 방문이 거의 30% 증가했으며, 미국 내 앱 설치 수도 18.1% 증가했습니다.\n- DuckDuckGo는 AI 없는 검색 경험이 Google의 AI 기반 개편으로 인해 어려워지고 있다는 점을 강조하며, 이는 사용자들이 대안 검색 엔진으로 이동하는 이유 중 하나입니다.\n- DuckDuckGo는 AI 챗봇 및 구독형 서비스를 제공하는 등 AI 기술을 완전히 배제하는 것은 아니지만, 사용자가 AI 없는 검색을 선택할 수 있는 옵션을 강화하고 있습니다.\n- 곧 출시될 Privacy Essentials 확장 프로그램 업데이트를 통해 Chrome, Firefox, Edge, Opera 등에서 AI 검색 설정을 제어할 수 있게 될 예정입니다.\n\n## 시사점\n\nDuckDuckGo의 AI 없는 검색 환경 접근성 강화는 Google의 AI 중심 검색 전략에 대한 대안을 찾는 사용자들에게 긍정적인 영향을 미칠 수 있으며, 검색 엔진 시장에서 사용자 경험 선택권의 중요성을 부각시킵니다."
 }
