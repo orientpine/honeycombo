@@ -12,5 +12,6 @@
     "whatsapp"
   ],
   "published_at": "2026-06-03T13:40:00.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nMeta는 WhatsApp Business의 고객 지원 AI 봇인 Meta Business Agent를 전 세계적으로 출시하여, 중소기업의 워크플로우 소프트웨어로 활용될 수 있도록 기능을 확장합니다.\n\n## 주요 내용\n\n-   Meta Business Agent는 고객 질문 답변, 제품 추천, 예약, 판매 리드 자격 심사, 필요시 담당자 연결 등 다양한 고객 지원 기능을 수행합니다.\n-   이 AI 봇은 WhatsApp뿐만 아니라 Instagram DM에서도 사용 가능하며, 향후 채팅 요약 및 인사이트 제공 기능이 테스트될 예정입니다.\n-   Meta는 시장 조사, 제품 기능 강조, 캘린더 관리, 경쟁사 인사이트 추출 등의 기능 추가를 개발 중입니다.\n-   또한, 검색 시 비즈니스 정보 노출, 연락처 공유 시 관련 비즈니스 정보 제공 기능도 개발 중입니다.\n-   대규모 기업을 위해 Shopify, Zendesk, Shopee 등과의 연동이 가능한 맞춤형 AI 에이전트 생성 플랫폼 구축도 진행하고 있습니다.\n-   Meta Business Agent는 WhatsApp Business Premium 구독의 일부로 유료화될 예정이며, 대규모 기업은 사용량 기반(토큰)으로 요금을 지불하게 됩니다.\n\n## 시사점\n\nMeta Business Agent의 글로벌 출시는 WhatsApp이 단순한 메시징 앱을 넘어 기업의 업무 효율성을 높이는 워크플로우 도구로 발전할 가능성을 시사하며, AI 기반 고객 지원 및 비즈니스 운영 방식에 변화를 가져올 것입니다."
 }
