@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-06-02T18:12:44.000Z",
-  "feed_id": "theverge"
+  "feed_id": "theverge",
+  "description": "## 개요\n\nMicrosoft가 Build 2026 컨퍼런스에서 발표한 MAI-Thinking-1은 소프트웨어 엔지니어링 벤치마크에서 선도적인 모델들과 동등한 성능을 보이는 플래그십 AI 모델입니다.\n\n## 주요 내용\n\n- MAI-Thinking-1은 Microsoft가 처음부터 자체적으로 깨끗한 데이터를 사용하여 훈련시킨 중형 모델이며, 타사 모델로부터의 증류 없이 개발되었습니다.\n- 이전에는 OpenAI의 모델에 의존했으나, 최근 OpenAI와의 계약 재협상을 통해 독자적인 모델 개발에 박차를 가하고 있습니다.\n- MAI-Thinking-1 외에도 이미지 생성, 음성 인식, 음성 합성, 코드 생성 등 다양한 분야를 위한 6개의 새로운 AI 모델이 함께 발표되었습니다.\n- MAI-Image 2.5는 텍스트-이미지 변환 및 이미지 편집 기능을 제공하며, MAI-Transcribe-1.5는 경쟁 모델 대비 5배 빠른 속도를 자랑합니다.\n- MAI-Voice 2 모델은 15개의 새로운 언어와 다양한 음성 옵션을 추가했으며, MAI-Code-1-Flash는 GitHub Copilot 및 Visual Studio Code에 통합된 추론 효율적인 코딩 모델입니다.\n\n## 시사점\n\nMAI-Thinking-1의 등장은 Microsoft가 AI 모델 개발에서 자체 역량을 강화하고 있음을 보여주며, 향후 다양한 분야의 AI 기술 발전과 적용에 중요한 영향을 미칠 것으로 예상됩니다."
 }
