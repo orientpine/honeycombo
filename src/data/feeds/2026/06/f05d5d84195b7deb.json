@@ -12,5 +12,6 @@
     "android"
   ],
   "published_at": "2026-06-02T18:00:46.000Z",
-  "feed_id": "arstechnica"
+  "feed_id": "arstechnica",
+  "description": "## 개요\n\nAndroid 휴대전화는 곧 발신자 사칭 및 피싱 사기를 탐지하는 기능을 도입하며, 이는 AI 음성 복제 기술의 발달로 인해 증가하는 금융 사기 위협에 대응하기 위한 것입니다.\n\n## 주요 내용\n\n*   **사기 전화 탐지 기능 확대**: Google은 연락처에 있는 사람을 사칭하는 음성 복제 사기 전화를 탐지하는 기능을 모든 Android 12 이상 기기에 제공합니다. 이 기능은 Phone by Google, Contacts, Google Messages 앱이 설치되어 있어야 작동합니다.\n*   **작동 방식**: 사기꾼이 온라인 릴레이를 사용하여 발신자 번호를 사칭할 경우, 수신자의 Google 다이얼러 앱에서 발신자 인증 신호가 누락됩니다. 이 신호가 없으면 Messages 앱이 인증된 RCS 핑을 발신자에게 보내 해당 전화가 실제 발신자가 아니라는 것을 확인하고, 발신자의 휴대전화에서 해당 통화를 연결하고 있지 않다고 보고하면 팝업 알림으로 사용자에게 경고합니다.\n*   **제한 사항**: 이 기능이 작동하려면 통화하는 상대방도 동일한 세 가지 Google 앱을 설치해야 합니다.\n*   **AI 기반 기능 확장**: Pixel 10 및 Galaxy S26에서 처음 선보인 Circle to Search의 \"Find the Look\" 기능이 Android 14 이상 기기로 확대되어 이미지 속 의상의 각 부분을 식별할 수 있습니다.\n*   **Google 포토 AI 기능**: Google 포토는 AI 기반 패션 엔진을 통해 사용자가 입었던 옷을 카탈로그화하고 가상 옷장을 만들어 AI 이미지 생성을 지원합니다.\n*   **AirDrop 지원 확대**: Google은 일부 기기에서 Apple AirDrop 지원을 확대하고 있으며, Samsung, OnePlus, Xiaomi, Vivo, HONOR 등의 기기에 적용됩니다.\n\n## 시사점\n\nAndroid 휴대전화는 AI 기술을 활용하여 증가하는 통신 사기 위협에 대한 보호 기능을 강화하고 있으며, 사용자 경험을 향상시키는 다양한 AI 기반 기능들을 추가적으로 제공합니다."
 }
