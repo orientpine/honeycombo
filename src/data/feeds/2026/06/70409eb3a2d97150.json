@@ -12,5 +12,6 @@
     "writing"
   ],
   "published_at": "2026-06-07T05:47:01.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nATTUNE은 오디오북 녹음 실패의 근본 원인인 시스템 부재를 해결하기 위해 개발된 도구로, GitHub Copilot의 도움을 받아 MVP(Minimum Viable Product)가 완성되었다.\n\n## 주요 내용\n\n*   **ATTUNE의 기능**:\n    *   오디오북 녹음 전, 챕터를 붙여 넣으면 30분 세션 창과 함께 보컬 로드 점수, 콜드 리드 위험 플래그, 퍼포먼스 레지스터를 제공한다.\n    *   별도의 스튜디오나 장비, 제작팀 없이 스마트폰과 조용한 방에서 사용 가능하도록 설계되었다.\n    *   기존 계획에 없던 보컬 로드 스코어링, 콜드 리드 위험 감지, 퍼포먼스 레지스터 분석 기능을 포함하여 MVP가 완성되었다.\n    *   세션을 완료하면 진행 상황을 시각적으로 추적할 수 있다.\n*   **GitHub Copilot의 활용**:\n    *   **Export Plan**: 세션 계획을 다운로드 가능한 markdown 파일로 내보내는 기능 개발에 Copilot이 전체 scaffold를 작성했다.\n    *   **Cold Read Risk Detection**: 원본 사양에는 없었으나, 중간 빌드 과정에서 녹음 시 구두점 등 밀도가 높은 문장을 미리 감지하여 녹음 품질을 저해하는 요소를 플래그하는 기능 개발에 Copilot이 기여했다.\n    *   **Performance Register Detection**: 키워드 빈도를 기반으로 각 세션의 주요 감정 레지스터(TENSION, GRIEF, INTROSPECTION, DIALOGUE, ACTION, EXPOSITION)를 분석하고 한 줄 성능 노트를 제공하는 기능 구현에 Copilot이 활용되어 도구의 성격을 '스케줄러'에서 '디렉터'로 변화시켰다.\n\n## 시사점\n\nATTUNE은 오디오북 제작의 진입 장벽을 낮추고, GitHub Copilot은 개발 과정에서 미처 예상치 못한 유용한 기능들을 구현하는 데 기여하며 도구의 완성도를 높이는 중요한 역할을 수행했다."
 }
