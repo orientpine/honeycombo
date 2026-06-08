@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-06-08T16:00:00.000Z",
-  "feed_id": "theverge"
+  "feed_id": "theverge",
+  "description": "## 개요\n\nNotebookLM은 Gemini 3.5 Pro 모델 업그레이드를 통해 AI 기반 정보 검색 및 분석 기능을 강화했으며, 클라우드 컴퓨터 환경에서 코드를 실행하여 연구를 지원하고 다양한 파일 형식으로 결과를 출력할 수 있게 되었다.\n\n## 주요 내용\n\n-   **Gemini 3.5 Pro 모델 적용:** NotebookLM은 Google의 업그레이드된 Gemini 3.5 Pro 모델을 사용하여 더 정확하고 신뢰성 높은 정보를 제공한다.\n-   **AI 기반 리서치 시작:** 사용자는 노트나 YouTube 영상 등 자료를 가져올 필요 없이, 주제에 대한 질문을 통해 NotebookLM에서 바로 리서치를 시작할 수 있다.\n-   **Google Search 통합 및 소스 탐색:** NotebookLM은 Google Search를 활용하여 관련 소스를 탐색하고, 기존의 \"discover\" 기능을 확장하여 웹상의 유용한 자료를 찾는 데 도움을 준다.\n-   **클라우드 컴퓨터 환경 (Antigravity) 도입:** NotebookLM은 Google의 에이전트 코딩 플랫폼인 Antigravity 위에서 실행되며, 각 노트북은 \"보안 클라우드 컴퓨터\"에 연결되어 연구 지원을 위한 코드 작성 및 실행이 가능하다.\n-   **다양한 파일 형식으로 결과 출력:** PDF 문서, 데이터 시각화(PNG, SVG), Nano Banana 이미지(PNG, JPG, GIF), Excel 및 PowerPoint 파일, CSV 시트 등 새로운 형식과 파일 타입으로 정보를 출력할 수 있다.\n-   **업데이트 배포 계획:** 현재 Google의 AI Ultra 플랜 및 Workspace 고객에게 제공되며, 향후 더 많은 플랜으로 확대될 예정이다.\n\n## 시사점\n\nNotebookLM의 이번 업데이트는 AI 기반 노트 앱의 활용 범위를 확장하여, 사용자가 정보를 단순히 저장하고 요약하는 것을 넘어 능동적으로 탐색하고 분석하며 결과물을 생성하는 데까지 도움을 줄 수 있는 강력한 연구 도구로 발전 가능성을 보여준다."
 }

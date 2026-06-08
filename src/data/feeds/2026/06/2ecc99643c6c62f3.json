@@ -12,5 +12,6 @@
     "notion"
   ],
   "published_at": "2026-06-07T17:56:22.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nNotion은 Anthropic의 Claude 모델 접근을 복구했으며, 이는 일시적인 서비스 중단으로 인해 발생했던 오류를 해결한 결과입니다.\n\n## 주요 내용\n\n- Notion AI에서 Anthropic의 Opus 4.7 및 4.8 모델 성능 저하 및 오류율 증가가 발생했습니다.\n- 이로 인해 Notion은 Notion AI에서 모든 Anthropic 모델 사용을 일시적으로 비활성화했습니다.\n- Notion의 제품 책임자는 해당 문제가 모델 품질 문제가 아닌 일시적인 서비스 중단 때문임을 강조했습니다.\n- Anthropic은 간략한 인프라 문제로 인해 Claude 모델에서 일시적으로 오류가 증가했으나, 현재 해결되었다고 밝혔습니다.\n- Notion은 Anthropic 모델에 대한 접근을 복구했습니다.\n\n## 시사점\n\n기술 서비스에서 발생하는 일시적인 인프라 문제는 예상치 못한 상황이며, 서비스 제공업체는 이러한 문제를 신속하게 해결하고 사용자에게 투명하게 소통하는 것이 중요합니다."
 }
