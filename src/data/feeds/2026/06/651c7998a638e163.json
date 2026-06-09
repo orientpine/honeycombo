@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-06-08T18:17:53.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nApple Intelligence와 Siri의 차세대 버전이 소개되었습니다. 이는 사용자의 필요에 맞춰진 AI로, 앱에 통합되고 사용자의 맥락에 기반하며, 모든 단계에서 개인정보 보호를 최우선으로 합니다.\n\n## 주요 내용\n\n-   **개인 맞춤형 AI:** 사용자의 정보를 기반으로 개인화된 도움을 제공하며, 앱 내에서 자연스럽게 통합됩니다.\n-   **접근성 강화:** VoiceOver는 주변 환경과 화면 콘텐츠를 더 풍부하게 설명하고, Magnifier는 확대 기능을 제공하며, Accessibility Reader는 텍스트 가독성을 높입니다. Voice Control은 더 유연해져 사용자가 자신의 언어로 앱과 상호작용할 수 있게 합니다.\n-   **스마트 홈 기능 향상:** Home 앱에서 관련 활동 알림을 통합하고, HomeKit Secure Video 영상의 내용을 미리 설명하며, AI를 통해 특정 사건 기반의 클립 검색이 가능해집니다.\n-   **Genmoji 생성:** 상황에 맞는 고품질 Genmoji를 생성할 수 있습니다.\n-   **Workout Buddy 개선:** 운동에 대한 더 깊은 통찰력과 데이터 기반 동기 부여를 제공하며, iPhone 없이도 훈련이 가능하고 스페인어 지원이 추가됩니다.\n-   **개인정보 보호:** on-device processing을 통해 개인 정보를 수집하지 않고 사용자의 정보를 파악합니다. Private Cloud Compute는 Apple silicon 기반 서버 모델을 활용하여 복잡한 요청을 처리하면서 개인정보를 보호합니다. Private Cloud Compute는 데이터를 저장하지 않고, 요청 시에만 사용하며, 검증 가능한 개인정보 보호 약속을 제공합니다.\n-   **개발자 지원:** Foundation Models 프레임워크, App Intents, API 및 프레임워크를 통해 개발자는 Apple Intelligence의 on-device 모델을 활용하여 오프라인 기능도 지원하는 앱을 무료로 개발할 수 있습니다. Siri, Writing Tools, Image Playground와 같은 기능을 쉽게 통합할 수 있습니다.\n\n## 시사점\n\nApple Intelligence와 Siri의 새로운 기능들은 사용자 경험을 개인화하고 접근성을 높이며, 동시에 강력한 개인정보 보호 기능을 제공함으로써 AI 기술의 실질적인 적용 가능성을 확장할 것으로 기대됩니다."
 }

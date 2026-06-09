@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-06-08T19:34:10.000Z",
-  "feed_id": "theverge"
+  "feed_id": "theverge",
+  "description": "## 개요\n\nApple Watch 운영체제 차기 버전인 watchOS 27은 Siri AI 지원, 재설계된 앱 그리드, 건강 및 피트니스 추적 개선을 포함하여 출시될 예정이다.\n\n## 주요 내용\n\n*   **Siri AI 통합:** Apple Intelligence 기반의 차세대 가상 비서인 Siri AI가 watchOS 27에 탑재되며, 전용 Siri 앱을 통해 Apple Watch에서 직접 대화를 시작하거나 iPhone에서 시작된 대화를 이어갈 수 있다. Siri는 음악 재생, 이메일 전송, Activity ring 목표 설정 등 앱 내 기능도 수행한다. Siri AI는 올해 말 베타 출시와 함께 제공될 예정이며, EU 지역 iOS 및 iPadOS 기기에는 아직 지원되지 않는다.\n*   **동적 앱 그리드:** Siri가 제안하는 앱을 자동으로 강조 표시하는 새로운 동적 앱 그리드가 도입된다. Siri 앱이 중앙에 위치하고, 자주 사용하거나 최근 사용한 앱으로 둘러싸여 접근성이 향상된다.\n*   **건강 및 피트니스 추적 개선:** AI 기반 개인 트레이너 기능인 Workout Buddy는 속도, 거리, 운동 시간 등에 대한 더 나은 분석을 제공하며, 야외 및 트레드밀 달리기 추적 기능이 개선된다. 생리 주기 패턴이 폐경이행기 징후를 나타낼 때 알림을 제공하는 등 월경 건강 지원 기능이 확장된다. Workout Buddy는 영어 외 스페인어도 지원한다.\n*   **시스템 전반의 개선:** Smart Stack에 더 많은 위젯 제안, 음악 재생 속도 향상, 배터리 최적화, Find My 앱에서의 기기 찾기 경험 간소화, 텍스트 가독성을 높인 Liquid Glass 경험 등이 포함된다. 검지와 엄지를 탭하여 Smart Stack의 위젯을 선택하는 새로운 제스처도 추가되었다.\n*   **지원 기기 제한:** watchOS 27은 Apple Watch Series 9 모델 또는 그 이후 버전(Ultra 2, Ultra 3, SE 3 포함)에서만 지원된다.\n\n## 시사점\n\nwatchOS 27은 Apple Watch의 AI 기능 확장과 사용자 경험 개선을 통해 기기의 활용성을 증대시킬 것으로 보인다."
 }

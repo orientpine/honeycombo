@@ -12,5 +12,6 @@
     "github"
   ],
   "published_at": "2026-06-08T18:34:23.000Z",
-  "feed_id": "arstechnica"
+  "feed_id": "arstechnica",
+  "description": "## 개요\n\nMicrosoft가 제공하는 수십 개의 암호화 서명된 오픈소스 패키지가 악성 크리덴셜 스틸러 코드로 감염되어 개발자들의 AI 코딩 에이전트에서 실행될 때 악성 행위를 유발했습니다.\n\n## 주요 내용\n\n- GitHub는 자동화 시스템을 통해 73개의 악성 패키지를 차단했으며, Microsoft는 이를 \"GitHub 서비스 약관 위반\"으로 처리했습니다.\n- Microsoft는 해당 패키지가 감염되었을 가능성을 월요일에 처음 언급했으며, 몇 주 전에는 Python SDK인 durabletask 역시 유사한 공격으로 감염된 사례가 있었습니다.\n- 이 감염된 패키지들은 AWS, Azure, GCP, Kubernetes, 비밀번호 관리자 등 90개 이상의 개발 도구 설정에서 크리덴셜을 탈취하는 28KB 페이로드를 실행했습니다.\n- 공격은 TeamPCP로 추적되는 위협 행위자가 Microsoft의 게시 자격 증명을 침해하여 durabletask 패키지를 감염시킨 것으로 추정되며, Miasma라는 악성코드가 사용되었습니다.\n- Miasma는 TeamPCP의 Mini Shai-Hulud 툴킷의 복제본으로, SLSA(Supply-chain Levels for Software Artifacts) 증명에 사용되는 OIDC(OpenID-Connect) 토큰 크리덴셜을 수집합니다.\n- 이러한 공격 기법은 리포지토리의 빌드 파이프라인을 완전히 우회할 수 있으며, Red Hat 패키지를 대상으로 한 별도의 공급망 공격에도 활용되었습니다.\n\n## 시사점\n\n이번 공격은 공식 Microsoft 리포지토리를 대상으로 한 두 번째 공급망 공격으로, 개발자들은 AI 코딩 에이전트를 사용할 때 감염 가능성을 염두에 두고 시스템 보안에 각별히 주의해야 합니다."
 }
