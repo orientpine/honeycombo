@@ -12,5 +12,6 @@
     "orbital"
   ],
   "published_at": "2026-06-09T12:00:00.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nOrbital은 5백만 달러의 시드 라운드 투자를 유치하여 우주 공간에 데이터 센터를 구축하려는 신생 기업으로, SpaceX의 Starship 로켓 상용화에 맞춰 우주에서의 AI 연산(inference)을 목표로 한다.\n\n## 주요 내용\n\n- Orbital은 a16z의 스타트업 액셀러레이터 프로그램 Speedrun을 통해 출범했으며, Basis Set, Human Element 등 다수의 투자사로부터 5백만 달러의 시드 투자를 유치했다.\n- 창업자 Euwyn Poon은 이전 전자 스쿠터 회사 Spin을 창업하고 매각한 경험이 있으며, 우주 경험은 없으나 AI 컴퓨팅 수요 증가와 지구에서의 배포 제약을 극복하기 위한 솔루션으로 우주 데이터 센터를 구상했다.\n- Orbital은 SpaceX의 Starship 상용화 시점에 맞춰 본격적인 사업 확대를 계획하고 있으며, 현재의 Falcon 9 로켓으로는 경제성이 낮다고 판단한다.\n- 현재 12명 규모의 팀은 Nvidia Blackwell 칩을 파트너 위성에 탑재하여 방사선 차폐 및 열 관리 기술을 테스트하는 데모 비행을 준비 중이다.\n- 2028년에는 Nvidia Space-1 Vera Rubin-class GPU를 탑재한 첫 데이터 처리 위성을 발사하고, 위성당 100kW의 컴퓨팅 파워를 제공하는 10,000개의 위성 네트워크를 통해 분산된 기가와트(GW) 규모의 컴퓨팅 파워를 목표로 한다.\n- 경쟁사로는 이미 궤도에 GPU를 탑재하고 Starship 상용화를 기다리는 Starcloud가 있으며, SpaceX의 AI 위성(150kW) 및 Starcloud의 위성(200kW)보다 작은 규모의 각 위성 설계이다.\n- 일부 경쟁사들은 Starship을 기다리지 않고 자체 로켓 개발(Cowboy Space Company) 또는 Blue Origin의 New Glenn 발사체 활용 계획 등을 추진하고 있다.\n- 벤처 캐피탈은 10년 이상의 장기 투자 및 50억 달러 이상의 자본 투입이 필요한 프로젝트에 대해 과거 모바일 앱 개발 시대보다 더 수용적인 태도를 보이고 있다.\n- 창업자는 개인적으로 Nvidia A100 GPU를 구매하여 데이터 센터에 배치하고 오픈 웨이트 모델을 서빙한 경험을 통해 AI 시대의 컴퓨팅 가치를 확신하게 되었다.\n\n## 시사점\n\nOrbital은 AI 컴퓨팅 수요 폭발과 우주 발사 비용 절감이라는 두 가지 추세에 기반하여, 미래의 우주 기반 컴퓨팅 인프라 구축 가능성을 제시하며 새로운 우주 산업 생태계의 잠재력을 보여준다."
 }
