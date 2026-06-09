@@ -11,5 +11,6 @@
     "apple intelligence"
   ],
   "published_at": "2026-06-09T13:05:49.000Z",
-  "feed_id": "arstechnica"
+  "feed_id": "arstechnica",
+  "description": "## 개요\n\nApple Intelligence는 기기 내 모델과 Google 클라우드 기반 모델을 활용하며, 민감한 정보 처리를 위해 Google의 인프라를 사용하면서도 Private Cloud Compute(PCC)를 통해 사용자 프라이버시를 보호하는 아키텍처를 갖추고 있다.\n\n## 주요 내용\n\n*   **아키텍처 구성:** Apple Intelligence는 기본적인 질문에는 기기 내에서 실행되는 온디바이스 모델(AFM 3 Core)을 사용하며, 더 복잡하거나 정교한 질문의 경우 클라우드 기반 모델(AFM 3 Cloud, ADM 3 Cloud, AFM 3 Cloud Pro)을 활용한다.\n*   **모델 종류 및 성능:**\n    *   **AFM 3 Core:** 새로운 Gemini 기반 모델로, 대부분의 Apple Intelligence 기기에서 사용된다.\n    *   **AFM 3 Core Advanced:** 12GB RAM 이상 및 최신 칩(M3 이상 Mac, M4 이상 iPad, A19 Pro iPhone)을 탑재한 기기에서 사용되며, 받아쓰기 개선 및 Siri 음성 기능 향상에 활용된다.\n    *   **AFM 3 Cloud:** 일반 용도 클라우드 모델.\n    *   **ADM 3 Cloud:** 이미지 생성 클라우드 모델.\n    *   **AFM 3 Cloud Pro:** 에이전트 도구 사용 및 복잡한 추론을 위한 고급 클라우드 모델.\n*   **클라우드 인프라 및 협력:** AFM 3 Cloud와 ADM 3 Cloud는 Apple의 서버에서 실행되며, AFM 3 Cloud Pro는 Google의 Nvidia 하드웨어에서 실행된다. 이 모델들은 Apple과 Google이 공동 개발했다.\n*   **Private Cloud Compute (PCC) 강화:** Google의 인프라를 사용하면서도 프라이버시를 유지하기 위해 Apple은 Nvidia의 Confidential Computing, Intel의 Trust Domain Extensions, Google의 Titan 보안 칩을 통합한 새로운 버전의 Private Cloud Compute를 도입했다.\n*   **보안 조치:** Apple은 Google Cloud 하드웨어 사용에 대한 암호화된 원장(ledger)을 유지하며, Apple 기기는 Apple이 서명한 소프트웨어만 해당 서버에서 신뢰한다.\n\n## 시사점\n\nApple Intelligence는 기기 성능과 클라우드 컴퓨팅의 이점을 결합하면서도, Private Cloud Compute와 다양한 보안 기술을 통해 민감한 사용자 데이터를 제3자 인프라에서도 안전하게 처리할 수 있음을 보여준다."
 }
