@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-06-08T19:14:47.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nApple Intelligence 플랫폼이 Google Gemini 기술 기반의 새로운 아키텍처를 공개하며 대대적인 개편을 발표했습니다.\n\n## 주요 내용\n\n- **Google Gemini 기반 아키텍처:** Apple은 Google과 협력하여 Gemini 기술에 기반한 Apple Foundation Models를 개발했으며, 이는 온디바이스 및 Private Cloud Compute 인프라를 통한 서버 실행에 최적화되었습니다.\n- **대폭 향상된 기능:** 이번 협력은 Apple Intelligence에 대한 \"거대한 업그레이드\"를 가져왔으며, 최첨단 이해 및 추론 능력, 이미지 이해 및 생성을 포함한 멀티모달 지원을 제공합니다.\n- **새로운 사용 사례:** 사실적인 이미지 생성, 고급 사진 편집, 시각적 질의응답 등의 새로운 기능을 지원합니다.\n- **고성능 모델:** 특정 기기에는 음성 생성, 개선된 받아쓰기 정확도, 강화된 자연어 이해 등의 추가 기능이 포함된 고성능 모델 버전이 제공될 예정입니다.\n- **시스템 오케스트레이터:** 개정된 아키텍처의 중심에는 새로운 시스템 오케스트레이터가 자리 잡고 있으며, 이는 Apple 플랫폼 전반에 걸쳐 Apple Intelligence 기능을 안전하게 조정합니다.\n- **개인 정보 보호 강조:** Apple은 사용자 데이터가 요청 실행에만 사용되며 Apple이나 제3자가 접근할 수 없음을 재확인했습니다.\n\n## 시사점\n\nGoogle Gemini 기술과의 통합은 Apple Intelligence의 이해, 추론, 멀티모달 처리 능력을 혁신적으로 향상시켜 사용자 경험을 크게 개선하고, 동시에 개인 정보 보호를 최우선으로 하는 Apple의 접근 방식을 강화할 것으로 보입니다."
 }
