@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-06-10T16:18:45.000Z",
-  "feed_id": "theverge"
+  "feed_id": "theverge",
+  "description": "## 개요\n\nGoogle은 사용자의 Google Lens 사진, Search Live 녹음, Translate 오디오와 같은 검색 데이터를 AI 모델 개발 및 개선을 위해 저장하는 새로운 'Search Services History' 설정을 도입합니다.\n\n## 주요 내용\n\n*   Google은 Google Lens 사진, 실시간 Search Live 도구 녹음, 음성 검색, Translate 오디오와 같은 검색 상호작용 데이터를 저장합니다.\n*   새로운 'Search Services History' 설정은 이러한 데이터를 Google의 AI 모델 개발 및 서비스 개선을 위해 사용합니다.\n*   사용자는 'Search Services History' 설정을 끄고 'Save Media' 옵션을 비활성화하여 데이터 저장을 중단할 수 있습니다.\n*   'Search Services History' 설정은 'Personalized Recommendations' 설정과 분리되며, 이 설정이 활성화된 경우 개인화된 추천 및 광고를 제공합니다.\n*   기존에 Web & App Activity 설정을 통해 검색 기록 저장을 차단했던 사용자는 Search Services History 설정이 자동으로 꺼진 상태로 유지됩니다.\n*   이 설정들은 향후 몇 달에 걸쳐 점진적으로 적용될 예정이며, 개인화 설정은 유지됩니다.\n\n## 시사점\n\nGoogle의 새로운 데이터 저장 정책은 AI 모델 발전에 기여하는 동시에, 사용자에게 자신의 데이터 사용에 대한 더 명확한 통제권을 제공합니다."
 }

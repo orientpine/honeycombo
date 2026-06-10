@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-06-10T17:20:36.000Z",
-  "feed_id": "theverge"
+  "feed_id": "theverge",
+  "description": "## 개요\n\nGoogle은 YouTube에 업로드된 콘텐츠를 AI 모델 훈련에 사용하고 있으며, 특히 Lyria 음악 AI 모델 훈련에도 YouTube 영상이 활용될 가능성이 높지만, 이에 대해 명확하게 인정하지 않고 있습니다.\n\n## 주요 내용\n\n- 독립 음악가 그룹이 Google을 상대로 YouTube에 업로드한 자신의 노래를 Lyria 3 모델 훈련에 불법적으로 사용했다고 주장하며 소송을 제기했습니다.\n- Google은 소송 기각 신청에서, 원고들이 주장하는 특정 저작물 훈련에 대한 증거가 부족하며, YouTube 이용 약관에 따라 콘텐츠 업로더는 Google에게 해당 콘텐츠를 사용할 수 있는 광범위한 라이선스를 부여했다고 주장했습니다.\n- Google은 YouTube 영상이 Lyria 3 AI 음악 모델 훈련에 사용되는지에 대한 직접적인 질문에 대해 논평을 거부했습니다.\n- 하지만 과거 YouTube CEO Neal Mohan은 YouTube 영상의 일부가 Gemini와 같은 모델 훈련에 내부적으로 사용될 수 있다고 언급했으며, Google의 블로그 게시물 또한 YouTube에 업로드된 콘텐츠가 머신러닝 및 AI 애플리케이션을 포함한 YouTube 및 Google 전반의 제품 경험 개선에 사용된다고 밝혔습니다.\n- Google은 CNBC에 Gemini 및 Veo 모델 훈련에 YouTube 업로드를 사용하고 있음을 확인했지만, Lyria 훈련에 대한 구체적인 확인은 하지 않았습니다.\n- Google은 소송 기각 신청에서 원고들이 YouTube에 콘텐츠를 직접 업로드함으로써 \"복제, 배포, 파생 저작물 준비\"를 허용하는 이용 약관에 동의했다고 주장했습니다.\n\n## 시사점\n\nGoogle은 YouTube 콘텐츠를 AI 모델 훈련에 활용하는 것에 대해 명확한 입장을 밝히지 않음으로써, 현재 진행 중인 소송에서 법적 책임을 회피하고 유리한 위치를 확보하려는 전략을 취하고 있습니다."
 }

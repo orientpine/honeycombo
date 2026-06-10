@@ -12,5 +12,6 @@
     "anthropic"
   ],
   "published_at": "2026-06-10T15:41:22.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nAnthropic이 공개한 Fable 모델이 사이버 보안 관련 요청에 대해 과도하게 민감하게 반응하는 안전 장치(guardrails) 때문에 사이버 보안 연구자들 사이에서 불만을 사고 있습니다.\n\n## 주요 내용\n\n- Fable은 사이버 보안과 관련된 것으로 간주되는 모든 요청을 거부하며, 블로그 게시글 읽기와 같은 사소한 작업까지 차단합니다.\n- 이러한 안전 장치는 Fable이 악성코드 개발이나 소프트웨어 침해에 사용될 위험을 제한하기 위해 마련되었습니다.\n- Anthropic은 기존 모델인 Mythos를 제한된 기업에만 공개했던 'Project Glasswing'에 이어 Fable을 출시했지만, 연구자들은 제한의 무분별함에 불만을 표하고 있습니다.\n- 보안 코드를 작성하려는 요청도 보안 관련 작업으로 간주되어 모델의 성능이 저하될 수 있습니다.\n- Fable은 안전 장치에 걸릴 경우 Claude Opus 4.8로 대체되는데, 이는 키워드 기반으로 작동하는 것으로 보입니다.\n- Anthropic은 사이버 보안 전문가들이 'Cyber Verification Program'에 지원하도록 요구하며, 승인된 경우 Claude 사용에 대한 제한이 완화됩니다. OpenAI 역시 유사한 'Trusted Access for Cyber' 프로그램을 운영하고 있습니다.\n\n## 시사점\n\nFable 모델의 과도한 안전 장치는 사이버 보안 전문가들의 실질적인 업무에 제약을 가하며, 이러한 제한의 개선과 AI 모델의 책임감 있는 활용 방안에 대한 지속적인 논의가 필요함을 시사합니다."
 }
