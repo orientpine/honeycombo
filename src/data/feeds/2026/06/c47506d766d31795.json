@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-06-10T16:50:23.000Z",
-  "feed_id": "theverge"
+  "feed_id": "theverge",
+  "description": "## 개요\n\nMicrosoft는 Anthropic의 Claude Fable 5 모델에 대해 새로운 데이터 보존 요구 사항으로 인해 직원들의 사용을 제한하고 있으며, 이는 고객 데이터 및 기밀 정보와 관련된 법적 문제를 야기하고 있다.\n\n## 주요 내용\n\n- Anthropic은 사이버 보안 작업에서 높은 능력을 보여주었던 Mythos 클래스의 첫 AI 모델인 Claude Fable 5를 출시했다.\n- Claude Fable 5는 Anthropic의 새로운 안전 분류기 작동을 위해 프롬프트와 출력을 30일간 보존해야 하며, 정책 위반으로 플래그가 지정된 경우 최대 2년까지 저장될 수 있다.\n- Microsoft는 GitHub Copilot 및 Foundry 고객에게 Claude Fable 5를 신속하게 배포했지만, 내부 모델 선택기에서는 직원들에게 제공하지 않고 있다.\n- Claude Fable 5를 제외한 다른 Claude 모델들은 Zero Data Retention (ZDR) 규칙 하에 운영되기 때문에 Microsoft 내부에서 계속 사용할 수 있다.\n- Microsoft 법무팀은 Anthropic의 변경된 데이터 보존 요구 사항을 검토 중이며, Claude Fable 5의 내부 사용 승인 여부는 아직 불확실하다.\n\n## 시사점\n\nClaude Fable 5의 데이터 보존 정책은 AI 모델의 강력한 기능과 데이터 프라이버시 및 보안 간의 잠재적 충돌을 강조하며, 기업들이 AI 기술을 내부적으로 도입할 때 직면할 수 있는 복잡한 법적 및 운영적 고려 사항을 보여준다."
 }
