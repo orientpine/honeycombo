@@ -12,5 +12,6 @@
     "cybersecurity"
   ],
   "published_at": "2026-06-09T17:00:00.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nAnthropic이 처음으로 대중에게 가장 강력한 AI 모델인 Claude Fable 5를 공개했으며, 이 모델은 소프트웨어 엔지니어링, 지식 작업, 비전에 뛰어나지만 안전 장치가 적용되어 있다.\n\n## 주요 내용\n\n*   Claude Fable 5는 Anthropic의 Mythos 모델의 첫 공개 버전으로, API 및 Enterprise 요금제를 통해 접근 가능하다.\n*   이 모델은 사이버 보안, 생물학, 화학, 증류와 같은 고위험 분야에서는 응답을 차단하고 Claude Opus 4.8로 전환된다.\n*   Mythos 모델은 초기에는 파트너에게만 제한적으로 제공되었으나, 이제 더 많은 조직에게 확대되었다.\n*   Fable 5는 6월 22일까지 Pro, Max, Team, Enterprise 플랜에 추가 비용 없이 포함되며, 이후에는 사용 크레딧이 필요하다.\n*   Anthropic은 Frontier AI 개발에 대한 조정된 제동 장치 구축을 촉구하며, Recursive Self-Improvement(RSI) 가능성을 경고했다.\n*   Fable 5 출시를 앞두고 1,000시간 이상의 테스트와 외부 레드 팀 테스트를 통해 보편적인 탈옥 시도를 방지했지만, 새로운 공격 가능성은 존재한다.\n*   모든 트래픽에 대해 30일간의 데이터 보존이 요구되며, 이는 복잡하고 새로운 공격을 방어하고 오탐지를 식별 및 감소시키기 위한 목적으로 사용된다.\n*   Fable 5 세션의 95% 이상이 자체 응답으로 처리되며, Hex의 분석 벤치마크에서 90%를 달성하는 등 복잡하고 장기적인 분석 작업에 강점을 보인다.\n*   Base44는 Fable 5가 \"one-shotting full apps\"에 더 뛰어나고 훌륭한 도구 호출 기능을 갖췄다고 평가했으며, Genspark는 UI 디자인 및 게임 코딩 작업에서 뛰어난 성능을 보였다고 밝혔다.\n*   Fable 5와 Mythos 5의 가격은 Claude Opus 4.8의 두 배인 입력 토큰당 10달러, 출력 토큰당 50달러이다.\n\n## 시사점\n\nFable 5의 출시는 AI 모델의 성능 향상과 안전 문제 사이의 균형을 맞추려는 Anthropic의 노력을 보여주며, 향후 강력한 AI 모델 접근 시 데이터 보존 정책이 안전 조치로서 업계 표준이 될 가능성을 시사한다."
 }

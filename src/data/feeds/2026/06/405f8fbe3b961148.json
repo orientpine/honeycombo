@@ -12,5 +12,6 @@
     "wwdc 2026"
   ],
   "published_at": "2026-06-09T20:50:17.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nApple은 WWDC에서 AI 기반 Siri 업데이트를 발표하며, 사용자 개인 정보 및 보안을 고려한 새로운 기능들을 소개했습니다.\n\n## 주요 내용\n\n*   Apple은 \"Apple Intelligence\"를 통해 Siri를 개인 정보 및 맥락에 기반한 AI 비서로 발전시킬 계획입니다.\n*   새로운 Siri는 iMessage, Notes, Calendar, Mail, Photos 등 Apple 네이티브 앱의 정보를 활용하여 사용자의 요청을 처리합니다.\n*   화면에 표시되는 내용을 인식하여 관련 정보를 제공하며, 예를 들어 Instagram에서 본 공원 사진의 위치를 찾을 수 있습니다.\n*   복잡한 작업 처리를 위해 Apple은 기기 자체에서 데이터를 처리하는 \"on-device AI\"와 클라우드 상에서 데이터를 안전하게 처리하는 \"Private Cloud Compute (PCC)\" 기술을 활용합니다.\n*   PCC는 Apple조차 사용자 데이터에 접근할 수 없도록 설계되었으며, $1백만 달러의 버그 바운티를 통해 보안 취약점 발견 시 보상합니다.\n*   기존의 AI 도구들이 개인 정보 침해 우려를 낳는 것과 달리, Apple은 보안 및 프라이버시를 강조하며, 사용자는 원치 않을 경우 Siri AI 기능을 끌 수 있습니다.\n\n## 시사점\n\nApple의 AI Siri 업데이트는 개인 정보와 보안을 우선시하며 사용자 경험을 향상시키려는 시도를 보여주며, 사용자는 AI의 편의성과 개인 정보 보호 사이에서 선택할 수 있습니다."
 }
