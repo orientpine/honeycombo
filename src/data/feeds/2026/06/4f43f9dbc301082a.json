@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-06-12T14:03:39.000Z",
-  "feed_id": "theverge"
+  "feed_id": "theverge",
+  "description": "## 개요\n\nJeff Bezos의 새로운 AI 스타트업 Prometheus는 물리적 제품 설계를 지원하는 AI 기반 엔지니어링 도구를 개발하여 '인공 일반 엔지니어'를 만드는 것을 목표로 합니다.\n\n## 주요 내용\n\n*   Prometheus는 120억 달러 규모의 펀딩 라운드를 통해 410억 달러의 기업 가치를 달성했으며, Amazon 창립자 Jeff Bezos와 Alphabet의 Verily 공동 창립자인 Vik Bajaj가 공동 CEO를 맡고 있습니다.\n*   현재 약 150명의 직원이 근무 중인 Prometheus는 로보틱스, 신약 설계, 제조 등 다양한 산업 분야의 물리적 제품 개발에 도움을 줄 수 있는 도구 개발을 계획하고 있습니다.\n*   Bezos는 Prometheus가 개발할 도구가 로켓 엔진과 같이 정교한 장치를 구축하는 Blue Origin과 같은 기업에 큰 이점을 제공할 것이라고 언급했습니다.\n\n## 시사점\n\nPrometheus의 '인공 일반 엔지니어' 개발 시도는 물리적 제품 설계 및 제조 분야에 AI 기술을 접목하여 혁신을 가져올 잠재력을 시사합니다."
 }
