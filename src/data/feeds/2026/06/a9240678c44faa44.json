@@ -12,5 +12,6 @@
     "gemini"
   ],
   "published_at": "2026-06-12T16:34:36.000Z",
-  "feed_id": "arstechnica"
+  "feed_id": "arstechnica",
+  "description": "## 개요\n\nGoogle은 중국의 사이버 범죄 조직인 Outsider Enterprise가 Gemini AI를 이용해 사기 캠페인을 자동화하고 대규모 피싱 공격을 감행한 것에 대해 소송을 제기했습니다.\n\n## 주요 내용\n\n*   Outsider Enterprise는 텔레그램 채널을 통해 기술적 지식이 부족한 개인에게 피싱 서비스(phishing-as-a-service)를 제공했습니다.\n*   이들은 Google의 Gemini AI를 사용하여 Google, YouTube, 뉴욕 E-ZPass와 같은 정부 기관을 모방한 웹사이트를 만드는 방법을 안내했습니다.\n*   Outsider Enterprise는 약 300개의 사기 템플릿을 제공했으며, 이를 통해 Android 사용자에게 250만 건 이상의 문자 메시지가 발송되었습니다.\n*   이러한 사기 캠페인은 9,000개의 가짜 웹사이트와 100만 개의 URL과 연결되어 있었으며, 사용자들의 개인 정보 및 은행 계좌 정보를 탈취하는 데 사용되었습니다.\n*   Google은 AT&T, Verizon, T-Mobile과 협력하여 악성 문자 메시지를 차단했으며, Google Messages의 기기 내 사기 탐지 기능도 피싱 시도를 줄이는 데 기여했습니다.\n\n## 시사점\n\nGoogle의 법적 조치는 생성형 AI가 범죄에 악용되는 사례에 대한 대응을 보여주며, AI 기반 사기 확산을 막기 위한 기술 기업과 통신사의 협력 필요성을 강조합니다."
 }
