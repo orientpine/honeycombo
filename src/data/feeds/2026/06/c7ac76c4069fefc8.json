@@ -11,5 +11,6 @@
     "googlecloud"
   ],
   "published_at": "2026-06-13T06:20:51.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nGemini CLI의 설치, 기능, 무료 사용량 제한 등 다양한 측면을 macOS와 Ubuntu 환경에서 실전 검증한 보고서입니다.\n\n## 주요 내용\n\n*   **설치 및 기본 기능 검증:** `npm install -g @google/gemini-cli` 명령어로 Gemini CLI 설치가 성공적으로 이루어졌으며, `gemini --version`으로 버전 확인 및 Headless 모드, Pipe 입력을 통한 프롬프트 처리 기능이 정상 작동함을 확인했습니다.\n*   **Git Diff 활용 Commit Message 생성:** `git diff` 결과를 Gemini CLI에 파이프하여 Conventional Commit 형식의 커밋 메시지를 자동으로 생성하는 기능이 성공적으로 검증되었습니다.\n*   **JSON 출력 및 Sandbox 모드:** `--output-format json` 옵션을 통해 상세한 응답과 통계 정보를 JSON 형태로 얻을 수 있었으며, Sandbox 모드에서는 파일 읽기는 허용되나 쉘 명령어 실행은 제한되는 것을 확인했습니다.\n*   **GEMINI.md Context 로딩 및 배치 파일 생성:** 프로젝트 루트 디렉토리의 `GEMINI.md` 파일을 자동으로 로딩하여 컨텍스트를 이해하는 기능과 `@file` 문법을 활용한 배치 파일 생성 기능이 효과적으로 작동했습니다.\n*   **gcommit 함수 및 Repo 검증:** Stage된 변경 사항으로 Conventional Commit 메시지를 자동 생성하는 `gcommit` 함수가 정상 작동했으며, BorrowHood GitHub repo의 정보도 대부분 일치함을 확인했습니다.\n*   **무료 사용량 제한:** API Key 사용 시 `gemini-2.5-flash` 모델은 하루 20개의 요청 제한이 있으며, 이는 블로그에서 언급된 OAuth 로그인 시의 1,000개/일과는 다른 제한임을 명확히 했습니다. 기본 모델(`gemini-3.1-pro` 등)은 무료 API Key 할당량이 0입니다.\n*   **환경별 설치 및 설정:** macOS에서는 Node.js, npm이 필요하며, 원격 Ubuntu 서버에서는 `sudo` 권한이 없을 경우 사용자 레벨의 npm prefix 설정을 통해 Gemini CLI를 설치하는 방법이 검증되었습니다.\n\n## 시사점\n\nGemini CLI는 다양한 개발 워크플로우에 통합될 수 있는 강력한 도구이며, 특히 무료 사용량 제한을 명확히 이해하고 모델 선택(`-m` 옵션)을 신중하게 하는 것이 중요합니다."
 }
