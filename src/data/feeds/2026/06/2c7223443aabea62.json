@@ -12,5 +12,6 @@
     "anthropicexport"
   ],
   "published_at": "2026-06-14T06:20:46.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nClaude Fable 5는 출시 72시간 만에 미국 정부의 수출 통제 명령으로 인해 전 세계적으로 서비스가 중단된 Anthropic의 최신 AI 모델입니다.\n\n## 주요 내용\n\n*   **Claude Fable 5의 성능:** Fable 5는 SWE-bench Verified에서 95.0%, SWE-bench Pro에서 80.3%를 기록하며 이전 최고 모델인 Claude Opus 4.8 대비 상당한 성능 향상을 보였습니다. 장기적 게임 플레이 평가에서도 우수한 능력을 입증했습니다.\n*   **API 접근 및 가격:** Fable 5는 api.anthropic.com, Amazon Bedrock, Google Vertex AI, Microsoft Azure Foundry를 통해 API로 제공되었으며, 입력 토큰당 $10, 출력 토큰당 $50의 가격으로 Claude Opus 4.8의 두 배였습니다. 기본 100만 토큰 컨텍스트 창을 지원하며 비전, 도구 사용, 메모리, 적응형 사고 등의 기능을 갖추고 있습니다.\n*   **안전 장치 및 Mythos 5:** Fable 5는 사이버 보안 및 생물학 분야에 대한 쿼리가 Claude Opus 4.8로 자동 우회되는 안전 장치를 갖추고 있습니다. Claude Mythos 5는 이러한 공개 안전 장치가 없는 버전으로, 정부 관련 사이버 보안 작업을 수행하는 조직에 제공되었습니다.\n*   **중단 사유:** 미국 정부는 Fable 5의 보호 장치를 우회할 수 있는 탈옥(jailbreak) 방법이 존재한다는 이유로 6월 12일에 수출 통제 명령을 내렸습니다. Anthropic은 이 주장에 대해 '오해'라고 설명하며 기술적 증거를 제공받지 못했다고 밝혔습니다.\n*   **개발자를 위한 조치:** Fable 5를 사용하던 개발자는 즉시 Claude Opus 4.8로 전환해야 합니다. 프로덕션 파이프라인은 단일 모델 ID 의존성을 피하고, 여러 단계의 대체 모델 전략을 구축하는 것이 권장됩니다.\n*   **향후 전망:** Anthropic은 Fable 5의 복구 시점을 명확히 밝히지 않았으며, 탈옥 존재 여부 및 정부와의 협의 결과에 따라 복구 시점과 방식이 결정될 것으로 보입니다.\n\n## 시사점\n\nClaude Fable 5의 갑작스러운 서비스 중단은 최첨단 AI 모델의 배포와 규제에 대한 복잡성을 보여주며, 개발자는 모델 의존성 관리 및 규제 변화에 대한 유연한 대응 전략이 필요함을 시사합니다."
 }
