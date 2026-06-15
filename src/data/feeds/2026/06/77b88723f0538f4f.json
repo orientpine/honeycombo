@@ -12,5 +12,6 @@
     "devtools"
   ],
   "published_at": "2026-06-15T18:24:59.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nLLM 앱 개발 시 발생하는 다양한 오류를 체계적으로 디버깅하기 위한 새로운 방법론과 이를 지원하는 Python SDK인 DebugAI가 소개되었습니다.\n\n## 주요 내용\n\n*   LLM 앱의 응답 오류는 모델의 환각(hallucination), 부적절한 청크 검색, 정보 출처 불일치, 도구 호출 누락, JSON 스키마 오류, 프롬프트 취약성 등 다양한 원인으로 발생할 수 있습니다.\n*   기존 LLM 기반의 \"응답이 좋은가\"와 같은 주관적 평가 방식 대신, 요청(request) 및 응답(response) 자체에서 정량적인 신호(deterministic signals)를 계산하여 실패 원인을 분류하는 접근 방식이 제안됩니다.\n*   중요하게 고려되는 입력 신호로는 프롬프트, 모델 출력, 검색된 청크, 유사도 점수, 도구 호출, 예상 도구, 응답 스키마, 지연 시간, 모델 설정 등이 있습니다.\n*   이러한 신호들을 기반으로 검색 실패(retrieval failure), RAG 환각(RAG hallucination), 스키마 위반(schema violation), 도구 호출 누락(missing tool call), 인용 실패(citation failure), 프롬프트 취약성(prompt brittleness), 모호한 프롬프트(ambiguous prompt), 지시 사항 미준수(instruction-following issue) 등과 같은 실패 범주로 분류합니다.\n*   예를 들어, 검색기가 낮은 유사도의 청크를 반환했는데도 모델이 자신 있게 응답한다면 검색 또는 정보 출처 문제로 판단하고, 청크가 관련성이 있지만 모델이 지원되지 않는 주장을 한다면 환각으로 간주합니다.\n*   이러한 디버깅 기능을 `debugai`라는 이름의 Python SDK로 구축하고 있으며, `pip install debugerai`로 설치 가능합니다.\n*   SDK는 로컬에서 웹사이트 로그인 없이 실행 가능하며, 추적 및 진단 저장을 위한 호스팅 대시보드도 제공되지만 현재는 로컬 사용성 테스트에 중점을 두고 있습니다.\n*   궁극적인 목표는 LLM의 신뢰성 문제를 마법처럼 해결하는 것이 아니라, 실패를 식별하고 명명하는 과정을 용이하게 만드는 것입니다.\n\n## 시사점\n\nDebugAI는 LLM/RAG 애플리케이션 개발자들이 직면하는 복잡한 오류를 체계적으로 진단하고 해결하는 데 실질적인 도움을 줄 수 있으며, 로컬 우선(local-first) 접근 방식을 통해 개발 워크플로우의 투명성과 효율성을 높일 잠재력을 가지고 있습니다."
 }
