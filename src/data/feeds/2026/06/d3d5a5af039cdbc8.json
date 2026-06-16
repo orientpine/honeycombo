@@ -12,5 +12,6 @@
     "google"
   ],
   "published_at": "2026-06-16T18:00:00.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nGoogle은 최신 AI 모델 지원과 함께 Android 17 및 Wear OS 7의 최종 버전을 출시했으며, 이는 Pixel 기기에서 AI 기술을 선보이려는 Google의 전략을 강조합니다.\n\n## 주요 내용\n\n*   **Android 17 주요 기능:**\n    *   음악 생성 모델 Lyria 3, 멀티모달 Gemini Omni, Pixel 10a용 AudioLM 기반 음성-번역 도구 지원.\n    *   Pixel 8a 및 9a 기기에서 Apple의 AirDrop과 호환되는 Android Quick Share 파일 공유 기능.\n    *   Gemini Omni를 통한 대화 중 동영상 편집 기능.\n    *   Gemini 앱에서 텍스트 프롬프트 및/또는 이미지를 사용하여 음악 트랙을 생성하는 Lyria 3.\n    *   Pixel 10a 기기에서 AudioLM을 통한 향상된 음성-대-음성 번역 기능.\n    *   전화 응답이 불가능할 때 발신자를 위한 개인화된 음성 메시지 녹음 기능.\n    *   \"Take a Message\" 기능의 글로벌 시장 확대.\n    *   \"Bubble bar\" UI 요소를 통해 최근 앱을 버블 형태로 표시하고 빠르게 접근할 수 있도록 하는 기능.\n    *   TikTok, YouTube, Instagram 등에서 공유할 수 있는 셀카 카메라와 화면을 동시에 녹화하는 기능.\n    *   PIN으로 설정 가능한 화면 시간 제한 및 콘텐츠 필터링 도구를 포함한 개선된 자녀 보호 및 보안 기능.\n    *   50/50 레이아웃과 동적 게임 패드를 제공하는 새로운 폴더블 게임 모드.\n*   **Wear OS 7 주요 기능:**\n    *   Pixel Watch에 긴급 감지 기능(자동차 사고, 낙상, 맥박 없음 감지 시 비상 서비스 자동 연락) 추가.\n    *   전화 앱의 라이브 업데이트를 Pixel Watch에서 수신 가능.\n    *   Google의 AI 안경 및 헤드폰과 같은 기타 하드웨어와의 호환성 향상.\n    *   올여름 Gemini Intelligence 기능(예: 설명만으로 개인 맞춤 위젯 생성) 도입 및 Google 앱/채팅 기록과 Gemini 연결을 통한 \"Personal Intelligence\" 제공.\n    *   Google 주장 최대 10%의 배터리 수명 개선 및 다단계 자동화 기능.\n\n## 시사점\n\nAndroid 17 및 Wear OS 7의 출시는 Google이 AI 기술 통합을 통해 기기 경험을 혁신하고 사용자에게 새로운 창작, 통신 및 생산성 도구를 제공하려는 의지를 보여줍니다."
 }

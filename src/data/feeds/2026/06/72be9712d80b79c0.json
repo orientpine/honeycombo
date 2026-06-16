@@ -12,5 +12,6 @@
     "copilot"
   ],
   "published_at": "2026-06-16T11:15:46.000Z",
-  "feed_id": "arstechnica"
+  "feed_id": "arstechnica",
+  "description": "## 개요\n\nMicrosoft Copilot에서 발견된 취약점인 SearchLeak은 공격자가 사용자의 2단계 인증(2FA) 코드를 포함한 민감한 기업 데이터를 탈취할 수 있도록 허용했습니다.\n\n## 주요 내용\n\n-   **Parameter-to-Prompt Injection 공격 방식:** 공격자는 특정 구문(https://m365.cloud.microsoft/search/?auth=2&origindomain=microsoft365&q=)을 포함한 URL을 포함하는 이메일을 대상 사용자에게 보냅니다. 이 URL의 'q' 필드에 악의적인 지시가 포함됩니다.\n-   **Copilot의 취약점 활용:** Copilot은 이 지시를 해석하여 사용자의 이메일을 검색하고, 제목을 추출한 후, 이 정보를 이미지 URL에 포함시킵니다. 사용자는 단순히 링크를 클릭하기만 하면 됩니다.\n-   **보안 경고(Guardrail) 우회:** 일반적으로 Copilot의 응답은 `<code>` 블록으로 래핑되어 보호받지만, 연구원들은 이 보호 기능이 응답 생성 후기에 발동된다는 것을 발견했습니다. 공격자가 URL을 통해 데이터를 탈취하기 전에 Copilot은 원시 HTML을 사용하여 응답을 생성하며, 이는 브라우저 DOM에 임시로 렌더링됩니다.\n-   **이미지 요청을 통한 데이터 유출:** Copilot이 응답 생성을 시작하면 `<img>` 태그가 포함됩니다. 브라우저는 이 이미지를 렌더링하고 `src` URL로 HTTP 요청을 보냅니다. Copilot의 보호 기능이 적용되기 전에 이 요청이 이미 전송됩니다.\n-   **Bing 검색 엔진을 Trampoline으로 활용:** Copilot은 대부분의 웹사이트로 이미지 요청을 보내지 않지만, 콘텐츠 보안 정책에 따라 Bing 검색 엔진은 허용됩니다. 공격자는 Bing 검색 엔진을 사용하여 공격자 제어 도메인으로 요청을 리디렉션합니다.\n-   **광범위한 데이터 유출 가능성:** SearchLeak은 Microsoft 365 Enterprise 티어를 대상으로 하며, 개인 데이터를 넘어 이메일, 회의 초대, SharePoint 문서, OneDrive 파일 및 기타 인덱싱된 비즈니스 콘텐츠 등 사용자가 접근할 수 있는 조직 내 모든 정보에 접근할 수 있습니다.\n\n## 시사점\n\nMicrosoft는 SearchLeak 취약점을 수정했지만, 근본적인 원인에 대한 해결책이 없기 때문에 공격자는 지속적으로 새로운 방법을 찾아내어 보안 경계를 우회할 것이며, 이 과정은 반복될 가능성이 높습니다."
 }

@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-06-16T17:30:30.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nClaude 모델에서 여러 모델에 걸쳐 오류율이 증가하는 현상이 발생했으나, 현재 수정 작업이 완료되었으며 결과를 모니터링하고 있습니다.\n\n## 주요 내용\n\n- 2026년 6월 16일 17:29 UTC에 Claude.ai, Claude API (api.anthropic.com), Claude Code, Claude Cowork 등에서 오류율 증가 문제가 처음 인지되었습니다.\n- 18:15 UTC에는 Opus 4.8 및 Haiku 4.5 모델에서 지속적인 오류가 관찰되었습니다.\n- 18:00 UTC에 수정 작업이 적용되었으며, 결과에 대한 모니터링이 시작되었습니다.\n- 19:00 UTC에는 Opus 4.8 모델에 대한 오류 해결 작업이 계속 진행 중임을 알렸습니다.\n- 19:08 UTC와 19:22 UTC에 걸쳐 추가적인 수정 작업과 모니터링이 이루어졌습니다.\n\n## 시사점\n\n해당 incident는 Claude 서비스 및 API 사용에 영향을 미쳤으며, Anthropic은 문제 해결을 위한 지속적인 모니터링 및 수정 작업을 진행했습니다."
 }
