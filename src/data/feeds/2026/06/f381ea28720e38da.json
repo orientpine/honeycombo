@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-06-17T16:14:04.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nAdam (YC W25)은 웹 브라우저에서 자연어 및 이미지 입력을 기반으로 CAD 모델을 생성하는 오픈소스 AI CAD 도구인 CADAM을 출시했습니다.\n\n## 주요 내용\n\n-   **AI 기반 생성:** 자연어 설명이나 이미지를 3D 모델로 변환하며, 텍스트 입력만으로 복잡한 기계 및 파라메트릭 부품 생성이 가능합니다.\n-   **파라메트릭 제어:** 생성된 모델의 치수를 인터랙티브 슬라이더를 통해 실시간으로 조정할 수 있습니다.\n-   **다중 내보내기 형식:** .STL, .SCAD, .DXF 등 다양한 형식으로 모델을 내보낼 수 있습니다.\n-   **브라우저 기반:** WebAssembly를 사용하여 별도의 설치 없이 모든 기능이 웹 브라우저 내에서 실행됩니다.\n-   **라이브러리 지원:** BOSL, BOSL2, MCAD 라이브러리를 포함하여 기능 확장을 지원합니다.\n-   **주요 기능:**\n    -   자연어 입력: 일반적인 영어로 3D 모델을 설명할 수 있습니다.\n    -   이미지 참조: 업로드된 이미지를 모델 생성 가이드로 활용합니다.\n    -   실시간 미리보기: Three.js를 통해 모델 변경 사항을 즉시 확인할 수 있습니다.\n    -   파라미터 추출: AI가 조정 가능한 치수를 자동으로 식별합니다.\n    -   스마트 업데이트: AI 재학습 없이 효율적으로 파라미터를 변경합니다.\n    -   커스텀 폰트: Geist 폰트를 지원하여 모델 내 텍스트를 삽입할 수 있습니다.\n-   **기술 스택:** React 19 + TypeScript, Three.js + React Three Fiber, OpenSCAD, TanStack Start, Supabase, Anthropic Claude API, Tailwind CSS, shadcn/ui를 사용합니다.\n-   **개발 환경 설정:** Node.js, npm, Supabase CLI, ngrok을 사전 요구사항으로 하며, 로컬 개발을 위한 환경 변수 설정 및 ngrok 설정 방법을 제공합니다.\n-   **라이선스:** GNU General Public License v3.0 (GPLv3) 하에 배포됩니다.\n\n## 시사점\n\nCADAM은 AI와 웹 기술을 결합하여 CAD 모델 생성의 접근성을 크게 향상시키고, 사용자가 직관적인 방식으로 복잡한 3D 디자인을 생성하고 수정할 수 있도록 지원합니다."
 }

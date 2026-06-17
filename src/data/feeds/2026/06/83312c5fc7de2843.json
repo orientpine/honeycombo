@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-06-17T12:11:27.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\n60%의 미국 소비자는 브랜드 메시지에 'AI'가 언급되는 것을 부정적으로 인식하며, 74%는 10년 전보다 인터넷이 덜 인간적으로 느껴진다고 답했습니다.\n\n## 주요 내용\n\n*   **AI 브랜드 가시성 (AI Brand Visibility) 현황:** 61%의 소비자는 AI를 메시지에 잘 활용하는 브랜드를 꼽지 못했으며, 16.6시간/주를 AI 가시성 개선에 투자하는 기업 팀에도 불구하고 소비자는 AI를 잘 사용하는 브랜드를 전혀 인지하지 못합니다.\n*   **소비자 피로도:** 평균 40분 정도의 상호작용 후 소비자는 '봇 피로 (bot fatigue)'를 느끼며, 인터넷이 덜 인간적으로 느껴짐에 따라 웹사이트 방문의 가치가 감소하고 있습니다.\n*   **AI 브랜드 가시성 측정 방식:**\n    *   **AI 인용 모니터링 (AI Citation Monitoring):** ChatGPT, Perplexity 등 AI 엔진 응답에서의 브랜드 언급 빈도 및 감성 추적. (예: Profound, brandvisibility.ai)\n    *   **AI 오버레이가 포함된 검색 분석 (Search Analytics with AI Overlays):** 기존 SEO 지표에 AI 인용 데이터 추가. (예: Similarweb, Semrush)\n    *   **AI 추천 트래픽을 포함한 웹 분석 (Web Analytics with AI Referral Tracking):** AI 엔진으로부터 유입된 트래픽의 행동 및 전환 측정. (예: Parse.ly, Google Analytics 4)\n    *   **브랜드 인텔리전스 플랫폼 (Brand Intelligence Platforms):** 소셜 및 PR 모니터링과 함께 AI 엔진 언급 추적. (예: Brandwatch, Talkwalker)\n    *   **맞춤형 솔루션 (Custom Solutions):** LLM API를 활용하여 자체적으로 AI 엔진 쿼리 및 대시보드 구축.\n*   **AI와 인간 중심 설계의 조화:** AI는 콘텐츠를 찾고 인용해야 하지만, 동시에 사용자는 웹사이트에 머무를 이유가 필요합니다. AI 시대의 웹사이트는 AI가 데이터를 추출하고 사용자가 시간을 보낼 만한 경험을 제공하는 플랫폼으로 기능해야 합니다.\n\n## 시사점\n\nAI 브랜드 가시성 경쟁은 아직 초기 단계이며, AI를 잘 활용하는 브랜드는 드뭅니다. AI가 콘텐츠를 찾도록 하면서도 사용자가 체류할 만한 가치를 제공하는 웹사이트 구축 전략이 중요하며, 이를 통해 기업은 AI 시대의 브랜드 경쟁력을 확보할 수 있습니다."
 }

@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-06-17T15:26:29.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nPolypore는 코드 생성 및 개발 워크플로우를 위한 새로운 개념의 에이전트 중심 IDE(통합 개발 환경)로, 기존 IDE의 한계를 넘어설 수 있도록 설계되었습니다.\n\n## 주요 내용\n\n*   **에이전트 중심 설계:** Polypore는 코드 에디터에 에이전트 기능을 추가하는 방식이 아닌, 에이전트를 핵심 액터로 삼아 레이아웃, 메모리 시스템, 디버그 도구 및 MCP(Multi-Command Protocol) 서버 등 IDE의 모든 구성 요소를 설계했습니다.\n*   **다양한 패널:** Claude, Codex, Preview, Diff-stack, Terminal, Debug, Memory, Agent 등 8가지 기본 패널을 제공하며, SDK를 통해 사용자 정의 패널을 추가할 수 있습니다.\n*   **확장 가능한 SDK 및 플러그인 시스템:** 모든 패널은 샌드박스화된 iframe 형태로 작동하며, 동일한 HostRpcServer 계약을 따르므로 어떤 프레임워크로든 플러그인을 작성하여 `.polypore/plugins/` 디렉토리에 추가하면 IDE에 통합됩니다.\n*   **MCP 서버 및 IDE 제어:** Node.js 기반의 MCP 사이드카는 에이전트에게 22개 이상의 도구를 통해 IDE에 직접 접근할 수 있는 권한을 부여하며, `polypore.debug.*`, `polypore.memory.*`, `polypore.verify.*` 등의 네임스페이스를 통해 디버깅, 메모리 관리, 검증 실행 등을 제어할 수 있습니다.\n*   **보안 강화된 비밀 관리 (Secret Broker):** 비밀 정보는 OS 키링에 저장되며, 에이전트는 `polypore.secrets.use`를 통해 HTTP 요청을 수행하고 Polypore는 비밀 값을 주입하면서도 에이전트에게는 평문으로 노출되지 않도록 처리합니다.\n*   **Polyflow 스킬:** 개발 루프 전반에 걸친 15가지 슬래시 명령으로 구성된 스킬 세트를 제공하여 효율적인 개발 워크플로우를 지원합니다.\n*   **기술 스택:** Tauri 2, Rust, React 18, Vite, TypeScript, Dockview, Monaco Editor, xterm.js, portable-pty, Node.js, JSON-RPC, SQLite, OS keyring 등 다양한 최신 기술을 사용합니다.\n*   **크로스 플랫폼 지원:** Linux (.AppImage, .deb, .rpm), macOS (.dmg), Windows (.msi, .exe) 등 다양한 플랫폼용 빌드를 제공합니다.\n\n## 시사점\n\nPolypore는 기존 IDE의 구조를 넘어 에이전트의 역할을 중심으로 재편함으로써, 빠르게 변화하는 AI 모델 및 개발 도구 환경에 효과적으로 대응하고 개발 생산성을 극대화할 수 있는 새로운 개발 환경의 가능성을 제시합니다."
 }
