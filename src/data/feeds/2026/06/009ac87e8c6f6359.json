@@ -10,5 +10,6 @@
     "mcp"
   ],
   "published_at": "2026-06-17T17:11:21.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nBrain AI Hub는 로컬 LLM, 마크다운 볼트, 시맨틱 검색, IDE 에이전트용 MCP 훅을 통합하여 사용자가 직접 소유하고 관리하는 휴대용 \"두 번째 뇌\"를 구축하는 솔루션입니다.\n\n## 주요 내용\n\n*   **핵심 기능:** Brain AI Hub는 로컬 LLM(Ollama, qwen2.5, nomic-embed)을 기반으로 OpenAI 호환 API를 제공하며, Obsidian 스타일의 마크다운 볼트, PDF/EPUB 라이브러리, sqlite-vec RAG, 경량 지식 그래프를 위한 지식 저장소를 갖추고 있습니다.\n*   **에이전트 연동:** 세 가지 MCP 서버(brain-vault, brain-library, brain-rag)를 통해 Cursor, Claude Code, VS Code와 같은 IDE 에이전트와의 통합을 원클릭으로 지원합니다.\n*   **데이터 처리 파이프라인:** Claude/Cursor/Antigravity 채팅 세션의 내보내기 데이터를 볼트 마크다운으로 변환하고, 중복을 제거하며, 코드를 인덱싱하고, 예약된 작업을 실행하는 트랜스크립트 파이프라인을 포함합니다.\n*   **대시보드:** FastAPI 기반 UI를 통해 서비스 상태, 채팅, GPU/VRAM 사용량, API 키, 파이프라인 상태를 모니터링하고 관리할 수 있습니다.\n*   **설치:** Windows에서는 portable 설치 파일(`Install.bat`, `Start.bat`)을, Linux에서는 `bootstrap.sh` 스크립트를 사용하여 간편하게 설치할 수 있습니다.\n*   **MCP 활용:** RAG가 단순히 검색 결과를 제공하는 것과 달리, MCP는 에이전트에게 메모 작성, 볼트 파일 목록 조회, 스킬 트리거, 코드 인덱스 쿼리 등 더 동적인 도구를 제공하여 IDE 에이전트의 실제 작동 방식과 일치합니다.\n*   **기술 스택:** Python, FastAPI, Ollama, sqlite-vec, PowerShell (Windows), systemd (Linux)를 사용하며, MikroTik/UniFi 네트워킹, WireGuard, Docker 등 홈랩 환경에 적합한 기술을 활용합니다.\n\n## 시사점\n\nBrain AI Hub는 클라우드 기반 솔루션의 한계를 극복하고 사용자의 데이터를 직접 제어하며, IDE 에이전트의 기능을 확장할 수 있는 개인 맞춤형 지식 관리 및 AI 통합 환경을 제공합니다."
 }

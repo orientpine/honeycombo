@@ -12,5 +12,6 @@
     "showdev"
   ],
   "published_at": "2026-06-17T17:12:50.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\n\"Tania Dictée\"는 퀘벡 프랑스어 및 혼합어(FR/EN) 코딩에 최적화된 로컬 윈도우 음성 받아쓰기 도구로, 2026년 6월 20일까지 25명의 초기 사용자 확보를 목표로 Build-in-public 방식으로 개발 및 검증되고 있다.\n\n## 주요 내용\n\n- **Tania Dictée 소개**: Whisper (faster-whisper) 모델을 기반으로 하며, F6 키를 누른 상태에서 말하고 떼면 활성 앱에 텍스트가 입력된다. 퀘벡 프랑스어와 영어 코드 스위칭에 대한 기존 솔루션(Dragon NaturallySpeaking, Wispr Flow)의 한계를 극복하기 위해 개발되었다.\n- **현재 제품 상태**: 64MB 용량의 윈도우 설치 파일(Python 및 관리자 권한 불필요), 클라우드/계정/구독 없음, 퀘벡 프랑스어 용어집(Cursor, Supabase, useState, \"pis\", \"fa que\" 등) 포함, Gumroad에서 9 CAD에 판매된다.\n- **향후 개선점**: Mac 버전 출시, 사용자 경험(UX) 개선, 공개 WER(Word Error Rate) 벤치마크 제공이 필요하다.\n- **Build-in-public 전략**: 현재 개발자는 자신의 사용 경험을 바탕으로 제품을 출시했으나, 다른 사용자에게 유용한지에 대한 데이터가 부족하여 공개적으로 초기 사용자를 모집하고 피드백을 수집하고자 한다.\n- **향후 3일 계획**: 매일 Build-in-public 관련 X(Twitter) 게시물 발행, GitHub 내 Whisper 도구 디렉토리에 공개, 6월 20일 공개 중간 점검을 진행한다.\n- **대상 사용자**: 퀘벡 개발자, 음성 입력이 많은 컨설턴트, 또는 윈도우용 로컬 Whisper 도구에 관심 있는 사용자에게 9 CAD의 직접 구매 또는 웨이트리스트 등록을 제안한다.\n\n## 시사점\n\nTania Dictée는 기존 음성 인식 도구가 지원하지 않는 특정 언어 및 사용 사례에 대한 니즈를 충족시키며, Build-in-public 접근 방식을 통해 초기 단계부터 사용자 피드백을 적극적으로 반영하여 제품을 개선하고 시장 검증을 진행하는 전략을 보여준다."
 }
