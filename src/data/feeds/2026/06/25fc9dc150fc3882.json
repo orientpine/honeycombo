@@ -12,5 +12,6 @@
     "ai assistant"
   ],
   "published_at": "2026-06-18T13:00:00.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nAdobe는 자체 AI 어시스턴트인 Firefly를 Premiere, Illustrator, InDesign, Frame.io 등 주요 앱에 통합하고, 브랜드 키트, 제품 비디오, 스토리보드 생성 등 새로운 기능을 추가했습니다.\n\n## 주요 내용\n\n*   Firefly AI 어시스턴트는 Premiere에서 애셋을 빈으로 분류하고, 클립을 일괄 재명명하며, 인터뷰 질문을 식별하고 마커를 추가하는 데 사용될 수 있습니다.\n*   Illustrator에서는 AI 어시스턴트가 문서 전체의 레이어를 재구성하거나 누락된 폰트를 확인하는 등의 작업을 수행할 수 있습니다.\n*   Frame.io와 같은 영상 협업 플랫폼에도 AI 기능이 추가될 예정입니다.\n*   Firefly 앱은 사용자가 생성한 콘텐츠를 프로젝트 전반에 걸쳐 재사용 가능한 'Elements'로 저장할 수 있는 기능을 제공합니다.\n*   'Projects' 기능은 기존 애셋을 한곳에 저장하고 컨텍스트를 공유하여 영상 시리즈 또는 브랜드 캠페인 제작에 유용할 수 있습니다.\n*   사용자는 브랜드 설명이나 기존 자료를 업로드하여 로고, 브랜드 아이덴티티, 색상 팔레트가 포함된 브랜드 키트를 생성하거나 사진으로 제품 비디오를 만들 수 있습니다.\n*   또한, 스토리보드를 생성하여 비디오 제작에 활용할 수 있습니다.\n*   Firefly는 ChatGPT, Claude, Copilot을 지원하며, Google Gemini와 Slack 지원도 곧 추가될 예정입니다.\n*   Adobe는 Express, Photoshop, Acrobat에서도 Firefly를 사용할 수 있도록 하고 있습니다.\n\n## 시사점\n\nAdobe의 Firefly AI 어시스턴트 통합은 크리에이티브 워크플로우를 자동화하고 효율성을 높여 사용자들에게 새로운 차원의 창작 경험을 제공할 것으로 기대됩니다."
 }
