@@ -12,5 +12,6 @@
     "tc"
   ],
   "published_at": "2026-06-17T17:43:07.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nOdyssey는 Amazon, AMD Ventures, GV 등의 투자를 유치하며 14억 5천만 달러의 기업 가치를 인정받은 월드 모델 AI 스타트업입니다.\n\n## 주요 내용\n\n*   Odyssey는 설립자 Oliver Cameron과 Jeff Hawke의 자율 주행 차량 개발 경험을 바탕으로 설립되었습니다.\n*   월드 모델은 실제 세계의 데이터를 수집하고 정확한 물리 시뮬레이션을 통해 이를 재현하는 AI 기술로, LLM의 다음 단계로 주목받고 있습니다.\n*   Odyssey는 초기 단계에서 카메라를 착용한 사람들을 활용하여 물리 세계 데이터를 수집하는 방식을 사용했습니다.\n*   현재 Odyssey는 비디오 게임 제작, 로보틱스 등 다양한 용도의 월드 모델을 제공하며, 텍스트 프롬프트를 통해 인터랙티브 비디오를 생성하는 것으로 알려져 있습니다.\n*   Amazon의 투자에 따라 AWS를 선호 클라우드 공급업체로 지정하고, AWS Trainium 칩에 최적화된 모델 개발을 진행할 예정입니다.\n*   이번 시리즈 B 라운드에는 Natural Capital이 주도적으로 참여했으며, Jeff Dean, Elad Gil, Garry Tan 등 다수의 저명한 엔젤 투자자들도 참여했습니다.\n*   Odyssey는 현재까지 총 3억 3,700만 달러의 자금을 조달했습니다.\n\n## 시사점\n\nOdyssey의 성공적인 투자 유치는 월드 모델 AI의 잠재력과 성장 가능성을 보여주며, 향후 AI 발전 방향에 대한 중요한 지표를 제시합니다."
 }
