@@ -1,0 +1,16 @@
+{
+  "id": "e5ecfdfc40719262",
+  "title": "LLM Security on Kubernetes: Why Standard K8s Security Controls Are Not Enough for AI Agents",
+  "url": "https://dev.to/thecybersidekick/llm-security-on-kubernetes-why-standard-k8s-security-controls-are-not-enough-for-ai-agents-3oeh",
+  "source": "Dev.to",
+  "type": "article",
+  "tags": [
+    "dev",
+    "kubernetes",
+    "llmsecurity",
+    "aiagents",
+    "promptinjection"
+  ],
+  "published_at": "2026-06-18T16:47:42.000Z",
+  "feed_id": "devto"
+}
