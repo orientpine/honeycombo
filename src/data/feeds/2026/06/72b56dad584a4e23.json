@@ -12,5 +12,6 @@
     "openai"
   ],
   "published_at": "2026-06-19T07:02:50.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nChatstore는 LLM 애플리케이션을 위한 경량의 프레임워크 독립적인 지속적인 채팅 기록 라이브러리로, 인프라 구축 없이 대화 기록 저장, LLM 컨텍스트 한계 관리, 관련 과거 컨텍스트 검색을 지원합니다.\n\n## 주요 내용\n\n*   **제로 인프라:** 별도의 서버나 Docker 설정 없이 `pip install chatstore`로 설치 및 즉시 사용 가능합니다.\n*   **프레임워크 독립성:** LangChain과 같은 특정 프레임워크에 종속되지 않고 OpenAI, Gemini, Anthropic, Ollama 등 모든 LLM과 함께 사용할 수 있습니다.\n*   **지속적인 기록:** SQLite를 기반으로 대화 기록을 저장하며, Postgres로 교체도 가능합니다.\n*   **컨텍스트 관리:** 설정 가능한 슬라이딩 윈도우를 통해 LLM의 컨텍스트 한계를 초과하지 않도록 관리합니다.\n*   **선택적 시맨틱 검색:** API 키 없이 로컬 임베딩을 활용한 시맨틱 검색 기능을 제공합니다. ( `chatstore[semantic]` 설치 시)\n*   **간편한 사용:** 3줄의 코드로 ChatService를 초기화하고 메시지를 저장할 수 있습니다. (`pip install chatstore` 후 `from chatstore import ChatService`, `chat = ChatService(project_id=\"my_app\")`, `chat.save_message(\"user\", \"Hello!\")`)\n\n## 시사점\n\nChatstore는 LLM 기반 애플리케이션 개발 시 대화 기록 관리 및 컨텍스트 처리에 필요한 시간과 복잡성을 대폭 줄여주어 개발 생산성을 향상시킬 수 있습니다."
 }
