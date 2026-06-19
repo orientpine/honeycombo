@@ -12,5 +12,6 @@
     "opensource"
   ],
   "published_at": "2026-06-18T16:47:20.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nKaliCart Bridge는 WooCommerce 카탈로그를 AI 에이전트가 사용할 수 있는 읽기 전용 API로 노출하는 WordPress 플러그인으로, 상세한 검색, 재고 및 가격 정보를 제공합니다.\n\n## 주요 내용\n\n-   **AI 에이전트의 쇼핑 행동:** AI 에이전트는 웹사이트를 스크래핑하여 가격 및 재고 정보를 파악하는데, 이는 불안정하고 부정확할 수 있습니다.\n-   **KaliCart Bridge의 역할:** WooCommerce 카탈로그를 기계가 이해할 수 있는 형식으로 제공하는 API를 통해 이러한 문제를 해결합니다.\n-   **API 설계 원칙:**\n    -   **Discovery Document 기반:** API의 시작점으로, 카탈로그의 기능, 엔드포인트 및 규칙을 사전에 알려줍니다.\n    -   **읽기 전용(Read-only):** 주문, 결제, 변경 등은 처리하지 않으며, 카탈로그 정보만 제공합니다.\n    -   **실시간 데이터:** WooCommerce 데이터베이스에서 직접 데이터를 가져와 최신 상태를 유지합니다.\n-   **엔드포인트:** Discovery, Search, Products, Product, Categories, Meta, MCP 등을 포함합니다.\n-   **검색 쿼리 구성:** 상품명(q)과 속성(filters)을 분리하여 검색의 예측 가능성을 높입니다.\n-   **검색 응답:** 상품 ID, 이름, 상세 가격 정보(정가, 할인, 현재가, 할인율), 재고 상태(가용성, 추적 여부, 신뢰도), 카테고리 정보 등을 제공합니다.\n-   **증거 기반 추론:** AI 에이전트가 제시하는 모든 정보는 카탈로그의 특정 필드와 연결되어야 하므로, 환각(hallucination)을 방지합니다.\n-   **Model Context Protocol (MCP) 지원:** REST API와 동일한 데이터를 JSON-RPC 2.0을 통해 MCP 프로토콜로도 제공합니다.\n-   **결제 기능 제외:** API는 결제 기능을 포함하지 않으며, 최종 결제는 WooCommerce 스토어프런트에서 인간이 진행하도록 합니다. (향후 자동화된 결제 기능 추가 로드맵)\n\n## 시사점\n\nKaliCart Bridge는 WooCommerce 스토어의 상품 정보를 AI 에이전트가 효율적이고 정확하게 접근할 수 있도록 함으로써, 전자상거래에서의 AI 활용 가능성을 확장하고 운영의 안정성을 높일 수 있는 기반을 마련합니다."
 }
