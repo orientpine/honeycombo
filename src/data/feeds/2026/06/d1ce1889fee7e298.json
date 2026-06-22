@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-06-21T21:29:43.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nApertus는 스위스 AI Initiative가 EPFL, ETH Zurich, CSCS의 협력으로 개발한 공개 파운데이션 모델로, EU AI Act 요구사항을 충족하며 다국어 지원과 뛰어난 성능을 제공합니다.\n\n## 주요 내용\n\n- **오픈 소스 및 재현성:** Apertus는 모델 가중치, 데이터, 코드, 방법론, 정렬 원칙 등 모든 구성 요소를 공개하여 투명성과 재현성을 보장합니다. 이는 \"AI에 대한 Apertus는 오픈 소스에 대한 오픈(Open)과 같다\"는 철학을 반영합니다.\n- **EU AI Act 준수:** 모델은 EU AI Act의 요구사항에 맞춰 설계되었으며, 옵트아웃 존중, 개인 식별 정보(PII) 제거, 정보 기억 방지(memorization prevention) 기능을 포함합니다.\n- **성능 및 다국어 지원:** 8B 및 70B 파라미터 규모에서 기존 최고 성능의 오픈 모델과 경쟁할 수 있는 성능을 제공하며, 초기부터 1000개 이상의 언어로 학습되어 다국어 지원이 가능합니다.\n- **전략적 파트너십:** Swisscom은 Swiss AI Initiative의 전략적 파트너로 참여하고 있습니다.\n\n## 시사점\n\nApertus는 EU AI Act를 준수하며 높은 성능과 다국어 지원을 제공하는 공개 파운데이션 모델로서, 전 세계 개발자들이 안전하고 신뢰할 수 있는 AI 애플리케이션을 구축할 수 있는 기반을 제공할 것으로 기대됩니다."
 }
