@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-06-22T14:21:24.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nSelector Forge는 AI를 활용하여 동적으로 변화하는 웹 페이지에서도 안정적인 CSS 또는 XPath 셀렉터를 생성하는 독립적인 브라우저 확장 프로그램입니다.\n\n## 주요 내용\n\n*   **AI 기반 셀렉터 생성 및 검증:** 사용자가 웹 페이지의 요소를 선택하면, AI가 이를 분석하여 신뢰할 수 있는 셀렉터 후보를 제안하고, 실제 DOM 환경에서 검증하여 정확도를 높입니다.\n*   **두 가지 선택 모드 제공:**\n    *   **Single Pick:** 버튼, 입력 필드, 링크 등 단일 요소에 대한 검증된 셀렉터 후보를 제공합니다.\n    *   **List Pick:** 반복되는 항목 집합에서 두 개의 예시를 선택하면, 전체 항목에 대한 검증된 컨테이너 셀렉터를 미리 보여주고 저장할 수 있습니다.\n*   **핵심 기술 스택:**\n    *   **Frontend:** React (Popup UI)\n    *   **Backend:** Intuned의 셀렉터 백엔드 (AI 기반 셀렉터 제안 및 순위 지정)\n    *   **Build Tool:** WXT (Web Extension Toolkit)\n    *   **Testing:** Vitest (Unit, Browser), Playwright (E2E)\n*   **개발 및 빌드 환경:** Node.js 18+, Yarn을 사용하여 개발하며, `yarn dev` 명령어로 개발 서버를 실행하고 확장 프로그램을 로드할 수 있습니다.\n*   **프로젝트 구조:** 배경 서비스 워커(background.ts), 콘텐츠 스크립트(content.ts), React 팝업(popup/), 메시징 프로토콜(messaging/), 상태 관리(state/), 인증(auth/) 등 모듈별로 구성되어 있습니다.\n*   **신뢰 경계:** 확장 프로그램은 세션 상태를 유지하고, 브라우저는 셀렉터의 실제 매칭 결과를 검증하는 최종 출처 역할을 합니다. AI는 후보를 제안하고 순위를 매기지만, 정확성 판단은 브라우저를 통해 이루어집니다.\n*   **로드맵:** CLI 제어, 스마트 피커 기능, 드릴다운 모드, 자체 백엔드 구축, 자동 페이지네이션 감지, 크로스-iframe 및 Shadow DOM 지원 등을 계획하고 있습니다.\n\n## 시사점\n\nSelector Forge는 End-to-end 테스트 작성, 웹 스크래핑, 자동화 등 동적 웹 환경에서 안정적인 셀렉터 확보의 어려움을 해결하여 개발 생산성을 향상시킬 수 있는 도구입니다."
 }
