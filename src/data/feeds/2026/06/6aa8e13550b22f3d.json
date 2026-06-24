@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-06-24T02:12:31.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nDiffusionBench는 기존의 ImageNet 평가만으로는 부족하다는 인식 하에, 생성 모델의 총체적인 평가를 위한 프레임워크를 제시한다.\n\n## 주요 내용\n\n*   **DiffusionBench v0.1 릴리스**: 실험적인 기술 보고서가 공개되었으며, 향후 기여자를 늘리고 커뮤니티와 협력하여 프레임워크를 개선할 계획이다.\n*   **단일 인터페이스 지원**: ImageNet, Text-to-Image (T2I) 등 다양한 생성 작업에 대한 훈련 및 평가를 단일 코드베이스로 지원한다.\n*   **훈련 절차**: Stage 1 (RAE tokenizer 훈련)과 Stage 2 (VAE/RAE/Pixel 공간에서의 diffusion 모델 훈련)로 구성된다.\n*   **평가 방식**: 훈련 중 온라인 평가 또는 릴리스된 체크포인트를 이용한 오프라인 평가를 지원하며, Stage 1 재구성 평가와 Stage 2 생성 평가를 포함한다.\n*   **다양한 인코더 및 VAE 지원**: 30개 이상의 RAE 및 RAEv2 인코더, 10개 이상의 VAE를 지원하며, Pixel 공간의 다양한 예측 방법론을 통합한다.\n*   **지원 아키텍처 및 작업**: LightningDiT, JiT, DDT 등의 아키텍처를 지원하며, ImageNet(클래스 조건부 생성) 및 T2I(텍스트-이미지 생성) 작업을 수행한다.\n*   **평가 지표**: ImageNet을 위한 FID, IS와 T2I를 위한 GenEval, DPGBench, GenAIBench, VQAScore 등을 지원한다.\n*   **기여 환영**: 코딩 에이전트와의 호환성을 확보했으며, AutoResearch 통합도 계획 중이다.\n\n## 시사점\n\nDiffusionBench는 이미지 생성 모델의 평가를 보다 포괄적이고 표준화하여, 모델 성능을 객관적으로 비교하고 발전을 가속화하는 데 기여할 수 있다."
 }
