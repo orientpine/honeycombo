@@ -12,5 +12,6 @@
     "tutorial"
   ],
   "published_at": "2026-06-25T16:15:56.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nDocker를 활용하여 Llama 모델을 로컬 환경에서 실행하는 방법이 설명되어 있으며, 이를 통해 데이터 프라이버시 확보, 클라우드 API 의존성 제거, 환경 설정의 간편성 등을 얻을 수 있다.\n\n## 주요 내용\n\n*   **로컬 추론의 장점**:\n    *   **프라이버시**: 민감한 데이터, 내부 문서, 고객 문의, 독점 코드 등을 다룰 때 데이터가 로컬 머신에만 머물러 제3자 로깅 및 유출 위험이 없다.\n    *   **비용 및 제약 없음**: 토큰당 비용, API 사용량 제한 등이 없다.\n    *   **완전한 제어**: 모델 버전, 추론 매개변수(temperature, context length 등), 런타임 환경을 직접 제어할 수 있다.\n    *   **안정성**: 외부 API 장애와 관계없이 애플리케이션이 계속 작동한다.\n*   **최소 시스템 요구 사항**:\n    *   RAM: 8 GB (권장 16 GB)\n    *   디스크: 10 GB 이상 여유 공간\n    *   CPU: 최신 멀티코어 프로세서 (x86\\_64 또는 ARM64)\n    *   GPU: 선택 사항이나 추론 속도를 크게 향상시킴 (NVIDIA CUDA 또는 Apple Silicon Metal 지원)\n    *   OS: Linux, macOS, 또는 WSL2가 설치된 Windows\n*   **Ollama와 Docker를 이용한 설정**:\n    *   Ollama는 모델 로딩, 양자화, 로컬 HTTP API 제공을 담당하는 경량 런타임이다.\n    *   Docker는 Ollama를 패키징하여 이식성과 격리성을 제공하며, 단일 명령으로 어떤 머신에서도 설정을 구동할 수 있게 한다.\n    *   `docker-compose.yml` 파일을 사용하여 설정을 재현 가능하게 구성한다.\n    *   `docker exec` 명령을 사용하여 `ollama` 컨테이너 내에서 `llama3` 모델을 `pull`하고 `run`한다.\n    *   Python `requests` 라이브러리를 사용하여 로컬 API 엔드포인트(`http://localhost:11434/api/generate`)로 쿼리를 보낼 수 있다.\n*   **리소스 요구 사항 (참고)**:\n    *   Llama 3 8B: 약 6 GB RAM, 약 4.7 GB 디스크 공간\n    *   Llama 3 70B: 약 48 GB RAM, 약 40 GB 디스크 공간\n*   **설정 시간**: Docker를 이용한 Llama 로컬 실행 설정은 15분 이내에 완료되었다.\n\n## 시사점\n\nDocker와 Ollama를 활용하면 Llama와 같은 대규모 언어 모델을 개인 로컬 환경에서 효율적으로 실행할 수 있어, 데이터 프라이버시를 최우선으로 하는 개발 및 프로덕션 워크플로우에 실질적인 이점을 제공한다."
 }
