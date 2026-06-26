@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-06-25T16:04:46.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nOpenKnowledge는 Obsidian/Notion의 오픈소스 대안으로, Claude, Codex 등과 통합된 AI 중심의 로컬 우선 WYSIWYG 마크다운 편집기입니다. 개인 노트, 지식 베이스, 사양서, LLM 위키 등으로 활용 가능합니다.\n\n## 주요 내용\n\n*   **WYSIWYG 편집 경험**: 마크다운 파일 편집이 Google Docs나 Notion 페이지 편집과 유사한 경험을 제공합니다.\n*   **협업 AI 편집**: Claude, Codex, Cursor 데스크톱 앱을 통한 협업 AI 편집 기능을 지원합니다.\n*   **다양한 AI 통합**: MCP/CLI를 통해 OpenCode와 같은 임의의 harness/agent와 연동할 수 있습니다.\n*   **LLM 특화 기능**: LLM 위키, 에이전트 세컨드 브레인, 지식 그래프를 위한 MCP, 스킬, 에이전트 검색 기능이 기본 제공됩니다.\n*   **간편한 팀 공유**: git/GitHub 기반의 노코드 팀 공유 및 자동 동기화 기능을 제공합니다.\n*   **엔지니어링 문서 작성**: 엔지니어링 사양서 및 시각화 보고서 작성을 위한 임베드 가능한 HTML과 풍부한 컴포넌트를 지원합니다.\n*   **UI 옵션**: 데스크톱 앱 내 TUI와 터미널 사용자에게 친숙한 Web UI를 제공합니다.\n*   **설치 및 사용**: macOS는 데스크톱 앱으로, Linux, Windows, Intel Mac은 Node.js 24+ 환경에서 CLI를 통해 로컬 웹 앱으로 실행할 수 있습니다.\n*   **기여 및 라이선스**: 공개 풀 리퀘스트를 환영하며, GPL-3.0-or-later 라이선스로 배포됩니다.\n\n## 시사점\n\nOpenKnowledge는 개발자와 지식 작업자에게 AI 기반의 통합된 문서 작성 및 관리 환경을 제공하며, 오픈소스 생태계를 통해 협업과 확장을 도모할 수 있는 잠재력을 지닙니다."
 }

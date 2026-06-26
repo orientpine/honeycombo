@@ -12,5 +12,6 @@
     "productivity"
   ],
   "published_at": "2026-06-25T16:10:41.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nNext.js, TypeScript, OpenAI API를 활용하여 실제 서비스 가능한 AI 챗봇 SaaS 애플리케이션을 구축한 경험을 공유합니다. 이 프로젝트는 현대적인 AI 기반 애플리케이션 개발 경험을 쌓고 풀스택 개발 역량을 강화하는 데 목적이 있습니다.\n\n## 주요 내용\n\n*   **개발 목표**: 간단한 CRUD 애플리케이션을 넘어 현대적인 프론트엔드 개발, 백엔드 아키텍처, 데이터베이스 설계, 인증 시스템, AI 통합을 결합한 실제 SaaS 제품 개발.\n*   **주요 기능**: 사용자 인증(보안 로그인 및 등록), OpenAI API 연동, ChatGPT 스타일 인터페이스, 대화 기록 관리, 채팅 생성/이름 변경/삭제, Markdown 및 코드 블록 지원, 다크/라이트 모드, 반응형 대시보드, PostgreSQL 데이터베이스 연동, 현대적인 SaaS UI.\n*   **기술 스택**:\n    *   **프론트엔드**: Next.js 15, TypeScript, Tailwind CSS, Shadcn UI.\n    *   **백엔드**: Next.js API Routes, Server Actions.\n    *   **데이터베이스**: PostgreSQL, Prisma ORM.\n    *   **인증**: NextAuth.js.\n    *   **AI**: OpenAI API.\n*   **학습 내용**: 실제 AI 애플리케이션의 구조와 대화형 AI를 현대적인 SaaS 플랫폼에 통합하는 방법 이해.\n*   **향후 계획**: 소셜 미디어 AI 자동화, AI 이력서 검토, GitHub 프로필 분석기, AI 워크플로우 자동화 도구 등 AI 기반 SaaS 애플리케이션 추가 개발. GitHub 저장소를 통해 프로젝트 소스 코드 공개 및 피드백 공유.\n\n## 시사점\n\n이 프로젝트는 풀스택 개발자가 최신 기술 스택을 활용하여 사용자 인증, 데이터 관리, AI 통합을 갖춘 완성도 높은 SaaS 애플리케이션을 구축하는 과정을 실질적으로 보여주며, AI 기술을 활용한 실제 서비스 개발에 대한 인사이트를 제공합니다."
 }
