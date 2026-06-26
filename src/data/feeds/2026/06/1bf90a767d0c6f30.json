@@ -12,5 +12,6 @@
     "email"
   ],
   "published_at": "2026-06-25T19:04:57.000Z",
-  "feed_id": "arstechnica"
+  "feed_id": "arstechnica",
+  "description": "## 개요\n\nNotion이 Skiff에서 영향을 받은 이메일 앱을 종료하면서, 사용자들이 AI 에이전트를 더 많이 사용하게 되는 추세가 나타나고 있습니다.\n\n## 주요 내용\n\n- Notion은 9월 21일까지 초안 및 예약된 이메일을 내보내도록 사용자들에게 요청했으며, 이 데이터는 자동으로 다른 앱으로 이전되지 않습니다.\n- 사용자는 Notion Mail 설정을 저장하고 스니펫 및 자동 레이블 지침을 내보내 다른 곳에서 사용할 수 있습니다.\n- Notion Mail에서 설정한 자동 레이블 규칙은 다시 구축할 필요 없이 커스텀 에이전트를 통해 이전할 수 있으며, 기존 Notion 에이전트는 계속 실행됩니다.\n- HIPAA와 같이 규제가 적용되는 환경에서 Notion Mail을 사용했던 조직은 2026년 6월 30일까지 Notion Mail 전환 계획을 세워야 합니다.\n- Skiff는 2백만 명의 사용자를 보유했었으며, Notion 인수에 앞서 Proton Mail과 같은 경쟁사들에게 위협이 되었습니다.\n- Notion Mail은 종단 간 암호화를 지원하지 않았으며, Skiff가 이메일 제공업체로서 가졌던 개인 정보 보호에 대한 초점과는 다르게 AI 중심적인 접근 방식을 채택했습니다.\n- Notion Mail은 Skiff의 인프라와 전 Skiff 임원들에 의해 구축되었기에, Notion Mail의 종료는 Skiff에게 일종의 마지막을 의미할 수 있습니다.\n- Notion은 Skiff의 이메일 클라이언트를 종료하지만, Skiff 인수를 통해 얻은 인적 자원 및 캘린더, 스토리지 관련 생산성 아이디어들을 활용하여 Google Workspace와 같은 경쟁사들과 더 강력하게 경쟁하려 할 수 있습니다.\n- Notion은 Skiff 포트폴리오의 직접적인 후속 제품 출시에서는 벗어나고 있습니다.\n\n## 시사점\n\nNotion Mail의 종료는 AI 에이전트 중심의 생산성 도구로의 전환을 보여주며, Notion은 Skiff 인수에서 얻은 자원을 활용하여 경쟁력을 강화할 것으로 예상됩니다."
 }

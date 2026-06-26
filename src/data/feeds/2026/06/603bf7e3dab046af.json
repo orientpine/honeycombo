@@ -12,5 +12,6 @@
     "benchmarking"
   ],
   "published_at": "2026-06-25T22:59:45.000Z",
-  "feed_id": "githublog"
+  "feed_id": "githublog",
+  "description": "## 개요\n\nGitHub Copilot 에이전트 허니스는 여러 벤치마크에서 강력한 결과와 뛰어난 토큰 효율성을 제공하며, 20개 이상의 모델 선택지를 유지하는 유연성을 갖추고 있습니다.\n\n## 주요 내용\n\n*   GitHub Copilot 에이전트 허니스는 GitHub Copilot CLI, GitHub Copilot 앱, Copilot 코드 리뷰 등 다양한 GitHub 및 Microsoft 경험을 지원하는 GitHub Copilot SDK의 공유 구성 요소입니다.\n*   SWP-bench, SWP-bench Pro, SkillsBench, TerminalBench, Win-Hill 등 다양한 공개 및 내부 벤치마크를 통해 에이전트 허니스의 성능과 효율성을 지속적으로 평가합니다.\n*   동일한 모델과 벤치마크 작업을 사용했을 때, GitHub Copilot 허니스는 대부분의 구성에서 더 낮은 토큰 소비량을 보이면서 다른 모델 벤더 허니스와 동등한 작업 완료율을 달성했습니다.\n*   TerminalBench 2.0 분석 결과, GitHub Copilot은 작업 완료율과 비용 측면에서 경쟁사 대비 우수한 성능을 보였으며, 실행 간 변동성이 적어 재현 가능한 결과를 제공합니다.\n*   GPT 모델은 최저 비용으로 강력한 성능을 제공하고, Claude Opus는 최고 수준의 해상도를 제공하는 반면, GitHub Copilot은 사용자가 필요에 따라 효율성 또는 최고 품질을 선택할 수 있도록 지원합니다.\n*   20개 이상의 프론티어 모델(GPT, Claude, Gemini, MAI 패밀리 포함)을 지원하며, 사용자 정의 키를 통해 오픈 소스 및 로컬 모델도 사용할 수 있습니다.\n*   자동 모델 선택 기능을 통해 작업 의도와 모델 상태를 균형 있게 고려하여 토큰 효율성을 최적화하며, 여러 모델을 활용하는 아키텍처는 단일 모델 허니스가 제공할 수 없는 기능을 가능하게 합니다.\n*   Rubber Duck 기능은 다른 모델의 작업을 한 모델이 검토하여 단일 모델보다 향상된 결과를 도출하는 크로스 모델 패밀리 비평을 활용합니다.\n\n## 시사점\n\nGitHub Copilot의 에이전트 허니스는 개발자에게 모델 벤더 허니스와 유사한 작업 완료율을 더 낮은 토큰 비용으로 제공하며, 다양한 모델 선택지를 통해 특정 작업에 가장 적합한 모델을 선택할 수 있는 유연성을 제공합니다."
 }
