@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-06-23T13:11:27.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\n900KB 크기의 Transformer 모델을 특정 파일 하나에 대해 과적합(overfitted)시켜 100MB CSV 파일을 7MB로 압축하는 실험이 진행되었다.\n\n## 주요 내용\n\n*   **압축 방식**: 900KB 크기의 Transformer 모델을 학습시켜 단일 파일을 \"암기\"하게 한 후, 다음 바이트를 예측하도록 했다. 이 예측값은 산술 코더(arithmetic coder)에 입력되어 압축된 출력물을 생성한다.\n*   **성능**: 100MB NYC 택시 CSV 파일의 경우 약 7MB(0.5 bits/byte)로 압축되었으며, 100MB 크기의 enwik9 텍스트 데이터는 약 21MB(1.68 bits/byte)로 압축되었다.\n*   **처리 속도**: 현재 실험은 상대적으로 느리며, 훈련에 약 20~30분, 압축 및 해제에 각각 약 45분(AMD 7800XT 기준)이 소요된다.\n*   **구현**: 해당 실험은 GitHub 저장소(https://github.com/samyak112/pym-particles)를 통해 공개되었다.\n\n## 시사점\n\nTransformer 모델을 특정 데이터에 과적합시키는 방식이 개별 파일 압축에서 높은 효율성을 보일 수 있음을 시사하며, 이는 기존 압축 방식의 대안 또는 보완 기술로 발전할 가능성을 제시한다."
 }

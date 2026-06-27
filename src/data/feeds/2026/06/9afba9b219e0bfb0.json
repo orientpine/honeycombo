@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-06-26T16:40:11.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nWeave에서 개발한 새로운 라우터는 Anthropic, OpenAI, Gemini 등 다양한 LLM 제공업체의 모델을 단일 엔드포인트로 통합하고, 각 요청에 가장 적합한 모델을 지능적으로 선택하는 기능을 제공합니다.\n\n## 주요 내용\n\n*   **통합 모델 라우팅:** `localhost:8080`의 단일 프록시 엔드포인트를 통해 Claude Code, Codex, Cursor 및 자체 애플리케이션에서 여러 LLM 모델을 사용할 수 있습니다.\n*   **요청별 최적 모델 선택:** \"Avengers-Pro\"에서 파생된 클러스터 스코어러를 사용하여 각 요청의 특성에 맞춰 최적의 모델을 동적으로 라우팅합니다. 이는 단순한 프롬프트 기반이 아닌, \"on-box embedder\"를 활용합니다.\n*   **다양한 API 지원:** Anthropic Messages, OpenAI Chat Completions, Gemini 네이티브 API를 지원하며, 스트리밍, 툴 사용, 비전 기능 등을 포괄합니다.\n*   **오픈소스 LLM 호환성:** OpenRouter 또는 OpenAI 호환 엔드포인트를 통해 DeepSeek, Kimi, GLM, Qwen, Llama, Mistral과 같은 오픈소스 모델도 지원합니다.\n*   **보안 및 개인정보 보호:** 제공업체 API 키는 기본적으로 BYOK(Bring Your Own Key) 방식을 지원하며, 로컬 환경에 암호화되어 저장됩니다.\n*   **관측 가능성:** OTLP(OpenTelemetry Protocol) 트레이스를 기본적으로 제공하여 Weave 대시보드, Honeycomb, Datadog, Grafana 등에서 라우팅 및 모델 사용 현황을 모니터링할 수 있습니다.\n*   **간편한 설치 및 통합:** Node.js 환경에서 `npx @workweave/router` 명령어로 30초 내에 호스팅된 라우터 또는 로컬 환경에 설치할 수 있습니다. Claude Code, Codex, opencode, Cursor와 같은 도구와 쉽게 통합됩니다.\n*   **자가 호스팅 옵션:** 자체 환경에서 라우터와 대시보드를 실행할 수 있으며, PostgreSQL 및 라우터 키 관리가 포함됩니다.\n\n## 시사점\n\n이 라우터는 개발자가 여러 LLM 모델을 효과적으로 관리하고, 각 작업에 가장 적합한 모델을 자동으로 선택함으로써 개발 생산성을 향상시키고 비용 효율성을 높일 수 있는 가능성을 제시합니다. 또한, 모델 제공업체에 대한 종속성을 줄이고 다양한 LLM 생태계를 유연하게 활용할 수 있도록 지원합니다."
 }
