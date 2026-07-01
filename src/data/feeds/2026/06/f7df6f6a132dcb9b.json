@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-06-29T17:16:17.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nOrnith-1.0은 자기 개선형 오픈소스 코딩 에이전트 모델로, 다양한 크기의 모델과 self-improving training framework를 제공하며, MIT 라이선스로 전 세계에서 자유롭게 접근 가능하다.\n\n## 주요 내용\n\n*   **State-of-the-Art 코딩 에이전트:** 9B-Dense, 31B-Dense, 35B-MoE, 397B-MoE 모델이 Gemma 4 및 Qwen 3.5 기반으로 제공되며, Terminal-Bench 2.1, SWE-Bench, NL2Repo, OpenClaw와 같은 코딩 벤치마크에서 유사 크기 오픈소스 모델 대비 최고 수준의 성능을 달성했다.\n*   **Self-Improving Training Framework:** 강화학습(RL)을 사용하여 솔루션 롤아웃뿐만 아니라 해당 롤아웃을 유도하는 스캐폴드(scaffold)를 생성하는 방법을 학습한다. 스캐폴드와 결과 솔루션을 공동으로 최적화하여 더 나은 탐색 궤적을 발견하고 고품질 솔루션을 생성한다.\n*   **라이선스 및 접근성:** MIT 라이선스로 전 세계적으로 접근 가능하며 지역적 제약이 없다.\n*   **벤치마크 결과:** 각 모델은 크기에 적합한 베이스라인과 비교 평가되었다. Ornith-1.0 모델들은 다양한 코딩 벤치마크에서 경쟁 모델 대비 우수한 성능을 보였다.\n*   **서빙 및 사용:** vLLM, SGLang, Hugging Face Transformers를 통해 서빙할 수 있으며, OpenAI 호환 API를 지원한다. 256K 토큰 컨텍스트 창을 지원하며, 다양한 모델 아키텍처(Dense, MoE)와 포맷(bf16, FP8, GGUF)으로 제공된다.\n*   **Agentic 코딩 활용:** OpenAI 호환 API와 도구 호출(tool-calling) 기능을 통해 Hermes Agent, OpenHands, OpenClaw, OpenCode 등 다양한 에이전트 프레임워크 및 코딩 CLI와 연동하여 활용 가능하다.\n\n## 시사점\n\nOrnith-1.0은 오픈소스 생태계에서 코딩 에이전트의 성능을 향상시키고 접근성을 높였으며, 자체 개선 학습 방식을 통해 더욱 발전된 코딩 자동화 및 개발 워크플로우 지원 가능성을 제시한다."
 }
