@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-07-01T00:03:55.000Z",
-  "feed_id": "theverge"
+  "feed_id": "theverge",
+  "description": "## 개요\n\nAnthropic은 트럼프 행정부와의 협상을 통해 소비자 대상 모델인 Claude Fable 5의 접근을 전 세계적으로 복원하고, AWS, Google Cloud, Microsoft Foundry에서의 접근도 곧 재개할 예정입니다.\n\n## 주요 내용\n\n- **Fable 5 및 Mythos 5 수출 통제 해제**: 미국 상무부는 Claude Fable 5와 Mythos 5 모델에 대한 수출 통제를 해제했으며, Anthropic은 이를 기반으로 사용자 접근을 점진적으로 복원할 계획입니다.\n- **보안 강화 및 업데이트**: Anthropic은 Fable 5의 잠재적 탈옥(jailbreak) 위험에 대응하기 위해 개선된 안전 분류기를 개발했으며, 이를 통해 해당 탈옥 시도가 99% 이상 차단됩니다.\n- **정부 협력 강화**: Anthropic은 향후 정부와 협력하여 국가 안보와 관련된 모델에 대한 사전 출시 정부 접근 및 평가를 제공하고, 중대한 탈옥 또는 오용 패턴 발견 시 신속한 정보 공유를 약속했습니다.\n- **AI 보안 및 평가 표준 개발**: Anthropic은 Amazon, Microsoft, Google 등과 협력하여 AI 탈옥의 심각성을 평가하기 위한 프레임워크를 개발 중이며, 24시간 탈옥 제출 채널 모니터링 및 연구자를 위한 HackerOne 프로그램을 도입할 예정입니다.\n- **탈옥의 불가피성 인정**: Anthropic은 AI 모델이 탈옥에 완전히 면역이 되기는 불가능하며, 모델의 심각도에 따라 다양한 수준의 탈옥이 발견될 수 있음을 인정합니다.\n\n## 시사점\n\nAnthropic의 Fable 5 복원은 AI 모델의 상용화와 정부 규제 간의 균형점을 찾으려는 노력의 일환이며, 향후 AI 모델의 안전성 평가 및 보안 표준 개발에 중요한 선례가 될 수 있습니다."
 }

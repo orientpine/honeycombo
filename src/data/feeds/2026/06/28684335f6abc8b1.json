@@ -12,5 +12,6 @@
     "artificial intelligence"
   ],
   "published_at": "2026-06-30T18:36:10.000Z",
-  "feed_id": "arstechnica"
+  "feed_id": "arstechnica",
+  "description": "## 개요\n\nGoogle DeepMind가 발표한 Nano Banana 2 Lite는 기존 모델 대비 뛰어난 속도와 저렴한 비용을 제공하는 새로운 AI 이미지 생성 모델이다.\n\n## 주요 내용\n\n- Nano Banana 2 Lite는 Gemini 3.1 제품군의 일부로, Gemini 3.1 Flash Lite Image라고도 불린다.\n- 아이디어 탐색 및 빠른 프로토타이핑에 이상적이며, 기존 Google 이미지 모델 대비 이미지 생성 시간이 훨씬 단축된다.\n- Arena.ai의 Elo 점수 비교 결과, 사용자들이 Nano Banana 2 Lite 결과물을 비-Lite 버전과 거의 동일하게 평가했다.\n- 텍스트, 특히 작은 텍스트 렌더링, 인포그래픽의 데이터 정확성, 반복 생성 시 캐릭터 일관성 등에서는 다소 부족함을 보일 수 있다.\n- 기본 저지연 모드에서 텍스트 입력 후 약 4초 만에 이미지를 생성하며, 이는 표준 Nano Banana 모델의 약 20초 대비 현저히 빠른 속도이다.\n- API를 통해 접근 시 1K 이미지당 평균 $0.034의 비용으로, Nano Banana의 절반 가격이다. (입력 토큰 1M당 $0.25, 출력 토큰 1M당 $1.50)\n\n## 시사점\n\nNano Banana 2 Lite는 AI 이미지 생성의 접근성과 효율성을 크게 향상시켜 개발자들의 비용 부담을 줄이고 아이디어 구체화 과정을 가속화할 수 있는 잠재력을 지닌다."
 }

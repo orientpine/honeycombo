@@ -12,5 +12,6 @@
     "in brief"
   ],
   "published_at": "2026-06-30T21:53:28.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nOpenClaw는 무료 오픈 소스 AI 에이전트로서 이제 iOS와 Android 모바일 앱으로 출시되어 사용자가 휴대폰에서 직접 AI 에이전트를 실행할 수 있게 되었다.\n\n## 주요 내용\n\n*   OpenClaw 앱은 iOS와 Android 플랫폼에서 모두 사용 가능하며, 사용자는 OpenClaw Gateway를 통해 AI 에이전트와 도구 및 스킬을 연결하여 작업을 수행할 수 있다.\n*   이를 통해 사용자는 코딩부터 식사 계획 수립까지 다양한 작업을 AI 에이전트를 활용하여 수행할 수 있으며, 프로그램 설정에 따라 유용성이 달라질 수 있다.\n*   OpenClaw는 올해 초 MoltBook이라는 소셜 미디어 사이트 출시와 함께 바이럴 되었으며, 당시 MoltBook은 전적으로 AI 에이전트에 의해 운영되는 것처럼 홍보되었다.\n*   OpenClaw의 제작자인 Peter Steinberger는 OpenAI에 합류했으며, MoltBook의 사례는 인간이 AI 에이전트를 가장하여 일부 기여한 것으로 밝혀졌다.\n*   MoltBook 홍보 전략은 OpenClaw를 위한 마케팅으로 기능했지만, AI 에이전트의 미래 가능성을 보여주는 사례로 평가된다.\n*   AI 에이전트는 현재 AI 생태계 전반에 걸쳐 통합되고 있으며, 모바일 기기에서도 점점 더 많이 활용될 것으로 예상된다.\n\n## 시사점\n\nOpenClaw의 모바일 앱 출시로 AI 에이전트 활용이 일상생활에 더욱 가까워졌으며, 이는 AI 에이전트 기술이 사용자에게 더욱 접근 가능해지고 실용적인 도구로 자리매김할 잠재력을 보여준다."
 }
