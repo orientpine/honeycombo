@@ -12,5 +12,6 @@
     "google"
   ],
   "published_at": "2026-06-30T19:02:38.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nGoogle이 기존 AI 이미지 및 비디오 생성기인 Nano Banana의 새로운 버전, Nano Banana 2 Lite를 공개했으며, 이는 이전 모델 대비 속도와 비용 효율성을 대폭 개선한 것이 특징입니다.\n\n## 주요 내용\n\n*   **향상된 성능 및 비용 효율성**: Nano Banana 2 Lite는 지연 시간을 크게 줄여 4초 만에 이미지를 생성할 수 있으며, 1,000개 이미지당 0.034달러의 저렴한 비용으로 대량의 콘텐츠 제작 및 반복 작업에 적합합니다.\n*   **기존 모델과의 관계**: Nano Banana 2 Lite는 고속 대량 워크플로우에 최적화되었으며, 범용적인 작업에 사용되던 Nano Banana 2와는 차별화됩니다. 이전 버전인 Nano Banana는 이제 \"레거시 모델\"로 취급됩니다.\n*   **출시 및 접근성**: Nano Banana 2 Lite는 Google AI Studio, Gemini API, Google의 Gemini Enterprise Agent Platform을 통해 이용 가능합니다.\n*   **관련 발표**: Google은 또한 초당 0.10달러의 비용으로 비디오 출력을 제공하는 Gemini Omni Flash의 광범위한 출시를 발표했으며, Omni를 활용하여 전자상거래 비디오를 생성하는 Omni Product Studio 데모 앱도 공개했습니다.\n*   **생성 미디어 개발 지원**: Google은 Nano Banana 2 Lite와 Gemini Omni Flash를 통해 개발자들이 빠른 이미지 생성과 비디오 제작 및 편집을 결합한 종합적인 멀티미디어 경험을 구축할 수 있도록 지원합니다.\n\n## 시사점\n\nGoogle의 Nano Banana 2 Lite 출시는 AI 기반 이미지 생성 기술의 발전과 대중화를 가속화하며, 콘텐츠 제작 비용 절감 및 워크플로우 효율성 증대에 기여할 것으로 예상됩니다."
 }

@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-07-02T04:32:41.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nKimi K2.7 Code 모델이 GitHub Copilot에서 정식 출시되어 개발자들이 코딩 워크플로우에 대한 선택권과 비용 효율성을 높일 수 있게 되었습니다.\n\n## 주요 내용\n\n- Kimi K2.7 Code는 GitHub Copilot에 처음으로 제공되는 오픈 웨이트(open-weight) 모델이며, Copilot 모델 선택기에서 직접 선택 가능합니다.\n- 이 모델은 Microsoft Azure에서 호스팅되며, 사용량 기반 과금 방식으로 제공됩니다.\n- Kimi K2.7 Code는 Copilot Pro, Pro+, Max 플랜에 점진적으로 적용될 예정이며, Visual Studio Code, Visual Studio, Copilot CLI 등 다양한 환경에서 사용 가능합니다.\n- Copilot Business 및 Enterprise 플랜에서는 관리자가 정책 설정을 통해 Kimi K2.7 Code를 활성화해야 합니다.\n- 관리자는 조직의 보안, 규정 준수 및 데이터 거버넌스 요구 사항에 맞춰 오픈 웨이트 모델을 검토한 후 활성화하는 것이 권장됩니다.\n- GitHub Copilot의 지원 모델 및 AI 모델 선택에 대한 자세한 내용은 관련 문서를 참고할 수 있습니다.\n\n## 시사점\n\nKimi K2.7 Code의 GitHub Copilot 통합은 개발자에게 더 많은 AI 모델 선택지를 제공하며, 조직별 요구 사항에 맞는 모델을 유연하게 적용할 수 있는 환경을 조성합니다."
 }
