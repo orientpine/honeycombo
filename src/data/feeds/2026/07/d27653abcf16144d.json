@@ -12,5 +12,6 @@
     "neocloud"
   ],
   "published_at": "2026-07-01T18:29:14.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nTogether AI는 엔비디아 GPU 클러스터 및 AI 특화 인프라를 임대하는 AI 네오클라우드로, 800만 달러의 시리즈 C 펀딩을 83억 달러의 기업 가치로 유치하며 투자를 유치했다.\n\n## 주요 내용\n\n- Together AI는 2022년에 설립되었으며, 이번 시리즈 C 펀딩은 Aramco Ventures가 주도했으며 Vista Equity Partners, General Catalyst, Emergence Capital, Nvidia, March Capital, Pegatron, SentinelOne의 S Ventures 등이 참여했다.\n- 약 16개월 전에는 33억 달러의 기업 가치로 3억 5백만 달러의 시리즈 B 펀딩을 유치한 바 있으며, 2023년에는 Kleiner Perkins가 주도하고 Nvidia와 Emergence Capital이 참여한 1억 2백 5십만 달러의 시리즈 A 펀딩을 통해 초기부터 상당한 자금을 확보했다.\n- 이전 보도에 따르면 Together AI는 75억 달러의 기업 가치로 10억 달러의 펀딩을 목표로 했으나, 실제로는 더 적은 금액으로 더 나은 조건의 투자를 유치한 것으로 보인다.\n- Together AI는 연간 예약 매출이 11억 5천만 달러를 넘어섰다고 주장하며, 이는 기업들이 더 저렴한 오픈소스 모델 채택을 늘리고 폐쇄형 최첨단 모델의 토큰 프리미엄을 피하는 추세에 따른 것이다.\n- 이러한 추세로 인해 지난 1년간 업계 전반에서 오픈소스 모델 사용량이 세 배 증가했으며, Together AI는 Cursor, Cognition, Decagon 등을 포함한 수천 개의 유료 고객사를 보유하고 있다고 밝혔다.\n- 네오클라우드 시장은 Together AI 외에도 투자가 활발하며, Upscale AI는 20억 달러의 기업 가치로 5억 달러, TensorWave는 15억 5천만 달러의 기업 가치로 3억 5천만 달러의 펀딩을 유치한 사례가 있다.\n- Together AI는 Apple에 2억 달러 이상에 인수된 Topsy의 창업자 Vipul Ved Prakash가 스탠포드 대학의 Percy Liang 교수, ETH Zürich/University of Chicago의 Ce Zhang 교수와 함께 공동 창업한 회사이다.\n\n## 시사점\n\n이번 투자는 오픈소스 AI 모델의 부상과 네오클라우드 제공업체에 대한 VC의 높은 관심도를 반영하며, Together AI의 시장 지배력 강화와 향후 AI 인프라 시장 성장에 중요한 역할을 할 것으로 기대된다."
 }
