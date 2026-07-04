@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-07-03T21:16:16.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nClaude Mythos Preview 출시 무렵 심각한 사이버 보안 취약점 공개(CVEs)가 급증했으며, 이는 AI 모델이 자율적으로 소프트웨어 취약점을 발견할 수 있다는 Anthropic의 발표 이후 발생했다.\n\n## 주요 내용\n\n*   2026년 6월, Anthropic의 Claude Mythos Preview 출시 전후로 1,500건에 달하는 고위험 및 치명적 심각도의 CVEs가 공개되었는데, 이는 이전 월간 최고 기록 대비 3.5배 이상 증가한 수치이다.\n*   Anthropic은 Claude Mythos Preview가 소프트웨어 취약점을 자율적으로 발견할 수 있으며, Project Glasswing 파트너사인 Microsoft, Google, Apple, AWS 등이 공개 전 버그를 찾고 수정하는 데 사용했다고 발표했다.\n*   Project Glasswing은 시작 이래 10,000개 이상의 고위험 또는 치명적 심각도의 취약점을 발견했으며, 이 중 다수는 아직 개별적으로 공개되지 않았다.\n*   OpenAI도 Daybreak 제품을 통해 유사한 노력을 기울이고 있으며, Epoch의 연구 결과는 Creative Commons BY 라이선스 하에 출처 및 저작자 표기 시 자유롭게 사용, 배포, 복제 가능하다.\n*   2026년 4월 Anthropic의 Claude Mythos Preview 발표 이후, AI 모델을 활용하여 악의적인 공격자보다 먼저 중요 소프트웨어를 강화하려는 노력이 진행되고 있다.\n\n## 시사점\n\nAI 모델의 자율적인 취약점 발견 능력은 사이버 보안 강화에 기여할 수 있지만, 동시에 해당 기술이 악용될 가능성에 대한 우려도 제기된다."
 }
