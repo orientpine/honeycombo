@@ -1,0 +1,16 @@
+{
+  "id": "4a7ba32b11aae021",
+  "title": "vLLM vs llama.cpp vs Ollama: What Happens When Your Model Doesn't Fit in 24GB VRAM",
+  "url": "https://dev.to/sikamikanikobg/vllm-vs-llamacpp-vs-ollama-what-happens-when-your-model-doesnt-fit-in-24gb-vram-56eb",
+  "source": "Dev.to",
+  "type": "article",
+  "tags": [
+    "dev",
+    "llm",
+    "homelab",
+    "vllm",
+    "ai"
+  ],
+  "published_at": "2026-07-05T05:54:01.000Z",
+  "feed_id": "devto"
+}
