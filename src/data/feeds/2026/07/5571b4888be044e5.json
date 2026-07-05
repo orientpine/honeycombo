@@ -12,5 +12,6 @@
     "githubcopilot"
   ],
   "published_at": "2026-07-05T15:04:56.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nGetSuperpower는 AI 코딩 에이전트의 재사용 가능한 워크플로를 패키징하고 공유하는 것을 목표로 하는 CLI 도구입니다.\n\n## 주요 내용\n\n- **문제점**: 기존 AI 코딩 에이전트 워크플로는 수동적이고 반복하기 어려우며, 주로 프롬프트 기록, 문서 또는 개인적인 기억에 의존하여 팀원이나 다른 프로젝트에서 공유하기에 비효율적입니다.\n- **GetSuperpower 소개**: 이 CLI 도구는 `workflow.json` 파일을 통해 워크플로를 정의하고, 하나의 진입점 스킬과 필요한 로컬 또는 재사용 가능한 스킬을 선언하여 완전한 AI 에이전트 워크플로를 설치 가능한 \"skill tree\" 형태로 패키징합니다.\n- **사용 방법**: 사용자는 워크플로를 설치하고 에이전트를 재시작한 후, 단일 진입점 스킬만 호출하면 됩니다. 예를 들어, `npx getsuperpower@latest install [workflow_url]`로 워크플로를 설치하고, `$entry-skill command`로 실행합니다.\n- **스킬 활용**: 워크플로는 로컬 스킬과 재사용 가능한 스킬을 함께 사용하여, 사용자가 모든 것을 처음부터 재구축할 필요 없이 자체 프로세스를 패키징할 수 있도록 합니다.\n- **README와의 차이점**: README는 인간에게 유용하지만, 에이전트 실행에는 명확한 진입점, 명시적 종속성, 설치 대상, 유효성 검사, 설치 내용 검사 기능이 필요하며, GetSuperpower는 이러한 기능을 제공합니다.\n- **제한점**: GetSuperpower는 완전한 에이전트 런타임이 아니며, LangGraph, CrewAI, n8n과 같은 도구는 프로덕션 에이전트 애플리케이션에 더 적합합니다. GetSuperpower는 기존 코딩 에이전트 주변의 프로세스를 위한 패키지 관리자에 가깝습니다.\n- **지원 대상**: Claude Codex, Cursor, opencode/OpenCodex, GitHub Copilot을 지원합니다.\n- **자체 워크플로 생성**: `npx getsuperpower@latest init [workflow_name]` 명령어로 자체 워크플로를 스캐폴딩하고, `validate` 및 `deps` 명령어로 검증 및 종속성을 확인할 수 있습니다.\n\n## 시사점\n\nGetSuperpower는 AI 에이전트 워크플로를 패키지처럼 설치 가능하고, 검사 가능하며, 버전 관리되고, 쉽게 시도해볼 수 있도록 만들어 공유 가능성을 크게 높였습니다."
 }
