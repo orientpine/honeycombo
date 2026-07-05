@@ -12,5 +12,6 @@
     "claude code"
   ],
   "published_at": "2026-07-04T16:32:08.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\n중국의 알리바바는 7월 10일부터 직원들의 Anthropic의 프로그래밍 도구인 Claude Code 사용을 금지할 예정이며, 이는 Anthropic의 기존 중국 기업 대상 모델 사용 금지 조치와 맥을 같이 합니다.\n\n## 주요 내용\n\n- 알리바바는 Claude Code를 고위험 소프트웨어로 분류하고, 직원들에게 대신 회사의 자체 도구인 Qoder를 사용하도록 지시했습니다.\n- Anthropic은 이미 중국 기업 및 해당 기업이 소유한 해외 법인의 자사 모델 사용을 금지하고 있습니다.\n- 최근 Reddit 게시물에 따르면, Anthropic은 중국 사용자가 Claude에 접근할 수 있는 허점을 막기 위해 노력해왔으며, 이 과정에서 중국 사용자를 비밀리에 식별할 수 있는 Claude Code 버전이 실험되었습니다.\n- Anthropic의 Thariq Shihipar는 해당 기능이 3월에 시작된 계정 남용 및 증류(distillation) 방지를 위한 실험이었으며, 이후 더 강력한 완화 조치가 적용되었고 해당 기능을 제거할 계획이었다고 밝혔습니다.\n\n## 시사점\n\n이번 알리바바의 Claude Code 사용 금지 조치는 AI 기술의 지정학적 통제와 기업 내부 보안 강화의 중요성을 보여주며, AI 모델의 무단 접근 및 오용 방지를 위한 기술적, 정책적 노력이 지속되고 있음을 시사합니다."
 }

@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-07-05T05:01:14.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nHIC Mouse는 AI 코딩 에이전트의 파일 편집 방식을 혁신하는 강력한 도구로, 기존의 단순한 문자열 교체 방식의 한계를 극복하고 정교한 편집 기능과 안전한 변경 관리 기능을 제공한다.\n\n## 주요 내용\n\n*   **기존 AI 파일 편집의 한계**: 현재 대부분의 AI 에이전트는 파일 편집 시 문자열 교체(string replacement) 기능만을 사용하며, 변경 사항을 미리 확인하거나 이전 상태로 깔끔하게 되돌리는 데 어려움이 있다.\n*   **Mouse의 핵심 기능**: Mouse는 좌표 기반 편집, 단계적 변경 및 원자적 롤백(atomic rollback), 도구 응답 엔지니어링(tool-response engineering)을 통해 이러한 문제를 해결한다.\n*   **정교한 편집 연산**: Mouse는 REPLACE 뿐만 아니라 INSERT, DELETE, ADJUST 등 6가지 선언적(declarative) 연산을 자연스러운 문법으로 제공하여 수술과 같이 정교한 편집 정확도를 지원한다.\n*   **단계적 변경 및 롤백**: 모든 위험한 편집은 승인 또는 원자적 롤백을 위해 단계적으로 관리된다. 에이전트는 변경 사항을 저장(Save), 취소(Cancel), 검사(Inspect), 또는 개선(Refine)할 수 있다.\n*   **AI 에이전트의 한계 보완**: Mouse는 AI 에이전트의 내재된 한계를 보완하기 위해 맥락 기반 안내(contextual guidance), 다음 행동 제안(next-action suggestions), 위험 평가(risk assessment), 뷰포트 파일 구조(viewport file structure) 정보를 제공한다.\n\n## 시사점\n\nHIC Mouse는 AI 코딩 에이전트에게 수술적 정확성과 일관성을 부여하여, AI를 활용한 소프트웨어 개발 과정에서 발생할 수 있는 편집 오류를 최소화하고 효율성을 증대시킬 수 있는 실무 적용 가능성을 제시한다."
 }
