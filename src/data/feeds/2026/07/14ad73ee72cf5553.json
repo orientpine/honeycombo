@@ -1,0 +1,16 @@
+{
+  "id": "14ad73ee72cf5553",
+  "title": "How We Built a 2ms Real-Time AI Inference Pipeline in .NET (By Abandoning Generative AI)",
+  "url": "https://dev.to/anton_po_dev/how-we-built-a-2ms-real-time-ai-inference-pipeline-in-net-by-abandoning-generative-ai-1k7",
+  "source": "Dev.to",
+  "type": "article",
+  "tags": [
+    "dev",
+    "ai",
+    "dotnet",
+    "architecture",
+    "performance"
+  ],
+  "published_at": "2026-07-07T16:14:40.000Z",
+  "feed_id": "devto"
+}
