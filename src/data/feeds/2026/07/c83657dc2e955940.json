@@ -1,0 +1,12 @@
+{
+  "id": "c83657dc2e955940",
+  "title": "Pruning RAG context down to what the answer actually needs",
+  "url": "https://www.kapa.ai/blog/how-we-prune-rag-context",
+  "source": "Hacker News",
+  "type": "article",
+  "tags": [
+    "tech"
+  ],
+  "published_at": "2026-07-06T19:28:24.000Z",
+  "feed_id": "hackernews"
+}
