@@ -12,5 +12,6 @@
     "psa"
   ],
   "published_at": "2026-07-06T17:04:58.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nGoogle은 검색 서비스에 업로드된 이미지, 파일, 오디오 및 비디오 녹음과 같은 미디어를 AI 모델 개선을 위해 저장하고 활용하는 개인 정보 보호 설정 변경 사항을 도입했습니다.\n\n## 주요 내용\n\n- **AI 학습을 위한 미디어 수집:** Google은 사용자가 검색 서비스에 업로드한 미디어(사진, 음성 녹음 등)를 AI 모델 개발 및 개선을 위해 저장하고 활용합니다.\n- **설정 변경 사항:** June에 고객 이메일을 통해 발표된 이번 변경 사항은 Search Services History와 Personalized Recommendations라는 두 가지 새로운 설정을 도입했으며, 사용자의 활동이 Google 경험을 개인화하고 웹 및 앱 활동을 저장하는 방식에 영향을 미칩니다.\n- **적용 범위:** 이 업데이트는 Google 검색뿐만 아니라 Maps, Shopping, Flights, Hotels, Translate, News와 같은 다른 검색 서비스에도 적용됩니다.\n- **산업 전반의 추세:** Google의 이러한 변화는 AI 서비스 개선을 위해 가능한 모든 수단을 동원해 데이터를 수집하려는 업계 전반의 움직임을 반영하며, Meta와 같은 다른 기업들도 사용자 데이터를 AI 학습에 활용하고 있습니다.\n- **옵트아웃 방법:** 사용자는 Search Services History 및 Search Services Personalization 페이지에서 'Save Media' 옵션을 해제하거나, 데이터 자동 삭제 간격(3개월, 18개월, 36개월)을 설정하여 미디어 저장을 제어할 수 있습니다.\n- **검색 기록 분리:** 이전에는 'Web & App Activity' 설정을 통해 저장되는 검색 기록을 제어할 수 있었으나, 이제는 'Web & App Activity' 데이터와 새로운 'Search data' 설정으로 분리되어 기본적으로 활성화됩니다.\n\n## 시사점\n\nGoogle의 이번 개인 정보 보호 설정 변경은 사용자의 데이터를 AI 학습에 활용하는 방식을 투명하게 공개하고, 사용자가 자신의 데이터 활용 방식을 제어할 수 있는 옵션을 제공하는 한편, AI 개발을 위한 데이터 수집이 점차 확대되고 있음을 시사합니다."
 }
