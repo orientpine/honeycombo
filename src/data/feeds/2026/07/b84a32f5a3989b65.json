@@ -12,5 +12,6 @@
     "github pages"
   ],
   "published_at": "2026-07-08T16:00:00.000Z",
-  "feed_id": "githublog"
+  "feed_id": "githublog",
+  "description": "## 개요\n\nGitHub Copilot CLI와 Namecheap API 연동을 통해 DNS 설정 없이 GitHub Pages 사이트를 커스텀 도메인과 HTTPS로 14분 안에 배포하는 방법을 설명합니다.\n\n## 주요 내용\n\n*   GitHub Pages 사이트 Publish: 빈 레포지토리에서 시작하여 Copilot CLI에게 원하는 결과물을 설명하면 랜딩 페이지 생성 및 GitHub Pages 활성화를 자동으로 처리합니다.\n*   저렴한 도메인 등록: .click과 같은 저렴한 최상위 도메인(TLD)을 사용하여 사이트 프로젝트를 위한 커스텀 도메인을 USD $2.00에 등록했습니다.\n*   Namecheap API 설정 및 Copilot CLI 연동: Namecheap 계정에서 API를 활성화하고, API 키를 복사하여 Copilot CLI에 Namecheap 스킬을 설치하고 인증하면 Namecheap 도메인 목록을 확인할 수 있습니다.\n*   커스텀 도메인 설정 자동화: Copilot CLI에게 Namecheap 스킬을 사용하여 커스텀 도메인 설정을 요청하면, 기존 레코드 대신 GitHub Pages에서 기대하는 A 레코드와 WWW 서브도메인의 CNAME 레코드로 자동 업데이트합니다. 또한, GitHub Pages에 사이트가 응답해야 할 커스텀 도메인을 알려주는 CNAME 파일을 자동으로 커밋합니다.\n*   API 지원 레지스트라 활용: Namecheap이 아닌 다른 레지스트라를 사용하는 경우에도 API 문서에 Copilot CLI를 지시하여 GitHub Pages 레코드를 설정할 수 있습니다.\n*   배포 검증: Copilot CLI는 도메인 확인 및 HTTP 200 응답을 통해 자체 작업을 검증합니다.\n*   총 소요 시간: 도메인 구매부터 커스텀 도메인 및 HTTPS 적용된 라이브 사이트까지 약 14분이 소요되었습니다.\n\n## 시사점\n\nGitHub Copilot CLI와 레지스트라 API의 연동은 개발자가 DNS 설정의 복잡성과 번거로움을 해소하고, 의사 결정과 승인에 집중하며 신속하게 GitHub Pages 사이트를 커스텀 도메인으로 배포할 수 있도록 합니다."
 }
