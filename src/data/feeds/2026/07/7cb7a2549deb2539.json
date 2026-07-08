@@ -12,5 +12,6 @@
     "microsoft"
   ],
   "published_at": "2026-07-07T19:58:20.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nMicrosoft는 AI 비용 절감 추세에 발맞춰 OpenAI와 Anthropic 같은 외부 모델 의존도를 줄이고 자체 개발한 MAI 모델을 활용하기 시작했습니다.\n\n## 주요 내용\n\n- Microsoft는 Excel 및 Word와 같은 주요 프로그램에서 사용자 프롬프트 응답에 자체 MAI 모델을 일부 적용하고 있습니다.\n- 과거에는 Office 365가 OpenAI 및 Anthropic 모델을 기반으로 작동함을 홍보했으나, 이제는 자체 AI 에이전트 구축을 늘리고 있습니다.\n- Microsoft는 연례 Build 컨퍼런스에서 에이전트 코더 및 텍스트-이미지 생성기를 포함한 7가지 새로운 MAI 모델을 발표했습니다.\n- Microsoft의 이러한 움직임은 Amazon, Uber, Meta, Accenture 등 다른 대형 기술 기업들도 AI 서비스 비용 절감을 위해 지출을 줄이고 있는 광범위한 추세의 일부입니다.\n- AI 서비스 제공 및 구매에 드는 막대한 비용이 업계의 논란거리가 되고 있으며, 일부 기업은 보안 문제에도 불구하고 저렴한 솔루션을 위해 중국 모델을 고려하고 있습니다.\n\n## 시사점\n\nMicrosoft의 자체 AI 모델 활용 증가는 AI 기술의 상용화 및 비용 효율성 확보를 위한 업계 전반의 움직임을 반영하며, 향후 AI 서비스 비용 구조와 기술 개발 방향에 영향을 미칠 것으로 보입니다."
 }
