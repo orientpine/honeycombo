@@ -12,5 +12,6 @@
     "muse image"
   ],
   "published_at": "2026-07-07T22:18:10.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nMeta가 출시한 새로운 AI 이미지 생성기 Muse Image가 사용자의 기존 사진을 AI로 조작하고, 이에 대한 사용자 동의 및 개인정보 보호 문제로 논란을 일으키고 있다.\n\n## 주요 내용\n\n*   Meta Superintelligence Labs에서 개발한 Muse Image는 Meta AI 앱, Instagram Stories, WhatsApp을 통해 무료로 제공된다.\n*   Muse Image는 사용자에게 창의적인 이미지 생성을 돕는 \"presets\" 기능을 제공하며, 다른 AI 이미지 생성기와 유사하게 다양한 유형의 이미지를 제작할 수 있다.\n*   특히 논란이 되는 기능은 공개 프로필을 가진 다른 Instagram 사용자의 이미지를 AI로 조작하는 기능으로, 사용자는 해당 사용자를 태그하여 자신의 사진을 새 AI 이미지 생성에 활용할 수 있다.\n*   Meta의 정책에 따르면, 사용자는 AI 기능을 사용하여 다른 사용자의 Instagram 콘텐츠로 이미지를 생성할 수 있으며, 이에 대한 별도 알림은 제공되지 않는다.\n*   Meta는 사용자에게 해당 기능에 대한 \"통제권\"이 있으며, 설정을 통해 사진의 AI 활용을 비활성화할 수 있다고 주장한다.\n*   Muse Image는 사용자 프로필 사진을 활용한 광고 제작, Facebook Marketplace 연동을 통한 인테리어 아이디어 실험 등 다른 응용 사례도 가진다.\n*   또한, 프롬프트 기반 이미지 편집 기능을 통해 역사적 리더 앞에서 사진을 찍거나, 사진에서 원치 않는 요소를 제거하고, 기능적 QR 코드를 생성하는 등 다양한 편집 작업을 지원한다.\n*   Instagram Stories를 위한 Muse 기반의 새로운 AI 효과들도 함께 출시되었으며, 이는 기존 사진을 수정하는 맞춤형 필터를 포함한다.\n*   Muse Image는 \"일상적인 창작\"에 대해서는 무료로 제공되지만, 특정 사용량 초과 시 구독이 필요하며, AI 비디오 생성기인 Muse Video도 개발 중이다.\n*   Meta의 과거 개인정보 보호 기록(Cambridge Analytica 스캔들, 안면 인식 시스템 폐쇄 등)이 Muse Image의 사진 조작 기능에 대한 사용자들의 불안감을 증폭시키고 있다.\n\n## 시사점\n\nMuse Image의 출시와 함께 불거진 개인정보 보호 및 사전 동의 없는 콘텐츠 활용 문제는 AI 기술 발전과 함께 고려해야 할 윤리적, 법적 쟁점을 다시 한번 부각시킨다."
 }
