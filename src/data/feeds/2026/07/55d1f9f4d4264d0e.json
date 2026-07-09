@@ -12,5 +12,6 @@
     "google photos"
   ],
   "published_at": "2026-07-08T18:30:08.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nGoogle Photos에 Gemini Omni 모델을 기반으로 한 새로운 AI 기반 'Video Remix' 기능이 추가되어 사용자가 몇 번의 탭만으로 동영상을 편집하고 변형할 수 있게 되었다.\n\n## 주요 내용\n\n- **Video Remix 기능**: 사용자가 동영상의 조명을 변경하고, 배경을 바꾸거나, 수채화, 스케치북, 유화와 같은 예술적 스타일 효과를 적용하는 등 다양한 편집을 할 수 있다.\n- **Gemini Omni 기반**: 이 기능은 Google의 최신 생성형 AI 모델인 Gemini Omni를 활용하여 다양한 입력으로부터 콘텐츠를 생성한다.\n- **AI 통합 강화**: Google의 생성형 AI 도구를 소비자 앱에 통합하려는 노력의 일환으로, 전문 편집 소프트웨어 없이도 동영상 편집을 간편하게 할 수 있도록 지원한다.\n- **접근성**: 'Video Remix'는 Google Photos의 'Create' 탭에서 접근 가능하며, AI Plus, Pro, Ultra 구독자를 대상으로 미국을 포함한 일부 국가에서 순차적으로 출시된다.\n- **기존 AI 기능**: Google Photos는 최근 사용자가 흠을 제거하거나 피부 질감을 개선하는 등의 미묘한 편집을 할 수 있는 터치업 도구와 옷 사진을 디지털 옷장으로 변환하여 새로운 의상 아이디어를 만들고 가상으로 착용해볼 수 있는 AI 기능도 선보였다.\n\n## 시사점\n\nVideo Remix 기능은 전문적인 기술 없이도 일반 사용자가 쉽게 동영상을 공유 가능한 콘텐츠로 만들 수 있도록 하여 Google Photos 생태계 내 사용자 유지율을 높이는 데 기여할 것으로 예상된다."
 }
