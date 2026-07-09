@@ -12,5 +12,6 @@
     "android"
   ],
   "published_at": "2026-07-08T16:39:48.000Z",
-  "feed_id": "arstechnica"
+  "feed_id": "arstechnica",
+  "description": "## 개요\n\nAndroid Bench는 LLM의 Android 앱 개발 성능을 평가하는 벤치마크로, 8개의 새로운 모델이 추가되고 새로운 프레임워크가 도입되는 등 대규모 업데이트가 이루어졌습니다.\n\n## 주요 내용\n\n*   Android Bench는 LLM이 100개의 Android 개발 작업에서 얼마나 잘 수행하는지를 측정하는 벤치마크입니다.\n*   최신 업데이트에는 Claude Fable 5, Claude Sonnet 5, Claude Opus 4.8, GLM 5.2, Kimi K2.7 Code, MiniMax M3, Qwen 3.7 Plus, Qwen 3.7 Max 등 8개의 새로운 모델이 포함되었습니다.\n*   새로운 리더보드에서 Gemini 3.1 Pro는 GPT 5.4, Claude Sonnet 5, Claude Fable 5에 이어 5위를 기록했습니다.\n*   Claude Fable 5는 84.5%의 정확도로 테스트에서 선두를 차지했습니다.\n*   이번 업데이트에는 비용 및 효율성과 같은 새로운 메트릭과 오픈 웨이트 모델이 추가되었습니다.\n\n## 시사점\n\nAndroid Bench의 업데이트는 LLM의 코드 생성 능력을 객관적으로 비교하고, 개발자들에게 Android 개발에 가장 적합한 LLM을 선택하는 데 도움을 줄 수 있는 중요한 지표를 제공합니다."
 }
