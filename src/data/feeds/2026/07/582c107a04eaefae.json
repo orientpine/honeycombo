@@ -1,0 +1,16 @@
+{
+  "id": "582c107a04eaefae",
+  "title": "How Vector Search Actually Works: IVF and HNSW",
+  "url": "https://dev.to/arthurpro/how-vector-search-actually-works-ivf-and-hnsw-1hnb",
+  "source": "Dev.to",
+  "type": "article",
+  "tags": [
+    "dev",
+    "vectorsearch",
+    "embeddings",
+    "ann",
+    "hnsw"
+  ],
+  "published_at": "2026-07-09T16:00:00.000Z",
+  "feed_id": "devto"
+}
