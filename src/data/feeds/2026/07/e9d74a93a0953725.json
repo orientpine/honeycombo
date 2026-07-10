@@ -10,5 +10,6 @@
     "antigravity"
   ],
   "published_at": "2026-07-10T15:45:18.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nAntigravity CLI를 활용하여 Angular, Firebase Hybrid & On-device Inference Web SDK, Gemini 모델을 사용한 이미지 분석 데모 애플리케이션 구축 방법을 설명합니다.\n\n## 주요 내용\n\n*   **데모 기능:** 사용자는 이미지를 업로드하고 Gemini 모델을 사용하여 분석하여 대체 텍스트, 태그, 추천, 이미지 품질 향상을 위한 CSS 팁을 생성합니다.\n*   **Hybrid & On-device SDK:** Chrome 148+ 환경에서는 온디바이스 Gemini Nano 모델의 Prompt API를 활용하여 이미지 텍스트 변환 작업을 수행하며, 이때 토큰 사용량은 0입니다.\n*   **클라우드 폴백:** Safari나 Firefox와 같은 다른 브라우저에서 동일한 작업을 수행할 경우, SDK는 클라우드 AI(Gemini 3.5 Flash 모델)로 폴백(fallback)되며, 이때 토큰 사용량이 발생합니다.\n*   **Antigravity CLI 설정:**\n    *   `grill-with-docs`, `angular`, `firebase` 스킬을 Angular 프로젝트에 설치했습니다.\n        *   `grill-with-docs`: 기능 사양 생성, 리팩토링, 코드 수정 등을 위한 Q&A 세션 수행.\n        *   `angular`: Signals 및 Signal Forms과 같은 최신 Angular 아키텍처 모범 사례 제공.\n        *   `firebase`: Firebase AI Logic, Firebase Remote 등의 기능 제공.\n    *   `stitch-mcp` 서버를 Antigravity CLI에 등록하여 데모의 인프라, 서비스, UI 디자인 개발을 진행했습니다.\n\n## 시사점\n\nAntigravity CLI는 다양한 스킬과 Firebase 연동을 통해 온디바이스 AI와 클라우드 AI를 유기적으로 활용하는 하이브리드 애플리케이션 개발을 효율적으로 지원하며, 브라우저 호환성을 고려한 AI 기능 구현을 가능하게 합니다."
 }
