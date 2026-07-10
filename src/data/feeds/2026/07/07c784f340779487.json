@@ -12,5 +12,6 @@
     "microsoft"
   ],
   "published_at": "2026-07-10T00:16:54.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nOpenAI가 GPT 5.6을 Microsoft 365 Copilot의 '선호 모델'로 발표하며, Microsoft와의 협력 관계에 대한 추측을 불식시키려 하고 있습니다. GPT 5.6은 Word, Excel, PowerPoint, Cowork 등 Microsoft의 생산성 앱 전반에 걸쳐 지원될 예정입니다.\n\n## 주요 내용\n\n*   **GPT 5.6, Microsoft 365 Copilot의 '선호 모델'로 지정:** OpenAI는 GPT 5.6을 Microsoft 365 Copilot을 구동하는 주요 모델로 발표했습니다.\n*   **Microsoft 생산성 앱 전반에 걸친 지원:** GPT 5.6은 Word, Excel, PowerPoint, Cowork를 포함한 Microsoft의 다양한 생산성 애플리케이션에서 사용자들을 지원하게 됩니다.\n*   **파트너십 지속 의지 강조:** OpenAI는 Microsoft와의 파트너십이 고급 AI의 혜택을 더 많은 개인 및 조직에 제공하기 위한 것이며, 앞으로도 이러한 공동의 노력을 이어갈 것이라고 밝혔습니다.\n*   **'선호 모델'의 의미:** '선호 모델'의 구체적인 의미는 명확하게 정의되지 않았으나, OpenAI의 소프트웨어가 계속해서 Microsoft 앱의 동력원이 될 것임을 시사합니다.\n*   **비용 절감을 위한 자체 모델 사용 보도와의 관계:** Microsoft가 비용 절감을 위해 자체 개발한 MAI 모델을 Word, Excel 등에 사용하고 있다는 이전 보도를 완전히 부정하지는 않습니다. '선호 모델' 발표는 이러한 이전 보도 내용을 상쇄하는 것은 아닌 것으로 보입니다.\n\n## 시사점\n\nOpenAI의 GPT 5.6을 Microsoft 365 Copilot의 '선호 모델'로 지정하는 발표는 양사 간의 지속적인 기술 협력을 확인시켜주며, Microsoft의 생산성 도구 전반에 걸쳐 AI 기능 통합이 심화될 것임을 나타냅니다."
 }

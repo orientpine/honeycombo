@@ -12,5 +12,6 @@
     "generative ai"
   ],
   "published_at": "2026-07-09T17:56:47.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nMeta가 새로 출시한 AI 이미지 생성 기능인 Muse Image는 공개된 Instagram 사진을 활용하여 AI 이미지를 생성할 수 있도록 지원하지만, 사용자 동의 및 개인정보 침해에 대한 우려를 낳고 있습니다.\n\n## 주요 내용\n\n*   Muse Image는 사용자가 공개된 Instagram 계정의 사진을 태그하여 AI 이미지 생성에 활용할 수 있도록 하는 기능입니다.\n*   18세 미만 사용자 및 비공개 계정은 이 기능에서 자동으로 제외되지만, 공개 계정 사용자는 자신의 사진이 AI 이미지 생성에 사용될 수 있다는 사실을 인지하지 못하거나 통보받지 못할 수 있습니다.\n*   이 기능은 동의 없는 이미지 사용, 괴롭힘, 사칭, 비동의 편집 등 오용의 가능성에 대한 우려를 제기합니다.\n*   Muse Image 기능에 대한 옵트아웃(Opt-out) 방법은 프로필에서 'Sharing and reuse' 섹션으로 이동하여 'Allow people to use your content on Instagram with AI features on Meta' 설정을 끄는 것입니다.\n*   Muse Image는 생성형 AI 기능이 소셜 미디어 플랫폼에 통합되는 추세 속에서 출시되었으며, 전문가들은 사용자 데이터 활용에 대한 더 강력한 개인정보 보호 및 투명성 강화를 주장합니다.\n*   Pew Research Center 조사에 따르면 응답자의 35%가 인공지능 사용 증가에 대해 우려를 표했으며, Meta의 과거 개인정보 침해 사례(FTC 50억 달러 벌금, Cambridge Analytica 스캔들)도 사용자 불신을 증폭시켰습니다.\n\n## 시사점\n\nMeta의 Muse Image 기능은 AI 기술의 발전과 함께 사용자 개인정보 보호 및 동의 메커니즘에 대한 중요한 질문을 제기하며, 소셜 미디어 플랫폼에서의 AI 활용에 대한 사회적 논의와 정책적 고려가 필요함을 시사합니다."
 }
