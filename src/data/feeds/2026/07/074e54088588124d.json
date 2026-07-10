@@ -8,5 +8,6 @@
     "dev"
   ],
   "published_at": "2026-07-10T15:44:43.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nAnthropic의 Tool Search 기능은 MCP(Multi-Tool Conversational Protocol)의 컨텍스트 문제점을 직접적으로 드러내며, AI 모델의 정확도 향상에 기여했다.\n\n## 주요 내용\n\n*   **Tool Search 기능의 등장:** Anthropic은 Claude Opus 4.5와 함께 Tool Search 기능을 출시했으며, 이 기능은 도구를 'defer\\_loading: true'로 표시하여 실제 필요할 때까지 스키마를 컨텍스트에 로드하지 않는다.\n*   **정확도 향상:** Tool Search 도입 후 Opus 4 모델에서 정확도가 49%에서 74%로, Opus 4.5 모델에서는 79.5%에서 88.1%로 크게 상승했다. 이는 동일한 모델과 도구를 사용했음에도 불구하고, 도구 스키마가 컨텍스트에 미리 로드되지 않았을 때 정확도가 25%p 향상되었음을 보여준다.\n*   **MCP의 컨텍스트 비용 문제:** 초기 MCP 모델은 사용되지 않는 도구 스키마가 컨텍스트를 채워 모델이 성능 저하를 겪는 문제를 야기했다. 예를 들어 Playwright MCP 서버 하나만으로도 12.8k 토큰이 소모되어 컨텍스트 창의 절반 이상을 차지할 수 있다.\n*   **Tool Search는 MCP 문제점의 인정:** Tool Search 기능은 MCP의 컨텍스트 비용 문제를 해결하기 위해 도구 로딩을 지연시키는 방식으로 설계되었으며, 이는 MCP 프로토콜 자체의 컨텍스트 문제를 인정하는 것으로 해석된다.\n*   **mcporter의 등장:** Tool Search 출시 3주 전, mcporter는 MCP 서버를 일반 코드로 변환하여 프로토콜 오버헤드와 JSON 스키마로 인한 컨텍스트 소모를 제거하는 대안을 제시했다.\n*   **두 가지 해결책:** Tool Search는 MCP를 유지하면서 도구 로딩을 지연시키고(Lazy Loading), mcporter는 MCP 자체를 제거하고 코드로 변환한다(Compilation). 두 접근 방식 모두 기존의 '모든 것을 미리 로드하는' 모델이 flawed 했음을 시사한다.\n*   **기존 벤치마크의 신뢰성 의문:** deferred loading이 정확도를 25%p 향상시킨다는 점은, MCP를 많이 사용하는 환경에서 발표된 기존 벤치마크 결과의 신뢰성에 의문을 제기한다. 컨텍스트 오염이 모델의 실제 성능을 제대로 반영하지 못했을 가능성이 있다.\n\n## 시사점\n\nTool Search 기능의 성공은 MCP 프로토콜의 컨텍스트 오버헤드가 AI 모델 성능에 심각한 영향을 미쳤음을 입증하며, 향후 AI 시스템 설계 시 컨텍스트 관리의 중요성을 강조한다."
 }
