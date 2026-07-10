@@ -12,5 +12,6 @@
     "kyutai"
   ],
   "published_at": "2026-07-09T18:34:35.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\n파리에 기반을 둔 AI 음성 스타트업 Gradium이 Nvidia를 포함한 투자자들로부터 1억 달러의 시드 라운드 투자를 유치하며, 인재 확보와 AI 생태계 중심지에서의 경쟁력 강화를 목표로 하고 있다.\n\n## 주요 내용\n\n*   Gradium은 기존 7천만 달러에 더해 Nvidia 등 신규 투자자들로부터 추가 투자를 유치하여 총 1억 달러의 시드 라운드를 마감했다.\n*   확보된 자금은 미국 베이 에어리어에 사무실을 개설하고 해당 지역의 인재를 확보하는 데 사용될 예정이며, 이는 Gradium이 세계적인 AI 생태계의 중심에서 경쟁력을 강화하려는 전략이다.\n*   Gradium은 원래 12월에 FirstMark Capital, Eurazeo, DST Global Partners, Eric Schmidt, Xavier Niel 등 주요 투자자들로부터 7천만 달러를 유치하며 베일을 벗었다.\n*   이 스타트업은 French AI lab Kyutai에서 파생되었으며, Kyutai와 Gradium 모두 Google Brain, DeepMind, Facebook 출신의 연구원 Neil Zeghidour가 공동 설립했다.\n*   Gradium은 초저지연(ultra-low latency)으로 대규모 음성을 제공하는 오디오 모델을 개발 중이며, 이는 AI 에이전트 대화에서 흔히 발생하는 어색한 지연 없이 거의 즉각적으로 응답하는 AI 음성을 목표로 한다.\n*   ElevenLabs (110억 달러 가치 평가)와 Google의 Gemini 등 경쟁사들이 존재하지만, Gradium은 출시 이후 프랑스 자동차 제조사 Renault와 같은 주요 고객을 확보하며 성과를 보이고 있다.\n\n## 시사점\n\nGradium의 대규모 투자 유치는 초저지연 AI 음성 기술의 잠재력과 급성장하는 AI 음성 시장에서의 경쟁 구도를 보여주며, 주요 AI 생태계에 대한 전략적 접근의 중요성을 시사한다."
 }

@@ -12,5 +12,6 @@
     "ai infrastructure"
   ],
   "published_at": "2026-07-09T17:17:37.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nMeta는 AI 칩 생산 비용 절감을 목표로 자체 개발한 AI 전용 칩의 최신 버전을 9월부터 생산에 들어갈 예정이다.\n\n## 주요 내용\n\n- Meta는 9월부터 자체 AI 칩인 MTIA(Meta Training and Inference Accelerator) 프로그램의 최신 버전 생산을 시작할 계획이다.\n- 이 칩은 Broadcom과 협력하여 설계하고, TSMC에서 제조하며, RAM은 Samsung, 스토리지용 부품은 Sandisk, 광섬유 장비는 Sumitomo Electric으로부터 공급받는다.\n- MTIA 칩은 Nvidia, AMD 등으로부터 GPU를 구매하는 비용을 절감하는 데 기여할 것으로 예상된다.\n- Meta는 MTIA 칩을 순위 및 추천 알고리즘 학습, 광범위한 AI 워크로드 처리, 애플리케이션을 위한 추론(inference)에 활용할 예정이다.\n- Meta는 2023년부터 자체 AI 칩을 생산해 왔으며, AI 관련 노력에 필요한 컴퓨팅 용량 확보를 위해 대규모 투자를 진행하고 있다.\n- Meta는 올해 자본 지출을 1250억 달러에서 1450억 달러 사이로 예상하며, 상당 부분이 AI 관련 투입될 전망이다.\n- Meta는 올해 7기가와트(GW)의 컴퓨팅 용량을 배포할 계획이며, 내년에는 두 배로 늘릴 계획이다.\n- Meta는 OpenAI, Anthropic, Amazon, Google 등 자체 AI 칩 개발에 나서는 다른 기술 기업들과 경쟁하고 있다.\n\n## 시사점\n\nMeta의 자체 AI 칩 생산 계획은 GPU 공급망 문제에 대한 대응과 AI 인프라 구축 비용 절감 노력의 일환으로, 자체 칩 개발 경쟁이 심화되는 AI 시장 동향을 보여준다."
 }

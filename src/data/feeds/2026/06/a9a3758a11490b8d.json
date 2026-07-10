@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-06-30T23:55:12.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\n미국 상무부가 Anthropic의 Claude Fable 5 및 Mythos 5 모델에 대한 수출 통제를 해제했으며, 이에 따라 접근 권한 복구가 곧 시작될 예정이다.\n\n## 주요 내용\n\n- 미국 상무부(Department of Commerce)는 Anthropic이 개발한 Claude Fable 5 및 Mythos 5 인공지능(AI) 모델에 대한 수출 통제를 해제했다.\n- 이번 조치로 인해 해당 모델들에 대한 접근 권한이 복구될 예정이며, 내일부터 접근 복구가 시작된다.\n- Anthropic은 사용자들의 인내심과 모델 재배포를 위해 협력한 모든 이들에게 감사를 표했다.\n\n## 시사점\n\nClaude Fable 5와 Mythos 5 모델에 대한 수출 통제 해제는 해당 AI 기술의 글로벌 접근성을 확대하고, 관련 연구 및 상업적 활용에 긍정적인 영향을 미칠 수 있다."
 }
