@@ -1,0 +1,12 @@
+{
+  "id": "fa5aec5cdee02c07",
+  "title": "Claude Code sends 33k tokens before reading the prompt; OpenCode sends 7k",
+  "url": "https://systima.ai/blog/claude-code-vs-opencode-token-overhead",
+  "source": "Hacker News",
+  "type": "article",
+  "tags": [
+    "tech"
+  ],
+  "published_at": "2026-07-12T18:25:51.000Z",
+  "feed_id": "hackernews"
+}
