@@ -1,0 +1,16 @@
+{
+  "id": "9193dd195470276e",
+  "title": "Agentic tool-use eval on a local 35B (Q8): trap-tool avoidance is solid, but I can't tell if my failures are the model or my harness",
+  "url": "https://dev.to/quantamind/agentic-tool-use-eval-on-a-local-35b-q8-trap-tool-avoidance-is-solid-but-i-cant-tell-if-my-4b6i",
+  "source": "Dev.to",
+  "type": "article",
+  "tags": [
+    "dev",
+    "ai",
+    "opensource",
+    "rust",
+    "llm"
+  ],
+  "published_at": "2026-07-13T16:21:20.000Z",
+  "feed_id": "devto"
+}
