@@ -12,5 +12,6 @@
     "typescript"
   ],
   "published_at": "2026-07-13T16:14:35.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nClaude Code slash commands는 개발자의 작업 흐름을 효율화하기 위해 설계된 10개의 명령, 4개의 서브 에이전트, 3개의 훅 레시피, 2개의 템플릿으로 구성된 새로운 기능 팩입니다.\n\n## 주요 내용\n\n*   **Claude Code slash commands**: `/ship`, `/fix-issue`, `/refactor-safe`, `/test-first`, `/security-pass` 등 10가지 명령어를 통해 코드 작성, 수정, 테스트, 보안 관련 작업을 단축키로 실행할 수 있습니다.\n*   **서브 에이전트**: `test-writer`, `bug-hunter`, `docs-writer`, `dep-auditor`와 같은 서브 에이전트는 테스트 코드 작성, 버그 헌팅, 문서 작성, 의존성 감사 등의 특정 작업을 자동화합니다.\n*   **훅 레시피**: `auto-format on edit`, `block edits to protected paths`, `tests-must-pass-before-stopping` 등의 훅 레시피는 코드 편집 시 자동 포맷팅, 중요 파일 보호, 테스트 통과 필수 등의 규칙을 적용합니다.\n*   **개발 원칙**: \"재현 없이는 수정 없음, 테스트 없이 리팩토링 없음, 측정 없이는 최적화 없음\"이라는 원칙을 기반으로 개발되었습니다.\n*   **사용 편의성**: 모든 구성은 일반 Markdown으로 작성되었으며 빌드 단계가 필요 없고 쉽게 편집할 수 있습니다.\n*   **가격 모델**: 1명의 개발자당 무제한 프로젝트에 대해 월 9달러로 제공됩니다.\n\n## 시사점\n\nClaude Code slash commands는 개발자가 반복적인 작업을 줄이고, 코드 품질 및 보안 표준을 유지하며, 전반적인 개발 생산성을 향상시키는 데 기여할 수 있습니다."
 }
