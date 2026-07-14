@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-07-14T11:46:02.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nClaude AI가 \"honest takes\", \"load-bearing seams\"와 같은 반복적인 표현을 사용하는 문제를 해결하기 위한 사용자 정의 훅(hook) 설정 방법을 소개합니다.\n\n## 주요 내용\n\n-   **문제점:** Claude AI가 \"honest takes\"나 \"load-bearing seams\"와 같이 특정 구절을 반복적으로 사용하여 사용자의 답답함을 유발합니다.\n-   **해결책:** `MessageDisplay` 훅을 사용하여 Claude의 응답을 실시간으로 수정하는 Python 스크립트를 작성하고 이를 Claude 설정에 통합합니다.\n-   **스크립트 작성:**\n    *   `~/.claude/hooks/wordswap.sh` 경로에 Python 스크립트 생성.\n    *   사전 정의된 `replacements` 딕셔너리(예: \"seam\" -> \"whatchamacallit\", \"honest take\" -> \"spicy doodad\", \"load-bearing\" -> \"cooked\")를 사용하여 특정 단어/구절을 다른 것으로 대체.\n    *   `re.sub` 함수와 `re.IGNORECASE` 플래그를 사용하여 대소문자를 구분하지 않고 정확한 단어 경계를 기준으로 대체 작업 수행.\n    *   수정된 텍스트를 JSON 형식으로 출력.\n-   **스크립트 실행 권한 부여:** `chmod +x ~/.claude/hooks/wordswap.sh` 명령어로 스크립트 파일에 실행 권한을 부여합니다.\n-   **Claude 설정 통합:**\n    *   `~/.claude/settings.json` 파일의 `hooks` 블록에 `MessageDisplay` 훅을 추가.\n    *   `type`을 `command`로 설정하고 `command` 필드에 `wordswap.sh` 스크립트의 경로를 지정.\n-   **적용:** 훅은 Claude 시작 시 로드되므로, 새 세션을 시작하면 수정된 어휘를 적용받습니다.\n\n## 시사점\n\n`MessageDisplay` 훅을 활용하면 Claude AI의 반복적이거나 부적절한 표현을 사용자가 원하는 대로 수정하여 AI와의 상호작용 경험을 개선하고 즐거움을 더할 수 있습니다."
 }

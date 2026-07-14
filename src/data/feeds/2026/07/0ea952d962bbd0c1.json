@@ -9,5 +9,6 @@
     "politics"
   ],
   "published_at": "2026-07-14T09:00:00.000Z",
-  "feed_id": "wired"
+  "feed_id": "wired",
+  "description": "## 개요\n\n미국 주택도시개발부(HUD) 산하의 효율성 관리 부서(DOGE)에서 정책 결정에 AI를 활용했으며, 정보공개법(FOIA) 요청을 통해 관련 정보 공개를 시도했으나 다수의 문서가 비공개 처리되었습니다.\n\n## 주요 내용\n\n*   Department of Government Efficiency (DOGE) 소속 공무원들이 주택도시개발부(HUD)에서 AI를 활용하여 정책 결정에 참고했습니다.\n*   DOGE 팀에는 시카고 대학교 학생이었던 Christopher Sweet과 부동산 기술 스타트업 Kukun 출신 Scott Langmack 등이 참여했습니다.\n*   Sweet의 주요 업무는 AI를 활용해 폐지 또는 계약 취소 대상이 될 수 있는 정부 규정을 식별하는 것이었습니다.\n*   민간 법률 단체인 Democracy Forward가 FOIA 요청을 통해 관련 문서를 확보하려 했으나, HUD는 AI 특권 부재, 대통령 통신 특권 등을 이유로 100건 이상의 문서를 비공개했습니다.\n*   비공개된 문서 중에는 \"GPT defined Econ Analysis approach 11 10 25.docx\"와 \"RegulatoryAnalysisPrompt.pdf\"와 같이 AI 프롬프트 및 규제 분석과 관련된 것으로 보이는 문서들이 포함되어 있습니다.\n*   현재 미국에는 정부의 규칙, 정책, 규제 생성에 AI 사용 여부를 공개하도록 하는 법률이 없습니다.\n*   AI가 정책 결정에 사용될 경우, 환각(hallucination), 편향, 오류 등의 문제가 발생할 수 있으며, 프롬프트 접근이 AI 활용 방식을 파악하는 주요 수단이 될 수 있습니다.\n*   HUD는 비공개 사유로 '심의 과정 특권(deliberative process privilege)'을 광범위하게 적용했으며, 일부 문서에는 'AI 프롬프트 초안' 또는 'AI 심의 입력'이 이유로 명시되었습니다.\n*   전자 프론티어 재단(EFF)과 민주주의 전진(Democracy Forward) 측은 AI의 정책 결정 과정 개입에 대한 투명성 부족을 우려하며, AI 사용에 대한 공개의 필요성을 강조하고 있습니다.\n\n## 시사점\n\nAI를 활용한 정부 정책 결정 과정의 투명성 확보는 AI의 잠재적 오류 및 편향으로 인한 사회적 영향에 대한 시민들의 이해 증진과 신뢰 구축을 위해 필수적이며, 관련 법규 및 공개 절차 마련이 필요합니다."
 }
