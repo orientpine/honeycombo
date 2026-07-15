@@ -12,5 +12,6 @@
     "devtools"
   ],
   "published_at": "2026-07-15T15:24:59.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\n인디 개발자가 LLM 비용을 통제하고 공급업체 종속성을 피하기 위해 OpenAI 호환 API 게이트웨이인 CostLLM을 구축했습니다.\n\n## 주요 내용\n\n-   **문제점**: 기존 LLM API 사용 시 프로젝트별 지출 가시성 부족, 월말 예상치 못한 청구, 기능별 비용 상한 설정 불가, Rate Limiting 문제 발생.\n-   **CostLLM 기능**:\n    -   **가상 API 키**: 프로젝트, 환경, 팀원별로 별도 키 생성 가능.\n    -   **사용량 추적**: 실시간 토큰 사용량 대시보드 제공.\n    -   **예산 통제**: 하드 캡을 통해 초과 지출 방지.\n    -   **Rate Limiting**: 키별 설정 가능.\n    -   **호환성**: OpenAI SDK와 완벽 호환, 코드 한 줄 변경으로 적용 가능.\n-   **구현 기술**: Python (FastAPI) 게이트웨이 및 백엔드, Rate Limiting을 위한 Redis, 사용자 및 사용량 데이터를 위한 PostgreSQL, Nginx 리버스 프록시, 결제를 위한 Creem 사용.\n-   **지원 모델**: Deepseek 모델 (deepseek-v4-flash, deepseek-v4-pro, deepseek-chat, deepseek-reasoner).\n-   **학습 내용**: 프로덕션 API 게이트웨이 구축 경험을 통해 동시성, 스트리밍, 오류 처리, 결제 웹훅 등에 대한 이해 증진. 특히 무료 사용자와 성장하는 팀 모두에게 적합한 가격 모델 설계의 어려움 체감.\n-   **사용 방법**: 웹사이트(https://costllm.ai)에서 무료 등급 사용 가능 ($10 가입 크레딧 제공, 신용카드 불필요). API 문서는 https://documenter.getpostman.com/view/56610873/2sBY4MtfzU에서 확인.\n\n## 시사점\n\nCostLLM은 LLM API를 사용하는 개발자들에게 비용 관리, 키 관리, 사용량 가시성을 제공하여 LLM 도입 및 운영의 효율성을 높일 수 있는 방안을 제시합니다."
 }
