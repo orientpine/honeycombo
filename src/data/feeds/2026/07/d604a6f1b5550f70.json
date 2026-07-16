@@ -12,5 +12,6 @@
     "openai"
   ],
   "published_at": "2026-07-15T23:59:44.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nMicrosoft는 자사 영업팀에게 OpenAI, Google, Anthropic과 같은 경쟁사의 AI 제품을 자사 제품과 부정적으로 비교하도록 교육하고 있다는 보도가 나왔습니다.\n\n## 주요 내용\n\n-   Microsoft는 내부 회의에서 영업 사원들에게 경쟁사의 AI 모델보다 자사의 자체 개발 모델이 효율적이고 비용 효과적임을 강조하는 전략을 제시했습니다.\n-   Jay Parikh 부사장은 \"다른 회사들은 부품을 판매하지만, 우리는 완전한 엔드투엔드 시스템을 판매합니다. 이것이 우리가 계속 알려야 할 이야기입니다.\"라고 언급했습니다.\n-   Jacob Andreou 부사장은 Copilot을 Anthropic의 Claude와 직접 비교하며, Microsoft 오피스 앱 내에서의 성능 면에서 Claude가 \"더 느리고 덜 정확했으며 적절한 보안 통합이 부족했다\"고 지적했습니다.\n-   이러한 움직임은 Microsoft가 AI 모델을 위해 의존해 온 OpenAI 및 Anthropic과 같은 회사들을 대상으로 한다는 점에서 주목할 만합니다.\n-   최근 보도에 따르면 Microsoft는 비용 절감을 위해 Word 및 Excel과 같은 주요 앱에서 OpenAI 및 Anthropic의 모델을 자체 모델로 교체하고 있습니다.\n-   과거 Microsoft와 OpenAI는 Microsoft가 자본과 컴퓨팅 파워를 제공하고 OpenAI는 Microsoft에 API 및 모델에 대한 독점적 액세스를 제공하는 독특한 계약 관계를 맺었으나, 이 파트너십은 독점 조항이 삭제되면서 수정되었습니다.\n-   Microsoft는 AI 사업 구축에 대한 막대한 투자에 대한 투자자들의 의문으로 인해 지난 한 해 동안 좋지 않은 주가 전망에 직면해 있으며, 경쟁력 있는 제품을 홍보하는 것은 이러한 우려를 완화하고 장기적인 AI 계획에 대한 신뢰를 구축하려는 시도로 보입니다.\n\n## 시사점\n\nMicrosoft의 영업 전략 변화는 AI 시장에서의 경쟁 심화와 자사 기술의 우수성을 강조하여 투자자 신뢰를 회복하려는 시도로 해석됩니다."
 }
