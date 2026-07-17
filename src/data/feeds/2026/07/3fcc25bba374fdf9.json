@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-07-16T22:27:22.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nThe Little Book of Reinforcement Learning은 강화 학습의 기본 원리부터 적용 가능한 알고리즘까지 다루는 짧은 입문서로, 관련 GitHub 저장소에는 서적 내용과 함께 Pytorch 기반의 다양한 알고리즘 구현체 및 동적 프로그래밍 알고리즘에 대한 상세 설명과 증명이 포함되어 있습니다.\n\n## 주요 내용\n\n- 이 책은 강화 학습의 기초 개념부터 Monte Carlo(MC)부터 Proximal Policy Optimization(PPO)까지 다양한 알고리즘을 Pytorch 기반으로 구현한 코드를 제공합니다.\n- `algos/` 폴더에는 Monte Carlo, Q-Learning, Deep Q-Networks (DQN), Actor-Critic, PPO 등 서적에서 다루는 강화 학습 알고리즘들의 Pytorch 구현이 포함되어 있습니다.\n- `supplementary/` 폴더에는 서적에서 간략하게 소개된 동적 프로그래밍 알고리즘들에 대한 상세한 설명과 엄밀한 증명이 제공됩니다.\n- 해당 자료는 2021년에 작성되었으며, 향후 추가적인 자료가 저장소에 업데이트될 예정입니다.\n- 책은 비상업적 Creative Commons 라이선스(CC BY-SA 4.0) 하에 배포됩니다.\n\n## 시사점\n\nThe Little Book of Reinforcement Learning은 강화 학습 이론 학습과 실제 알고리즘 구현을 병행하고자 하는 연구자 및 개발자에게 유용한 학습 자료를 제공하며, 상세한 증명 자료는 강화 학습 알고리즘에 대한 깊이 있는 이해를 돕습니다."
 }

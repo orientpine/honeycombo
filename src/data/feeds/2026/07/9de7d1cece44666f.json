@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-07-16T16:08:13.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nNotebookLM이 Gemini Notebook으로 리브랜딩되었으며, Google 생태계 내에서 더 많은 기능을 지원하고 보안 클라우드 컴퓨터가 업데이트되었습니다.\n\n## 주요 내용\n\n*   NotebookLM은 'Gemini Notebook'으로 이름이 변경되었으며, 이는 Google 생태계 전반에서 더 많은 작업을 수행할 수 있는 독립형 연구 도구입니다.\n*   모든 노트북에 보안 클라우드 컴퓨터가 탑재되어, 소스에 기반한 복잡한 데이터 분석을 위해 코드를 네이티브로 작성하고 실행할 수 있게 되었습니다.\n*   이 기능은 현재 Google AI Ultra 사용자 및 AI Ultra Access/AI Expanded Access를 보유한 Workspace 비즈니스 고객에게 제공되며, 향후 몇 주 안에 웹상의 모든 Pro 사용자에게 확대 적용될 예정입니다.\n*   Gemini 앱 내에서 노트북에 직접 액세스하고 생성할 수 있으며, Gemini 앱과 독립형 Gemini Notebook 경험 간의 완전한 크로스 앱 동기화가 지원됩니다.\n*   향후 AI Mode in Search에도 노트북 기능이 통합될 예정입니다.\n\n## 시사점\n\nGemini Notebook의 리브랜딩 및 기능 강화는 연구 및 학습 경험을 혁신하고, Google 생태계 전반에 걸쳐 AI 기반 분석 및 접근성을 확장하는 것을 목표로 합니다."
 }
