@@ -12,5 +12,6 @@
     "notebooklm"
   ],
   "published_at": "2026-07-16T16:00:00.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nGoogle이 AI 기반 연구 도구 NotebookLM을 Gemini Notebook으로 리브랜딩하며 Gemini 브랜드로 통합하는 추세를 이어가고 있습니다.\n\n## 주요 내용\n\n- NotebookLM은 Google I/O 2023에서 Project Tailwind로 처음 공개된 이후 3천만 명의 사용자 및 60만 개 이상의 조직에서 사용되고 있습니다.\n- 지난 3년간 대화형 팟캐스트 생성, 큐레이션된 노트북, 비디오 개요, 더 많은 파일 형식 지원, 엔터프라이즈 플랜 등의 기능이 추가되었습니다.\n- 이번 업데이트를 통해 각 노트북은 보안 컨테이너 역할을 하며, 사용자는 코드를 생성하여 출력을 대화형으로 만들 수 있습니다.\n- 코드 실행 기능으로 사용자는 여러 소스를 활용하여 도구 내에서 복잡한 데이터 분석을 직접 수행할 수 있습니다.\n- 해당 업데이트는 Google AI Ultra 유료 플랜 사용자, AI Ultra Access 및 AI Expanded Access가 있는 Workspace 비즈니스 고객에게 제공됩니다.\n- Pro 사용자는 향후 몇 주 안에 이 기능에 접근할 수 있게 됩니다.\n- 사용자들은 이미 Gemini 앱 내에서 노트북을 확인할 수 있으며, 곧 검색의 AI 모드를 통해서도 접근할 수 있을 예정입니다.\n\n## 시사점\n\nGemini Notebook으로의 리브랜딩은 Google의 AI 제품 포트폴리오를 Gemini 브랜드로 통합하려는 전략을 보여주며, 코드 실행 기능을 통해 데이터 분석 및 상호작용 기능을 강화하여 사용자들에게 더 큰 가치를 제공할 것으로 기대됩니다."
 }

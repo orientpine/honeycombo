@@ -12,5 +12,6 @@
     "google"
   ],
   "published_at": "2026-07-16T16:00:00.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nGoogle의 AI Mode는 이제 사용자가 Instacart, Canva, YouTube 등 지원되는 앱과 연동하여 대화형 검색 경험 내에서 작업을 수행할 수 있도록 기능을 확장했습니다.\n\n## 주요 내용\n\n-   AI Mode가 질문 답변을 넘어 사용자가 자주 사용하는 앱 전반에 걸쳐 작업을 완료할 수 있도록 지원 범위를 넓혔습니다.\n-   Instacart 연동 시, AI Mode에서 식료품 목록을 생성한 후 직접 쇼핑 카트에 추가하고 결제까지 진행할 수 있습니다.\n-   Canva 연동 시, 프로젝트 디자인 아이디어를 얻기 위해 템플릿을 요청할 수 있습니다.\n-   YouTube 연동 시, 파티용 재생 목록을 만들고 YouTube Music에 바로 저장할 수 있습니다.\n-   이번 업데이트는 Google I/O에서 발표된 Gemini 앱의 타사 앱 연동 기능에 기반하며, Google은 향후 더 많은 앱 지원을 계획하고 있습니다.\n-   최근 AI Mode는 인근 매장의 재고 확인, 웹 검색과 AI Mode를 나란히 사용하여 정보 비교 및 맥락 유지, Gmail 및 Google Photos 연동을 통한 개인화된 응답 제공 등의 기능을 추가했습니다.\n\n## 시사점\n\nGoogle AI Mode의 앱 연동 기능 강화는 사용자의 쇼핑, 디자인, 콘텐츠 큐레이션 등 다양한 활동을 통합하고 편의성을 증대시켜 OpenAI의 ChatGPT 및 Anthropic의 Claude와 같은 경쟁사의 앱 통합 기능에 효과적으로 대응할 수 있는 기반을 마련했습니다."
 }
