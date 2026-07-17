@@ -11,5 +11,6 @@
     "patreon"
   ],
   "published_at": "2026-07-17T15:21:17.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nPatreon은 AI 훈련 목적으로 콘텐츠를 무단으로 스크랩하는 AI 봇을 직접 차단하기 위해 Cloudflare와 협력하고 있습니다.\n\n## 주요 내용\n\n- Patreon은 2023년 AI 크롤러를 억제하기 위한 조치를 시행했으나, AI 스크래핑 기술이 정교해짐에 따라 조치를 강화했습니다.\n- 기존의 paywall 외에도 새롭게 도입된 Home Feed 및 Quips와 같은 검색 도구들이 콘텐츠를 크롤러에 더 많이 노출시킬 수 있습니다.\n- Cloudflare는 웹사이트 게시자가 AI 봇을 제한할 수 있는 도구를 제공하며, AI 봇이 스크래핑에 비용을 지불하게 하는 'Pay Per Crawl' 마켓플레이스를 운영합니다.\n- Cloudflare는 최근 정책 변경을 통해 광고가 포함된 페이지에서 '혼합 사용(mixed-use)' 크롤러(인덱싱 및 훈련 모두 수행)를 기본적으로 차단합니다.\n- Patreon은 Cloudflare의 AI Crawl Control 기술을 활용하여 AI 정책 및 집행 도구를 업데이트하며, robots.txt 파일 사용 요청 대신 AI 훈련 봇을 적극적으로 차단합니다.\n- 개별 AI 훈련 크롤러의 Patreon 접근 시도가 수천 건에서 0건으로 감소한 테스트 결과는 robots.txt 파일이 무시되었음을 보여줍니다.\n- Patreon은 페이지를 인덱싱하고 사용자에게 Patreon으로 돌아갈 수 있는 정보를 제공하는 봇은 허용할 것입니다.\n- Patreon은 AI 에이전트가 강력해지고 인기를 얻음에 따라, AI 기업이 창작자의 작업을 어떻게 사용하는지에 대해 창작자가 의미 있는 발언권을 가져야 한다고 보고 있습니다.\n\n## 시사점\n\nPatreon은 창작자가 자신의 콘텐츠 사용 방식에 대해 더 많은 통제권을 가질 수 있는 환경을 조성하며, AI 스크래핑으로부터 창작자의 권리를 보호하는 새로운 기준을 제시합니다."
 }
