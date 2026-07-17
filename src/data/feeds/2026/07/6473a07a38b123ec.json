@@ -12,5 +12,6 @@
     "programming"
   ],
   "published_at": "2026-07-17T15:03:40.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nHybridAI는 Ambient HybridAI Intelligence 1.0을 기반으로 한 무료 오픈 소스 AI 챗봇으로, 웹, Android, Windows에서 사용할 수 있습니다.\n\n## 주요 내용\n\n- HybridAI는 구독료, 광고, 배터리 소모가 심한 웹 앱에 대한 불만에서 시작되었습니다.\n- Ambient HybridAI Intelligence 1.0을 활용하여 무료 및 무제한 채팅 기능을 제공합니다.\n- Android 및 Windows 기기에 최적화되었으며, Material 3 Expressive UI를 특징으로 합니다.\n- 웹, Android, Windows 플랫폼에서 모두 접근 가능합니다.\n- 채팅 기록, 다크/라이트 테마, Material You Dynamic Color 등의 기능을 지원합니다.\n- 소스 코드는 GitHub에서 MIT 라이선스로 공개되어 있습니다.\n\n## 시사점\n\nHybridAI는 AI 챗봇 사용의 높은 비용과 불편함에 대한 대안을 제시하며, 오픈 소스 커뮤니티의 피드백을 통해 지속적인 발전을 목표로 하고 있습니다."
 }
