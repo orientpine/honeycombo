@@ -11,5 +11,6 @@
     "opensource"
   ],
   "published_at": "2026-07-19T14:54:24.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nClaw-coder는 현재 사용되는 AI 코딩 CLI를 대체할 수 있는 완전 로컬 및 자율 AI 코딩 CLI로 탐색되고 있습니다.\n\n## 주요 내용\n\n- Claw-coder는 npm install-g claw-coder 명령어로 설치할 수 있습니다.\n- claw login 및 claw --help와 같은 명령어를 지원합니다.\n- 개발자는 Claw-coder가 현재 CLI를 대체할 수 있을지, 그리고 아직 수정 중인 버그가 있음을 언급하며 탐색하고 있습니다.\n- 이 CLI는 세계 최초의 완전 로컬 및 자율 AI 코딩 CLI일 가능성이 제기되었습니다.\n\n## 시사점\n\nClaw-coder는 로컬 환경에서 작동하며 자율적인 AI 코딩 기능을 제공함으로써 기존 CLI의 대안이 될 잠재력을 가지고 있으며, 사용자 피드백을 통해 지속적인 개선이 이루어질 것으로 기대됩니다."
 }
