@@ -1,0 +1,16 @@
+{
+  "id": "346edb2ffd564a6c",
+  "title": "Retiring a Claude Code Model Unattended with launchd: A Self-Destructing Job That Auto-Patches settings.json",
+  "url": "https://dev.to/bokuwalily/retiring-a-claude-code-model-unattended-with-launchd-a-self-destructing-job-that-auto-patches-4jee",
+  "source": "Dev.to",
+  "type": "article",
+  "tags": [
+    "dev",
+    "claudecode",
+    "launchd",
+    "automation",
+    "macos"
+  ],
+  "published_at": "2026-07-19T05:00:05.000Z",
+  "feed_id": "devto"
+}
