@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-07-20T02:51:16.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nClaude Fable이 세계 월드컵 결승전 기간 동안 작업하여 Jacobian Conjecture에 대한 반례를 생산했습니다.\n\n## 주요 내용\n\n*   Jacobian Conjecture는 다변수 복소수 함수 $f: \\mathbb{C}^n \\to \\mathbb{C}^n$에 대해, 만약 $f$의 야코비안 행렬식(Jacobian determinant)이 0이 아니면, $f$는 전단사 함수(bijective)이며 그 역함수 $f^{-1}$도 복소수 미분 가능(complex differentiable)함을 주장하는 추측입니다.\n*   Claude Fable이 제시한 반례는 다음과 같은 함수 $f: \\mathbb{C}^3 \\to \\mathbb{C}^3$입니다:\n    $$ f(x, y, z) = \\begin{pmatrix} (1+xy)^3 z + y^2 (1+xy) (4+3xy) \\\\ y + 3 x (1+xy)^2 z + 3 x y^2 (4+3xy) \\\\ 2 x - 3 x^2 y - x^3 z \\end{pmatrix} $$\n*   이 함수 $f$의 야코비안 행렬식은 -2입니다.\n*   이 함수는 특정 세 점 $(0, 0, -1/4)$, $(1, -3/2, 13/2)$, $(-1, 3/2, 13/2)$를 각각 $(-1/4, 0, 0)$으로 보냅니다.\n\n## 시사점\n\nFable이 제시한 반례는 1939년 처음 제기된 Jacobian Conjecture가 거짓임을 증명하며, 대수 기하학 및 복소 해석학 분야에 중요한 함의를 가집니다."
 }

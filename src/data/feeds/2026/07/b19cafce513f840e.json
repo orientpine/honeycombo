@@ -11,5 +11,6 @@
     "programming"
   ],
   "published_at": "2026-07-20T05:15:00.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nClaude HUD는 Claude Code와 같은 AI 터미널 에이전트의 작동 상태를 실시간으로 표시하여 개발자의 가시성 문제를 해결하는 오픈 소스 상태 표시줄 플러그인입니다.\n\n## 주요 내용\n\n*   **가시성 문제 해결**: Claude Code와 같은 CLI 기반 AI 에이전트는 내부 작동 방식을 숨기는 \"블랙박스\"처럼 느껴질 수 있으며, Claude HUD는 이러한 가시성 부족을 해결합니다.\n*   **실시간 Heads-Up Display (HUD)**: Claude HUD는 Claude Code 터미널 화면 하단에 지속적으로 표시되는 상태 표시줄 역할을 하여 에이전트의 중요한 메트릭을 표시합니다.\n*   **Context Health Bar**: 토큰 창 사용률을 백분율로 보여주는 진행 표시줄을 통해 \"컨텍스트 블라인드니스\"를 방지하고 필요 시 세션을 재설정하도록 안내합니다.\n*   **Active Tool Monitoring**: Claude Code가 파일을 열거나, git 명령을 실행하거나, 디렉토리를 검색하거나, 패키지를 설치하는 등 활동하는 도구를 실시간으로 기록합니다.\n*   **Agent & Subagent Tracking**: 복잡한 작업 시 백그라운드에서 실행되는 동시 서브에이전트 목록과 그 목표를 요약하여 병렬 작업에 대한 전체적인 시각을 제공합니다.\n*   **Todo Checklist Progress**: 프로젝트 지침에 명시된 작업이 에이전트에 의해 완료됨에 따라 동적으로 작업 목록을 업데이트하고 체크하여 요청 완료까지의 진행률을 표시합니다.\n*   **설치 방법**: Claude Code의 내장 플러그인 마켓플레이스를 통해 `/plugin marketplace add jarrodwatts/claude-hud` 명령으로 추가하고 `/plugin install claude-hud`, `/claude-hud:setup` 명령으로 설치 및 설정을 진행하며, `/reload-plugins` 명령으로 플러그인을 다시 로드하여 적용합니다.\n\n## 시사점\n\nClaude HUD는 터미널 기반 코딩 에이전트와의 협업을 더욱 투명하고 신뢰할 수 있게 만들어, CLI 개발 스택에서 필수적인 요소로서 에이전트의 컨텍스트 상태와 프로세스 가시성을 프롬프트 라인으로 직접 가져오는 역할을 합니다."
 }
