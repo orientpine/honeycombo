@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-07-19T10:03:23.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nClaude Code의 최신 버전이 Rust로 재작성된 Bun을 사용하며, 이를 통해 Linux 환경에서 10%의 속도 향상을 달성했다.\n\n## 주요 내용\n\n- Claude Code v2.1.181 (2026년 6월 17일 출시)부터 Rust로 포팅된 Bun을 사용한다.\n- Linux 환경에서는 10%의 실행 속도 향상이 있었으나, 다른 환경에서는 사용자 체감 성능 변화가 미미했다.\n- `strings ~/.local/bin/claude | grep -m1 'Bun v1'` 명령어를 통해 Claude Code가 내부적으로 Bun v1.4.0을 사용하는 것을 확인할 수 있다.\n- Bun의 GitHub 최신 릴리스 버전(v1.3.14)보다 높은 v1.4.0 버전 사용은 Claude Code가 아직 공식 출시되지 않은 Bun 버전을 사용하고 있음을 시사한다. (업데이트: Rust 버전은 Bun canary로 출시되었으며, `bun upgrade --canary` 명령어로 설치 가능하다.)\n- `strings ~/.local/bin/claude | grep -Eo 'src/[[:alnum:]_./-]+\\.rs'` 명령어를 통해 Rust 소스 파일 목록이 출력되어 Rust로 작성된 Bun이 실제 프로덕션 환경에서 사용되고 있음을 뒷받침한다.\n- `cat > /tmp/bun-version.ts <<'EOF' console.log(\"embedded bun:\", Bun.version); process.exit(0); EOF BUN_OPTIONS=\"--preload=/tmp/bun-version.ts\" claude --version` 명령어를 통해 Claude Code --version 실행 시 1.4.0이 출력된다.\n- package.json 파일의 버전이 1.4.0으로 업데이트된 커밋은 5월 17일에 이루어졌으나, canary 버전을 제외한 정식 릴리스에는 아직 포함되지 않았다.\n\n## 시사점\n\nRust로 재작성된 Bun의 채택은 Claude Code의 성능 개선 가능성을 보여주며, 기술 스택의 변화가 사용자 경험에 미치는 영향을 보여주는 사례이다."
 }
