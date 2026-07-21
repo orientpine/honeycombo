@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-07-21T15:00:00.000Z",
-  "feed_id": "theverge"
+  "feed_id": "theverge",
+  "description": "## 개요\n\nGoogle은 대규모 AI 보안 모델의 저렴한 대안으로 Gemini 3.5 Flash Cyber를 출시하여 보안 취약점을 신속하게 찾고 패치하는 데 초점을 맞추고 있습니다.\n\n## 주요 내용\n\n- Gemini 3.5 Flash Cyber는 Anthropic의 Mythos와 같은 대규모, 고비용 AI 시스템에 대한 비용 효율적이고 높은 성능의 대안으로 설계되었습니다.\n- 이 모델은 Gemini 3.5 Flash를 기반으로 구축되었으며, 처음에는 CodeMender를 통해 정부 및 신뢰할 수 있는 파트너에게 제공될 예정입니다.\n- CodeMender는 Gemini 3.5 Flash Cyber를 고속으로 저렴하게 호출하여 더 많은 코드 경로를 스캔하고 취약점을 찾을 수 있습니다.\n- Anthropic의 Mythos 5는 고비용 AI 보안 모델로, Microsoft는 이를 활용하여 보안 점검에서 큰 성과를 거두었습니다.\n- Gemini 3.6 Flash는 코딩 및 멀티모달 성능이 향상되었으며, Gemini 3.5 Flash-Lite는 3.5 시리즈 중 가장 비용 효율적인 모델입니다.\n- Gemini 3.5 Flash Cyber는 CyberGym AI 사이버 보안 벤치마크에서 최대 5회 호출 시 \"상당히 큰 모델\"과 비교하여 경쟁력 있는 성능을 달성했습니다.\n- V8 JavaScript Engine에서 Gemini 3.5 Flash Cyber는 Gemini 3.5 Flash 및 Opus 4.6보다 더 많은 고유한 확인된 문제를 식별했으며, 다른 모델이 발견하지 못한 10가지 문제를 발견하기도 했습니다.\n\n## 시사점\n\nGemini 3.5 Flash Cyber의 출시는 AI 기반 보안 솔루션의 접근성을 높이고, 기업들이 신속하고 비용 효율적으로 사이버 보안을 강화할 수 있는 새로운 가능성을 열어줍니다."
 }
