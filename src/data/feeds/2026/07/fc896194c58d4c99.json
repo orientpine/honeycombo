@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-07-20T22:19:12.000Z",
-  "feed_id": "theverge"
+  "feed_id": "theverge",
+  "description": "## 개요\n\nSony Music Entertainment가 AI 음악 생성기 Udio를 상대로 30,000곡 이상의 저작권을 침해했다는 추가 소송을 제기했습니다.\n\n## 주요 내용\n\n*   Sony는 Udio가 엘비스 프레슬리의 'Hound Dog'부터 비욘세의 'Say My Name', 해리 스타일스의 'As It Was'에 이르기까지 30,000곡 이상의 자사 소유 곡에 대한 저작권을 침해했다고 주장합니다.\n*   이 새로운 소송은 2024년에 Sony, Universal Music Group, Warner Records가 Udio와 Suno를 상대로 제기했던 이전 소송에 이은 것입니다.\n*   Sony는 이전 소송의 발견 과정에서 Udio의 학습 데이터를 분석한 후 '오디오 핑거프린팅' 기술을 사용하여 추가적인 저작권 침해 곡들을 식별했습니다.\n*   Sony는 Udio가 \"다양한 종류의 사운드 녹음을 방대하게 보여줌으로써 생성 AI 모델이 구성되었다\"고 인정했다는 주장을 바탕으로 소송을 제기했습니다.\n*   Universal Music Group과 Warner Music Group은 이미 Udio와 합의하고 파트너십을 맺었으나, Sony는 30,000곡 이상에 대한 소송을 별도로 진행하고 있습니다.\n*   Sony는 Udio가 저작권을 침해한 각 작품당 최대 150,000달러의 배상을 청구하며, Udio의 저작물 침해 행위 금지를 요구하고 있습니다.\n\n## 시사점\n\nSony의 이번 소송은 AI 음악 생성 기술의 저작권 침해 문제와 관련하여 음악 산업이 직면한 법적, 윤리적 과제를 부각시키며, AI 학습 데이터의 저작권 준수와 공정한 사용에 대한 중요한 논의를 촉발합니다."
 }
