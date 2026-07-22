@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-07-22T14:44:27.000Z",
-  "feed_id": "theverge"
+  "feed_id": "theverge",
+  "description": "## 개요\n\nAMD는 AI 회사 Anthropic에 최대 50억 달러를 투자하며, Anthropic의 컴퓨팅 파워 확장을 지원하기로 발표했습니다.\n\n## 주요 내용\n\n*   AMD는 Anthropic에 최대 50억 달러를 투자할 계획입니다.\n*   이번 파트너십의 일환으로 Anthropic은 AMD의 새로운 Helios 랙스케일 시스템을 활용하여 AMD의 Instinct MI450 AI GPU 2 기가와트(GW)를 배치할 예정입니다.\n*   파트너들은 2027년 상반기에 첫 1 GW를 배치하는 것을 목표로 하고 있으며, 이는 Anthropic이 최근 SpaceX 및 TeraWulf와 체결한 데이터센터 계약을 기반으로 합니다.\n*   Anthropic은 이미 Google, Broadcom, Amazon과 AI 인프라 계약을 체결했으며, Meta와의 계약도 논의 중인 것으로 알려져 있습니다.\n*   AMD와 Anthropic은 다년간의 엔지니어링 협업도 시작하며, AMD는 자체 소프트웨어 개발, 엔지니어링 및 제품 개발에 Anthropic의 Claude를 활용할 것입니다.\n*   Anthropic은 AMD와의 협력을 통해 Claude 모델의 학습 및 서비스에 필요한 컴퓨팅 용량을 확보하고 최적화할 수 있게 됩니다.\n\n## 시사점\n\nAMD의 대규모 투자는 AI 인프라 경쟁 심화 속에서 Anthropic의 입지를 강화하고, AMD는 AI GPU 시장에서의 점유율을 확대하며, 자사의 AI 모델 개발에도 활용할 수 있는 기회를 얻게 됩니다."
 }
