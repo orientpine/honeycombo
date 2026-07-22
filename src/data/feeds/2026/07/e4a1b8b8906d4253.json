@@ -12,5 +12,6 @@
     "google gemini"
   ],
   "published_at": "2026-07-21T17:11:50.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nGoogle DeepMind가 Gemini 3.6 Flash, 3.5 Flash-Lite, 3.5 Flash Cyber 세 가지 새로운 Gemini 모델을 출시했으며, 이는 효율성, 저지연성 및 신뢰성 향상에 초점을 맞추고 있다.\n\n## 주요 내용\n\n- **Gemini 3.6 Flash:** 코딩, 지식 작업 및 멀티모달 성능을 개선하고 토큰 사용량을 최대 17%까지 줄여 이전 모델인 3.5 Flash보다 비용 효율성을 높인 Google의 핵심 모델이다.\n- **Gemini 3.5 Flash-Lite:** 가장 비용 효율적인 모델로, 프로덕션 애플리케이션에 적합하다.\n- **Gemini 3.5 Flash Cyber:** 사이버 보안 취약점을 발견하고 수정하는 데 특화된 모델로, 정부 및 신뢰할 수 있는 파트너를 대상으로 제한적 액세스 파일럿 프로그램으로 독점 제공된다.\n- **출시 목적:** AI 에이전트를 대규모로 구축하는 고객에게 효율성, 지연 시간 및 신뢰성을 제공하는 데 중점을 둔다.\n- **Gemini Pro 3.5 업데이트 부재:** 이번 출시에는 오랫동안 기다려온 Gemini Pro 플래그십 모델의 업데이트가 포함되지 않았다. 경쟁사들은 GPT-5.5, GPT-5.6, Claude Opus 4.8, Claude Sonnet 5 등 신규 모델을 출시하며 경쟁이 심화되고 있다.\n- **Gemini Pro 3.5 지연:** Google은 내부 성능 목표 달성에 어려움을 겪으며 Gemini Pro 3.5 출시가 지연되고 있다고 알려졌으며, 현재 파트너와 함께 테스트 중이며 곧 출시될 예정이다.\n- **Gemini 4 개발:** Google DeepMind 팀은 Gemini 4에 대한 가장 야심찬 사전 훈련을 시작했다.\n\n## 시사점\n\n이번 Gemini 모델 출시는 AI 에이전트 개발을 위한 비용 효율성과 성능 최적화에 대한 Google의 노력을 보여주며, 동시에 경쟁사와의 치열한 모델 개발 경쟁 속에서 Gemini Pro 3.5의 향후 출시가 주목된다."
 }
