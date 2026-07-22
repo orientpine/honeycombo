@@ -11,5 +11,6 @@
     "slack"
   ],
   "published_at": "2026-07-21T19:43:41.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nJack Dorsey가 Block에서 개발한 Buzz는 AI 에이전트와 사용자가 동일한 대화 공간에서 협업할 수 있도록 설계된 새로운 그룹 채팅 플랫폼으로, Slack과 GitHub의 대안을 목표로 합니다.\n\n## 주요 내용\n\n*   Buzz는 모델에 구애받지 않고(model-agnostic), 분산화되었으며(decentralized), 자체 주권을 가지며(self-sovereign), 오픈소스(open source)로 개발되었습니다.\n*   기존 Slack과 GitHub의 워크플로우를 통합하여, AI 에이전트를 활용하는 팀의 다양한 업무 협업을 단일 워크스페이스에서 지원합니다.\n*   오픈소스라는 특성상 팀별 맞춤 설정이 가능하며, 필요시 개발자가 직접 기능을 구축하고 배포할 수 있습니다.\n*   Paradigm의 CTO Georgios Konstantopoulos가 개발한 Centaur와 같이 Slack 내에서 작동하거나 API를 통해 접근 가능한 유사한 오픈소스 제품들도 등장하고 있습니다.\n*   Buzz는 현재 초기 단계이며, macOS, Windows, Linux용 무료 데스크톱 앱으로 제공되고 있습니다.\n\n## 시사점\n\nBuzz는 AI 에이전트 활용이 증가하는 스타트업에게 새로운 협업 환경을 제공하며, 오픈소스 기반의 유연성과 확장성을 바탕으로 향후 팀 커뮤니케이션 및 생산성 향상에 기여할 잠재력을 가집니다."
 }

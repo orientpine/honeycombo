@@ -12,5 +12,6 @@
     "gemini"
   ],
   "published_at": "2026-07-21T16:58:25.000Z",
-  "feed_id": "arstechnica"
+  "feed_id": "arstechnica",
+  "description": "## 개요\n\nGoogle은 새로운 AI 모델 라인업을 발표하며 Gemini 3.6 Flash와 사이버 보안에 특화된 AI 모델을 출시했고, Gemini 3.5 Pro 및 Gemini 4에 대한 개발 상황을 공유했습니다.\n\n## 주요 내용\n\n*   **Gemini 3.6 Flash 출시:** 이전 모델인 Gemini 3.5 Flash를 개선하여 코딩 성능 및 멀티모달 기능이 향상되었으며, 사용자 피드백을 반영하여 개발되었습니다. DeepSWE 코딩 테스트에서 3.5 Flash의 37% 대비 49%의 점수를 기록했으며, OSWorld 컴퓨터 사용 테스트에서는 78.4%에서 83%로 향상되었습니다.\n*   **향상된 효율성 및 비용 절감:** Gemini 3.6 Flash는 토큰 사용량을 약 17% 줄여 효율성을 높였으며, API 비용도 3.5 Flash 대비 인하되었습니다 (입력 토큰 $1.50/1M, 출력 토큰 $7.50/1M). 이는 에이전트 워크플로우에서 더 정확하고 적은 단계, 적은 토큰으로 작업을 완료할 수 있게 하여 비용 절감 효과를 가져올 것으로 예상됩니다.\n*   **Gemini 3.5 Flash Lite 및 Cyber 공개:** Google은 Gemini 3.5 Flash Lite와 3.5 Flash Cyber 모델도 출시했습니다. Gemini 3.5 Flash Lite는 초당 350개의 토큰을 처리하는 높은 효율성을 자랑하며, 에이전트 시스템 확장에 적합합니다. 가격은 입력 토큰 $0.30/1M, 출력 토큰 $2.50/1M으로 책정되었습니다.\n*   **사이버 보안 특화 AI 모델:** Google은 사이버 보안 분야에 맞춰진 첫 Gemini 모델을 공개했습니다.\n*   **Gemini 3.5 Pro 및 Gemini 4 개발 진행:** 출시가 지연되었던 Gemini 3.5 Pro와 Gemini 4 모델의 개발 진행 상황에 대한 언급이 있었습니다.\n\n## 시사점\n\nGoogle의 Gemini 3.6 Flash 및 관련 모델 출시는 AI 모델의 성능 향상과 함께 비용 효율성을 강조하며, 개발자들에게 더욱 경제적이고 효율적인 AI 솔루션을 제공하려는 노력을 보여줍니다. 특히 사이버 보안 특화 모델의 등장은 해당 분야에서의 AI 활용 가능성을 넓힐 것으로 기대됩니다."
 }
