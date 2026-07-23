@@ -12,5 +12,6 @@
     "api"
   ],
   "published_at": "2026-07-22T19:00:00.000Z",
-  "feed_id": "githublog"
+  "feed_id": "githublog",
+  "description": "## 개요\n\nGitHub Copilot과 직접 API 액세스 비용은 사용자가 제어하려는 작업의 범위에 따라 달라지며, Copilot은 개발 워크플로우와 통합된 도구를 제공하고, API 액세스는 자체 시스템 구축에 적합합니다.\n\n## 주요 내용\n\n-   **Copilot의 비용 및 기능:** GitHub Copilot은 월별 GitHub AI 크레딧을 포함하며, 사용량은 입력, 출력, 캐시된 토큰을 기준으로 산정됩니다. 코드 완성 및 다음 편집 제안은 유료 요금제에 포함되며, 더 많은 리소스가 필요한 채팅 및 에이전트 작업에는 AI 크레딧이 적용됩니다.\n-   **Copilot의 역할:** Copilot은 GitHub 이슈, 리포지토리, 커밋, 풀 리퀘스트 등 개발 워크플로우 전반에 걸쳐 에디터, 리포지토리, 풀 리퀘스트, 이슈, 터미널, 조직 정책을 연결하는 개발 도구 역할을 합니다.\n-   **직접 API 액세스의 역할:** 직접 API 액세스는 자체 프롬프트, 검색, 라우팅, 로깅, 보안 모델, 결제 제어를 포함하는 제품 기능, 내부 에이전트 플랫폼, 평가 도구 또는 자동화 파이프라인 구축에 사용됩니다.\n-   **Agent SDK:** Agent SDK는 오케스트레이션, 도구 사용, 세션 및 스트리밍 처리를 담당하며, Copilot CLI를 지원하는 Copilot SDK는 프로덕션 테스트를 거친 하네스를 제공합니다.\n-   **BYOK (Bring Your Own Key):** BYOK 기능을 통해 Anthropic, AWS Bedrock, Google AI Studio, Microsoft Foundry, OpenAI 등 지원되는 공급업체 모델을 Copilot Chat, Copilot CLI, VS Code에서 사용할 수 있으며, 공급업체가 토큰 비용을 부담하고 GitHub은 도구 개발을 담당합니다.\n-   **선택 기준:** 사용자 정의 동작, 통합 및 제어가 필요한 시스템을 구축할 때는 원시 API 액세스를 선택하고, 팀이 코드 작성, 검토, 보안, 배포를 수행하는 도구 및 리포지토리 내 소프트웨어 개발 작업에는 GitHub Copilot을 선택해야 합니다.\n\n## 시사점\n\nGitHub Copilot과 직접 API 액세스 간의 선택은 단순히 모델 비용뿐만 아니라, 개발자가 제어하고 구축해야 하는 시스템의 복잡성과 통합 요구사항에 따라 결정되어야 하며, BYOK와 같은 기능은 기존 클라우드 계약을 활용하면서 Copilot의 워크플로우 이점을 유지할 수 있는 유연성을 제공합니다."
 }
