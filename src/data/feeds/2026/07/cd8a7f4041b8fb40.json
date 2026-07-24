@@ -12,5 +12,6 @@
     "openai"
   ],
   "published_at": "2026-07-24T13:36:42.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nOpenAI가 ChatGPT 데스크톱 앱에 ChatGPT Voice 기능을 추가하여 사용자가 음성으로 AI 에이전트를 제어하고 컴퓨터에서 작업을 수행할 수 있게 되었습니다.\n\n## 주요 내용\n\n*   **ChatGPT-Live 모델 기반**: 이 기능은 OpenAI의 새로운 음성 모델 패밀리인 ChatGPT-Live를 활용합니다.\n*   **데스크톱 앱 통합**: ChatGPT Voice는 ChatGPT Work 및 Codex와 연동되며, 웹사이트 및 앱 검색과 같은 컴퓨터 사용 기술을 활용할 수 있습니다.\n*   **macOS 기능**: macOS에서는 Appshots를 통해 사용자가 화면의 내용을 ChatGPT 앱이 접근하도록 허용할 수 있습니다.\n*   **향상된 기능**: 스마트폰 버전과 달리, 데스크톱 업데이트는 복잡한 다단계 명령을 음성으로 전달하고 ChatGPT의 입력 요청에 응답하는 능력이 향상되었습니다.\n*   **AI 에이전트 제어**: 사용자는 음성만으로 ChatGPT Work 또는 Codex에서 실행되는 여러 에이전트를 제어하고 작업을 지시할 수 있습니다.\n*   **실시간 소통**: ChatGPT-Live 모델은 말하고, 듣고, 앱 내에서 동시에 작업을 조율할 수 있습니다.\n*   **Codex 연동**: iOS 앱을 통해 원격 액세스로 Codex에서 ChatGPT Voice를 활용할 수 있습니다.\n*   **경쟁사 동향**: Anthropic 또한 Claude의 음성 모드를 업데이트하여 Gmail, Calendar, Slack, Notion, Canva와 같은 앱에서 Opus, Sonnet, Haiku 모델을 사용하여 작업을 완료할 수 있도록 했습니다.\n\n## 시사점\n\nChatGPT Voice의 데스크톱 앱 통합은 사용자가 음성을 통해 컴퓨터와 AI 에이전트와의 상호작용 방식을 혁신적으로 변화시킬 잠재력을 가지며, AI 기반 작업 자동화 및 효율성 증대에 기여할 것으로 보입니다."
 }
