@@ -12,5 +12,6 @@
     "productivity"
   ],
   "published_at": "2026-07-25T04:23:00.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nOzperium의 `aicost-tracker` 라이브러리는 OpenAI 및 Anthropic API 호출 비용 추적을 자동화하여 개발자가 수동 로깅의 번거로움 없이 AI 서비스 사용량을 파악할 수 있도록 지원한다.\n\n## 주요 내용\n\n*   **문제점:** AI API 호출은 비용이 발생하지만, 개발자가 각 호출마다 수동으로 기록하지 않으면 어떤 프로젝트나 모델이 비용을 증가시키는지 알기 어렵다. 수동 로깅은 일관성 부족과 누락 가능성으로 인해 비효율적이다.\n*   **해결책:** `aicost-tracker`는 `track()` 함수를 통해 OpenAI 또는 Anthropic 클라이언트를 래핑하여 API 호출 시마다 자동으로 로깅한다.\n*   **사용법:**\n    *   `npm install @ozperium/aicost-tracker`로 라이브러리를 설치한다.\n    *   기존 코드 수정 없이 `track(new OpenAI(), { project: 'myapp' })` 또는 `track(new Anthropic(), { project: 'summarizer' })`와 같이 클라이언트를 감싸기만 하면 된다.\n*   **로깅 내용:** API 호출 후 `aicost summary` 명령어를 실행하면 전체 비용, 프로젝트별 비용, 모델별 비용 등 요약 정보를 확인할 수 있다.\n*   **작동 방식:** `track()` 함수는 OpenAI의 `client.chat.completions.create` 또는 Anthropic의 `client.messages.create` 메소드를 패치하여 응답에서 사용량 정보를 추출하고 `logUsage()`를 호출한다. 로깅 실패 시에도 API 호출은 정상적으로 응답하며 오류는 조용히 처리된다.\n*   **프로젝트별 추적:** `{ project: 'project_name' }` 옵션을 사용하여 각 AI 호출을 특정 프로젝트에 태그를 지정할 수 있으며, 이를 통해 여러 에이전트나 도구의 비용을 세분화하여 추적할 수 있다.\n\n## 시사점\n\n`aicost-tracker`는 AI API 사용량 및 비용 관리를 자동화함으로써 개발자의 시간과 노력을 절감하고, AI 프로젝트의 비용 효율성을 높이는 데 기여한다."
 }
