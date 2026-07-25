@@ -1,0 +1,16 @@
+{
+  "id": "8bf451b403f875f9",
+  "title": "We instrumented an AI agent swarm with SigNoz, and its own telemetry told us we were wrong about almost everything",
+  "url": "https://dev.to/himanshu_748/we-instrumented-an-ai-agent-swarm-with-signoz-and-its-own-telemetry-told-us-we-were-wrong-about-3fip",
+  "source": "Dev.to",
+  "type": "article",
+  "tags": [
+    "dev",
+    "ai",
+    "observability",
+    "opentelemetry",
+    "showdev"
+  ],
+  "published_at": "2026-07-25T15:01:20.000Z",
+  "feed_id": "devto"
+}
