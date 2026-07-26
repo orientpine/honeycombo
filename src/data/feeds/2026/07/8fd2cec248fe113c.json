@@ -1,0 +1,16 @@
+{
+  "id": "8fd2cec248fe113c",
+  "title": "Fix: resolve Qwen3 text encoder loading issues for FP8 and GGUF formats",
+  "url": "https://dev.to/arifachan/fix-resolve-qwen3-text-encoder-loading-issues-for-fp8-and-gguf-formats-2bl",
+  "source": "Dev.to",
+  "type": "article",
+  "tags": [
+    "dev",
+    "ai",
+    "opensource",
+    "programming",
+    "python"
+  ],
+  "published_at": "2026-07-26T14:44:41.000Z",
+  "feed_id": "devto"
+}
