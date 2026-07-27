@@ -1,0 +1,16 @@
+{
+  "id": "c24fe66887d54348",
+  "title": "Why I Kept Search Scope Inside a Single Supabase RPC",
+  "url": "https://dev.to/daniel_romitelli_44e77dc6/why-i-kept-search-scope-inside-a-single-supabase-rpc-212a",
+  "source": "Dev.to",
+  "type": "article",
+  "tags": [
+    "dev",
+    "supabase",
+    "postgres",
+    "pgvector",
+    "rag"
+  ],
+  "published_at": "2026-07-27T16:03:04.000Z",
+  "feed_id": "devto"
+}
