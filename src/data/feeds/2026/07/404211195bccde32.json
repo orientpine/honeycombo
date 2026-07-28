@@ -12,5 +12,6 @@
     "powerfuldevs"
   ],
   "published_at": "2026-07-28T04:47:47.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nPower Automate에서 \"Apply to each\" 액션을 과도하게 사용하는 대신 XPath를 활용하여 XML 데이터를 효율적으로 처리하는 방법을 소개합니다.\n\n## 주요 내용\n\n-   \"Apply to each\" 루프는 많은 XML 레코드 중 특정 데이터만 필요한 경우 불필요한 액션 수를 증가시키고 실행 속도를 저하시키며 디버깅을 복잡하게 만듭니다.\n-   XPath는 XML을 직접 쿼리하여 특정 데이터를 추출할 수 있는 강력한 기법입니다. 예를 들어, 모든 직원을 순회하는 대신 \"ID가 102인 직원의 이름을 가져오라\"와 같이 직접 요청할 수 있습니다.\n-   XPath 사용은 불필요한 액션 감소, 실행 속도 향상, 유지보수 간소화, 깔끔한 엔터프라이즈 자동화 구축에 기여합니다.\n-   XPath는 XML 파일, SOAP API, 레거시 시스템의 XML 응답, SharePoint XML 페이로드, 구조화된 XML 문서와 함께 작업할 때 이상적입니다. JSON 데이터의 경우 Power Automate의 `filter()`, `select()`, `first()` 함수를 사용하는 것이 좋습니다.\n\n## 시사점\n\nXPath를 적절히 활용하면 Power Automate 흐름의 효율성을 크게 높일 수 있으며, 이는 많은 프로덕션 흐름에 적용될 때 누적되어 상당한 성능 향상을 가져올 수 있습니다."
 }
