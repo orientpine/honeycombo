@@ -12,5 +12,6 @@
     "openai"
   ],
   "published_at": "2026-07-29T21:07:48.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nThinking Machines의 공동 창립자인 Lilian Weng이 건강상의 이유로 회사를 떠난 후 OpenAI에 합류했다.\n\n## 주요 내용\n\n- Lilian Weng은 스타트업의 속도와 업무량이 자신의 건강을 유지하기 어렵다고 판단하여 Thinking Machines에서 물러난다고 발표했다.\n- Weng은 이전에도 OpenAI에서 AI Safety Research 부사장으로 근무한 경험이 있으며, OpenAI는 그녀가 내부 연구 가속화에 초점을 맞춘 최고 수준의 팀을 이끌 것이라고 밝혔다.\n- 이 팀은 AI 시스템이 스스로를 개선하여 더 강력해질 수 있도록 하는 재귀적 자기 개선(recursive self-improvement)에 대한 연구를 지원할 예정이다.\n- AI 연구소 간 인재 경쟁이 치열한 시기에 이러한 유명 인사의 이동은 주목할 만하다.\n- Thinking Machines의 공동 창립자이자 전 OpenAI CTO인 Mira Murati는 Weng의 건강 우선 결정에 지지를 표했다.\n\n## 시사점\n\nLilian Weng의 OpenAI 복귀는 AI 연구 속도와 개인 건강 사이의 균형에 대한 질문을 제기하며, AI 분야에서의 인재 확보 경쟁이 심화되고 있음을 보여준다."
 }
