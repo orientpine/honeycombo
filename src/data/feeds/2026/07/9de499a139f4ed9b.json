@@ -10,5 +10,6 @@
     "business / artificial intelligence"
   ],
   "published_at": "2026-07-30T15:04:22.000Z",
-  "feed_id": "wired"
+  "feed_id": "wired",
+  "description": "## 개요\n\nGemini Robotics 2는 Google DeepMind가 공개한 새로운 AI 모델로, 다양한 로봇이 주변 환경을 인식하고 물리적인 작업을 수행할 수 있도록 지원한다.\n\n## 주요 내용\n\n*   Gemini Robotics 2는 비전 언어 모델(VLM)과 두 개의 비전 언어 액션(VLA) 모델을 통합하여 로봇이 환경을 이해하고 인간과 소통하며 복잡한 작업을 수행하도록 한다.\n*   VLM은 이미지를 이해하고 추론하며, VLA 모델은 로봇의 전신 움직임과 그리퍼/손의 움직임을 제어한다.\n*   Google DeepMind는 인간 원격 조작, 비디오 예제, 시뮬레이션을 혼합하여 Gemini Robotics 2 모델을 훈련시켰으며, 이를 통해 Apptronik의 Apollo 2 로봇이 선반을 정리하는 등 다양한 작업을 자율적으로 수행하는 것을 시연했다.\n*   Google은 챗봇 및 코딩 도구 분야에서 Anthropic 및 OpenAI에 비해 로봇 공학 연구에서 더 강력한 역사를 가지고 있으며, Gemini Robotics 2의 출시는 AI가 물리적 세계로 확장되어 잠재력을 발휘할 것이라는 Google의 전략을 보여준다.\n*   이 모델은 인간 수준의 작업을 수행할 수 있는 \"Physical AGI\"를 향한 이정표이며, 로봇에 AI를 통합하는 것은 잠재적으로 유용하지만 위험도 따른다.\n*   Google은 모델의 각 계층에 가드레일을 적용하는 다층적인 안전 접근 방식을 사용하며, 로봇을 제어하는 AI 시스템의 안전성을 측정하기 위한 새로운 벤치마크인 ASIMOV-Agentic을 도입했다.\n*   Google CEO Demis Hassabis는 다양한 로봇을 위한 AI 운영 체제를 개발하는 것을 목표로 하고 있으며, 이는 스마트폰을 위한 Android 운영 체제와 유사하다.\n\n## 시사점\n\nGemini Robotics 2는 AI가 디지털 영역을 넘어 물리적 세계에서 인간과 유사한 작업을 수행할 수 있는 잠재력을 보여주며, 로봇 공학 분야에서의 AI 발전과 안전성 확보의 중요성을 강조한다."
 }

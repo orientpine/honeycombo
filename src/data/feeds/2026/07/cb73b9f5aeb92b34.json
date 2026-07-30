@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-07-30T11:55:39.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nGo LLM SDK는 Go 애플리케이션에서 언어 모델 호출, 응답 스트리밍, 도구 실행 및 AI 기반 엔드포인트 제공을 가능하게 하며, React 프론트엔드 라이브러리와 함께 사용하거나 독립적으로 활용할 수 있습니다.\n\n## 주요 내용\n\n-   **핵심 기능**: Go SDK는 모델 호출, 스트리밍, 도구 사용, 구조화된 출력, 다단계 에이전트 실행 등을 위한 단일 API를 제공하며, Vercel AI SDK의 디자인을 따르고 TypeScript 프론트엔드 훅과 와이어 호환성을 유지합니다.\n-   **스트리밍 및 프론트엔드 통합**: Go 백엔드에서 `aisdk.StreamText(...)`를 사용하여 Server-Sent Events(SSE)를 React의 `useChat`과 같은 훅으로 직접 스트리밍할 수 있으며, 이는 별도의 프로토콜 어댑터 없이 TypeScript 백엔드를 Go로 대체하는 것을 가능하게 합니다.\n-   **주요 기능**:\n    -   `StreamText / GenerateText`: 재시도 및 다단계 도구 실행을 포함하여 응답을 스트리밍하거나 전체 결과를 기다릴 수 있습니다.\n    -   `React compatibility`: `useChat`, `useCompletion`, `useObject`를 지원합니다.\n    -   `Composable tools`: 모델에서 일반 Go 함수를 호출하고 중요한 작업에 대한 승인을 요구할 수 있습니다.\n    -   `Structured output`: 스키마 유효성 검사가 적용된 객체, 배열 및 선택 항목을 생성할 수 있습니다.\n    -   `Multiple providers`: Anthropic, Amazon Bedrock, OpenAI, OpenAI 호환 API 및 Grafana의 호스팅 엔드포인트를 지원합니다.\n    -   `Production controls`: 타임아웃, 폴백, 로깅, Prometheus 메트릭 및 Agent Observability를 구성할 수 있습니다.\n-   **설치 및 빠른 시작**: `go get`을 사용하여 핵심 모듈과 원하는 제공업체를 설치할 수 있으며, 간단한 Go 프로그램 예제를 통해 모델 호출 및 응답 출력을 시연합니다.\n-   **기여 및 라이선스**: Apache License 2.0을 따르며, Vercel AI SDK와의 상향 호환성 및 OpenSpec을 사용한 사양 주도 개발을 특징으로 합니다.\n\n## 시사점\n\n이 Go LLM SDK는 Go 개발자가 AI 모델과의 상호작용을 간소화하고, 기존 React 프론트엔드와의 원활한 통합을 지원하며, 복잡한 AI 애플리케이션 구축을 위한 강력하고 유연한 도구를 제공합니다."
 }
