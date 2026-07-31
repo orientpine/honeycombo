@@ -11,5 +11,6 @@
     "productivity"
   ],
   "published_at": "2026-07-31T05:35:20.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\n클라우드 환경의 비동기적 경계를 넘어 멀티 에이전트 AI 생태계를 확장할 때, 기존 RPC 호출의 한계를 극복하고 상태 손상이나 부작용을 방지하기 위한 WORM(Write Once, Read Many) 아키텍처 기반의 10-Tuple 봉투(Envelope)를 활용한 장애 복구(Fail-Closed) 자율 에이전트 네트워크 구축 방법을 다룹니다.\n\n## 주요 내용\n\n*   **5가지 자율 상태 거버넌스 불변성:**\n    *   **거래적 수집 경계(Transactional Ingestion Boundary):** 모든 상태 변경은 단일 PostgreSQL ACID 트랜잭션 내에서 실행됩니다.\n    *   **표준 봉투 프로토콜(Canonical Envelope Protocol):** 에이전트 간 모든 페이로드는 HMAC-SHA256으로 서명된 10-Tuple 봉투에 래핑됩니다.\n    *   **분리된 권한 분리(Decoupled Authority Separation):** 코드 및 마이그레이션은 Git에, 상태 및 핸드오프는 WORM 감사 대상 공유 워크스페이스에 저장됩니다.\n    *   **시간 제한 임대 잠금(Time-Bound Lease Locks):** 동시 요청은 300초의 유예 기간 후 자동으로 만료됩니다.\n    *   **장애 복구 기본값(Fail-Closed Default):** 검증되지 않은 요청이나 누락된 증인 봉인은 즉시 보류(HOLD) 상태로 되돌립니다.\n*   **10-Tuple 표준 봉투:** 각 에이전트 간 메시지는 `(event_id, effect_id, log_id, producer_id, schema_version, session_epoch, destination, route_status, issued_at, payload_digest)`의 10개 요소로 정의됩니다.\n*   **수집 구현 (Python + PostgreSQL):** `CanonicalEnvelope` 데이터 클래스를 사용하여 봉투를 정의하고, `generate_witness_seal` 메서드를 통해 HMAC-SHA256 서명을 생성합니다.\n*   **실험적 검증 및 혼돈 결과:** 82회의 CI 주기 동안 100%의 단일 효과/논리적 이벤트 전달률을 달성했으며, 전원 실패 시뮬레이션에서 중복 상태 전환이 없었고, 임대 잠금 복구가 즉시 이루어졌습니다.\n\n## 시사점\n\nWORM 감사 로그와 HMAC 봉인을 사용하여 인증되지 않은 웹훅에 대한 의존성을 배제하고, KMS 키를 클라우드 워크스페이스 외부에 분리하며, 만료된 요청을 주기적으로 정리하는 자율 정리 에이전트를 자동화하는 것이 멀티 에이전트 시스템의 상태 일관성을 유지하는 데 중요합니다."
 }

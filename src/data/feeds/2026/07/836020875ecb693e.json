@@ -12,5 +12,6 @@
     "github"
   ],
   "published_at": "2026-07-30T17:30:24.000Z",
-  "feed_id": "githublog"
+  "feed_id": "githublog",
+  "description": "## 개요\n\nGitHub Copilot 앱의 stacked sessions 및 pull requests 기능을 활용하여 10년 이상 된 개인 프로젝트의 레거시 코드를 성공적으로 현대화한 경험을 공유합니다.\n\n## 주요 내용\n\n-   **레거시 코드베이스의 문제점:** 10년 이상 된 개인 프로젝트의 코드는 React 15, Less, 구버전 react-bootstrap 등을 사용하여 의존성이 매우 오래되었고, 업데이트 및 관리가 어려웠습니다.\n-   **AI를 활용한 초기 시도:** GitHub Copilot 앱의 Plan mode를 사용하여 Tailwind CSS 또는 vanilla CSS 사용, Less 제거, 접근성 및 반응형 디자인 개선, 스타일 및 React 기능 정리, 의존성 현대화 등 코드 현대화를 위한 계획 수립 및 실행을 시도했습니다.\n-   **이전 작업과의 호환성 문제:** AI 기반 현대화 시도 중, 과거에 부분적으로 업데이트했던 dev 브랜치와의 호환성 문제가 발생했습니다. GitHub Copilot 앱을 통해 새로운 세션을 생성하고 기존 풀 리퀘스트를 닫은 후, 스타일 변경 사항을 dev 브랜치 작업에 적용하는 유연한 전환이 가능했습니다.\n-   **새로운 기술 부채 발견 및 해결:** 현대화 과정 중, react-bootstrap 라이브러리에서 `findDOMNode` 및 `componentWillReceiveProps`와 같은 오래된 React API 참조 경고가 발견되었습니다. Copilot 앱을 통해 라이브러리 전체를 교체하는 방안을 모색했습니다.\n-   **Stacked Sessions 및 Stacked Pull Requests 활용:** 큰 범위의 변경을 단일 풀 리퀘스트로 처리하는 대신, 먼저 기존 변경 사항에 대한 풀 리퀘스트를 생성하고, 이어서 react-bootstrap 교체 작업을 위한 새로운 stacked session을 생성했습니다. 이 새로운 세션은 이전 세션의 컨텍스트를 이어받아 독립적인 풀 리퀘스트로 dev 브랜치에 병합될 수 있도록 구성되었습니다.\n-   **Stacked Sessions의 작동 방식:** Stacked sessions은 동일한 저장소 내에서 각 세션이 이전 세션의 결과물을 기반으로 작동하며, 연속적인 풀 리퀘스트를 생성하여 궁극적으로 메인 브랜치로 통합되는 구조를 형성합니다.\n\n## 시사점\n\nGitHub Copilot 앱의 stacked sessions 및 stacked pull requests 기능은 레거시 코드베이스의 복잡한 현대화 작업을 분할하고 관리 가능한 단위로 나누어 진행할 수 있게 함으로써, 개발 생산성을 크게 향상시키고 소프트웨어 개발의 효율성을 높일 수 있는 강력한 도구입니다."
 }
