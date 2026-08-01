@@ -1,0 +1,16 @@
+{
+  "id": "2f244c6d3da1c561",
+  "title": "Function Calling With a Local LLM to Drive Foundry: Fuzz, Read, Repeat",
+  "url": "https://dev.to/pavelespitia/function-calling-with-a-local-llm-to-drive-foundry-fuzz-read-repeat-5el3",
+  "source": "Dev.to",
+  "type": "article",
+  "tags": [
+    "dev",
+    "ai",
+    "solidity",
+    "testing",
+    "ollama"
+  ],
+  "published_at": "2026-08-01T15:09:05.000Z",
+  "feed_id": "devto"
+}
