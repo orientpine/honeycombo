@@ -12,5 +12,6 @@
     "devops"
   ],
   "published_at": "2026-08-02T04:50:05.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\n개발자가 실제 운영 가능한 에이전트 플랫폼을 구축하면서 얻은 경험과 교훈을 공유하며, 에이전트 기술의 핵심 요소와 실무 적용 방안을 제시한다.\n\n## 주요 내용\n\n- **모든 스킬은 1급 시민(First-class Citizen):** 플랫폼은 27개의 스킬을 7개 그룹(플랫폼 운영, 게시, 테스트, 커뮤니케이션, 지식, 개발, 스크래핑)으로 분류하며, 각 스킬은 생성, 검증, 버전 관리, 워크스페이스 삽입 등 관리되는 라이프사이클을 거친다.\n- **14개의 통합 서비스 및 단일 감사 추적:** GitHub, Jira, Slack, Telegram, Gmail, Google Calendar, Google Drive, LinkedIn, Dev.to, 지식 베이스, 메모리, 웹 검색, 음성 변환 등 다양한 서비스와 통합되며, 모든 외부 호출은 `platform_cli` 디스패치 작업 또는 `service_call` 어댑터를 통해 동일한 감사 파이프라인과 추적 ID를 거친다.\n- **CLI를 통한 상태 검증:** 설정 파일 수정에 의존하는 대신 `loop_list`, `policy_show`, `skill_list`, `service_list`, `workflow_catalog` 등을 통해 플랫폼의 상태를 직접 검증한다.\n- **테스트는 후순위가 아님:** TEA(Test Engineering Architecture) 스위트는 테스트 설계, 기준선 특성화, 비기능 요구사항 증거 감사, 자동 테스트 생성, 테스트 검토, 요구사항-커버리지 추적 등 6가지 워크플로우를 제공하며, 모든 출력은 JSON 또는 마크다운 형식으로 저장된다.\n- **실제 운영 시 고려사항:** 27개 스킬 중 4개는 아직 준비되지 않았으며, 모델은 `deepseek-chat`과 `deepseek-reasoner`를 사용한다. 워크스페이스 임시 파일은 24시간 TTL이 적용되고, `kubectl delete`, `helm uninstall`과 같은 위험한 명령어는 패턴 차단된다.\n\n## 시사점\n\n실제 API를 다루는 에이전트를 구축할 때는 모든 통합을 관리되는 스킬로 취급하고, 모든 호출을 추적하며, 플랫폼에서 상태를 직접 읽어 확인할 수 있도록 하는 것이 중요하다."
 }
