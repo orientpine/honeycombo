@@ -12,5 +12,6 @@
     "genai"
   ],
   "published_at": "2026-08-01T04:50:58.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\n사용자는 Model Context Protocol(MCP)을 활용하여 블로그 초안을 자동으로 다듬고 Dev.to에 게시하는 사용자 정의 MCP 서버를 구축했다.\n\n## 주요 내용\n\n*   **MCP의 기능:** MCP는 AI 모델이 텍스트 생성뿐만 아니라 파일 읽기, API 호출, 스크립트 실행 등 정의된 도구를 호출할 수 있도록 하는 프로토콜이다.\n*   **구축 과정:**\n    *   Claude Desktop이 파일에 접근하고 수정할 수 있도록 `filesystem` MCP 서버를 설정했다.\n    *   Dev.to API를 래핑하여 블로그 게시 기능을 제공하는 `devto`라는 사용자 정의 MCP 서버를 개발했다.\n    *   Python 패키지 관리 도구 `uv`를 사용하여 환경 설정을 진행했으며, 초기에는 PowerShell의 PATH 인식 문제와 Python 버전 호환성 문제(MCP SDK가 Python 3.10+ 요구)를 겪었다.\n    *   PyPI에 `mcp`라는 이름으로 존재하는 다른 패키지 때문에 정식 MCP SDK 설치에 실패하는 문제를 발견했으며, `uv add \"mcp[cli]>=1.2.0,<2.0.0\"`와 같이 버전 범위를 명시적으로 지정하여 해결했다.\n    *   Claude Desktop 설정 파일(`claude_desktop_config.json`)에서 `mcpServers` 키 아래에 사용자 정의 서버 설정을 올바르게 중첩해야 함을 인지했으며, Windows 환경에서 Claude Desktop이 셸의 PATH를 상속하지 않는 문제를 발견하고 `uv` 명령어의 전체 경로를 사용하도록 수정했다.\n    *   MCP Inspector를 사용하여 Claude Desktop 연동 전에 독립적으로 사용자 정의 서버의 기능을 테스트하고 디버깅했다.\n*   **자동 게시 워크플로우:** Claude에게 블로그 파일의 내용을 다듬고 Dev.to에 초안으로 게시하도록 지시하면, Claude는 `filesystem` 서버를 통해 파일을 읽고, 내용을 수정하며, `devto` 서버를 통해 게시하는 과정을 자동으로 수행한다.\n*   **실질적인 교훈:** MCP 프로토콜 자체보다는 PATH 문제, Python 버전 고정, 패키지 이름 충돌, JSON 설정 오류와 같은 기본적인 환경 디버깅의 중요성을 강조한다.\n\n## 시사점\n\n이 프로젝트는 MCP와 같은 AI 도구 통합의 효율성을 보여주며, 기본적인 개발 환경 설정 및 디버깅 능력이 AI 에이전트의 성공적인 구현에 결정적인 역할을 함을 시사한다."
 }
