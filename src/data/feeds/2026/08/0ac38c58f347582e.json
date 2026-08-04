@@ -12,5 +12,6 @@
     "webdev"
   ],
   "published_at": "2026-08-04T16:00:00.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\n글쓴이는 비행기 Wi-Fi 환경에서 3시간 동안 인공지능(AI) 에이전트인 Codex를 활용하여 웹사이트 'waddles.website'를 개발하고 배포하는 과정을 공유한다.\n\n## 주요 내용\n\n*   **프로젝트 착수 및 계획 수립:** 글쓴이는 자신의 에이전트(Codex)에게 MVP 요구사항을 설명하고, 이를 바탕으로 기술 스택, 배포 방식, 웹사이트 기본 아이디어 등을 포함한 계획을 Markdown 파일로 작성하도록 지시하여 개발 방향을 설정했다.\n*   **초기 기술 스택 결정:** Frontend는 React 19, TypeScript, Build 도구는 Vite 8, Tooling은 Node.js 24, pnpm, Turborepo, Hosting은 Amazon S3, CDN은 Amazon CloudFront, DNS & TLS는 Route 53, AWS Certificate Manager, Infrastructure는 AWS CDK / CloudFormation, CI/CD는 GitHub Actions with AWS OIDC로 구성했다.\n*   **개발 결과물:** ASCII 오리(Waddles)가 웹 서핑을 하며 흥미로운 명언을 제공하는 단순한 정적 웹사이트를 로컬 환경에서 성공적으로 개발했다.\n*   **배포 과정의 어려움 및 해결:** 도메인(.website) 구매 후 AWS CDK를 사용하여 인프라를 구축하는 과정에서 20MB ZIP 파일 업로드 시 비행기 Wi-Fi 환경의 타임아웃 문제가 발생했다. Codex의 제안으로 코드를 GitHub에 푸시하고 CI/CD를 통해 CloudFormation 스택을 배포하는 방식으로 해결했다.\n*   **지속적인 개선:** 주말 동안 AWS Amplify로 마이그레이션하여 CDK 관리 부담을 줄이고 미리보기 환경을 확보했으며, 사용자가 좋아하는 Waddles 명언을 공유하고 새로운 명언을 기여할 수 있도록 기능을 추가했다.\n\n## 시사점\n\n인공지능 에이전트와 클라우드 기술을 결합하여 제약된 환경에서도 효율적으로 웹 개발 및 배포가 가능함을 보여주며, CI/CD와 같은 자동화 도구의 중요성을 강조한다."
 }

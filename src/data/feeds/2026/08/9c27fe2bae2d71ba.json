@@ -12,5 +12,6 @@
     "smartphones"
   ],
   "published_at": "2026-08-04T16:11:05.000Z",
-  "feed_id": "arstechnica"
+  "feed_id": "arstechnica",
+  "description": "## 개요\n\n픽셀 11의 \"glow\" 기능은 HiLight로 명명되었으며, 이는 주로 Gemini와의 상호작용 시 사용될 것으로 예상됩니다.\n\n## 주요 내용\n\n*   HiLight는 픽셀 11 후면에 위치하며, 전화기가 뒤집혀 있을 때 주로 활용될 것으로 보입니다.\n*   이 기능은 과거 안드로이드 기기에서 알림 표시를 위해 사용되던 RGB LED와 유사한 역할을 할 수 있습니다.\n*   HiLight는 Gemini AI와의 연동을 통해 사용자와의 상호작용을 시각적으로 표시하는 데 중점을 둘 가능성이 높습니다.\n*   Google은 향후 출시될 Googlebook 노트북의 \"Glowbar\"와 유사한 기능을 HiLight에 통합할 것으로 예상됩니다.\n*   새로운 Google Home Speaker의 조명 링 또한 Gemini와의 상호작용 시 색상 변화를 통해 상태를 나타내는 방식으로 HiLight와 유사한 역할을 할 수 있습니다.\n*   2025년 픽셀 11에는 Qi2 자석 기능인 Pixel Snap과 함께 Gemini 중심의 알림 LED가 추가될 예정입니다.\n\n## 시사점\n\nHiLight 기능은 픽셀 11의 하드웨어 혁신 중 하나로, Gemini AI의 활용성을 높이고 사용자 경험을 개선하는 데 기여할 수 있습니다."
 }
