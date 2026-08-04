@@ -12,5 +12,6 @@
     "automation"
   ],
   "published_at": "2026-08-04T04:42:25.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nClaude Code CLI를 사용하여 개발 연습 중 API 사용량 증가를 우려한 개발자가 Anthropic API 대신 AWS Bedrock의 Amazon Nova를 활용할 수 있도록 LiteLLM 프록시를 구축했습니다.\n\n## 주요 내용\n\n- **목적:** Anthropic API 직접 사용 시 발생하는 비용 부담 없이 Claude Code CLI를 활용한 에이전트 개발 연습 환경 구축.\n- **기존 대안의 한계:**\n    - **Ollama 로컬 설치:** 고사양 머신(RAM, GPU) 필요.\n    - **무료 티어 제공 서비스 (OpenRouter 등):** 기본 프롬프트 몇 번으로 토큰 한도 도달. 긴 에이전트 워크플로우에 부적합.\n- **구축 내용:**\n    - LiteLLM 프록시를 Claude Code CLI와 AWS Bedrock 사이에 배치.\n    - Claude Code CLI는 Anthropic API와 통신하는 것으로 인식하지만, 실제로는 Amazon Nova로 라우팅.\n    - **주요 기능:**\n        - **무제한 세션:** 자체 호스팅으로 세션 길이 또는 빈도에 대한 제약 없음.\n        - **AWS 크레딧 사용:** API 과금 대신 AWS 크레딧으로 운영 (Claude Haiku 대비 20-35% 저렴 예상).\n        - **IAM 권한 제한:** 특정 모델 invocation만 허용하도록 역할 설정.\n        - **AWS Budget 알림:** 과도한 청구 방지.\n    - Docker 이미지 및 설정은 GitHub 공개.\n- **장점:**\n    - GPU 구매 없이 긴 에이전트 세션 실행 가능.\n    - 무료 티어 한도에 구애받지 않고 에이전트 계획, 도구 호출, 오류 복구 등 학습 가능.\n- **한계점:**\n    - **무료 Claude가 아님:** Amazon Nova는 Claude와 동일한 모델이 아니므로 출력, 추론 품질, 도구 호출 동작이 다를 수 있음.\n    - **Claude Code 자체 평가에 부적합:** 실제 서비스 개발 시에는 Anthropic API를 통해 직접 테스트해야 함.\n\n## 시사점\n\nAnthropic API 사용 비용 없이 Claude Code CLI의 메커니즘을 익히려는 개발자에게 AWS Bedrock 프록시는 현실적인 대안이 될 수 있으며, 에이전트 개발 학습에 유용한 환경을 제공합니다."
 }
