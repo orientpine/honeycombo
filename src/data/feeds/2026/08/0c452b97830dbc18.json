@@ -10,5 +10,6 @@
     "stacked pull requests"
   ],
   "published_at": "2026-08-04T16:47:18.000Z",
-  "feed_id": "githublog"
+  "feed_id": "githublog",
+  "description": "## 개요\n\nAI 코딩 에이전트의 생산성을 높이기 위해 거대한 단일 Pull Request 대신 GitHub의 Stacked Pull Requests를 사용하여 작업을 검토 가능한 작은 단위로 분해하는 방법론을 제시합니다.\n\n## 주요 내용\n\n- **문제점:** AI 코딩 에이전트가 생성하는 거대한 Pull Request는 검토가 어렵고, 이를 분할하더라도 수동 동기화 및 충돌 해결에 많은 노력이 필요합니다.\n- **해결책:** GitHub Stacked Pull Requests는 기능 구현을 논리적 계층으로 분해하여 각 계층을 독립적으로 검토 가능한 작은 Pull Request로 구성합니다.\n- **작동 방식:**\n    - **스택 구조:** 기본(Base) 브랜치를 설정하고, 종속성이 낮은 작업부터 높은 작업 순서로 브랜치를 쌓아 올립니다.\n    - **CLI 도구:** `gh extension install github/gh-stack` 및 `gh skill install github/gh-stack` 명령어를 통해 Stacked Pull Requests 기능을 설치하고 에이전트가 이를 사용하도록 학습시킵니다.\n    - **에이전트 워크플로우:** 각 에이전트는 특정 계층의 작업을 담당하며, `gh init stack`, `gh stack add` 등의 명령어를 사용하여 스택을 구성합니다.\n    - **검토 프로세스:** 리뷰어는 스택 맵을 통해 전체 기능을 파악하고, 아래 계층부터 위로 검토하며, 각 Pull Request는 독립적으로 검토될 수 있습니다.\n    - **변경 사항 전파:** 하위 계층의 변경 사항이 발생하면 `gh stack rebase` 및 `gh stack sync` 명령어를 통해 상위 계층으로 변경 사항이 자동으로 전파되어 수동 작업과 충돌 해결을 최소화합니다.\n- **예시 시나리오:** 쇼핑 어시스턴트에 상품 검색 기능을 추가하는 과정을 데이터 모델, API, 채팅 연동, UI 구현 순서로 네 개의 계층으로 분해하여 Stacked Pull Requests를 적용하는 과정을 상세히 설명합니다.\n\n## 시사점\n\nStacked Pull Requests는 AI 코딩 에이전트를 활용할 때 발생하는 대규모 코드 변경의 검토 및 유지보수 문제를 해결하는 효과적인 방법론이며, 이를 통해 개발 생산성과 코드 품질을 향상시킬 수 있습니다."
 }
