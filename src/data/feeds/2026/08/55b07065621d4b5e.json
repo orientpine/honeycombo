@@ -10,5 +10,6 @@
     "business / artificial intelligence"
   ],
   "published_at": "2026-08-05T16:00:00.000Z",
-  "feed_id": "wired"
+  "feed_id": "wired",
+  "description": "## 개요\n\nJeff Dean을 포함한 Google의 최상위 AI 과학자 4명이 Discovery Loop라는 새로운 스타트업을 설립하기 위해 Google을 떠났습니다. 이들은 과학적 탐구 과정을 자동화하는 AI 시스템 개발을 목표로 합니다.\n\n## 주요 내용\n\n*   **핵심 인물 및 창업**: Google의 전설적인 엔지니어 Jeff Dean, Sanjay Ghemawat, Oriol Vinyals, Quoc Le가 Discovery Loop를 공동 창업했습니다. 이들은 각각 Google Brain, DeepMind, Gemini 등 Google의 핵심 AI 프로젝트에 기여해왔습니다.\n*   **Discovery Loop의 비전**: 과학적 탐구의 자동화된 반복 루프(automated experiment loops)를 통해 과학, 생물학, 칩 설계, AI 모델 개선 등 다양한 분야에서 획기적인 발전을 이루는 것을 목표로 합니다.\n*   **초기 집중 분야**: Discovery Loop는 자체적인 고급 머신러닝 알고리즘 개선을 첫 번째 고객으로 삼아, 자율적으로 AI 제품을 구축하는 AI 시스템을 개발할 계획입니다.\n*   **실리콘밸리의 관심**: 이 팀의 명성과 아이디어는 벤처 캐피탈로부터 높은 관심을 받았으며, Khosla Ventures와 Radical Ventures 등이 투자를 진행했습니다.\n*   **Google과의 관계**: Google은 Discovery Loop의 초기 투자자로 참여하며, 컴퓨팅 파워 제공 및 ML 시스템 연구 프레임워크 협력을 할 예정입니다. Alphabet CEO Sundar Pichai는 이들의 기여를 높이 평가했습니다.\n*   **스타트업의 운영 방식**: Discovery Loop는 퍼블릭 베네핏 코퍼레이션(public benefit corporation)으로 설립되었으며, 초기에는 인간과 공동으로 아이디어를 개발하지만 궁극적으로는 과정을 깊이 자동화하는 것을 목표로 합니다.\n\n## 시사점\n\nDiscovery Loop의 창업은 AI 분야의 최고 인재들이 대기업을 떠나 특정 기술적 비전을 실현하기 위한 스타트업에 집중하는 트렌드를 보여줍니다. 이들이 과학적 발견을 자동화하는 데 성공한다면, 연구 개발 방식에 근본적인 변화를 가져올 가능성이 있습니다."
 }
