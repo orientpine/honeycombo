@@ -12,5 +12,6 @@
     "google assistant"
   ],
   "published_at": "2026-08-05T15:30:02.000Z",
-  "feed_id": "arstechnica"
+  "feed_id": "arstechnica",
+  "description": "## 개요\n\nGoogle이 9월 4일부터 Android 기기에서 Google Assistant 지원을 중단하고 Gemini로 전환할 계획을 발표했습니다.\n\n## 주요 내용\n\n*   Google Assistant는 9월 4일부터 Android 기기에서 단계적으로 종료됩니다.\n*   Google Assistant 종료는 사용자들에게 이메일을 통해 공지되었습니다.\n*   기존 Assistant 사용자들은 Gemini로 전환해야 합니다.\n*   초기 계획은 2025년 말까지 Assistant를 중단하는 것이었으나, Gemini 준비 작업으로 인해 일정이 앞당겨졌습니다.\n*   Assistant 지원 중단 과정은 완료까지 몇 주가 소요될 수 있습니다.\n*   이 변화는 스마트폰뿐만 아니라 스마트워치, 헤드폰, Android Auto가 탑재된 자동차 등 Google Assistant에 연결된 다양한 기기에도 적용됩니다.\n*   대부분의 Google 스마트 홈 기기는 이미 Gemini로 전환되었습니다.\n\n## 시사점\n\nGoogle Assistant의 서비스 종료는 사용자 경험의 전환을 의미하며, Gemini를 통해 인공지능 기반의 통합된 경험을 제공하려는 Google의 전략을 보여줍니다."
 }
