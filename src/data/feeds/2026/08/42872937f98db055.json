@@ -12,5 +12,6 @@
     "cybersecurity"
   ],
   "published_at": "2026-08-04T19:28:49.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nNvidia가 주도하는 Open Secure AI Alliance(OSAA)는 설립 일주일 만에 120개 이상의 기업을 확보하며 AI 보안 및 안전을 위한 협력 방안을 빠르게 모색하고 있습니다.\n\n## 주요 내용\n\n*   **SAFE 워킹 그룹 출범 및 제안서 공개:** OSAA는 'Shared AI Findings Exchange(SAFE)'라는 이름의 워킹 그룹을 구성하고, AI 사이버 보안 사고의 기밀 보고, 피해자 알림, 비난 없는 분석을 통한 학습 등과 관련된 초기 제안서를 공개했습니다.\n*   **오픈 소스 기술 기여 및 활용:** OSAA 회원사들은 AI 에이전트 보안 및 적대적인 AI 공격 방어에 유용할 수 있는 오픈 소스 기술 조각들을 기여하고 있습니다. Nvidia는 오픈 모델 및 LLM 취약점 스캐너 Garak을, Okta는 에이전트 ID 기술을, Red Hat은 에이전트 거버넌스를, Amazon은 Strands Agents와 Cedar를 제공합니다.\n*   **주요 기업 참여 및 일부 기업의 부재:** Adobe, BlackRock, Cisco, Intel, Microsoft, Visa 등 다수의 주요 기업이 OSAA에 참여하고 있으나, Anthropic, OpenAI, Google과 같은 일부 기업은 현재 참여하지 않고 있습니다. 특히 OpenAI와 Google은 이 그룹의 모태가 된 공개 서한에는 서명했으나, 그룹 자체의 참여 여부는 아직 불확실합니다.\n*   **AI 생태계 안전 및 보안 강화 노력:** OSAA는 최근 논의된 특정 국가의 오픈 웨이트 모델 규제 가능성에 대한 업계의 우려에 대응하여 신속하게 구성되었으며, 개방성이 AI 안전 및 보안을 강화하는 중요한 경로가 될 수 있다는 점을 강조하고 있습니다.\n\n## 시사점\n\nOSAA의 빠른 움직임은 AI 산업의 보안 및 안전 문제에 대한 업계의 협력 의지를 보여주며, 향후 오픈 소스 기반의 AI 보안 생태계 구축에 중요한 역할을 할 것으로 기대됩니다."
 }
