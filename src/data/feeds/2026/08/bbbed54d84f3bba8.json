@@ -12,5 +12,6 @@
     "ai"
   ],
   "published_at": "2026-08-07T03:44:40.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nMCP(My MCP Tool)의 `list_articles` 함수에서 docstring이 \"Published articles.\"라고 명시했음에도 불구하고 실제로는 모든 기사(published 및 unpublished drafts 포함)를 반환하는 `/articles/me` 엔드포인트를 호출하여 published 기사 목록을 가져오지 못하는 버그가 발견되었습니다.\n\n## 주요 내용\n\n*   **docstring과 실제 동작 불일치:** `list_articles` 함수의 docstring은 \"List your published DEV.to articles.\"라고 명시되어 있으나, 실제 API 호출은 `/articles/me` 엔드포인트를 사용했습니다.\n*   **잘못된 엔드포인트 선택:** Forem API에서 `/articles/me` 엔드포인트는 모든 기사(unpublished drafts가 먼저 정렬됨)를 반환하도록 문서화되어 있으며, published 기사만 필터링하려면 `/articles/me/published` 엔드포인트를 사용해야 합니다.\n*   **결과 해석의 오류:** `/articles/me` 엔드포인트에서 반환된 기사 목록에는 unpublished drafts가 먼저 포함되어 있어, `per_page` 설정에 따라 published 기사가 전혀 포함되지 않을 수 있습니다. 예를 들어, 10개 이상의 unpublished drafts가 있는 경우 응답은 10개의 draft로만 구성될 수 있으며, published 기사는 0개입니다.\n*   **버그 발견 과정:** 이 버그는 해당 도구를 실제로 실행하여 테스트했을 때 발견되었으며, 이전에는 코드만 분석하는 방식으로는 발견되지 않았습니다.\n*   **버그 유형의 차이:** 이 버그는 API의 특정 매개변수가 무시되는 이전 버그(예: `sort=stars` 무시)와 달리, API 자체가 아니라 올바른 리소스를 호출하지 않은 \"엔드포인트 선택\"의 문제입니다.\n*   **수정:** `list_articles` 함수는 `/articles/me/published?per_page={min(per_page, 30)}` 엔드포인트를 호출하도록 수정되었습니다.\n*   **문서화:** 버그의 근본 원인과 네 가지 관련 엔드포인트(`me`, `me/published`, `me/unpublished`, `me/all`)에 대한 혼란이 `docs/project_notes/bugs.md`에 기록되었습니다.\n\n## 시사점\n\n이 사건은 코드의 docstring이나 API 엔드포인트의 자체 문서만으로는 코드의 실제 동작을 완전히 검증할 수 없으며, 코드의 의도된 계약과 실제 호출되는 리소스 간의 직접적인 비교 및 테스트가 오류를 발견하는 데 필수적임을 보여줍니다."
 }
