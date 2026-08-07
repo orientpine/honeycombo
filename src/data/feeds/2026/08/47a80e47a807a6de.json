@@ -12,5 +12,6 @@
     "webdev"
   ],
   "published_at": "2026-08-07T14:39:36.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\n15세 개발자 Naitik Prajapati는 React, Google AI Studio, Gemini API를 사용하여 완전 자율 AI 앱 포트폴리오를 구축하고 Vercel에 무료로 배포하는 과정을 공유합니다.\n\n## 주요 내용\n\n*   **기술 스택 및 아키텍처:**\n    *   프론트엔드 프레임워크: React (빠르고 컴포넌트 기반 레이아웃)\n    *   AI 엔진: Google AI Studio (Gemini Pro 및 Gemini Flash 오케스트레이션 활용)\n    *   호스팅 플랫폼: Vercel (고속 글로벌 CDN 제공)\n*   Google AI Studio는 개발자가 프롬프트를 테스트하고, 안전 설정을 조정하며, 시스템 지침을 코드 로직으로 내보내는 데 유용합니다.\n*   Gemini API 오케스트레이션을 통해 포트폴리오는 정적 텍스트를 넘어 개발자 데이터를 동적으로 가져오고 Google Cloud Platform(GCP)에서의 진행 상황을 보여줍니다.\n*   Google Cloud Arcade 프로그램에서 획득한 60개 이상의 Google Cloud Skill Badge를 공식 Google Developer Profile에 직접 연결하여 웹 도메인에 임베딩함으로써 클라우드 역량을 검증하는 루프를 구축했습니다.\n\n## 시사점\n\n이 프로젝트는 React, Google AI Studio, Gemini API, Vercel을 활용하여 완전 자율 AI 앱 포트폴리오를 구축하고 배포하는 실질적인 사례를 제시하며, Google Cloud Skill Badge를 통한 개발자 역량 검증 방안을 보여줍니다."
 }
