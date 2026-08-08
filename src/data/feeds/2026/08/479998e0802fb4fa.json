@@ -10,5 +10,6 @@
     "gear / how to and advice"
   ],
   "published_at": "2026-08-08T10:00:00.000Z",
-  "feed_id": "wired"
+  "feed_id": "wired",
+  "description": "## 개요\n\nGemini가 Gmail과 Google Docs에 도입된 AI 기능을 사용하고 싶지 않은 사용자들을 위해 해당 기능을 비활성화하는 방법을 안내합니다.\n\n## 주요 내용\n\n*   **Google Docs 내 Gemini 바 숨기기:** Google Docs 메뉴 바에서 'Gemini'를 클릭한 후 'Bottom bar preferences'로 이동하여 'Turn off'를 선택하면 화면 하단의 Gemini 바를 숨길 수 있습니다.\n*   **Gmail 설정 변경을 통한 비활성화 (개인 계정):** 개인 Google 계정(@gmail.com) 사용자는 Gmail 설정의 'Smart features' 옵션을 해제하여 Gemini 관련 기능을 비활성화할 수 있습니다. 이 설정은 Gmail의 문법 제안, 자동 완성, 스마트 답장 등 다른 AI 기능과 Gmail의 맞춤법 검사에도 영향을 미칩니다.\n*   **Google Workspace 계정의 경우:** 회사에서 제공하는 Google Workspace 계정의 경우, IT 관리자만 Gemini 기능을 제어할 수 있습니다.\n*   **Chrome 확장 프로그램 사용 (Bye Bye Gemini):** Gmail 설정 변경이 작동하지 않거나 다른 AI 기능을 유지하면서 Gemini를 비활성화하고 싶다면, 'Bye Bye Gemini' Chrome 확장 프로그램을 설치할 수 있습니다. 이 확장 프로그램은 Gmail, Docs, Drive 등 Google 생산성 제품 전반에 걸쳐 Gemini 기능을 숨기고, Google 검색 결과의 AI Overviews도 제거합니다.\n\n## 시사점\n\nGemini와 같은 AI 기능의 강제적인 UI 통합에 대한 사용자의 불만이 존재하며, 사용자가 AI 기능의 사용 여부를 선택할 수 있도록 하는 비활성화 옵션의 필요성을 보여줍니다. Google은 사용자가 AI 기능을 쉽게 숨기거나 비활성화할 수 있는 옵션을 제공하고 있지만, 일부 설정은 다른 기능에 영향을 미치거나 관리자의 권한이 필요하여 사용자에게는 다소 복잡하게 느껴질 수 있습니다."
 }
