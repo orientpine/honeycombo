@@ -11,5 +11,6 @@
     "openai"
   ],
   "published_at": "2026-08-08T19:41:13.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nOpenAI가 프레젠테이션 스타트업인 NextSlide를 인수했으며, NextSlide 팀은 ChatGPT 개발에 참여하게 됩니다.\n\n## 주요 내용\n\n*   NextSlide는 프롬프트, 노트, 문서 또는 연구 자료를 편집 가능한 프레젠테이션으로 변환하는 제품을 개발해왔습니다.\n*   NextSlide의 궁극적인 목표는 시각적 커뮤니케이션을 더 쉽게 만들고 사람들이 아이디어를 명확하게 표현하도록 돕는 것이었습니다.\n*   OpenAI 합류 후 NextSlide 팀은 AI 제품을 구축하여 사람들이 아이디어를 창작하고 소통하며 의미 있는 결과물을 만들도록 돕는 미션을 이어갈 예정입니다.\n*   인수 조건은 공개되지 않았으며, NextSlide 창업자 Ahmed Beshry는 이미 올해 초에 인수가 완료되었다고 밝혔습니다.\n*   Ahmed Beshry는 이전에도 Instacart에 인수된 Caper AI의 공동 창업자였습니다.\n\n## 시사점\n\n이번 인수를 통해 OpenAI는 사용자가 텍스트 기반 정보를 시각적으로 표현하는 데 도움을 줄 수 있는 AI 기능을 강화하고, ChatGPT를 통해 아이디어 실현을 더욱 지원할 수 있게 되었습니다."
 }
