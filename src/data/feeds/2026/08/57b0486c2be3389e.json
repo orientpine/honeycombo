@@ -12,5 +12,6 @@
     "web"
   ],
   "published_at": "2026-08-09T14:34:36.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nMCP(Managed Cloud Platform) 구현에서 반복적으로 발생하는 구성 및 규정 준수 문제를 해결하기 위해 오픈소스 MCP Conformance Scanner가 개발되었습니다. 이 도구는 개발자가 배포 전에 MCP 서버를 검증하는 것을 돕습니다.\n\n## 주요 내용\n\n- MCP Conformance Scanner는 다양한 프로젝트에서 공통적으로 발견되는 MCP 구성 및 규정 준수 문제를 자동화하여 검증하는 도구입니다.\n- 개발자는 이 스캐너를 사용하여 배포 전에 MCP 서버의 규정 준수 여부를 확인할 수 있습니다.\n- 프로젝트는 라이브 데모(https://mcpscanner.arctransformationgrouplab.dev/)와 GitHub 저장소(https://github.com/aking-beep/mcp-conformance-scanner)를 통해 접근 가능합니다.\n- 사용자는 자신의 MCP 서버에 스캐너를 적용하고, 버그를 보고하거나 예기치 않은 동작을 제보하며, 새로운 규정 준수 또는 프로덕션 준비 검사를 제안하고, 워크플로우 개선을 위한 아이디어를 공유함으로써 프로젝트 발전에 기여할 수 있습니다.\n\n## 시사점\n\nMCP Conformance Scanner는 MCP 기반 개발 시 수동 검증에 소요되는 시간과 노력을 절감하고, 프로젝트 초기 단계에서 잠재적인 문제를 발견하여 배포의 안정성을 높이는 데 기여할 수 있습니다."
 }

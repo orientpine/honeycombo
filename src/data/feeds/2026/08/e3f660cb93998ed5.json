@@ -12,5 +12,6 @@
     "webdev"
   ],
   "published_at": "2026-08-09T14:45:09.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nAI는 초기 문제 해결 시 Cloudflare 캐싱 및 이메일 난독화와 같은 기술적인 추측을 제시했지만, 최종적으로는 AI 코드 생성 시 부여된 `featured-ad`라는 클래스 이름이 AdBlockPlus의 EasyList 필터링 규칙에 의해 차단되어 발생한 CSS 로딩 문제를 해결하지 못했다.\n\n## 주요 내용\n\n*   개발자는 직접 만든 소규모 이커머스 쇼핑몰에 Cloudflare를 적용하는 과정에서 로컬 환경에서는 정상 작동하던 페이지가 Cloudflare 적용 후 깨지는 현상을 경험했다.\n*   문제의 원인을 파악하기 위해 AI에게 도움을 요청했으나, AI는 Cloudflare의 캐싱(JS/CSS 4시간 캐싱) 및 이메일 난독화(email-decode.min.js 주입)를 원인으로 지목했다.\n*   AI의 제안대로 캐시 설정을 변경하고 시크릿 모드에서 확인했으나 문제는 해결되지 않았고, 이후 브라우저 확장 프로그램(DarkReader, Metamask, TamperMonkey 등)을 비활성화하며 원인을 탐색했다.\n*   AdBlockPlus 확장 프로그램을 비활성화하자 페이지가 정상적으로 표시되는 것을 확인했고, AI가 생성한 코드에서 `featured-ad`라는 클래스 이름이 AdBlockPlus의 EasyList 필터링 규칙에 의해 차단된 것이 원인임을 파악했다.\n*   `featured-ad` 클래스 이름을 `shop-featured`로 변경하는 간단한 수정으로 모든 문제가 해결되었다.\n\n## 시사점\n\n이 경험은 AI가 복잡한 기술적 추측을 할 수는 있지만, 때로는 AI가 생성한 코드의 명명 규칙과 같은 미묘한 요소가 예상치 못한 문제를 야기할 수 있음을 보여주며, 개발자는 AI의 결과물을 맹신하기보다 직접적인 검증과 디버깅 과정을 거쳐야 함을 시사한다."
 }
