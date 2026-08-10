@@ -1,0 +1,16 @@
+{
+  "id": "bf65d50ecfcd765c",
+  "title": "My Commit-Message Script Has 8 Assertions in --selftest. None of Them Touch the Code That Can Actually Fail.",
+  "url": "https://dev.to/enjoy_kumawat/my-commit-message-script-has-8-assertions-in-selftest-none-of-them-touch-the-code-that-can-4ji4",
+  "source": "Dev.to",
+  "type": "article",
+  "tags": [
+    "dev",
+    "python",
+    "debugging",
+    "claudecode",
+    "devtools"
+  ],
+  "published_at": "2026-08-10T03:38:42.000Z",
+  "feed_id": "devto"
+}
