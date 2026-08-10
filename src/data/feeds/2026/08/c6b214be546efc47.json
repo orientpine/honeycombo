@@ -12,5 +12,6 @@
     "what's next in tech"
   ],
   "published_at": "2026-08-10T09:00:00.000Z",
-  "feed_id": "mittech"
+  "feed_id": "mittech",
+  "description": "## 개요\n\nTransformer 아키텍처의 한계를 극복하고 LLM의 속도, 효율성, 능력을 향상시키기 위한 다양한 스타트업들의 혁신적인 접근 방식들이 등장하고 있다.\n\n## 주요 내용\n\n- **Transformer의 한계**: Transformer의 핵심인 Dense Attention 메커니즘은 텍스트 길이가 길어질수록 연산량이 기하급수적으로 증가하여 높은 컴퓨팅 자원과 에너지를 소모하며, 긴 컨텍스트를 처리하는 데에도 어려움을 겪는다.\n- **Sparse Attention**: Subquadratic과 같은 스타트업은 Dense Attention 대신 Sparse Attention을 도입하여 연산량을 줄이면서도 정보의 정확성을 유지하려 한다. Subquadratic은 텍스트에서 중요한 단어를 동적으로 식별하는 Sparse Attention 모델을 개발했다고 주장한다.\n- **Power Retention**: Manifest AI는 Sparse Attention 대신 Power Retention이라는 메커니즘을 개발했다. 이는 가장 관련성 높은 정보만 저장하고, 새로운 정보가 추가될 때 관련성이 낮은 정보를 제거하는 방식으로 컨텍스트 창의 크기 증가 문제를 해결한다. StarCoder를 PowerCoder로 변환하는 등 Transformer 모델과의 최소한의 재학습으로 적용 가능성을 보여주고 있다.\n- **Liquid Neural Networks**: Liquid AI는 Transformer와 함께 자체 개발한 Liquid Neural Networks를 결합한 LFMs(Liquid Foundation Models)를 개발했다. 이 모델은 크기가 작고 에너지 효율성이 높아 차량용 칩이나 저가형 컴퓨터에서도 구동 가능하며, 새로운 정보에 적응하고 학습하는 능력이 뛰어나다.\n- **Diffusion 모델**: Inception은 이미지 및 비디오 생성에 사용되는 Diffusion 기술을 LLM에 적용하여 텍스트를 한 번에 전체 문장 또는 단락 단위로 생성하는 방식을 개발했다. 이는 Transformer를 사용하더라도 더 적은 자원으로 더 빠른 생성이 가능하게 한다.\n- **State Space 모델**: Pathway는 Transformer의 Attention 메커니즘을 State Space라는 수학적 구조로 대체하는 새로운 접근 방식을 제시한다. 이를 통해 언어 제약을 넘어선 추론 능력을 갖춘 모델(Dragon Hatchling)을 개발했으며, Sudoku와 같은 복잡한 퍼즐 해결에서 뛰어난 성능을 보였다.\n\n## 시사점\n\nLLM의 미래는 Transformer 아키텍처를 넘어서는 새로운 기술들의 등장에 달려 있으며, 이는 AI 기술의 접근성과 효율성을 혁신적으로 개선하고 더 복잡하고 창의적인 문제 해결을 가능하게 할 것이다."
 }
