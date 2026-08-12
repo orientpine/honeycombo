@@ -12,5 +12,6 @@
     "chatgpt"
   ],
   "published_at": "2026-08-11T19:15:35.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nOpenAI가 리눅스 커뮤니티의 요청에 응답하여 ChatGPT 데스크톱 앱을 리눅스용으로 공식 출시했습니다.\n\n## 주요 내용\n\n*   **리눅스용 ChatGPT 데스크톱 앱 출시:** OpenAI는 오랫동안 요청받아온 리눅스용 ChatGPT 데스크톱 앱의 프리뷰 버전을 전 세계적으로 출시했습니다.\n*   **지원 기능:** 이 앱을 통해 리눅스 사용자는 ChatGPT, ChatGPT Work, 그리고 Codex를 사용할 수 있습니다.\n*   **지원 배포판:** 초기 지원 배포판은 Ubuntu 24.04 및 26.04 LTS, Debian 13, Fedora 43 및 44이며, 이러한 기반 배포판을 사용하는 다양한 다운스트림 데스크톱 배포판(flavors)에서도 호환될 것으로 예상됩니다.\n*   **경쟁사 동향:** OpenAI는 약 한 달 전 리눅스용 Claude 데스크톱 앱을 출시한 Anthropic에 이어 리눅스용 데스크톱 앱을 출시했습니다.\n\n## 시사점\n\n이번 리눅스용 ChatGPT 데스크톱 앱 출시는 모든 주요 데스크톱 운영 체제에서 ChatGPT와 Codex의 접근성을 확장하며, 오픈 소스 개발자 커뮤니티의 요구를 충족시키는 중요한 조치입니다."
 }
