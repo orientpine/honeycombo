@@ -12,5 +12,6 @@
     "ai"
   ],
   "published_at": "2026-08-13T15:04:18.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nFastMCP는 Python 함수에 데코레이터를 추가하는 것만으로 Claude Code가 호출할 수 있는 맞춤형 MCP 서버를 쉽게 구축할 수 있도록 지원합니다.\n\n## 주요 내용\n\n*   **MCP (Model Context Protocol) 서버의 역할**: AI 모델이 텍스트 생성 외에 외부 도구를 호출하여 실제 작업을 수행하도록 하는 표준입니다.\n*   **FastMCP의 장점**: MCP 서버 구축 시 필요한 저수준 프로토콜 디테일(메시지 형식, 도구 광고 등)을 자동으로 처리하여 개발자가 일반 Python 함수와 `@mcp.tool` 데코레이터만으로 도구를 쉽게 구현할 수 있게 합니다.\n*   **Fortune-telling 도구 구축**: `FastMCP(\"uranai\")`로 서버 인스턴스를 생성하고, `@mcp.tool`로 장식된 `fortune` 함수는 이름과 생년월일을 기반으로 무작위 운세를 생성하며, 날짜를 시드에 포함하여 매일 다른 운세를 제공합니다.\n*   **FastMCP와 MCP SDK 데코레이터 차이**: Standalone `fastmcp` 패키지는 `@mcp.tool`을 사용하고, 공식 MCP Python SDK에 포함된 `MCPServer`는 `@mcp.tool()`을 사용합니다.\n*   **환경 설정**: Python 3.10 이상이 필요하며, 가상 환경 생성 및 `pip install fastmcp`로 설치합니다.\n*   **Claude Code 연동**: Claude Code CLI 또는 데스크톱 앱 설정을 통해 FastMCP 서버를 등록하고 연결합니다.\n*   **확장 아이디어**: 타로, 별자리 운세, 외부 API 연동, 결과 지속화 등 다양한 기능을 추가하거나 GPU 클라우드 인스턴스를 활용하여 컴퓨팅 부하를 분산할 수 있습니다.\n\n## 시사점\n\nFastMCP를 사용하면 복잡한 MCP 서버 구축 과정을 단순화하여 개발자가 내부 도구 활용, 반복 작업 자동화 등 더 유용하고 창의적인 애플리케이션 개발에 집중할 수 있습니다."
 }
