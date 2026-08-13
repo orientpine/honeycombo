@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-08-13T13:30:00.000Z",
-  "feed_id": "theverge"
+  "feed_id": "theverge",
+  "description": "## 개요\n\nMicrosoft는 소비자 및 상업용 Copilot AI 어시스턴트를 단일 \"슈퍼 앱\" 인터페이스로 통합하기 시작했으며, 이는 Copilot과 Microsoft 365 Copilot 앱에서부터 시작됩니다.\n\n## 주요 내용\n\n*   개인 및 업무 계정 모두 새로운 통합 앱으로 이전되며, 업데이트된 앱 아이콘을 가진 \"Microsoft Copilot\"이라는 이름이 재활용됩니다.\n*   이 통합은 올해 말 출시될 Microsoft의 \"슈퍼 앱\" 출시를 위한 기술적 이정표이며, Copilot 제품의 기반을 마련합니다.\n*   웹 및 모바일 앱의 전 세계 롤아웃은 8월 중순부터 시작되며, Windows 및 Mac 앱은 9월 중순으로 예정되어 있습니다.\n*   기존 Microsoft Copilot 사용자는 채팅 및 콘텐츠와 함께 업데이트된 버전으로 이전되며, Microsoft 365 Copilot 앱 사용자는 탐색 변경 사항과 Copilot 채팅 기능에 접근할 수 있습니다.\n*   개인 계정과 Microsoft Entra ID(업무 또는 학교) 계정 간 전환은 계속 가능하며, 각 계정 유형 내에서의 데이터는 완전히 분리됩니다.\n*   기업 보안, 규정 준수 및 정부 통제에는 변경 사항이 없습니다.\n*   코어 Copilot 기능은 무료로 유지되지만, 무료 사용량 제한에 일부 변경이 있을 수 있습니다.\n*   Podcasts 및 Deep Research 기능은 8월 18일 이후로 제공되지 않으며, Group Chat 스레드, 메시지 및 콘텐츠도 새 앱으로 이전되지 않습니다.\n*   Shopping 및 Copilot Health와 같은 다른 기능은 롤아웃 동안 일시적으로 사용 불가할 수 있습니다.\n\n## 시사점\n\nMicrosoft의 Copilot 통합은 AI 경험을 간소화하고 향후 \"슈퍼 앱\" 출시를 위한 기반을 마련하는 중요한 단계이며, 사용자에게는 보다 일관된 인터페이스를 제공할 것으로 예상됩니다."
 }
