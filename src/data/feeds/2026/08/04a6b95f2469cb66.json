@@ -1,0 +1,16 @@
+{
+  "id": "04a6b95f2469cb66",
+  "title": "My MCP Tool's Empty-Payload Guard Checks Whether You Passed a Field. It Never Checked Whether the Field Would Actually Change Anything.",
+  "url": "https://dev.to/enjoy_kumawat/my-mcp-tools-empty-payload-guard-checks-whether-you-passed-a-field-it-never-checked-whether-the-1fi2",
+  "source": "Dev.to",
+  "type": "article",
+  "tags": [
+    "dev",
+    "mcp",
+    "python",
+    "debugging",
+    "ai"
+  ],
+  "published_at": "2026-08-13T03:44:36.000Z",
+  "feed_id": "devto"
+}
