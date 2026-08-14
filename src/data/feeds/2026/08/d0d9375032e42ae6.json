@@ -1,0 +1,16 @@
+{
+  "id": "d0d9375032e42ae6",
+  "title": "My claude -p Call Has a --safe-mode Flag for Isolation. It Never Isolated the Two API Keys Sitting Right Next To It.",
+  "url": "https://dev.to/enjoy_kumawat/my-claude-p-call-has-a-safe-mode-flag-for-isolation-it-never-isolated-the-two-api-keys-sitting-4opj",
+  "source": "Dev.to",
+  "type": "article",
+  "tags": [
+    "dev",
+    "security",
+    "python",
+    "claudecode",
+    "debugging"
+  ],
+  "published_at": "2026-08-14T03:48:36.000Z",
+  "feed_id": "devto"
+}
