@@ -12,5 +12,6 @@
     "debugging"
   ],
   "published_at": "2026-08-14T03:48:36.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nClaude CLI 실행 시 `--safe-mode` 플래그가 환경 변수 상속을 차단하지 못해 민감한 API 키가 노출될 수 있는 문제를 해결합니다.\n\n## 주요 내용\n\n*   `claude -p` 명령어 실행 시 `--safe-mode` 플래그는 CLAUDE.md, skills, plugins, hooks, MCP-server 자동 탐색을 비활성화하지만, 부모 프로세스의 환경 변수는 상속합니다.\n*   `git_commit.py` 및 `server.py`의 `claude -p` 호출 시, `load_env()` 함수가 `.env` 파일의 `GITHUB_TOKEN` 및 `DEV_TO_API` 키를 프로세스 환경 변수에 로드하여 하위 프로세스에 전달했습니다.\n*   `subprocess.check_output` 함수는 `env` 인자가 명시되지 않으면 기본적으로 현재 프로세스의 `os.environ`을 복사하여 하위 프로세스를 시작합니다.\n*   `--safe-mode`는 구성 탐색을 격리하는 데 효과적이지만, 하위 프로세스가 상속하는 환경 변수에는 영향을 미치지 않습니다.\n*   격리를 위한 해결책으로, `_CLAUDE_SUBPROCESS_ENV_EXCLUDE` 변수를 사용하여 `GITHUB_TOKEN` 및 `DEV_TO_API`와 같이 제외할 환경 변수 이름을 명시하고, `subprocess.check_output`에 `env=_claude_subprocess_env()`를 전달하여 하위 프로세스에 전달되는 환경 변수를 제어합니다.\n*   수정 후, 하위 프로세스가 API 키를 상속하지 않지만 `PATH`와 같이 필요한 환경 변수는 정상적으로 상속되는 것을 확인했습니다.\n*   이 문제는 단순히 두 개의 API 키가 동일한 Python 프로세스 내에서 공존하는 기존 문제와는 다른, 프로세스 경계를 넘어선 환경 변수 상속의 실패 사례입니다.\n\n## 시사점\n\nCLI 플래그를 통한 특정 기능의 격리만으로는 하위 프로세스에서 환경 변수를 통한 민감 정보 노출을 완전히 방지할 수 없으며, `subprocess` 호출 시 환경 변수 상속 메커니즘을 명확히 이해하고 명시적인 제어가 필요합니다."
 }

@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-08-13T21:42:38.000Z",
-  "feed_id": "theverge"
+  "feed_id": "theverge",
+  "description": "## 개요\n\nMicrosoft Copilot에서 음성 모드 시 나타나던 감정 표현 캐릭터 'Mico'가 더 이상 Copilot의 얼굴 역할을 하지 않게 되었습니다. Mico는 Copilot의 Learn Live 플랫폼으로 이전될 예정입니다.\n\n## 주요 내용\n\n*   Mico는 약 1년 전 Copilot의 음성 모드에 처음 등장했으며, AI 챗봇에 '정체성'을 부여하는 수단으로 소개되었습니다.\n*   Mico는 사용자의 말에 실시간으로 반응하며 표정과 애니메이션을 표현하는 노란색 감정 표현 캐릭터였습니다.\n*   Microsoft는 Mico의 전환을 통해 AI와의 상호작용에서 '따뜻함', '표현력', 그리고 사용자가 AI와 대화하기를 원하는 방식에 대한 학습을 진행했다고 밝혔습니다.\n*   이러한 학습 내용은 향후 Copilot 개발에 반영될 예정입니다.\n*   Mico의 제거는 Copilot과 Microsoft 365 Copilot 앱을 통합하려는 Microsoft의 계획의 일부입니다.\n*   이는 최근 Jacob Andreou가 Copilot을 총괄하고 Mustafa Suleyman이 새로운 AI 모델 개발에 집중하도록 하는 AI 조직 개편 이후에 이루어진 변화입니다.\n\n## 시사점\n\nMico의 은퇴는 Microsoft가 AI 캐릭터를 통한 사용자 경험 개선 시도를 중단하고, AI와의 상호작용에 대한 학습 결과를 실제 Copilot의 발전으로 통합하려는 전략 변화를 시사합니다."
 }

@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-08-13T13:05:29.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nNetlify는 OpenRouter와의 파트너십을 통해 AI Gateway에서 다양한 모델을 지원하고 Agent Runners의 코딩 모델 선택지를 확장했으며, 이를 통해 동일한 프롬프트에 대한 11가지 AI 모델의 결과 차이를 비교 분석합니다.\n\n## 주요 내용\n\n-   Netlify는 OpenRouter와의 협력을 통해 AI Gateway에서 사용 가능한 모델의 폭을 넓히고, Kimi K3, GLM 5.2, DeepSeek V4 등 최신 오픈 소스 코딩 모델을 Agent Runners에서 제공합니다.\n-   Agent Runners는 Netlify 내에서 코딩 에이전트를 실행하며, 프로젝트 생성 및 반복 작업을 지원하며, Netlify의 자체 기능(Database, AI Gateway, Identity)에 대한 컨텍스트와 스킬을 제공합니다.\n-   본 콘텐츠는 로컬 커피숍 웹사이트 제작이라는 단일 시나리오에 대해 11가지 AI 모델에 동일한 프롬프트를 적용하여 생성된 결과와 크레딧 사용량을 비교 분석합니다.\n-   모델별 크레딧 사용량은 Claude Opus 5519 크레딧부터 DeepSeek V4 Flash 2.4 크레딧까지 매우 큰 편차를 보입니다.\n-   Claude Opus는 상세하고 시각적으로 풍부한 결과물을 생성했지만, 특정 실행에서 비정상적으로 높은 크레딧을 사용했으며, Claude Sonnet은 Opus보다 덜 상세하지만 합리적인 비용으로 결과를 제공했습니다.\n-   GPT 5.6 Sol (low effort)은 Anthropic의 중간 티어 모델보다 디자인 직관성이 뛰어나고 풍부한 콘텐츠를 제공했으며, GPT 5.6 Terra는 Sol과 다른 시각적 언어를 가지며 콘텐츠가 더 단순했지만 유사한 비용으로 다른 결과물을 보여주었습니다.\n-   Gemini 3.1 Pro는 최소한의 결과물을 생성한 반면, Gemini 3.6 Flash는 더 많은 크레딧을 사용했지만 더 나은 결과를 보여주었습니다.\n-   Kimi K3는 에이전트 작업에는 강점을 보이지만, 이 디자인 중심의 작업에서는 다른 모델에 비해 두드러지지 않았으며, Kimi K2.7 Code는 매우 낮은 크레딧 비용으로 단순한 결과물을 제공했습니다.\n-   GLM 5.2는 낮은 크레딧 비용으로 매우 다른 결과물을 생성했으며, 텍스트 입력만 가능합니다.\n-   DeepSeek V4 Pro는 유사 비용의 GPT 5.6 Terra보다 결과물이 좋지 않았으며, DeepSeek V4 Flash 0731은 극도로 낮은 크레딧 비용으로 중간 티어 모델과 유사한 결과물을 제공했습니다.\n\n## 시사점\n\n단순 웹사이트 제작 시에도 AI 모델에 따라 결과물의 품질과 비용이 크게 달라지므로, 프로젝트 요구사항과 예산을 고려하여 적합한 모델을 선택하고 반복적인 프롬프트 엔지니어링을 통해 원하는 결과물을 얻는 것이 중요합니다."
 }

@@ -12,5 +12,6 @@
     "microsoft"
   ],
   "published_at": "2026-08-13T15:30:52.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nMicrosoft가 소비자 및 비즈니스용 Copilot 앱을 통합하고 일부 AI 기능을 중단하며, AI 전략을 단순화하고 경쟁력을 강화한다.\n\n## 주요 내용\n\n- Microsoft는 소비자 대상 Copilot 앱과 비즈니스 중심의 Microsoft 365 Copilot 앱을 하나로 통합한다.\n- 이는 개인 및 업무용 AI 활용의 중복성을 인정하고, 기존 전략의 복잡성을 개선하여 ChatGPT, Claude, Gemini 등과의 경쟁을 강화하려는 의도이다.\n- 2026년 8월 18일까지 소비자들은 Group Chats, AI-generated podcasts in Copilot, Copilot Labs 실험 기능, Deep Research 기능을 더 이상 사용할 수 없게 된다.\n- 유료 전문 사용자를 위해 Researcher 기능이 Deep Research를 대체할 예정이다.\n- Mico라는 이름의 Copilot 애니메이션 캐릭터도 사라진다.\n- stand-alone Copilot 앱에서 생성된 파일은 OneDrive로 마이그레이션될 예정이다.\n- Microsoft는 이번 통합을 통해 Copilot 경험을 \"더 단순하고 응집력 있게\" 만들고자 한다.\n- 이는 Copilot이 고객의 삶에 \"존재할 권리\"를 얻어야 한다는 내부적 평가를 반영한 조치이다.\n\n## 시사점\n\nMicrosoft의 Copilot 앱 통합 및 기능 축소는 AI 시장에서의 경쟁 심화 속에서 사용자 경험을 단순화하고 핵심 기능에 집중하려는 전략적 움직임으로, 향후 AI 서비스의 통합 및 전문화 추세를 보여준다."
 }
