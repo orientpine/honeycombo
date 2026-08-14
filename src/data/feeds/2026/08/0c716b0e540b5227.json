@@ -12,5 +12,6 @@
     "ai"
   ],
   "published_at": "2026-08-14T14:59:53.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nNabu.Mcp.AspNetCore는 기존 ASP.NET Core Web API의 컨트롤러 액션과 Minimal API 라우트 핸들러를 Model Context Protocol(MCP) 도구로 노출시켜 API 재작성 없이 MCP 서버로 전환할 수 있게 해주는 솔루션이다.\n\n## 주요 내용\n\n*   **기존 API 활용**: `[McpTool]` 속성을 ASP.NET Core 컨트롤러 액션이나 Minimal API 라우트 핸들러에 추가하는 것만으로 해당 기능을 MCP 도구로 사용할 수 있다.\n*   **HTTP 파이프라인 유지**: 모든 도구 호출은 애플리케이션의 HTTP 파이프라인을 통해 실제 HTTP 요청으로 재현되므로, 인증, 권한 부여, 유효성 검사, 필터 및 미들웨어 기능이 HTTP 요청과 동일하게 유지된다.\n*   **설정**: `WebApplicationBuilder`에서 `AddNabuMcp` 서비스를 등록하여 서버 이름, 인증 요구 여부, 도구 가시성 등을 설정할 수 있다. `/mcp` 엔드포인트에서 MCP 서비스가 제공된다.\n*   **도구 설명 및 스키마**: 도구 설명은 XML 문서에서 가져오고, 입력 스키마는 CLR 타입, 데이터 어노테이션 및 nullability로부터 자동 생성된다.\n*   **권한 부여**: `[Authorize]` 속성, 정책 및 역할은 호출별로 강제되며, HTTP 요청 시 403 오류를 반환하는 동일한 액션이 MCP 호출 시에는 `isError` 도구 결과로 반환된다. `tools/list`는 호출자별로 접근 가능한 도구만 표시할 수 있다.\n*   **안전성 확보**: 단순한 컨트롤러 리플렉션과 달리, Nabu는 시작 시점의 `RequestDelegate`를 캡처하고 합성 `HttpContext`를 통해 전체 파이프라인을 통과시켜 안전성을 확보한다.\n*   **주요 기능**:\n    *   하나의 액션으로 여러 도구 노출 (`[McpTool]` 반복 사용).\n    *   호출자별 도구 가시성 (`tools/list`에서 인가 정책 적용).\n    *   보호된 헤더 (모델 인수가 Authorization, Cookie, proxy 헤더를 재정의할 수 없음).\n    *   공식 SDK 어댑터 (`Nabu.Mcp.ModelContextProtocol` 사용).\n    *   다양한 타겟 지원 (netstandard2.0 ~ net10.0).\n*   **라이선스**: MIT 라이선스.\n\n## 시사점\n\nNabu.Mcp.AspNetCore는 기존 ASP.NET Core Web API를 별도의 재작업 없이 MCP 서버로 쉽게 확장할 수 있도록 하여 개발 효율성을 높이고, API의 보안 및 기능성을 그대로 유지하면서 새로운 통합 방식을 도입할 수 있는 방안을 제시한다."
 }
