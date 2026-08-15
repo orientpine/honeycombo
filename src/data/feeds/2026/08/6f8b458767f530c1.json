@@ -12,5 +12,6 @@
     "devops"
   ],
   "published_at": "2026-08-15T14:16:18.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nAI 코딩 에이전트 작업의 실제 시간 소요 분석 결과, 인프라 오버헤드가 작업 시간의 상당 부분을 차지하며, 이를 최적화함으로써 에이전트의 추론 시간에 집중할 수 있음을 제시한다.\n\n## 주요 내용\n\n*   **AI 코딩 에이전트 작업의 시간 분석:** 에이전트 오케스트레이션 플랫폼에서 실행되는 일반적인 코딩 작업은 20~30분이 소요되며, 초기 가정과 달리 모델 응답 속도보다 인프라 오버헤드가 5~8분을 차지하는 주요 병목 현상으로 파악되었다.\n*   **인프라 오버헤드 단계별 분석:** Git worktree 설정, `bun install` (약 91초), Lint & Typecheck (1~2분), `next build` (최장 소요 시간), Vitest (약 26초) 등 각 단계별 시간 소요와 영향이 측정되었다.\n*   **인프라 최적화 방안:**\n    *   **사전 워밍된 실행기 슬롯 풀(Pre-Warmed Executor Slot Pool):** 작업마다 새로운 worktree 생성 및 `bun install` 대신, 사전 설치된 `node_modules` 및 빌드 캐시를 포함하는 실행기 슬롯 풀을 유지하여 `bun install` 시간을 거의 제거한다.\n    *   **영구 Next.js 빌드 캐싱(Persistent Next.js Build Caching):** Next.js의 영구 파일 시스템 빌드 캐싱을 활용하여 `next build` 단계를 수십 초로 단축시킨다.\n    *   **증분 Linting 및 Typechecking(Incremental Linting and Typechecking):** `tsc --incremental` 및 `eslint --cache`를 사용하여 Linting 및 Typechecking 시간을 1분 가량 단축한다.\n    *   **Windows 파일 시스템 최적화:** 실시간 Defender 스캔 제외 또는 ReFS Dev Drive 사용으로 `node_modules` 및 `.next` 디렉토리 관련 I/O 속도를 2~5배 향상시킨다.\n    *   **격리된 Linker(Isolated Linker):** `bun install --linker isolated`를 사용하여 pnpm 스타일의 심볼릭 링크 스토어를 활용할 수 있으나, 작업 디렉토리 외부로 확장되는 심볼릭 링크는 신중하게 사용해야 한다.\n*   **구현 전략:** 안티바이러스 스캔 제외, 영구 의존성 및 캐시를 위한 슬롯 풀 구축, 증분 캐싱 활성화, Next.js 영구 빌드 캐싱 활성화 순으로 진행한다.\n\n## 시사점\n\n인프라 파이프라인 최적화를 통해 고정된 작업 오버헤드를 60초 미만으로 줄임으로써, AI 코딩 에이전트 작업의 실제 가치를 제공하는 모델 추론 단계에 더 집중할 수 있다."
 }
