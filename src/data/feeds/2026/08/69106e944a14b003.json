@@ -12,5 +12,6 @@
     "data centers"
   ],
   "published_at": "2026-08-14T15:43:28.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nMeta가 Glimmer라는 오픈 웨이트 AI 모델을 공개하며 AI 기술이 소수 연구소에 의해 독점되지 않고 모든 사람이 접근 가능해야 한다는 Mark Zuckerberg의 비전을 제시했습니다.\n\n## 주요 내용\n\n- Meta는 Glimmer를 출시했으며, 이는 누구나 자신의 하드웨어에서 다운로드하여 실행할 수 있는 오픈 웨이트 AI 모델입니다.\n- 이는 Meta의 자체 API 뒤에 잠겨 있는 더 강력한 모델인 Muse Spark와 대조됩니다.\n- Mark Zuckerberg는 AI가 \"모두를 위한 것\"이어야 하며 소수의 연구소에 의해 통제되어서는 안 된다는 내용의 6,500단어 분량의 선언문을 발표했습니다.\n- Glimmer의 공개는 이러한 비전과 함께 진행되었으나, TechCrunch Equity 팟캐스트의 진행자들은 이 비전에 일부 제한 사항이 있음을 지적했습니다.\n- 팟캐스트는 Glimmer, Zuckerberg의 선언문, AI 산업의 에너지 소비 비용, 2억 5천만 달러 규모의 인수 실패 사례 등 이번 주 주요 헤드라인을 다룹니다.\n\n## 시사점\n\nMeta의 Glimmer 공개와 Mark Zuckerberg의 AI 접근성에 대한 발언은 AI 기술의 민주화 가능성과 잠재적 과제를 동시에 보여주며, 업계 전반의 AI 정책 및 개발 방향에 대한 논의를 촉발할 수 있습니다."
 }

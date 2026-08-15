@@ -12,5 +12,6 @@
     "github marketplace"
   ],
   "published_at": "2026-08-14T16:00:00.000Z",
-  "feed_id": "githublog"
+  "feed_id": "githublog",
+  "description": "## 개요\n\nGitHub agent apps는 소프트웨어 개발 수명 주기(SDLC) 전반에 걸쳐 기능의 범위 설정, 보안, 배포 및 출시 과정을 GitHub 환경 내에서 직접 관리할 수 있도록 지원합니다.\n\n## 주요 내용\n\n-   **기능 범위 설정 (Scoping):** Amplitude agent 앱을 사용하여 특정 기능 구현이 사용자 경험에 미치는 영향을 분석하고, 데이터 기반 의사결정을 통해 기능 재설계를 수행할 수 있습니다.\n-   **의존성 보안 검토 (Securing Dependencies):** Endor Labs agent 앱을 통해 pull request에서 변경되는 의존성의 알려진 취약점 및 잠재적 위험을 사전에 식별하여 보안 문제를 조기에 예방합니다.\n-   **안전한 기능 배포 (Rolling Out Safely):** LaunchDarkly agent 앱을 활용하여 특정 사용자 세그먼트를 대상으로 하는 feature flag를 신속하게 생성하고 코드에 통합하여 점진적인 배포를 관리합니다.\n-   **배포 위험 평가 (Shipping Safely):** PagerDuty agent 앱을 통해 현재 진행 중인 인시던트 및 최근 장애 이력을 기반으로 서비스의 배포 위험도를 평가하고, 안전한 배포 결정을 내릴 수 있도록 지원합니다.\n-   **GitHub Marketplace 제공:** Amplitude, Endor Labs, LaunchDarkly, PagerDuty를 포함한 다양한 agent 앱이 GitHub Marketplace에서 제공되어 사용자가 필요에 따라 설치하고 조직에 적용할 수 있습니다.\n-   **작업 흐름 통합:** agent 앱은 이슈 할당, pull request 댓글 `@mention` 등을 통해 GitHub 내에서 직접 사용되며, 개발자가 별도의 도구로 전환할 필요 없이 기존 워크플로우에 통합됩니다.\n\n## 시사점\n\nAgent 앱은 개발자들이 GitHub라는 단일 플랫폼 내에서 다양한 외부 도구의 기능을 활용할 수 있게 함으로써, 소프트웨어 개발 및 배포 과정의 효율성을 극대화하고 컨텍스트 전환으로 인한 비효율을 제거합니다."
 }
