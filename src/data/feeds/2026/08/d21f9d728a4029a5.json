@@ -12,5 +12,6 @@
     "google"
   ],
   "published_at": "2026-08-17T21:27:05.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nAI 기반 워크플로우 자동화 도구 Relay가 서비스를 종료하며, 창업자 겸 CEO를 포함한 일부 직원이 Google Chrome 팀으로 합류합니다.\n\n## 주요 내용\n\n*   **Relay 서비스 종료:** 2021년 출시된 AI 기반 워크플로우 자동화 도구 Relay가 9월 14일부터 유료 고객의 접근을 중단하고, 8월 15일부로 무료 고객의 접근도 이미 중단되었습니다.\n*   **창업자 Google 복귀:** Relay의 창업자이자 CEO인 Jacob Bank는 Google Chrome 팀의 VP of Product로 복귀하며, Chrome 제품 및 개발자 관계 팀을 이끌 예정입니다.\n*   **AI를 활용한 생산성 향상 목표:** Bank는 AI를 활용하여 개인의 창의성과 통찰력을 희생시키지 않으면서 생산성을 높이는 도구를 만드는 데 집중해왔으며, Chrome 팀 합류를 통해 이러한 경험을 더 많은 사람들에게 제공할 기회로 삼고 있습니다.\n*   **Chrome에서의 AI 통합 계획:** Bank는 Chrome에서 AI를 활용하여 업무를 처리할 수 있도록 하는 야심찬 계획을 가지고 있다고 밝혔으며, Chrome을 \"에이전트와 협업하기에 완벽한 장소\"라고 언급했습니다.\n*   **Google의 AI 통합 강화:** Relay의 폐쇄 및 Bank의 Google 합류는 Google 검색에 Gemini가 통합되는 등 Google 사용자 경험 전반에 걸친 AI 통합 강화 추세와 맥을 같이합니다. Gemini는 이미 Chrome에서도 선택적 인브라우저 어시스턴트로 통합되어 10억 명 이상의 사용자를 확보했습니다.\n\n## 시사점\n\nAI 기반 워크플로우 자동화 스타트업 Relay의 종료는 해당 분야의 경쟁 환경과 기술 발전 속도를 시사하며, Google Chrome 팀으로의 인력 이동은 Chrome 브라우저 내 AI 기반 생산성 기능 강화에 대한 기대를 높입니다."
 }

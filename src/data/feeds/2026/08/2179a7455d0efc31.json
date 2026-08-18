@@ -12,5 +12,6 @@
     "webdev"
   ],
   "published_at": "2026-08-18T02:33:07.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nrepomapper v0.1.0은 코드 저장소의 서브시스템, 테스트, 규칙 및 과거 문제점 등을 포함하는 운영 가이드 AGENTS.md를 자동으로 생성하는 도구입니다.\n\n## 주요 내용\n\n- **문제점:** 코드 에이전트는 코드 자체에 포함되지 않은 저장소의 운영 지식(서브시스템 파일 위치, 테스트 실행 방법, 과거 오류 수정 워크플로우, 프로젝트 규칙 및 구조 등)이 필요하며, AGENTS.md와 같은 문서를 수동으로 작성하고 최신 상태로 유지하는 것은 번거롭습니다.\n- **해결책:** RepoMapper는 다음 세 단계를 통해 이 과정을 자동화합니다.\n    - **스캔:** 저장소 구조, 언어, 진입점, 테스트, 서브시스템, 종속성 및 규칙을 분석합니다.\n    - **탐색 (Probe):** import check, syntax check, test runner, 설정 유효성 검사와 같은 합성 작업을 수행합니다.\n    - **생성:** 3000자 미만의 AGENTS.md 형식으로 압축된 운영 가이드를 생성합니다.\n- **사용법:**\n    1. repomapper 저장소를 클론합니다.\n    2. 가상 환경을 설정하고 필요한 패키지를 설치합니다.\n    3. `python3 -m repomapper /path/to/repo` 명령어를 사용하여 대상 저장소의 AGENTS.md를 생성합니다.\n- **기반 기술:** 2026년 논문 \"Probe-and-Refine Tuning of Repository Guidance for Coding Agents\"에 기반합니다.\n\n## 시사점\n\nRepoMapper는 코드 에이전트가 새로운 저장소에 적응하는 데 드는 시간을 단축하고, 개발자가 운영 문서를 수동으로 작성하고 관리하는 부담을 줄여 생산성을 향상시킬 수 있습니다."
 }
