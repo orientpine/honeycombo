@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-08-17T15:36:18.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nSpeko는 언어와 목적에 따라 최적의 음성 AI 모델을 선택할 수 있도록 돕는 라우터로, 벤더의 자체 리더보드가 아닌 공개된 측정값을 기반으로 작동합니다.\n\n## 주요 내용\n\n*   Speko는 다양한 음성 AI 모델(STT, LLM, TTS)을 지원하며, 각 모델의 성능(WER)과 비용을 비교 분석하여 최적의 선택을 돕습니다.\n*   벤더별 리더보드에 의존하지 않고, 언어별(EN, AR, FR, DE, HI, ES, AT, EN)로 벤치마크 커버리지를 제공합니다.\n*   실제 비용과 정확도(WER)를 고려한 모델별 성능 비교 데이터를 제시합니다. 예를 들어, Universal-3.5 Pro는 2.0% WER에 $0.0075/min의 비용을 보이며, GPT-4o Transcribe는 2.3% WER에 $0.0060/min의 비용을 가집니다.\n*   Speko는 OpenAI API와 호환되어, 기존에 OpenAI API를 사용하는 프레임워크에서 호스트 이름과 모델 문자열만 변경하면 쉽게 통합할 수 있습니다.\n*   Speko의 API 엔드포인트는 `https://api.speko.ai/v1`이며, `process.env.SPEKO_API_KEY` 환경 변수에 API 키를 설정하여 사용할 수 있습니다.\n*   LiveKit Agents SDK를 사용하여 Speko를 연동하는 예시 코드가 제공되며, `defineAgent` 함수 내에서 `STT`, `LLM`, `TTS` 플러그인으로 `openai`를 지정하고 `baseURL`을 Speko의 API로 설정합니다.\n\n## 시사점\n\nSpeko는 개발자들이 음성 AI 모델 선택 시 겪는 복잡성을 해소하고, 객관적인 데이터를 기반으로 비용 효율적이고 성능이 뛰어난 모델을 쉽게 찾아 적용할 수 있도록 지원합니다."
 }
