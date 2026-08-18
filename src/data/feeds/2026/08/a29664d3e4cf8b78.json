@@ -12,5 +12,6 @@
     "woocommerce"
   ],
   "published_at": "2026-08-18T14:27:34.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\n9개의 워드프레스 AI 검색 플러그인 문서를 검토한 결과, 일부는 TF-IDF를 사용하고 네 개는 추가 비용이 발생하는 것으로 나타났습니다.\n\n## 주요 내용\n\n*   **TF-IDF 기반 플러그인:** FiboSearch, Relevanssi, SearchWP는 AI나 벡터 임베딩을 명시적으로 주장하지 않고 TF-IDF 또는 유사한 키워드 기반 검색 알고리즘을 사용합니다. Softlinkster Semantic Search도 BM25 랭킹 및 TF-IDF 가중치를 사용하지만, 이름에 'Semantic Search'를 포함하고 있습니다.\n*   **AI 및 벡터 임베딩 사용 플러그인:** Mori AI Search, FindAstra Pro, AI Vector Search Semantic은 실제 벡터 임베딩을 사용합니다. 하지만 이러한 플러그인들은 임베딩 생성 비용을 사용자가 부담해야 합니다. Mori AI Search는 OpenAI API 키를, FindAstra Pro는 OpenAI API 키 또는 Hugging Face 토큰을, AI Vector Search Semantic은 Supabase와 OpenAI API 키를 요구합니다.\n*   **고객에게 비용 전가:** FindAstra의 무료 버전(Local engine)은 모델을 방문자의 브라우저에 다운로드하고 캐시하는 방식으로 작동하여 고객의 대역폭 비용을 발생시킵니다.\n*   **WP-search.ai:** 무제한 임베딩을 미래 프리미엄 기능으로 명시하며 현재는 무료로 제공되지만, 임베딩 컴퓨팅 위치나 API 키 제공 여부에 대한 정보가 부족합니다.\n*   **Queryra:** 작성자가 개발한 플러그인으로, OpenAI 계정이나 API 키, 추가 청구 없이 자체 호스팅되며 모든 비용이 단일 가격에 포함됩니다. 다만, 자체 서버에서 벗어나지 않는 것을 요구하는 경우 Softlinkster 또는 FindAstra의 로컬 모드가 대안이 될 수 있습니다.\n*   **문서 검토 방법:** AI 검색 플러그인 설치 전, 해당 플러그인 페이지에서 \"TF-IDF\", \"BM25\", \"inverted index\" 검색 시 키워드 검색인지 확인하고, \"API key\", \"OpenAI\", \"Supabase\", \"Hugging Face\" 검색 시 추가 계정이나 청구 발생 여부를 파악하며, 무료 티어와 유료 티어 간의 기능 차이를 비교하는 것이 권장됩니다.\n\n## 시사점\n\n워드프레스 AI 검색 플러그인 선택 시, 이름에 'AI'나 'Semantic'이 포함되었다고 해서 반드시 최신 기술을 사용하는 것은 아니며, 문서의 세부 사항을 꼼꼼히 확인하여 실제 사용되는 기술, 비용 구조, 그리고 잠재적인 추가 청구 가능성을 파악하는 것이 중요합니다."
 }
