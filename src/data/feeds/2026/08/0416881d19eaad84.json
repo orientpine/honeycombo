@@ -12,5 +12,6 @@
     "meta ai"
   ],
   "published_at": "2026-08-20T12:11:57.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nMeta AI가 새로운 Mac 앱을 출시하여 시스템 전반의 받아쓰기 기능과 화면 맥락을 이해하는 능력을 제공한다.\n\n## 주요 내용\n\n-   Meta AI Mac 앱은 시스템 전반의 받아쓰기 기능을 지원하며, 이는 Wispr Flow, Superwhisper, Monologue와 같은 기존 도구와 유사하게 모든 앱에서 작동한다.\n-   새로운 앱은 현재 화면 내용을 분석하여 Muse Spark 모델을 기반으로 맥락에 맞는 질문에 답변할 수 있다.\n-   이번 Mac 앱 출시는 비즈니스 사용자를 위한 Meta AI 업데이트의 일환으로, 판매자는 Instagram, Facebook 계정, Meta 광고 캠페인, Google Workspace(Gmail, Docs, Sheets, Slides)를 Meta AI에 연결하여 인사이트를 얻을 수 있다.\n-   Meta AI는 캠페인 성과, 잠재 고객 참여 지표에 대한 정보를 제공하고, 공개된 데이터를 기반으로 경쟁사 분석 정보도 제공한다.\n-   비즈니스 도구와의 통합을 통해 AI 비서는 제안서 작성, 문서 초안 작성, 스프레드시트 생성이 가능하다.\n-   Meta는 WhatsApp, Instagram 등 자사 앱 전반에 걸쳐 자동화된 고객 지원 및 문의를 위해 AI 도구를 비즈니스에 제공하는 데 집중하고 있다.\n-   Meta CEO Mark Zuckerberg는 에이전트를 비즈니스에 판매하고 그들을 대신하여 작업을 자동화하는 데 큰 기회가 있다고 언급했다.\n\n## 시사점\n\nMeta AI의 새로운 Mac 앱은 통합된 받아쓰기와 화면 인지 기능을 통해 비즈니스 사용자의 생산성 향상과 자동화된 업무 지원을 위한 중요한 발걸음을 내딛었다."
 }
