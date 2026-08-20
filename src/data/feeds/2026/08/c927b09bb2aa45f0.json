@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-08-19T19:00:00.000Z",
-  "feed_id": "theverge"
+  "feed_id": "theverge",
+  "description": "## 개요\n\nGoogle Gemini가 학업 관련 기능을 강화한 전용 학생 허브를 출시하여 연구, 학습 자료 제작, 퀴즈 등을 지원한다.\n\n## 주요 내용\n\n- Gemini 학생 허브는 연구 조사, 플래시카드 제작, 연습 퀴즈 등 학업 활동을 지원하는 원스톱 저장소를 제공한다.\n- 스터디 노트 기능이 강화되어 그래프와 이미지를 지원하며, 강의 계획서를 기반으로 시험 날짜 및 마감일을 Google Calendar에 추가할 수 있다.\n- Gemini Live에 Deep Research 기능이 추가되어 복잡한 연구 보고서를 생성하고 결과를 논의할 수 있으며, 보고서가 준비되면 알림을 받을 수 있다.\n- 곧 출시될 Google 모바일 앱의 Lens 기능은 학습지나 워크시트 사진을 찍어 설명, 복잡한 개념 도움, 또는 실수에 대한 코칭을 받을 수 있게 한다.\n- 미국 내 자격 요건을 갖춘 학생들은 1년간 무료로 Google AI Pro를 이용할 수 있으며, 여기에는 5TB 스토리지, Google Health Premium, Gemini 사용량 증대, Google 앱 전반의 Gemini 접근 권한이 포함된다.\n- 미국 외 학생들은 400GB 스토리지와 낮은 Gemini 사용량 제한이 있는 Google AI Plus 구독을 이용할 수 있다.\n\n## 시사점\n\nGoogle Gemini의 학생 허브 및 관련 기능 강화는 학생들이 학업 효율성을 높이고 복잡한 학습 과정을 더욱 쉽게 관리할 수 있도록 지원하는 데 기여할 것으로 예상된다."
 }
