@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-08-20T15:26:02.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nVomit은 Claude의 토큰 출력(token vomit)을 별도의 로컬 LLM을 통해 영어로 변환하는 도구입니다.\n\n## 주요 내용\n\n*   **기능:** Claude의 원시 토큰 출력을 로컬 LLM으로 전달하여 사람이 이해할 수 있는 영어 텍스트로 변환합니다.\n*   **특징:**\n    *   완전한 로컬 환경에서 작동하며, 텔레메트리(telemetry) 기능이 없습니다.\n    *   외부 라이브러리 의존성이 없습니다.\n    *   로컬 LLM은 Claude가 전달하려는 메시지만 볼 수 있으며, 외부 액션이나 파일에 접근하지 못합니다.\n*   **제한사항:**\n    *   로컬 LLM이 일부 환각(hallucinate)을 일으킬 수 있습니다.\n    *   실행 속도가 느릴 수 있습니다.\n    *   Mac 환경에서만 테스트되었으며, 다른 OS에서는 작동이 보장되지 않습니다.\n    *   Claude의 메시지를 완전히 놓칠 가능성이 있습니다.\n*   **설치 및 설정:**\n    *   `go install github.com/zachahn/vomit@latest` 명령어로 바이너리를 설치합니다.\n    *   `vomit init` 명령어로 LLM 연결 정보를 설정합니다.\n    *   `vomit scrub -claude` 명령어로 Claude의 출력을 덮어쓰도록 설정합니다.\n*   **사용법:**\n    *   `vomit list`: Claude 세션 식별자 목록을 보여줍니다.\n    *   `vomit tail [<session_identifier>]`: 지정된 세션의 Claude 토큰을 번역하거나 최신 세션을 실시간으로 추적합니다.\n    *   `vomit help`: 추가 명령어를 확인합니다.\n*   **호환 LLM:** Llama.app, Ollama, OpenAI API를 사용하는 LLM 등과 호환됩니다. Llama.app과 GPT-OSS 20B를 사용하는 것을 권장합니다.\n*   **비침습 모드:** `vomit list` 및 `vomit tail`과 같이 사이드에서 실행하여 원본 메시지를 건드리지 않는 비침습 모드도 제공합니다.\n*   **라이선스:** GNU GPLv3 라이선스를 따릅니다.\n\n## 시사점\n\nVomit은 Claude와 같은 LLM의 복잡한 출력 형식을 로컬 환경에서 간편하게 이해할 수 있는 텍스트로 변환하여 사용자 경험을 개선할 수 있는 잠재력을 제공합니다."
 }

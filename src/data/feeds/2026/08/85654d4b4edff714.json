@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-08-20T21:50:22.000Z",
-  "feed_id": "theverge"
+  "feed_id": "theverge",
+  "description": "## 개요\n\nGoogle Discover 피드가 AI 챗봇 기능을 통해 사용자 맞춤 설정이 가능해지며, 사용자의 선호도를 기억하여 향후 피드를 자동으로 조정한다.\n\n## 주요 내용\n\n- Google Discover 피드를 맞춤 설정하기 위한 새로운 기능이 '며칠 내' Google 앱에 출시될 예정이다.\n- 이 기능은 AI를 활용하여 사용자의 선호도를 기억하고 피드를 자동으로 조정한다.\n- Discover 피드의 세 점 메뉴 내에서 이 옵션을 찾을 수 있으며, 챗봇 스타일 인터페이스를 통해 원하는 콘텐츠 설명을 입력할 수 있다.\n- 챗봇은 선택 사항을 확인하고 우선순위를 정할 콘텐츠 유형을 제시하며, 필요 시 추가 정보를 입력하여 피드 조정을 요청할 수 있다.\n- \"피드 새로고침\"을 통해 변경 사항을 적용할 수 있다.\n- 이는 Google 검색 및 앱 활동을 기반으로 추천 기사를 제공하는 Discover 피드의 콘텐츠 제어를 용이하게 한다.\n- YouTube, Instagram, Bluesky, X 등 다른 소셜 미디어 앱에서도 AI를 활용한 피드 맞춤 설정 기능을 도입했다.\n- Google은 Android의 Google News 앱에서 일일 오디오 브리핑 개인화 기능과 Preferred Sources 기능 업데이트도 발표했다.\n- Preferred Sources 기능은 게시자가 사이트에 \"Preferred Sources\" 버튼을 배치하여 사용자가 웹페이지를 벗어나지 않고도 해당 출처를 목록에 추가할 수 있도록 한다.\n\n## 시사점\n\nGoogle Discover의 AI 챗봇 기반 맞춤 설정 기능은 사용자 경험을 향상시키고, 소셜 미디어 플랫폼 간의 피드 개인화 경쟁에서 Google의 입지를 강화할 것으로 보인다."
 }
