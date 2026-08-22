@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-08-21T14:31:52.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nClaudette는 Claude의 응답을 인간 친화적인 영어로 번역하기 위해 Antigravity CLI와 Gemini 모델을 활용하는 Claude Code 스킬이다.\n\n## 주요 내용\n\n- Claude는 때때로 지나치게 과장되거나 TED 강연 스타일의 응답을 생성하는 경향이 있어, 엔지니어링 관련 내용의 명확성을 저해할 수 있다.\n- Claudette 스킬은 Claude의 응답을 받아 Antigravity CLI를 통해 Gemini 모델로 전달하여, 클릭베이트나 과장된 표현을 제거하고 일반적인 영어로 번역한다.\n- 이 스킬은 Claude의 응답을 직접 수정하는 대신, 다른 모델을 사용하여 번역 결과를 그대로 출력함으로써 Claude 자체의 과장된 말투가 다시 도입되는 것을 방지한다.\n- `/debuzz` 명령어는 기본적으로 'colleague' 모드로 작동하며, 엔지니어에게 익숙한 방식으로 코드를 유지하면서도 명료하게 내용을 전달한다.\n- 'manager' 모드는 내용을 3분의 1로 줄여 요약하고, 'director' 모드는 3~5문장으로 핵심 결과, 영향, 요청 사항을 전달하여 경영진에게 적합하게 한다.\n- 텍스트를 직접 제공하지 않으면 Claude의 이전 응답을 자동으로 번역하며, \"say that in normal english\"와 같은 자연스러운 구문으로도 트리거될 수 있다.\n- Claude Code, Antigravity CLI (agy) 설치 및 Google 계정 로그인이 필요하며, 사용법은 `git clone`으로 스킬을 설치하고 `/debuzz [mode] [text]` 형식으로 사용한다.\n\n## 시사점\n\nClaudette는 LLM 응답의 가독성과 실용성을 향상시켜, 특히 기술 문서나 보고와 같이 명확성이 중요한 분야에서 엔지니어링 커뮤니케이션의 효율성을 높이는 데 기여할 수 있다."
 }
