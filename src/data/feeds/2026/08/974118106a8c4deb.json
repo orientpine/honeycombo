@@ -1,0 +1,16 @@
+{
+  "id": "974118106a8c4deb",
+  "title": "Comparing INT4 and NVFP4 Palettes on Real Gradient Tensors",
+  "url": "https://dev.to/megapixel99/comparing-int4-and-nvfp4-palettes-on-real-gradient-tensors-g99",
+  "source": "Dev.to",
+  "type": "article",
+  "tags": [
+    "dev",
+    "llm",
+    "quantization",
+    "training",
+    "measurement"
+  ],
+  "published_at": "2026-08-22T14:00:00.000Z",
+  "feed_id": "devto"
+}
