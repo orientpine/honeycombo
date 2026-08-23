@@ -12,5 +12,6 @@
     "buildinpublic"
   ],
   "published_at": "2026-08-23T02:50:06.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nFusebox는 현재 Claude API 지원을 제공하지 않으며, 이는 Anthropic의 API 키 스코핑(scoping) 기능이 OpenAI와 같이 개별 계정 수준에서 제한적인 읽기 권한만 부여할 수 있도록 지원하지 않기 때문이다.\n\n## 주요 내용\n\n*   Fusebox는 사용자가 설정한 예산을 초과하기 전에 이메일 알림을 제공하는 도구로, 사용자의 OpenAI 사용량 및 비용 데이터를 읽기 위해 API 키가 필요하다.\n*   OpenAI는 `api.usage.read`와 같은 특정 스코프로 API 키를 생성할 수 있어, 키가 사용량 및 비용 데이터만 읽도록 제한할 수 있다. 이는 도구가 요구해야 하는 신뢰 수준과 일치한다.\n*   Anthropic의 Claude Console(개인 개발자가 사용하는 제품) API 키는 선택 가능한 스코프가 없으며, 모든 키는 관리자 API 키가 허용하는 모든 엔드포인트에 대해 전체 접근 권한을 가진다.\n*   Anthropic의 경우, 읽기 전용 스코프 키(`read:spend_limits`, `read:analytics`)는 Claude Enterprise 조직에만 존재하며, 개별 Console 계정에는 해당되지 않는다.\n*   따라서 개별 Claude Console 계정 사용자가 예산 알림과 같은 기능을 위해 조직 구성원을 관리하거나 다른 API 키를 해지할 수 있는 권한을 가진 키를 제공하는 것은 보안상 적절하지 않다고 판단된다.\n*   Fusebox는 Claude 지원 기능을 이미 개발했지만, Anthropic이 개별 계정을 위한 OpenAI와 같은 스코핑 기능을 제공할 때까지 비활성화된 상태로 유지할 예정이다.\n*   대부분의 API 접근 권한을 요청하는 도구는 요구하는 권한의 상세 내용을 명확히 설명하지 않으며, 사용자 역시 이를 확인하지 않는 경향이 있다.\n\n## 시사점\n\nFusebox는 API 키 접근 권한에 대한 투명성을 확보하고, 사용자의 데이터 보안을 최우선으로 고려하여 Claude API 지원을 보류하는 결정을 내렸다. 이는 개발 도구 제작 시 보안 및 신뢰성 측면에서 API 키 관리의 중요성을 강조한다."
 }
