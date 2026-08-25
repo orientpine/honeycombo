@@ -12,5 +12,6 @@
     "ai"
   ],
   "published_at": "2026-08-25T02:25:09.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nScraping AI는 CSS 선택자에 의존하지 않고 웹페이지에서 구조화된 데이터를 추출하는 Python SDK를 제공하여, 웹사이트 변경으로 인한 유지보수 부담을 줄이고 검증된 JSON 형식의 데이터를 얻을 수 있게 합니다.\n\n## 주요 내용\n\n*   **기존 웹 스크래핑의 문제점**: BeautifulSoup, Cheerio, Selenium 등과 같은 기존 스크래핑 도구는 웹사이트의 DOM 구조(CSS 클래스 등) 변경 시 선택자가 작동하지 않아 데이터 파이프라인이 중단되는 문제를 겪습니다.\n*   **Semantic Extraction 방식**: Scraping AI는 고정된 DOM 선택자 대신 사용자가 원하는 데이터(예: 제목, 가격, 재고 여부)를 JSON 스키마로 정의하면, AI가 해당 데이터를 추출합니다.\n*   **Scraping AI 작동 방식**:\n    1.  **Smart Rendering**: JavaScript를 실행하여 동적으로 렌더링되는 웹페이지를 처리합니다.\n    2.  **Markdown Distillation**: 웹페이지의 불필요한 요소(SVG, CSS, 스크립트 등)를 제거하고 추출에 필요한 텍스트, 구조, 컨텍스트를 유지한 Markdown 형식으로 변환합니다.\n    3.  **LLM Semantic Schema Matching**: GPT-4o, Gemini와 같은 LLM을 사용하여 페이지 내용을 이해하고 정의된 스키마에 매칭하며, 데이터의 물리적 위치가 아닌 의미에 기반하여 추출합니다.\n    4.  **Validated JSON Output**: 추출된 데이터는 JSON 스키마에 따라 검증된 후 구조화된 JSON 형식으로 반환됩니다.\n*   **Python SDK 제공**: `pip install scraping-ai` 명령어로 SDK를 설치하여 동기식 및 비동기식 데이터 추출이 가능합니다.\n*   **AI Agents 및 RAG 활용**: LangChain, LlamaIndex와 같은 프레임워크에서 웹 데이터 추출 도구로 Scraping AI를 활용하여 AI 에이전트가 구조화된 데이터를 얻도록 할 수 있습니다.\n*   **제한 사항**: 일부 공격적인 봇 방어 시스템, X, Instagram, LinkedIn과 같은 특정 소셜 플랫폼, 개인 데이터 추출에는 제약이 있습니다.\n\n## 시사점\n\nScraping AI는 웹사이트 구조 변경으로 인한 유지보수 비용을 절감하고, LLM 기반의 시맨틱 추출 방식을 통해 더욱 견고하고 유연한 데이터 추출 솔루션을 제공하며, AI 에이전트 및 RAG 파이프라인과의 연동성을 높여 개발 생산성을 향상시킬 수 있습니다."
 }
