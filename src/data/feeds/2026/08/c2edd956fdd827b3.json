@@ -12,5 +12,6 @@
     "node"
   ],
   "published_at": "2026-08-26T15:14:07.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nClaude Code CLI를 실질적으로 사용하면서 학습할 수 있도록 설계된 텍스트 기반 롤플레잉 게임(RPG)인 claude-quest는 기존의 문서 기반 학습 방식의 한계를 극복하고자 합니다.\n\n## 주요 내용\n\n*   **학습 방식:** claude-quest는 사용자가 실제 Claude Code CLI 명령어를 실행하고, 이에 대한 피드백을 받으며 학습하는 방식으로 작동합니다. 이는 단순히 정보를 전달하는 문서 방식과 달리, CLI 학습에서 흔히 사용되는 실습 중심의 접근법을 따릅니다.\n*   **구현:** 별도의 애플리케이션이나 복잡한 UI 없이, 일반 Claude 세션 내에서 \"let's play claude quest\"라고 입력하면 Claude 자체가 게임 마스터가 되어 진행합니다. 실제 Claude Code 환경을 \"파일시스템\"처럼 활용하며, 각 미션은 실제 샌드박스 디렉토리에 저장되고 수행 결과가 검사됩니다.\n*   **미션 등급 시스템:** 미션은 Artifact(파일 작성/수정), Invocation(명령어 실행), Mastery(개념적 오류 수정), Judgment(루브릭 기반 작성)의 네 가지 티어로 나뉩니다. 각 티어는 실제 파일 상태, 명령어 실행 결과, 보유 테스트 배터리, 또는 독립적인 평가자의 채점 등을 통해 진행 상황을 평가하며, 사용자가 직접 답변을 입력하는 방식이 아닙니다.\n*   **설치 및 실행:** Claude 세션 내에서 `/plugin marketplace add susheem-k/claude-quest` 및 `/plugin install claude-quest@claude-quest` 명령어로 플러그인을 설치한 후, \"let's play claude quest\"를 입력하면 게임이 시작됩니다. 진행 상황은 `~/.claude-quest/`에 저장되어 프로젝트 위치에 상관없이 이어할 수 있습니다.\n*   **현재 상태 및 기여:** claude-quest는 플레이 가능한 알파 버전이며, 모든 Claude Code 기능에 대한 캠페인은 아직 완성되지 않았습니다. 현재는 각 티어별 몇 가지 예시 미션과 5개의 아크가 존재합니다. 오픈 소스 프로젝트로서, 새로운 미션 아이디어나 PR을 통해 기여할 수 있으며, 미션 형식은 간단한 디렉토리 구조와 `check.js` 파일로 구성됩니다.\n\n## 시사점\n\nclaude-quest는 Claude Code CLI 학습을 위한 혁신적인 실습 중심 접근 방식을 제공하며, 오픈 소스 기여를 통해 기능 확장이 가능하다는 점에서 사용자 참여를 통한 생태계 발전을 기대할 수 있습니다."
 }
