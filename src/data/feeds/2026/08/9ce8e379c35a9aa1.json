@@ -12,5 +12,6 @@
     "productivity"
   ],
   "published_at": "2026-08-28T14:00:34.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nNoWreck v0.12.0은 AI 코딩 어시스턴트의 코드 변경 주장과 실제 구조적 변화를 검증하는 CLI 도구로, Provider Consolidation과 Scan Caching 기능을 개선했다.\n\n## 주요 내용\n\n*   **Provider Consolidation**: 기존에 분산되어 있던 Provider 탐지 로직을 `resolve_provider(base_url, provider)`라는 단일 함수로 통합하여, URL 매칭과 인증 헤더 타입을 한 번의 호출로 결정한다. 이를 통해 여러 Provider를 사용하는 경우 발생할 수 있는 불일치 문제를 해결했다.\n*   **Scan Caching**: 대규모 리포지토리의 경우, 매 `nowreck fix` 실행마다 모든 파일을 다시 스캔하는 대신, `.nowreck/cache/` 디렉토리에 파일별 스캔 결과를 캐싱한다. 변경되지 않은 파일은 캐시를 사용하고, 변경된 파일만 새로 파싱하여 스캔 성능을 향상시킨다.\n*   **캐시 키 및 형식**: 캐시 키는 파일 경로, 수정 시간(mtime), 크기, 내용 해시(MD5)를 포함하여 파일 변경 여부를 정확하게 판단한다. Python 파일은 소스 텍스트를 저장하고, JS/TS/Rust/Go 파일은 심볼 목록을 직접 저장한다.\n*   **캐시 무효화**: 파일의 mtime, 크기, 내용 해시가 변경되거나 캐시 버전이 맞지 않으면 해당 파일은 다시 파싱된다. 캐시 디렉토리는 `.gitignore`에 포함된다.\n*   **새로운 데이터 구조 및 클래스**: `ProviderInfo` dataclass와 `resolve_provider()` 함수가 새로 도입되었고, `ScanCache`, `CacheEntry` 클래스가 추가되었다. `_auth_header()` 함수는 제거되었으며, `detect_adapter()`는 `resolve_provider()`로 위임되도록 변경되었다.\n\n## 시사점\n\nNoWreck v0.12.0의 Provider Consolidation은 AI 코딩 도구 연동의 안정성과 일관성을 높이며, Scan Caching은 대규모 프로젝트에서의 검증 속도를 크게 향상시켜 개발 워크플로우 효율성을 증대시킬 수 있다."
 }
