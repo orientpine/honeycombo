@@ -12,5 +12,6 @@
     "tutorial"
   ],
   "published_at": "2026-08-29T17:09:27.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nLM Studio에서 NVIDIA GPU를 사용하여 로컬 LLM을 실행하는 과정에서 런타임 자동 업데이트로 인해 모델 로드 실패가 발생했으며, 이는 NTSTATUS 오류 코드를 통해 진단되고 런타임 롤백 및 자동 업데이트 비활성화를 통해 해결되었습니다.\n\n## 주요 내용\n\n*   LM Studio는 llama.cpp의 CUDA/ROCm/Vulkan 빌드를 런타임 확장 팩으로 제공하며, 기본적으로 백그라운드에서 자동 업데이트됩니다.\n*   RTX 5090 GPU에서 모델이 갑자기 로드되지 않는 현상이 발생했으며, UI에는 \"Failed to load the model / Error loading model. / (Exit code: 18446744072635812000). Unknown error.\"라는 메시지만 표시되었습니다.\n*   거대한 부호 없는 종료 코드는 Windows NTSTATUS 코드로, 16진수로 변환 시 `0xFFFF_FFFF_C000_08A0`이며, 하위 32비트 `0xC00008A0`가 실제 오류 상태를 나타냅니다.\n*   이 NTSTATUS 코드는 드라이버 또는 커널 수준의 실패를 의미하며, UI에서 직접 해석되지 않아 사용자에게 혼란을 줍니다.\n*   LM Studio의 개발자 > 로컬 서버 로그에서 실제 CUDA 오류 메시지 \"CUDA error: shared object initialization failed in launch_fattn (the flash-attention kernel), with the model's Gated Delta Net fallback path logged as unsupported and disabled.\"를 확인할 수 있었습니다.\n*   이 오류는 Blackwell 아키텍처의 특정 커널에서 발생하며, CUDA 12 런타임 v2.27.1이 RTX 5090 (sm_120)에서 잘못된 fallback path를 가지고 있는 llama.cpp 이슈로 인해 발생했습니다.\n*   해결 방법은 LM Studio 설정 > 런타임에서 이전 버전의 CUDA 12 빌드(예: v2.25.2)로 롤백하고, \"Auto-update selected Runtime Extension Packs\" 옵션을 비활성화하는 것입니다.\n*   LLM 툴에서 런타임을 번들로 제공할 경우, 업데이트 시 런타임이 자동으로 변경될 수 있으며, 모델 로드 실패, 거대한 종료 코드, 특정 커널 오류 메시지가 동반될 때 런타임 버전을 먼저 확인하고 롤백해야 합니다.\n\n## 시사점\n\nLM Studio와 같이 런타임을 번들로 제공하는 로컬 LLM 도구 사용 시, 런타임의 자동 업데이트 기능으로 인해 예기치 않은 모델 로드 실패가 발생할 수 있으며, 이러한 오류는 NTSTATUS 코드와 로그를 통해 진단하고 런타임 롤백 및 자동 업데이트 비활성화를 통해 해결할 수 있습니다."
 }
