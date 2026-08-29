@@ -12,5 +12,6 @@
     "rag"
   ],
   "published_at": "2026-08-27T12:21:24.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nSynapCores를 LlamaIndex의 Vector Store 및 Property Graph Store로 함께 사용하여 두 개의 별도 백엔드를 관리할 필요 없이 단일 엔진에서 벡터 검색과 관계형 검색을 모두 구현하는 방법을 설명합니다.\n\n## 주요 내용\n\n*   **통합 엔진**: SynapCores는 벡터 저장소와 그래프 데이터베이스 기능을 단일 엔진으로 통합하여 LlamaIndex 설정에서 두 개의 분리된 백엔드(VectorStoreIndex용 벡터 저장소, PropertyGraphIndex용 그래프 데이터베이스)를 사용할 때 발생하는 복잡성을 줄입니다.\n*   **LlamaIndex 통합**: SynapCores는 `llama-index-vector-stores-synapcores` 및 `llama-index-graph-stores-synapcores` PyPI 패키지를 통해 LlamaIndex와 통합됩니다.\n*   **Vector Store 기능**: SynapCores Vector Store는 `BasePydanticVectorStore` ABC를 완벽하게 구현하며, 표준 RAG 작업(add, delete, query 등)과 함께 12가지 연산자를 지원하는 강력한 메타데이터 필터링 기능을 제공합니다.\n*   **Property Graph Store 기능**: SynapCores Property Graph Store는 `PropertyGraphStore` ABC를 지원하며, `supports_structured_queries=True` 및 `supports_vector_queries=True`를 모두 만족합니다. 또한, `get_rel_map(depth=N)`과 같은 그래프 순회 기본 기능을 제공하고 Cypher 쿼리를 직접 실행할 수 있습니다.\n*   **GraphRAG 지원**: 별도의 그래프 데이터베이스 없이 SynapCores 단일 엔진 내에서 GraphRAG를 구현할 수 있어 프로토타이핑 및 복잡한 쿼리 구성이 용이합니다.\n*   **테스트 및 접근성**: SynapCores LlamaIndex 통합은 48개 이상의 테스트(벡터 23개, 그래프 25개)와 실제 HuggingFace MiniLM 임베딩을 사용한 노트북을 통해 검증되었으며, PyPI를 통해 쉽게 설치할 수 있습니다.\n\n## 시사점\n\nSynapCores를 LlamaIndex와 함께 사용하면 벡터 및 그래프 기반 정보 검색을 위한 단일 인프라를 구축할 수 있어, 시스템 복잡성을 줄이고 개발 효율성을 높일 수 있습니다."
 }

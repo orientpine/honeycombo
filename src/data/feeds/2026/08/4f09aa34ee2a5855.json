@@ -12,5 +12,6 @@
     "nvidia"
   ],
   "published_at": "2026-08-26T23:47:18.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nAmazon은 AI 모델 학습 및 실행을 위한 Nvidia GPU 칩 200만 개를 추가로 주문하며 Nvidia와의 파트너십을 확장하여, 2027년과 2028년에 걸쳐 Amazon Web Services(AWS) 데이터 센터에 배치할 예정입니다.\n\n## 주요 내용\n\n- Amazon은 기존 100만 개 이상의 Nvidia GPU 도입 계약에 더해, Nvidia의 Blackwell Ultra, Rubin, Rubin Ultra GPU 200만 개를 추가로 확보했습니다.\n- 이번 확장 계약에는 GPU 칩뿐만 아니라, GPU를 연결하는 네트워킹 하드웨어, 오픈 모델, CPU, 데이터 처리 소프트웨어, 로보틱스 플랫폼 등 Nvidia의 다양한 기술이 AWS 전반에 통합되는 내용이 포함됩니다.\n- \"폭발적인 수요(surging demand)\" 증가가 이러한 협력 강화의 주요 요인으로 작용했으며, 이는 스타트업, 기업, AI 연구소, 정부 등 다양한 고객층의 니즈를 반영한 결과입니다.\n- Amazon은 자체 AI 칩(Trainium, Graviton CPU 등) 개발에도 투자하고 있으며, 이를 통해 Nvidia에 대한 의존도를 줄이고 경쟁력을 강화하려는 움직임을 보이고 있습니다. Amazon의 맞춤형 칩 사업은 연간 250억 달러 이상의 연간 매출 성장률을 기록하고 있습니다.\n- Nvidia는 Amazon에 Rubin GPU와 함께 Vera CPU도 공급할 예정이며, Vera CPU는 다양한 주요 클라우드 제공업체, AI 연구소, 시스템 OEM에서 채택될 것으로 예상됩니다.\n- 파트너십은 Amazon의 창고 로봇 및 엔터프라이즈 솔루션으로도 확장되어, Amazon은 Nvidia의 Omniverse, Cosmos, Isaac, Jetson 등 물리적 AI 스택을 로봇 운영에 적용할 계획입니다.\n- AWS는 Nvidia의 Nemotron 제품군 오픈 모델을 Amazon Bedrock 및 SageMaker를 통해 제공할 예정입니다.\n- Nvidia는 2분기에 962억 달러의 매출을 기록했으며, 이 중 데이터 센터 부문이 890억 달러로 대부분을 차지했습니다. Nvidia는 3분기에 1,080억 달러의 매출을 예상하며, 차세대 Rubin GPU의 판매가 이러한 수요 지속 여부를 보여줄 중요한 지표가 될 것입니다.\n- Nvidia는 향후 몇 년간 AI 수요를 충족하기 위해 현재 및 미래의 데이터 센터 프로젝트를 위한 공급 및 제조 역량을 확보하기 위해 2,790억 달러를 투자하고 있습니다.\n\n## 시사점\n\nAmazon의 대규모 Nvidia 칩 주문은 AI 산업의 가파른 성장세와 컴퓨팅 성능에 대한 지속적인 수요를 방증하며, AI가 실질적이고 수익성 있는 작업을 수행함에 따라 업계 전반의 투자가 가속화될 것임을 시사합니다."
 }
