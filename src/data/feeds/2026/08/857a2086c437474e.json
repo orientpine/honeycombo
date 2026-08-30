@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-08-29T18:19:53.000Z",
-  "feed_id": "theverge"
+  "feed_id": "theverge",
+  "description": "## 개요\n\nSony Music Publishing과 Warner Chappell은 수만 건의 저작권 보호 대상 작품을 무단으로 사용했다고 주장하며 AI 모델 개발사 Anthropic을 상대로 소송을 제기했습니다.\n\n## 주요 내용\n\n*   Sony Music Publishing과 Warner Chappell은 Anthropic이 자체 AI 모델인 'Claude' 시리즈를 개발하고 운영하는 과정에서 수만 건의 저작권 보호 작품을 불법적으로 토렌트, 스크랩, 다운로드했다고 주장하고 있습니다.\n*   이들 음반사는 각 저작권 침해 건당 최대 150,000달러, 저작권 식별 데이터가 제거된 각 사례당 최대 25,000달러의 손해 배상을 청구하고 있으며, 총액은 수십억 달러에 달할 수 있습니다.\n*   소장에는 Anthropic의 공동 창립자인 Dario Amodei와 Benjamin Mann도 개별 피고로 포함되어 있으며, Mann은 BitTorrent를 통해 500만 건 이상의 불법 도서를 다운로드하고, 직원들은 Pirate Library Mirror에서 200만 건 이상의 도서를 다운로드했다는 주장이 제기되었습니다.\n*   또한 Anthropic이 MusixMatch, LyricFind와 같은 사이트에서 음반사로부터 라이선스를 받아야 하는 가사를 스크랩했다고 주장합니다.\n*   소송에서 언급된 특정 곡으로는 Marvin Gaye와 Tammi Terrell의 \"Ain’t No Mountain High Enough\", Bon Jovi의 \"Livin’ On a Prayer\", Earth, Wind & Fire의 \"September\", Leonard Cohen의 \"Hallelujah\", Taylor Swift의 \"Paper Rings\" 등이 있습니다.\n*   이 소송은 Anthropic이 최근 출판 업계로부터 15억 달러에 합의한 소송에 이어, Universal Music Group, Concord, ABKCO, BMG, Round Hill Music 등으로부터 제기된 다수의 소송 중 최신 사례입니다.\n\n## 시사점\n\n이번 소송은 AI 모델 학습 과정에서의 저작권 침해 문제를 다시 한번 부각시키며, AI 개발사의 콘텐츠 사용 범위와 저작권 보호에 대한 법적, 윤리적 논쟁을 심화시킬 것으로 예상됩니다."
 }
