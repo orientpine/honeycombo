@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-08-29T18:19:53.000Z",
-  "feed_id": "theverge"
+  "feed_id": "theverge",
+  "description": "## 개요\n\nSony Music과 Warner Chappell은 저작권이 있는 수만 건의 작품에 대해 수십억 달러에 달하는 손해 배상을 요구하며 Anthropic을 상대로 소송을 제기했습니다.\n\n## 주요 내용\n\n- Sony Music과 Warner Chappell은 Anthropic이 저작권이 있는 수만 건의 작품을 불법적으로 사용했다고 주장하며, 각 작품당 최대 150,000달러, 저작권 데이터 제거 시 각 사례당 최대 25,000달러의 손해 배상을 요구하고 있습니다.\n- 이 소송은 Anthropic이 출판 업계와 15억 달러 규모의 합의를 도출한 직후 제기되었으며, Universal Music Group, Concord, ABKCO 등에서도 소송을 당한 바 있습니다.\n- 소장에는 Anthropic 법인뿐만 아니라 공동 창립자인 Dario Amodei와 Benjamin Mann도 개별 피고로 명시되어 있습니다.\n- 소송 내용은 Mann이 BitTorrent를 사용하여 500만 권 이상의 불법 복제된 서적을 다운로드했으며, 직원들은 Pirate Library Mirror에서 200만 권 이상을 추가로 다운로드했다고 주장합니다.\n- 또한 Anthropic이 MusixMatch, LyricFind와 같은 사이트에서 가사를 스크랩했으며, 이들 사이트는 레이블로부터 콘텐츠 라이선스를 취득하기 위해 비용을 지불했다고 명시하고 있습니다.\n- 훈련 데이터에서 발견된 특정 노래로는 Marvin Gaye와 Tammi Terrell의 \"Ain't No Mountain High Enough\", Bon Jovi의 \"Livin’ On a Prayer\", Earth, Wind & Fire의 \"September\", Leonard Cohen의 \"Hallelujah\", Taylor Swift의 \"Paper Rings\" 등이 언급되었습니다.\n\n## 시사점\n\n이번 소송은 AI 모델 훈련 과정에서 저작권 침해 문제와 관련하여 대규모 엔터테인먼트 기업과 AI 개발 기업 간의 법적 분쟁이 심화될 수 있음을 보여줍니다."
 }
