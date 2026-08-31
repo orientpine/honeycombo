@@ -1,5 +1,7 @@
 # HoneyCombo — Agent Guidelines
 
+> **Tool-call encoding**: Always write Korean (and other non-ASCII) strings in tool-call parameters as literal UTF-8; never as `\uXXXX` unicode escapes.
+
 ## Git Workflow
 
 - **작업 완료 후 반드시 커밋 & 푸시한다.** 모든 구현/수정 작업이 끝나면 변경 사항을 커밋하고 원격 저장소에 푸시한다.
