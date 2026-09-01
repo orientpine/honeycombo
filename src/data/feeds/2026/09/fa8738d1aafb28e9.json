@@ -12,5 +12,6 @@
     "google"
   ],
   "published_at": "2026-09-01T17:35:37.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nGoogle Pics는 Google Workspace와 프리미엄 Google AI 구독자를 대상으로 하는 새로운 AI 기반 이미지 생성 및 편집 도구로, 사용자가 디자인 대신 프롬프트를 통해 콘텐츠를 제작하도록 지원한다.\n\n## 주요 내용\n\n*   Google Pics는 Google의 Nano Banana 이미지 생성 모델을 기반으로 하며, 향후 몇 주 안에 대부분의 Workspace 고객과 Google AI Pro 또는 Ultra 유료 구독자에게 제공될 예정이다.\n*   Adobe Express 및 Canva와 유사하게 일상적인 업무 및 개인적인 디자인 작업을 지원하며, 포스터, 소셜 미디어 게시물, 시각 자료 및 일러스트 제작에 활용될 수 있다.\n*   Canva와 달리 Google Pics는 AI 기반으로 콘텐츠를 생성하며, AI는 아티스트의 작업물을 학습했다.\n*   Adobe Express와 달리 Google Pics는 처음부터 새로운 디자인을 만드는 것이 아니라 프롬프트를 통해 이미지를 생성하는 데 초점을 맞춘다.\n*   이미지 내 객체 분리 및 변형, 텍스트 수정 또는 번역과 같은 편집 도구를 포함한다.\n*   협업 편집을 지원하며, 요청한 이미지에 대해 여러 버전을 생성하여 최적의 결과물을 선택할 수 있다.\n*   Google Workspace 내 Docs 및 Slides에 우선 통합되며, 향후 Google Drive에도 추가될 예정이다.\n\n## 시사점\n\nGoogle Pics의 등장은 AI 기술을 활용한 창작 도구의 발전 방향을 보여주며, 사용자가 디자인 기술 없이도 아이디어를 시각화할 수 있는 새로운 방법을 제시한다."
 }
