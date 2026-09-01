@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-09-01T16:00:00.000Z",
-  "feed_id": "theverge"
+  "feed_id": "theverge",
+  "description": "## 개요\n\nGoogle Pics는 Gemini 및 Nano Banana 생성 AI 모델을 기반으로 Workspace 사용자를 위해 개발된 새로운 크리에이티브 디자인 도구로, 비즈니스를 위한 전문적인 수준의 AI 이미지 편집 및 생성을 간소화하는 것을 목표로 합니다.\n\n## 주요 내용\n\n- Google Pics는 프롬프트 기반 이미지 생성 및 조작에 대한 세밀한 제어를 제공하며, 사용자는 특정 객체나 텍스트를 탭하고 변경 사항을 설명하여 챗봇의 결과물과 차별화되는 이미지를 만들 수 있습니다.\n- 이 도구는 독립형 Workspace 앱으로 제공되며 Google Docs 및 Slides에 통합되어, 문서나 슬라이드 내에서 이미지 선택 후 Pics의 AI 도구를 사용하여 편집할 수 있습니다.\n- Google Pics를 통해 사용자는 이미지를 처음부터 생성하거나, 이미지 내 개별 객체를 선택하여 변경, 재포맷, 번역하는 등의 편집 작업을 프롬프트로 수행할 수 있습니다.\n- 또한, 이미지 해상도를 2K 또는 4K로 업스케일링하고, 웹, 소셜 미디어, 인쇄물 또는 디지털 용도에 맞게 빠르게 자르며, 공유를 통해 디자인 협업도 가능합니다.\n- Canva 및 Adobe Express와 같은 기존 크리에이티브 플랫폼과 유사한 기능을 제공하지만, Google은 Pics가 사용자가 그래픽 디자이너가 되지 않고도 훌륭한 이미지를 만들 수 있도록 지원하여 외부 서비스 사용을 줄이기를 기대합니다.\n- Google Pics는 Business Standard, Business Plus, Enterprise Standard, Enterprise Plus 플랜, Google AI Pro 및 Ultra 개인 플랜, Google AI Pro for Education 플랜의 Workspace 사용자에게 점진적으로 출시됩니다.\n\n## 시사점\n\nGoogle Pics는 Workspace 생태계 내에서 전문적인 수준의 AI 이미지 생성 및 편집 기능을 통합함으로써, 비즈니스 사용자들이 외부 도구에 의존하지 않고도 효율적으로 창의적인 작업을 수행할 수 있도록 지원할 것으로 예상됩니다."
 }
