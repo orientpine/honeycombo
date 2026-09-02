@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-09-02T13:43:14.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nAISLE은 OpenAI Codex Security와 Anthropic Mythos가 200억 개 이상의 인스턴스에 배포된 소프트웨어인 curl에서 0건의 취약점을 보고한 지 며칠 만에 6건의 curl CVE를 발견했습니다.\n\n## 주요 내용\n\n*   AISLE은 curl의 보안 취약점을 분석하는 과정에서 6건의 CVE를 발견했으며, 이 중 3건은 2026년 8월 24일, 2건은 8월 26일, 1건은 8월 27일에 보고되었습니다.\n*   발견된 6건의 CVE는 모두 Low 심각도로 분류되었으며, curl 8.22.0 릴리스에 포함되어 수정되었습니다.\n*   이 CVE들은 curl의 보안 감사 기록에 따르면 취약점이 적고, 발견되는 결함이 미묘한 구성이나 상호작용에서 발생하는 경향과 일치합니다.\n*   OpenAI Codex Security와 Anthropic Mythos는 curl 코드 분석 후 취약점을 발견하지 못했다고 보고했으나, AISLE은 이들 보고 이후 curl에서 6건의 취약점을 발견하여 CVE로 지정되었습니다.\n*   이 발견은 AI 기반 보안 평가가 일반적인 벤치마크나 알려진 취약점을 학습 데이터로 사용할 수 있는 환경이 아닌, 실제 운영 중인 코드에서 이루어졌다는 점에서 주목할 만합니다.\n*   Linux 커널 유지보수자인 Greg Kroah-Hartman 역시 유사한 패턴을 보고하며, AISLE의 방식이 Linux에서도 효과가 있음을 시사했습니다.\n\n## 시사점\n\nAISLE의 분석 결과는 특정 AI 시스템이 범용 AI 모델을 능가하여 실제 제로데이 취약점 발견에 더 효과적일 수 있음을 시사하며, 이는 curl 및 Linux와 같은 중요한 소프트웨어의 보안 강화에 기여할 수 있습니다."
 }
