@@ -12,5 +12,6 @@
     "y combinator"
   ],
   "published_at": "2026-09-01T22:08:24.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nAI 트레이닝 데이터 스타트업 AfterQuery가 5개월 만에 10배 이상 가치가 상승하며 32억 달러(약 4조 3천억 원)의 기업 가치를 인정받아 Y Combinator 역사상 가장 빠른 유니콘 기업이 되었다.\n\n## 주요 내용\n\n- AfterQuery는 2026년 4월 3억 달러(약 4천억 원)의 기업 가치로 3천만 달러(약 400억 원)의 Series A 투자를 유치한 지 5개월 만에 32억 달러(약 4조 3천억 원)의 기업 가치를 인정받는 라운드를 완료했다.\n- 이는 Y Combinator 파트너 Gustaf Alströmer에 따르면, Y Combinator 역사상 스타트업이 론칭 후 유니콘이 되기까지 가장 짧은 기간이다.\n- 22세와 23세의 AfterQuery 창업자들은 18개월 전 Y Combinator의 Winter 2025 코호트에 참여했다.\n- AfterQuery는 2026년 4월, 연간 반복 매출(annualized revenue run rate) 1억 달러(약 1,330억 원)에 도달했으며, Nvidia, Legora, 한국 AI 연구소 Motif Technologies 등 주요 고객사와 협력하고 있다고 밝혔다.\n- AfterQuery는 의사, 변호사 등 전문가 지식을 활용하여 모델을 훈련시키는 Mercor, Scale과 같은 스타트업의 뒤를 잇고 있으나, 단순히 모델의 정확한 답변을 보장하는 것을 넘어 \"세계 최고 전문가들의 패턴, 결정, 추론을 인코딩\"하는 방식으로 모델과 에이전트가 전문가처럼 업무를 수행하도록 훈련시킨다.\n\n## 시사점\n\nAfterQuery의 급격한 성장은 AI 모델 훈련 방식의 새로운 패러다임을 제시하며, 전문가의 업무 처리 방식을 학습시켜 AI의 실질적인 활용도를 높일 수 있음을 보여준다."
 }

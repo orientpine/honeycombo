@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-09-01T20:07:57.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nOpenAI의 ChatGPT/Codex 데스크톱 앱이 1.7GB의 데이터를 포함하며, 이 안에는 Python, Node.js 설치 파일과 Poppler, git, LibreOffice의 네이티브 바이너리가 포함되어 있다.\n\n## 주요 내용\n\n- OpenAI Codex 데스크톱 앱 (현재 ChatGPT로 리브랜딩됨)의 캐시 폴더(`~/.cache/codex-runtimes/codex-primary-runtime/`)에서 1.7GB의 데이터가 발견되었다.\n- 이 데이터에는 완전한 Python 설치 환경, 완전한 Node.js 설치 환경이 포함되어 있다.\n- 또한 Poppler, git, 그리고 2010년에 OpenOffice.org에서 분기된 LibreOffice 오픈 소스 오피스 스위트의 네이티브 바이너리가 포함되어 있다.\n- `~/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime/plugins/documents` 폴더 내의 스킬(skills)은 Codex가 이러한 바이너리를 어떻게 찾고 사용할지 지시한다.\n\n## 시사점\n\nChatGPT/Codex 데스크톱 앱은 다양한 외부 도구를 통합하여 기능을 확장하고 있으며, LibreOffice와 같은 오피스 스위트의 바이너리를 포함하는 것은 문서 처리 및 생성을 위한 잠재적인 기능을 시사한다."
 }
