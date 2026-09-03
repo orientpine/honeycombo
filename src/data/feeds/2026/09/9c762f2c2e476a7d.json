@@ -12,5 +12,6 @@
     "google"
   ],
   "published_at": "2026-09-03T16:00:00.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nGoogle이 Gmail, Docs, Keep에 대화형 AI 기능을 출시하여 사용자가 자연어 쿼리와 받아쓰기를 통해 받은편지함 및 문서에 대한 질문을 하고 작업을 수행할 수 있게 합니다.\n\n## 주요 내용\n\n*   **Docs Live:** 사용자가 작성하고자 하는 내용을 설명하면 AI 비서가 초안 작성을 돕고, Gmail, Drive, 채팅, 웹에서 정보를 가져와 초안을 생성할 수 있습니다.\n*   **Gmail Live:** Gemini 기반 AI 비서에게 받은편지함 내용에 대해 질문할 수 있으며, 비서와 대화하는 동안 실시간 녹취록이 표시됩니다.\n*   **Keep Live:** 음성으로 메모를 작성하고, 특정 요구사항에 따라 레시피나 목록을 종합하는 스크래치패드로 활용할 수 있습니다.\n*   **접근성:** Gmail Live는 Google AI Plus, Pro, Ultra 고객에게 제공되며, Docs Live와 Keep Live는 Google AI Pro 및 Ultra 사용자에게 제공됩니다. 이 기능들은 영어로 iOS 및 Android 기기에서 사용할 수 있으며, 곧 Workplace Business 고객에게도 제공될 예정입니다.\n*   **기존 음성 기능 확장:** Google은 이전에 Mac 앱에 크로스 앱 받아쓰기 기능을 추가하고, Pixel 11 스마트폰에 필러 단어를 제거하는 Rambler 기능을 출시했으며, Gemini 3.5 Transcribe 모델을 음성-텍스트 변환용으로 도입한 바 있습니다.\n\n## 시사점\n\nGoogle의 이번 AI 음성 기능 통합은 사용자가 Google Workspace 앱 내에서 정보를 검색하고 콘텐츠를 생성하는 방식을 간소화하여 생산성 향상과 보다 직관적인 상호작용을 가능하게 합니다."
 }

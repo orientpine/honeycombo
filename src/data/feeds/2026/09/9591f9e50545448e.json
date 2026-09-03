@@ -12,5 +12,6 @@
     "security"
   ],
   "published_at": "2026-09-03T17:38:29.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nAWS 고객은 Claude Platform on AWS와 Amazon Bedrock 두 가지 방법으로 Claude를 AWS에서 사용할 수 있으며, 이는 데이터 처리 주체와 보안 경계 측면에서 중요한 차이를 가진다.\n\n## 주요 내용\n\n*   **Claude Platform on AWS:** Anthropic의 네이티브 Claude 플랫폼 경험을 AWS를 통해 제공하며, Claude Console, 네이티브 API 동작, 일부 Claude 플랫폼 기능에 대한 빠른 접근을 지원하지만, 플랫폼 운영 및 데이터 처리는 Anthropic이 담당한다.\n*   **Amazon Bedrock:** AWS의 관리형 파운데이션 모델 서비스로, Claude를 포함한 다양한 모델을 제공하며, 서비스 경계, 거버넌스 모델, 운영 책임이 AWS에 있다.\n*   **보안 아키텍처 및 신뢰 경계:** 프롬프트 수신 및 처리 주체가 누구인지가 GenAI 워크로드의 보안 관점에서 중요하며, Claude Platform on AWS는 Anthropic을, Amazon Bedrock은 AWS를 데이터 처리 주체로 한다.\n*   **데이터 프라이버시, 컴플라이언스 및 리저던시:** Claude Platform on AWS 사용 시 프롬프트 및 완료 결과가 Anthropic에서 처리되므로 민감 정보 처리 시 제3자 플랫폼 경계를 넘는다는 점을 인지해야 하며, Amazon Bedrock은 AWS가 운영 주체로서 모델 제공자는 고객 프롬프트 및 완료 결과에 접근하지 않는다.\n*   **로깅:** AI 워크로드 로깅 시 민감 정보가 포함될 수 있으므로, 로깅 대상, 암호화, 접근 제어, 보존 정책 등 신중한 설계가 필요하다.\n*   **의사 결정 기준:** 데이터 분류를 기준으로, 공개 콘텐츠나 빠른 기능 접근이 필요하면 Claude Platform on AWS를, 기밀, 규제 대상, 고객 소유 또는 중앙 집중식 거버넌스가 필요한 엔터프라이즈 워크로드는 Amazon Bedrock을 우선 고려할 수 있다.\n\n## 시사점\n\nClaude on AWS 통합 선택은 단순한 기능이나 성능 비교를 넘어, 데이터 처리 주체, 보안, 컴플라이언스, 데이터 프라이버시 측면에서 조직의 요구사항과 위험 허용 범위에 따라 신중하게 결정해야 한다."
 }

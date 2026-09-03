@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-09-03T16:00:00.000Z",
-  "feed_id": "theverge"
+  "feed_id": "theverge",
+  "description": "## 개요\n\nNvidia가 출시한 Personal AI Router(PAIR)는 유휴 상태의 개인용 컴퓨터들을 연결하여 로컬 AI 추론 작업을 수행할 수 있도록 지원하는 오픈소스 소프트웨어입니다.\n\n## 주요 내용\n\n-   **PAIR의 기능**: PAIR는 하드웨어 라우터가 아닌 소프트웨어로, 네트워크 내 호환 PC를 자동으로 검색하고 연결하며, Agentic 워크플로우와 같은 로컬 AI 추론 작업을 위해 준비합니다.\n-   **호환 하드웨어**: 주로 Nvidia GeForce GPU (RTX 20-series 이상, RTX Pro GPU, DGX Spark 시스템)를 지원하며, Apple M4 칩 또는 그 이상 버전의 Mac도 호환됩니다.\n-   **작동 방식**: PAIR는 다른 작업에 방해가 되지 않도록 컴퓨터가 유휴 상태일 때 자원을 활용하며, 분산된 시스템으로 병렬 처리가 가능하여 복잡한 작업을 더 효율적으로 수행할 수 있습니다. 또한, 디바이스가 네트워크에 추가되거나 제거될 때(예: 사용자가 게임을 시작할 때) 동적으로 적응합니다.\n-   **활용 예시**: 여러 대의 고성능 개인 컴퓨터를 보유한 가정을 예로 들어, PAIR를 통해 상당한 양의 컴퓨팅 자원을 활용할 수 있음을 보여줍니다.\n-   **보안**: PAIR는 6자리 코드를 통한 페어링과 mTLS(Mutual Transport Layer Security)를 사용하여 암호화된 통신 채널을 생성함으로써 디바이스 간의 안전한 연결을 보장합니다.\n-   **배포 및 접근성**: PAIR는 현재 Nvidia PAIR 베타 버전으로 Windows, Linux, macOS에서 사용 가능합니다.\n-   **현실적인 사용자**: Nvidia는 PAIR 사용자가 주로 맥북 또는 윈도우 노트북 한 대와 게이밍 PC 한 대 정도의 구성을 가질 것으로 예상합니다.\n-   **AI 에이전트 앱 지원**: Perplexity Portable Computer, Hermes Agent, OpenClaw와 같은 주요 AI 에이전트 앱들이 Windows 환경에서 Nvidia GPU를 사용하여 로컬 설치를 간소화할 수 있도록 지원을 확대합니다.\n\n## 시사점\n\nNvidia PAIR는 개인 사용자가 보유한 유휴 컴퓨팅 자원을 효과적으로 활용하여 로컬 AI 환경을 구축하고, 복잡한 AI 작업을 분산 처리할 수 있는 새로운 가능성을 제공합니다."
 }
