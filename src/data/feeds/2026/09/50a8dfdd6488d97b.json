@@ -12,5 +12,6 @@
     "gemini"
   ],
   "published_at": "2026-09-02T18:13:54.000Z",
-  "feed_id": "arstechnica"
+  "feed_id": "arstechnica",
+  "description": "## 개요\n\nGoogle이 새롭게 공개한 Gemini 3.8 Flash 모델은 복잡한 소프트웨어 엔지니어링 문제 해결 능력에서 DeepSWE 리더보드 최상위를 차지했으며, 기존 모델 대비 낮은 비용으로 운영될 수 있다.\n\n## 주요 내용\n\n*   Gemini 3.8 Flash는 DeepSWE 리더보드에서 최고 성능을 기록하며, 복잡한 소프트웨어 엔지니어링 문제 해결 능력을 입증했습니다.\n*   이전 모델인 Gemini 3.7 Flash 대비 OSWorld-2.0 테스트에서의 에이전트 컴퓨터 사용 능력은 향상되었으나, Claude Opus에는 미치지 못하는 수준입니다.\n*   Gemini 3.8 Flash Cyber 모델은 사이버 보안 분야에서 이전 모델 대비 취약점 식별 및 패치 정확도에서 상당한 개선을 보였으며, Chrome 보안팀은 2.6배의 패치 정확도 증가를 보고했습니다.\n*   Google Cloud팀은 Gemini 3.8 Flash Cyber를 사용하여 단 2시간 만에 중요 취약점을 발견했으며, Wiz 및 Palo Alto Networks와 같은 파트너사들도 이 모델의 성능을 인정했습니다.\n*   Gemini 3.8 Flash는 Google 생태계 전반에 걸쳐 사용 가능하지만, Gemini 3.8 Flash Cyber는 현재 신뢰할 수 있는 테스터 및 정부 기관으로 제한됩니다.\n*   Gemini 3.8 Flash는 Gemini 앱에서 Pro 또는 Ultra 구독이 필요하지만, AI Studio에서는 무료로 사용해 볼 수 있습니다.\n\n## 시사점\n\nGemini 3.8 Flash는 소프트웨어 엔지니어링 및 사이버 보안과 같은 특정 분야에서 Google의 LLM 기술 발전과 경쟁력 강화를 보여주며, 향후 다양한 서비스 및 애플리케이션에 통합될 잠재력을 시사합니다."
 }
