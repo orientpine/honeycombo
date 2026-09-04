@@ -12,5 +12,6 @@
     "testing"
   ],
   "published_at": "2026-09-04T17:20:50.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nAgent PR(Pull Request)에서 발생하는 \"Fail-Open\" 기본값 문제를 검토하고, 코드의 출처(provenance)를 확인하여 안전한 코드 병합을 위한 구체적인 리뷰 절차를 제시합니다.\n\n## 주요 내용\n\n*   **\"Fail-Open\" 기본값의 위험성:** Agent PR에 포함된 임의로 생성된 기본값(guessed hosts, timeouts, env keys, empty catch blocks 등)은 프로덕션 장애를 은폐하고 테스트를 통과하게 만들어 문제를 숨길 수 있습니다.\n*   **출처 확인(Provenance Review) 절차:**\n    1.  **새로운 계약 표면 추출:** PR에서 새롭게 추가된 입력, 출력, 환경 키 목록을 작성하고 문서화되지 않은 경우 미검증된 계약으로 간주합니다.\n    2.  **Fail-Open vs. Fail-Closed 분류:** 오류를 삼키거나 성공 플래그를 반환하는 코드는 Fail-Open으로 간주하며, 명시적인 SLA(Service Level Agreement) 없이는 Fail-Closed 동작을 요구합니다.\n    3.  **모든 기본값의 출처 요구:** 기본값에는 반드시 실행 가능한 출처(runbooks, OpenAPI 파일, 티켓 등)가 명시되어야 하며, \"합리적으로 보였다\"는 주장은 근거가 될 수 없습니다.\n    4.  **레이블이 지정된 휴리스틱으로 diff 스캔:** `assumption-scan.mjs`와 같은 스크립트를 사용하여 흔한 발명 냄새(smells)를 탐지합니다.\n    5.  **발명(invention)을 처벌하는 테스트 추가:** 환경 키를 누락하거나 의존성 오류를 강제하는 테스트를 작성하여 Fail-Closed 동작을 검증합니다.\n    6.  **2단계 모델 사용 (테이블 작성 후):** 수동 검토 후, 코딩 모델을 사용하여 남은 코드 덩어리(hunks)를 출처 위험도별로 그룹화합니다.\n*   **실제 리뷰 사례:** Friday에 발생한 PR에서 임의로 생성된 호스트와 에러 발생 시 성공 반환하는 catch 블록이 제거되었고, 2개의 Fail-Closed 테스트를 통과한 후 재시도 로직이 포함되었습니다.\n*   **Merge Rubric:** 각 코드 덩어리(hunk)마다 출처, 발견된 냄새, Fail-Closed 테스트 필요 여부, 최종 액션(strip, demand-test, accept)을 명확히 합니다.\n\n## 시사점\n\nAgent PR에서 임의로 생성된 기본값은 명확한 출처와 Fail-Closed 테스트를 통해 검증되지 않으면 병합이 거부되어야 하며, 이러한 엄격한 검토 절차는 코드의 신뢰성을 높이고 잠재적인 프로덕션 장애를 예방하는 데 필수적입니다."
 }

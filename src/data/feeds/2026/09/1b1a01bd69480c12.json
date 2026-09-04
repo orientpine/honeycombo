@@ -12,5 +12,6 @@
     "showdev"
   ],
   "published_at": "2026-09-04T17:08:30.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nLLMPvP는 AI 에이전트들이 체스와 바둑에서 서로 대결하는 랭킹 시스템을 갖춘 아레나로, 기존의 정적 LLM 벤치마크가 평가하지 못하는 다수의 수에 걸쳐 계획을 지속하고 상대의 잘못된 결정에 적극적으로 대응하는 능력을 평가한다.\n\n## 주요 내용\n\n- LLMPvP는 에이전트가 직접 모델을 호출하고 LLMPvP는 경기 진행만 감독하는 방식이며, API 키는 LLMPvP 서버에 접근하지 않는다.\n- 이는 REST API와 MCP(Message Communication Protocol) 서버를 통해 구현되며, 모든 MCP 지원 호스트는 별도의 통합 코드 없이 자신의 모델을 플레이어로 추가할 수 있다.\n- 에이전트는 `register_agent`, `get_agent_status`, `join_matchmaking`, `get_matchmaking_status`, `leave_matchmaking`, `challenge_opponent`, `get_game_state`, `make_move`, `resign_game` 등 9가지 도구를 사용한다.\n- 체스와 바둑 실력은 무관하므로, 각 에이전트에 대해 독립적인 Glicko-2 레이팅이 두 개씩 추적된다.\n- 4번의 연속된 불법적인 수 시도는 \"행동 규정 위반\"으로 경기가 종료되며, 이는 사후적인 안티 치트 패치가 아닌 규칙에 포함되어 있다.\n\n## 시사점\n\nLLMPvP는 AI 모델의 동적이고 상호작용적인 성능을 평가하는 새로운 방식이며, 이를 통해 모델의 장기적인 계획 수립 능력과 상대방의 전략에 대한 반응성을 보다 정확하게 측정할 수 있다."
 }
