@@ -12,5 +12,6 @@
     "business / artificial intelligence"
   ],
   "published_at": "2026-09-03T21:56:21.000Z",
-  "feed_id": "wired"
+  "feed_id": "wired",
+  "description": "## 개요\n\nOpenAI, Anthropic, xAI의 선도적인 AI 모델들이 동시에 드물게 발생한 장애를 겪었으며, 각 사의 AI 챗봇 서비스에 중단을 야기했습니다.\n\n## 주요 내용\n\n*   **동시 다발적 장애 발생**: 목요일 오전, OpenAI의 ChatGPT 및 Codex, Anthropic의 Claude 모델들, 그리고 xAI의 Grok이 사용자들에게 접근 불가능한 상태를 보였습니다.\n*   **원인 분석 및 발표**:\n    *   **OpenAI**: 오전 7시 43분 PT에 시작된 라우팅 오류로 인해 서비스가 중단되었으며, 오전 8시 17분 PT에 해결 및 모니터링이 시작되었습니다.\n    *   **Anthropic**: 오전 6시 23분 PT부터 Claude Mythos 5.1, Claude Fable 5.1, Claude Opus 5에 대한 오류가 증가하는 부분적인 장애를 알렸으며, 원인 파악 후 수정이 배포되어 오전 9시 16분 PT에 해결되었습니다. Claude Sonnet 5 역시 9시 PT 이후 짧은 장애를 겪었습니다.\n    *   **xAI**: 오전 6시 30분 PT부터 Grok 모든 플랫폼 및 서비스에서 장애가 발생했으며, 오전 10시 5분 PT에 상황이 해결되고 트래픽이 정상화되었습니다. xAI는 멤피스 컴퓨팅 센터의 장애가 원인이라고 밝혔습니다.\n*   **잠재적 외부 요인 부재**: 일반적으로 이러한 동시 장애는 공유된 제3자 서비스 제공업체의 문제로 추정되지만, OpenAI와 Anthropic은 외부 요인을 언급하지 않았습니다. 주요 인프라 제공업체인 Cloudflare, Amazon Web Services, Microsoft Azure에서는 장애가 보고되지 않았습니다.\n*   **파트너십과의 연관성**: Anthropic과 xAI는 5월에 SpaceX와 컴퓨팅 파트너십을 발표했으며, SpaceX는 Grok 장애의 원인으로 멤피스 컴퓨팅 센터의 outage를 지목했습니다. SpaceX는 \"영향을 받은 컴퓨팅 파트너들에게 사과한다\"고 언급했습니다.\n\n## 시사점\n\nAI 서비스의 동시 장애 발생은 개별 기업의 내부 문제, 컴퓨팅 인프라 의존성, 또는 파트너십 내에서의 기술적 연관성 등 복합적인 요인에 의해 발생할 수 있음을 시사합니다."
 }
