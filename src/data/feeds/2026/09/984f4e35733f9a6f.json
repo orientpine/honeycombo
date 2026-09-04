@@ -12,5 +12,6 @@
     "in brief"
   ],
   "published_at": "2026-09-03T19:36:29.000Z",
-  "feed_id": "techcrunch"
+  "feed_id": "techcrunch",
+  "description": "## 개요\n\nThinking Machines이 최소 400억 달러의 기업 가치로 10억 달러의 자금 조달을 논의 중이며, 기존 투자자인 Accel이 이번 펀드 조성을 주도할 것으로 알려졌다.\n\n## 주요 내용\n\n- Thinking Machines은 작년 초 전 OpenAI CTO인 Mira Murati가 설립한 AI 연구소로, 현재 10억 달러 규모의 펀드 조성을 추진하고 있다.\n- 기존 투자자 Accel이 이번 펀드 조성 라운드를 주도하기 위한 협상을 진행 중이다.\n- 이번 라운드가 성사될 경우, Thinking Machines의 기업 가치는 작년 말 목표했던 500억 달러보다는 낮아지지만, 연간 매출 1억 달러 이상의 현재 실적 대비 매우 높은 밸류에이션을 반영한다.\n- Thinking Machines은 7월에 오픈 웨이트 모델인 Inkling을 출시했으며, 이 모델은 사용자가 자체 데이터를 사용하여 모델을 조정할 때 발생하는 컴퓨팅 비용을 기반으로 수익을 창출한다.\n- 이전 펀드 조성 라운드에서는 20억 달러를 조달했으며, 당시 기업 가치는 120억 달러였다. 이 라운드는 Andreessen Horowitz가 주도했으며 Nvidia, GV, Lightspeed, Conviction Partners가 참여했다.\n- 당시 투자자들은 Mira Murati와 합류한 전 OpenAI 연구원들의 배경을 보고 투자 결정을 내렸다.\n- 이후 Lilian Weng, Luke Metz 등 일부 공동 창업자들이 OpenAI로 복귀하는 등 몇몇 주요 인물들이 회사를 떠났다.\n\n## 시사점\n\nThinking Machines의 펀드 조성 논의는 AI 스타트업의 높은 성장 잠재력과 이를 뒷받침하는 투자 열기를 보여주며, 시장이 AI 모델의 실제 수익 창출 능력과 기술 리더십을 중요하게 평가하고 있음을 시사한다."
 }
