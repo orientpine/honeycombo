@@ -12,5 +12,6 @@
     "cloud"
   ],
   "published_at": "2026-09-05T16:22:48.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nAgent Substrate가 Kubernetes CRD였던 ActorTemplate를 ateapi 리소스로 변경하면서, Actor를 배포하는 방식을 설명하는 콘텐츠입니다.\n\n## 주요 내용\n\n-   **ActorTemplate 객체 폐지**: 과거 Actor 배포 시 사용되던 ActorTemplate Kubernetes CRD가 2026년 9월 2일부로 사라졌습니다.\n-   **변경 사유**: ActorTemplate가 Kubernetes 객체로 존재할 때 발생하던 API 공개 범위, 명명 규칙, 생명주기, 인증 등의 혼란을 방지하고, Actors가 ateapi 객체인 점을 고려하여 템플릿 역시 ateapi 리소스로 통합하기 위함입니다.\n-   **ateapi의 템플릿 소유**: 이제 ate-api-server가 `CreateActorTemplate`, `GetActorTemplate`, `ListActorTemplates`, `DeleteActorTemplate` 등의 API를 통해 템플릿을 관리합니다. Actor, Worker, atespace 객체도 ateapi에서 관리됩니다.\n-   **Kubernetes CRD의 잔존**: 일부 객체/CRD는 여전히 Kubernetes에 존재합니다.\n-   **템플릿 준비**: 템플릿은 YAML 구성 파일 형태로 정의되며, `atespace`와 `name`, `workerSelector`, `containers` (image, command, probes), `volumeMounts`, `resources`, `snapshotsConfig`, `storageLocation`, `sandboxConfig`, `volumes` 등의 설정이 포함됩니다.\n-   **템플릿 생성**: 정의된 YAML 파일을 `kubectl ate create atespace` 및 `kubectl ate create actor-template` 명령어를 사용하여 atespace와 템플릿을 생성합니다.\n-   **Actor 생성**: 템플릿이 생성된 후 `kubectl ate create actor` 명령어를 사용하여 Actor를 생성하며, `--template-ref` 옵션으로 템플릿 이름을 지정합니다.\n\n## 시사점\n\nAgent Substrate 프로젝트가 빠르게 변화하는 AI 기술 발전 속도에 맞춰, 개발자 사용성을 개선하고 책임 범위를 명확히 분리하기 위해 Kubernetes API 의존성을 줄이고 ateapi 중심의 아키텍처로 전환하고 있음을 보여줍니다."
 }
