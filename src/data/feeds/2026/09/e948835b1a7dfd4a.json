@@ -12,5 +12,6 @@
     "webdev"
   ],
   "published_at": "2026-09-06T16:53:12.000Z",
-  "feed_id": "devto"
+  "feed_id": "devto",
+  "description": "## 개요\n\nFile Librarian은 팀의 파일 명명 규칙 수립 및 적용을 돕는 PWA(Progressive Web App)로, 파일명 및 폴더 구조 생성을 자동화하고, 실제 명명 규칙 합의를 위한 워크숍 기능을 제공한다.\n\n## 주요 내용\n\n-   **문제 인식**: 공유 드라이브에서 발생하는 일관성 없는 파일명과 정리의 어려움은 파일 명명 규칙에 대한 회의가 제대로 잡히지 않아 발생하는 근본적인 문제이다.\n-   **File Librarian 기능**:\n    -   **파일명 및 폴더 구조 생성**: 사용자가 설정한 규칙에 따라 일관된 파일명과 폴더 경로를 생성한다.\n    -   **운영체제 통합**: Chrome/Edge 브라우저에서는 File System Access API를 통해 실제 폴더를 생성하고, 지원하지 않는 브라우저에서는 ZIP 파일로 제공한다.\n    -   **Naming Workshop**: 팀원들이 실시간으로 모여 20분 안에 파일 명명 규칙에 대한 합의를 도출할 수 있도록 지원하는 퍼실리테이터 모드를 제공한다.\n    -   **AI 시스템 프롬프트 연동**: 생성된 명명 규칙을 Markdown 형식으로 내보내 AI 비서의 시스템 프롬프트에 붙여넣어 팀의 규칙을 따르도록 할 수 있다.\n-   **기술 스택**: React 19 + Vite PWA로 개발되었으며, 사용자 설정은 브라우저의 localStorage에 저장되어 개인 정보 유출 우려가 없다.\n-   **다양한 산업별 에디션**: General, Law Firm, Real Estate Brokerage, Architecture, Design, Game Development, Software Development, School (K-12), Union, Personal 등 10가지 산업별 특화 에디션을 제공한다.\n\n## 시사점\n\nFile Librarian은 단순히 파일명 생성 도구를 넘어, 팀의 효율적인 협업을 위해 필수적인 파일 명명 규칙 수립 과정을 촉진하고 자동화함으로써 실질적인 워크플로우 개선을 가능하게 한다."
 }
