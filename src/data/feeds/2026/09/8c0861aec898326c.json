@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-09-06T23:36:04.000Z",
-  "feed_id": "theverge"
+  "feed_id": "theverge",
+  "description": "## 개요\n\nSeattle Times와 Newsday가 OpenAI와 Microsoft를 상대로 저작권 침해 소송을 제기하며, AI 모델 구축에 자신들의 저널리즘을 무단으로 학습 데이터로 사용하고 사용자 질문에 대한 답변으로 기사 내용을 복제한다고 주장했습니다.\n\n## 주요 내용\n\n- Seattle Times와 Newsday는 OpenAI가 자신들의 저널리즘을 허가 없이 AI 모델 학습 데이터로 사용했으며, 종종 사용자 질문에 답변할 때 자신들의 보도 내용을 복제한다고 주장했습니다.\n- Microsoft는 Copilot이 OpenAI 기술을 기반으로 만들어졌다는 이유로 소송의 피고로 함께 이름을 올렸습니다.\n- 이들 언론사는 기존에 The New York Times, Ziff Davis, Merriam-Webster, Encyclopedia Britannica 등이 OpenAI를 상대로 제기한 유사한 소송에 합류했습니다.\n- 이번 소송에는 약 400개 지역 신문사들이 두 회사를 상대로 이미 소송을 제기한 상태이며, 챗봇이 정보 습득을 위해 해당 사이트 방문 필요성을 줄여 구독 수익에 손실을 입혔다고 주장하고 있습니다.\n- Seattle Times와 Newsday는 소송을 통해 자신들의 저작물이 포함된 사본, 학습 데이터셋, AI 모델의 파기 및 제거를 요구하고 있습니다.\n\n## 시사점\n\n이번 소송은 AI 학습 데이터로 사용되는 저작물에 대한 저작권 침해 문제를 더욱 부각시키며, 언론사의 콘텐츠 보호와 AI 기술 발전 간의 균형점 모색에 대한 논의를 심화시킬 것으로 보입니다."
 }
