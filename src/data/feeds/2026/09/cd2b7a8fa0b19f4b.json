@@ -8,5 +8,6 @@
     "tech"
   ],
   "published_at": "2026-09-04T21:39:19.000Z",
-  "feed_id": "hackernews"
+  "feed_id": "hackernews",
+  "description": "## 개요\n\nOpenRouter에서 GPT-6 Astra 모델이 공개되었습니다.\n\n## 주요 내용\n\n*   GPT-6 Astra 모델은 OpenRouter 플랫폼을 통해 제공됩니다.\n*   OpenRouter 뉴스레터를 구독하면 모델 사용 데이터, 제품 업데이트, 연구 보고서 등을 이메일로 받아볼 수 있습니다.\n*   뉴스레터는 주 1회 발송되며, 수신 거부는 언제든지 가능합니다.\n*   뉴스레터 구독 시 개인정보 처리 방침에 동의하게 됩니다.\n\n## 시사점\n\nOpenRouter는 GPT-6 Astra 모델 출시를 통해 사용자들에게 새로운 AI 모델 접근성을 제공하고, 뉴스레터 구독을 통해 관련 정보를 지속적으로 전달하려는 전략을 취하고 있습니다."
 }
